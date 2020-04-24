@@ -1,5 +1,5 @@
 <template>
-  <div id="dataImport">
+  <div >
     <el-collapse v-model="activeNames" accordion >
       <el-collapse-item   name="1">
         <template slot="title" style="background-color:rgba(232, 232, 232, 1) ,border:1px solid,margin-left:10px">
@@ -26,8 +26,11 @@
                 <el-table-column prop="group_time" label="创建时间" width="250"></el-table-column>
                 <el-table-column prop="group_username" label="创建人" width="250"></el-table-column>
                 <el-table-column fixed="right" label="操作" width="250">
-                  <el-button type="text" size="small" @click="search = !search">删除</el-button>
-                </el-table-column>
+                  <template slot-scope="scope">
+                    <el-button type="text" size="small" @click="bianji(scope.row)">编辑</el-button>
+                    <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>
+                  </template>
+                </el-table-column>               
               </el-table>
             </div>
           </div>
@@ -56,9 +59,9 @@
                 </el-select>
               </div>
           </div>
-          <div class="echarts">
+          <div class="echarts" :model="field">
             <div class="btns">
-              <el-button type="primary" plain>性别</el-button>
+              <el-button type="primary" plain >性别</el-button>
               <el-button type="primary" plain>年龄</el-button>
               <el-button type="primary" plain>籍贯</el-button>
               <el-button type="primary" plain>居住地</el-button>
@@ -78,37 +81,15 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
+import axios from 'axios'
 import echarts from "echarts";
+// import func from '../../../vue-temp/vue-editor-bridge';
   export default {
     data() {
       return {
         activeNames: ['1'],
         datalist: [], //数据集数组
-      };
-    },
-    mounted() {
-       this.$nextTick(function() {
-        this.drawLine();
-        this.getDataList();  
-      })     
-    },
-    methods:{
-      // 获取数据集列表
-      async getDataList() {
-        const { data: res } = await this.$http.get(
-        "http://192.168.75.58/cedar/api/group/list.php"
-      );
-      this.datalist = res.data;
-      console.log(this.datalist)
-      },
-      // 图
-      drawLine(){
-        // 基于准备好的dom，初始化echarts实例
-        // console.log(document.getElementById('tu'))  
-        let myChart = this.$echarts.init(document.getElementById('tu'),'macarons');
-        // 绘制图表
-        myChart.setOption({
-            // title: { text: '在Vue中使用echarts' },
+        option:{
             tooltip: {
               show:true,
               trigger:'axis', //对bar
@@ -156,10 +137,9 @@ import echarts from "echarts";
                             
             },
             series: [{
-              name: 'setosa',
-              type: 'bar',
-              
-              data: [5, 16, 36, 3, 18, 20]
+              name: 'sex',
+              type: 'bar',          
+              data: []
             },
             {
               name: 'versicolor',
@@ -171,8 +151,47 @@ import echarts from "echarts";
               type: 'bar',
               data: [5, 20, 36, 21, 12, 25]
             }]
-        });    
+
+        },
+        field:['sex'],
+      };
     },
+    mounted() {
+       this.$nextTick(function() {
+        
+        this.getDataList();  
+        // this.getEcharts();
+      })     
+    },
+    methods:{
+      // 点击编辑获取ID
+      bianji(row){
+        // console.log(row.id)
+        let group_id = row.id
+        console.log(group_id)
+        .drawLine(group_id);
+      },
+ 
+      // 获取数据集列表
+      async getDataList() {
+        const { data: res } = await this.$http.get(
+        "http://192.168.75.58/cedar/api/group/list.php"
+      );
+      this.datalist = res.data;
+      console.log(this.datalist)
+      },
+      // 图
+      drawLine(group_id){
+        this.sex()
+        // 基于准备好的dom，初始化echarts实例
+        // console.log(document.getElementById('tu'))   样式
+        let myChart = this.$echarts.init(document.getElementById('tu'),'macarons')
+        // 绘制图表
+        axios.get("http://192.168.75.58/cedar/api/group/stat.php",{params:{group_id:9,field:sex}}).then(function(data){
+          console.log(data)
+        })
+        myChart.setOption(this.option)      
+      }, 
     },
   }
 </script>

@@ -1242,16 +1242,15 @@ export default {
       // const sicksList = JSON.stringify(sicksArr);
     },    
     // 免疫租化增删
-    ihcAddData(array, item) {
+    ihcAddData(array, value) {
       //判断当前数组的对象是否有数据
-      if (item.mark.trim() || item.value.trim()) {
+      if (value.mark.trim() || value.value.trim()) {
         //验证通过 添加新的一条
-        var item = {
+        var value = {
           mark: "",
           value: ""
         };
-        array.push(item);
-        alert("添加成功");
+        array.push(value);
       } else {
         alert("请检查输入是否正确");
       }
