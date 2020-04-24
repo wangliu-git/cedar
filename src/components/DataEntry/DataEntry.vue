@@ -671,17 +671,16 @@
                   </div>
                 </div>
 
-                <div class="ihc">
-                
-                  <div v-show="seen" v-for="(item,idx) in editForm.helper_diagnosis.ihc"
-                              :key="idx">
+                <div class="ihc">  
+                      <!-- 遍历患者已有的免疫组化 -->
+                  <div v-show="seen" v-for="(item,idx) in editForm.helper_diagnosis.ihc" :key="idx">
                     <span class="titl">
                       <i class="iconfont icontubiaozhizuo-"></i>
                       {{ihc.name}}
                     </span>
-                    <div id="one"   >
+                    <div id="one"   v-for="(ihc, idx) in help_diagnosis.ihc" :key="idx">
                       <!-- 循环myzh这个数组，来动态 + - 操作 -->
-                      <div class="sickI" >
+                      <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.key_ihc.field_title}}：</span>                       
                            <el-input v-model="item.mark" style="width:100px"></el-input>
@@ -1031,7 +1030,7 @@ import qs from "qs";//ulencode
 import axios from 'axios'
 
 export default {
-  el:'#myUpload',
+  
   created() {
     this.getDataList();
     this.getTableList();  
@@ -1243,15 +1242,15 @@ export default {
       // const sicksList = JSON.stringify(sicksArr);
     },    
     // 免疫租化增删
-    ihcAddData(array, value) {
+    ihcAddData(array, item) {
       //判断当前数组的对象是否有数据
-      if (value.mark.trim() || value.value.trim()) {
+      if (item.mark.trim() || item.value.trim()) {
         //验证通过 添加新的一条
-        var value = {
+        var item = {
           mark: "",
           value: ""
         };
-        array.push(value);
+        array.push(item);
         alert("添加成功");
       } else {
         alert("请检查输入是否正确");
@@ -1474,9 +1473,7 @@ export default {
   data() { 
     return {   
       // 数据集列表
-      data:[
-      
-      ],
+      data:[ ],
       // 列表参数
       id:'',
       page:'',
@@ -1562,14 +1559,6 @@ export default {
         sample_morphology: "", //形态学描述
         diagnosis: "", //诊断结论
         type: "" //淋细胞瘤来源
-        // helper_diagnosis: {
-        //   ihc: [], //免疫租化数组
-        //   fish: [], //荧光杂交数组
-        //   rearrangement: [], //基因重排数组
-        //   ish: [], //原位杂交数组
-        //   fcm: [], //流式细胞检测
-        //   ngs: [] //ngs数组
-        // } //辅助诊断
       },
       // 页面患者展示信息
       showInfo: {
@@ -1811,7 +1800,6 @@ export default {
         default:
           break;
       }
-      // console.log(this.fMInstitution.organization);
     });
 
     // 报告结论信息

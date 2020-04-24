@@ -4,6 +4,7 @@ import App from './App.vue'
 import router from './router/index'
 import VueResource from 'vue-resource'
 import './plugins/element.js'
+import '../public/js/macarons.js'
 import 'element-ui/lib/theme-chalk/index.css';
 
 // 入口文件
@@ -11,6 +12,7 @@ import ElementUI from 'element-ui'
 
 
 import echarts from 'echarts'
+
 Vue.prototype.$echarts = echarts
 // 引入基本模板
 

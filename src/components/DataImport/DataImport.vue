@@ -179,14 +179,7 @@
                   <th  v-for="(item,index) in editForm.helper_diagnosis.ihc" :key="index" :value="item">
                     <td>{{item.mark}}</td>
                     <td>{{item.value}}</td>
-                  </th>
-                <!--               
-                <el-button-group>
-                  <el-button v-for="(item,index) in editForm.helper_diagnosis.ihc" :key="index" :value="item">{{item.mark}}</el-button>
-                  <el-button v-for="(item,index) in editForm.helper_diagnosis.ihc" :key="index" :value="item">{{item.value}}</el-button>                  
-                </el-button-group> 
-                {{editForm.helper_diagnosis.ihc.mark}} {{editForm.helper_diagnosis.ihc.value}}
-                -->                       
+                  </th>                
                 </div>
 
             </div>
@@ -593,7 +586,8 @@ export default {
         count:0,        //数据总数
       },   
       // 查询到的用户信息对象
-      editForm:{},         
+      editForm:{},  
+      help_diagnosis:{},       
       //测试数据
       help_diagnosis: {
           ihc: [

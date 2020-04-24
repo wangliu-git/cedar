@@ -104,8 +104,8 @@ import echarts from "echarts";
       // 图
       drawLine(){
         // 基于准备好的dom，初始化echarts实例
-        console.log(document.getElementById('tu'))  
-        let myChart = this.$echarts.init(document.getElementById('tu'))
+        // console.log(document.getElementById('tu'))  
+        let myChart = this.$echarts.init(document.getElementById('tu'),'macarons');
         // 绘制图表
         myChart.setOption({
             // title: { text: '在Vue中使用echarts' },
@@ -124,7 +124,7 @@ import echarts from "echarts";
               // y: 'bottom',
               feature: {  
                 magicType: {
-                    type: ['stack', 'tiled','line','bar',]
+                  type: ['stack', 'tiled','line','bar',]
                 },
                 dataView: {},
                 saveAsImage: {
@@ -158,6 +158,7 @@ import echarts from "echarts";
             series: [{
               name: 'setosa',
               type: 'bar',
+              
               data: [5, 16, 36, 3, 18, 20]
             },
             {
