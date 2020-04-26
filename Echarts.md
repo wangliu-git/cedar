@@ -48,7 +48,7 @@ export default {
     // 基于准备好的dom，初始化echarts实例
     const myChart = echarts.init(document.getElementById("main"));
 
-    const { data } = await this.$http.get("reports/type/1");
+    const { data } = await this.axios.get("reports/type/1");
     if (data.meta.status !== 200) {
       return this.$message.error(data.meta.msg);
     }
