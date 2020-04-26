@@ -8,7 +8,7 @@
   export default {
     methods: {
       loginout(){
-        // window.sessionStorage.clear()
+        window.sessionStorage.clear()
         this.$router.push('/login')
       }
     },

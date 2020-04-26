@@ -62,7 +62,7 @@ export default {
           if (valid) {
             // 结构赋值
             const {data:res} = await this.$http.post('http://192.168.75.58/cedar/api/user/login.php',{params:{username:this.Form.username,pass:this.Form.pass}})
-            console.log(res)
+            // console.log(res)
             // 判断登录成功失败
             if (res.uid = res.uid){
               this.$message({
@@ -70,6 +70,8 @@ export default {
                 type:'success'
               })
               // 登录成功跳转到首页
+              window.sessionStorage.setItem('token',res.token)
+              console.log(res)
               this.$router.push('/homepage')
             }else{
               this.$message({

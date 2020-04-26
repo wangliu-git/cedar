@@ -59,9 +59,9 @@
                 </el-select>
               </div>
           </div>
-          <div class="echarts" :model="field">
+          <div class="echarts">
             <div class="btns">
-              <el-button type="primary" plain >性别</el-button>
+              <el-button type="primary" plain @click="sex()">性别</el-button>
               <el-button type="primary" plain>年龄</el-button>
               <el-button type="primary" plain>籍贯</el-button>
               <el-button type="primary" plain>居住地</el-button>
@@ -153,12 +153,12 @@ import echarts from "echarts";
             }]
 
         },
-        field:['sex'],
+        field:'',
+        sex:'',
       };
     },
     mounted() {
-       this.$nextTick(function() {
-        
+       this.$nextTick(function() {       
         this.getDataList();  
         // this.getEcharts();
       })     
@@ -169,7 +169,7 @@ import echarts from "echarts";
         // console.log(row.id)
         let group_id = row.id
         console.log(group_id)
-        .drawLine(group_id);
+        this.drawLine(group_id);
       },
  
       // 获取数据集列表
@@ -182,7 +182,7 @@ import echarts from "echarts";
       },
       // 图
       drawLine(group_id){
-        this.sex()
+        this.sex(sex)
         // 基于准备好的dom，初始化echarts实例
         // console.log(document.getElementById('tu'))   样式
         let myChart = this.$echarts.init(document.getElementById('tu'),'macarons')
@@ -190,7 +190,7 @@ import echarts from "echarts";
         axios.get("http://192.168.75.58/cedar/api/group/stat.php",{params:{group_id:9,field:sex}}).then(function(data){
           console.log(data)
         })
-        myChart.setOption(this.option)      
+        myChart.setOption(this.options)      
       }, 
     },
   }

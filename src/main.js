@@ -38,14 +38,10 @@ import './assets/css/global.css'
 // axios
 import axios from 'axios'
 // 挂载axios
-// Vue.prototype.$http = axios
+Vue.prototype.$http = axios
 
 axios.defaults.headers.post['content-Type'] = 'application/x-www-form-urlencoded'
-// axios.defaults.baseURL = 'https://www.liulongbin.top:8888/api/private/v1/'
-axios.defaults.baseURL = 'http://192.168.75.58/cedar/api'
-// http://192.168.75.58/cedar/api/report/onedata.php
-
-// http://106.13.49.232
+axios.defaults.baseURL = 'http://192.168.75.58/cedar/api/'
 
 
 // // 请求头拦截
