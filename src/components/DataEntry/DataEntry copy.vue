@@ -1043,7 +1043,7 @@ export default {
     //点击数据集编辑
     bianji(row){
       this.search =! this.search
-      const {data :res } = this.$http.get("http://192.168.75.58/cedar/api/dataset/list.php?id=", + row.id)
+      const {data :res } = this.axios.get("dataset/list.php?id=", + row.id)
       console.log(row.id)
       this.id = row.id
     
@@ -1064,8 +1064,8 @@ export default {
         // console.log(this.id)
         // this.editForm = JSON.parse(JSON.stringify(row))
         // console.log(this.editForm)         
-        const { data :res} = await this.$http.get(
-            "http://192.168.75.58/cedar/api/excel_data/onedata.php?id=" + row.id
+        const { data :res} = await this.axios.get(
+            "excel_data/onedata.php?id=" + row.id
         );
         console.log("getTableList",res);
         // console.log(row.id) //53
@@ -1075,8 +1075,8 @@ export default {
     },
     // 获取数据集列表
     async getDataList() {
-        const { data : res } = await this.$http.get(
-            "http://192.168.75.58/cedar/api/dataset/list.php"
+        const { data : res } = await this.axios.get(
+            "dataset/list.php"
         );
         this.datalist = res.data;   
         // console.log('***********',res.data) 
@@ -1084,8 +1084,8 @@ export default {
     // 获取病理号
     async getTableList(row) {
       console.log(row.id)
-        const { data: res } = await this.$http.get(
-          "http://192.168.75.58/cedar/api/excel_data/list.php?id=" + row.id,             
+        const { data: res } = await this.axios.get(
+          "excel_data/list.php?id=" + row.id,             
         );
           this.tablelist = res.data
           console.log(res.data)
@@ -1110,8 +1110,8 @@ export default {
       console.log(this.id)
       // this.editForm = JSON.parse(JSON.stringify(row))
       // console.log(this.editForm)         
-      const { data :res} = await this.$http.get(
-        "http://192.168.75.58/cedar/api/excel_data/onedata.php?id=" + row.id
+      const { data :res} = await this.axios.get(
+        "excel_data/onedata.php?id=" + row.id
       );
       // if(res.meta.status !== 200){
       //   return this.$message.error('查询用户信息失败')
@@ -1290,7 +1290,7 @@ export default {
       
       console.log("data:",data);
 
-      //   this.$http.post('http://192.168.75.58/cedar/api/report/add.php',qs.stringify({id:"3",data:"bbb"})).then(reponse=>{
+      //   this.axios.post('report/add.php',qs.stringify({id:"3",data:"bbb"})).then(reponse=>{
       //  console.log(reponse)
      
       // })
@@ -1301,7 +1301,7 @@ export default {
                   var params = new URLSearchParams();
 
       if(data){
-        this.$http.post('http://192.168.75.58/cedar/api/report/add.php',data).then(function(res){
+        this.axios.post('report/add.php',data).then(function(res){
           console.log('res:',res); 
           var result = res.body;//JSON.parse(res.body);
           if(result.result=="done"){

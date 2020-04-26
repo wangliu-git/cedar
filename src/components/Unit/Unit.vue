@@ -426,7 +426,7 @@ import allMessage from "../../staic/allMessage.json";
     },
     // 获取病理号
     async getTableList(){
-      const {data : res} = await this.$http.get('http://192.168.75.58/cedar/api/diagnosis_origin/list.php',{params:{page:this.queryInfo.page}})
+      const {data : res} = await this.axios.get('diagnosis_origin/list.php',{params:{page:this.queryInfo.page}})
       console.log("getTableList",res);
       this.tablelist = res.data;
       console.log(res.data);
@@ -438,8 +438,8 @@ import allMessage from "../../staic/allMessage.json";
     // 搜索
     async getTable() {      
       // console.log(row.id)
-      const { data: res } = await this.$http.get(
-      "http://192.168.75.58/cedar/api/diagnosis_origin/list.php" , {params:{name:this.name,test_id:this.test_id}});
+      const { data: res } = await this.axios.get(
+      "diagnosis_origin/list.php" , {params:{name:this.name,test_id:this.test_id}});
       console.log(this.test_id)
       console.log(this.name)
       this.tablelist = res.data

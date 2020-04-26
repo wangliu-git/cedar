@@ -161,7 +161,7 @@
                 <div><span>民族：</span>{{editForm.nation}}</div>           
                 <div><span>籍贯：</span>{{editForm.birthplace}}</div>           
                 <div><span>居住地：</span>{{editForm.address_prov}}</div>           
-                <div><span>病理号：</span>{{editForm.patient_id}}</div>           
+                <div><span>病理号：</span>{{editForm.test_id}}</div>           
                 <div><span>送检科室：</span>{{editForm.department}}</div>           
                 <div><span>申请日期：</span>{{editForm.application_date}}</div>  
                 <div><span>报告日期：</span>{{editForm.report_date}}</div>        
@@ -248,8 +248,8 @@ export default {
   methods:{
     // 点击确定
     async sure(id){    
-      const { data : res } = await this.$http.post(
-        "http://192.168.75.58/cedar/api/dataset/edit.php",{params:{id:this.id,file_name:this.data.file_name,location:this.data.location}}
+      const { data : res } = await this.axios.post(
+        "dataset/edit.php",{params:{id:this.id,file_name:this.data.file_name,location:this.data.location}}
       );    
       console.log(this.data.file_name)
       console.log(res)
@@ -260,16 +260,39 @@ export default {
     async bianji(row){
       this.group = !this.group
       this.id = row.id    
-      const { data : res } = await this.$http.get(
-        "http://192.168.75.58/cedar/api/dataset/one.php?id=" + row.id
+      const { data : res } = await this.axios.get(
+        "dataset/one.php?id=" + row.id
       );
       console.log(res)
       this.data = res
     },
     //点击数据集解析
     jiexi(row){
-      this.chakan =! this.chakan
-      const {data :res } = this.$http.get("http://192.168.75.58/cedar/api/dataset/list.php?id=", + row.id)
+      
+      // 插入数据  excel_data/readjson.php
+       this.axios.get("excel_data/readjson.php", {params:{id :row.id}}).then(res => {
+        console.log(res)
+        console.log(res.data)
+         var result = res.data;//JSON.parse(res.body);
+        if(result.result == 1){
+            this.$alert("解析成功", '提交结果', {
+              confirmButtonText: '确定',
+              type: 'success',
+              callback: action => {
+                this.chakan =! this.chakan
+                this.axios.get("dataset/list.php?id=", + row.id)
+              },
+            });
+            
+        }else{
+            this.$alert("解析失败", '提交结果', {
+              confirmButtonText: '确定',
+              type: 'warning',
+              callback: action => {
+              },
+            });
+          }
+      })
       console.log(row.id)
       this.id = row.id 
       console.log(this.id)
@@ -278,16 +301,16 @@ export default {
     // 点击数据集删除
     async dele(row){
       console.log(row.id)
-      const { data :res} = await this.$http.get(
-        "http://192.168.75.58/cedar/api/dataset/del.php" ,{params:{id:row.id}}
+      const { data :res} = await this.axios.get(
+        "dataset/del.php" ,{params:{id:row.id}}
       );
       console.log(res)
     },
     // 点击病理号查看
     async look(row){         
       this.zhezhao = !this.zhezhao 
-      const { data :res} = await this.$http.get(
-        "http://192.168.75.58/cedar/api/excel_data/onedata.php" ,{params:{id:row.id}}
+      const { data :res} = await this.axios.get(
+        "excel_data/onedata.php" ,{params:{id:row.id}}
       );
       console.log("getTableList",res);
       this.editForm = res.data;
@@ -295,8 +318,8 @@ export default {
     },
     // 获取数据集列表
     async getDataList() {
-        const { data : res } = await this.$http.get(
-            "http://192.168.75.58/cedar/api/dataset/list.php"
+        const { data : res } = await this.axios.get(
+            "dataset/list.php"
         );
         this.datalist = res.data;   
     },
@@ -304,8 +327,8 @@ export default {
     async getTableList(row) {  
       // console.log(row.id)
       console.log(this.queryInfo.page)
-      const { data: res } = await this.$http.get(     
-      "http://192.168.75.58/cedar/api/excel_data/list.php?id=" + row.id, {params:{page:this.queryInfo.page}});
+      const { data: res } = await this.axios.get(     
+      "excel_data/list.php?id=" + row.id, {params:{page:this.queryInfo.page}});
       //console.log(row.id)
       this.tablelist = res.data
       //console.log(res.data)
@@ -319,8 +342,8 @@ export default {
     async getTableList() {  
       // console.log(row.id)
       console.log(this.queryInfo.page)
-      const { data: res } = await this.$http.get(     
-      "http://192.168.75.58/cedar/api/excel_data/list.php?id=" + this.id, {params:{page:this.queryInfo.page}});
+      const { data: res } = await this.axios.get(     
+      "excel_data/list.php?id=" + this.id, {params:{page:this.queryInfo.page}});
       //console.log(row.id)
       this.tablelist = res.data
       //console.log(res.data)
@@ -333,8 +356,8 @@ export default {
     },
     // 病理号删除
     async del(row) {     
-      const { data: res } = await this.$http.get(
-      "http://192.168.75.58/cedar/api/excel_data/del.php" , {params:{id:row.id}});
+      const { data: res } = await this.axios.get(
+      "excel_data/del.php" , {params:{id:row.id}});
       this.$confirm("确定删除该数据？, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -358,8 +381,8 @@ export default {
     // 搜索
     async getTable() {      
       // console.log(row.id)
-      const { data: res } = await this.$http.get(
-      "http://192.168.75.58/cedar/api/excel_data/list.php?id=" + this.id, {params:{name:this.name,test_id:this.test_id}});
+      const { data: res } = await this.axios.get(
+      "excel_data/list.php?id=" + this.id, {params:{name:this.name,test_id:this.test_id}});
       console.log(this.test_id)
       console.log(this.id)
       console.log(this.name)
@@ -390,32 +413,29 @@ export default {
         this.editForm.help_diagnosis = this.help_diagnosis;
         // const sicksList = JSON.stringify(sicksArr)      
         let data={
-            "id":"",
-            "data":editForm
+          "id":"",
+          "data":editForm
         }
-          //             var params = new URLSearchParams();
-          // params.append('username', 'admin');
-          // params.append('password', '123456');
-        // console.log("data:",data);
         // 判断提交
         if(editForm){
-            this.$http.post('http://192.168.75.58/cedar/api/report/add.php',data).then(function(res){
-            console.log('res:',res.body);
-            var result = res.body;//JSON.parse(res.body);
+            await this.axios.post('report/add.php',data).then(res =>{
+            console.log('res:',res);
+            var result = res.data;//JSON.parse(res.body);
             if(result.result=="done"){
+              
                 this.$alert("提交成功", '提交结果', {
-                confirmButtonText: '确定',
-                type: 'success',
-                callback: action => {
-                },
+                  confirmButtonText: '确定',
+                  type: 'success',
+                  callback: action => {
+                  },
                 });
             }
             else{
                 this.$alert("提交失败", '提交结果', {
-                confirmButtonText: '确定',
-                type: 'warning',
-                callback: action => {
-                },
+                  confirmButtonText: '确定',
+                  type: 'warning',
+                  callback: action => {
+                  },
                 });
             }
             })
@@ -524,7 +544,7 @@ export default {
       fd.append('_t1',new Date());
       axios({
           method:'post',
-          url:"http://192.168.75.58/cedar/api/upload_file/add.php",
+          url:"upload_file/add.php",
           data:fd,
           headers:{"Content-Type":"multipart/form-data;boundary="+new Date().getTime()}
       }).then(rsp=>{

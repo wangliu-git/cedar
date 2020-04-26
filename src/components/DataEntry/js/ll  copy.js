@@ -93,7 +93,7 @@ import axios from 'axios'
                 fd.append('_t1',new Date());
                axios({
                     method:'post',
-                    url:"http://192.168.75.58/cedar/api/upload_file/add.php",
+                    url:"upload_file/add.php",
                     data:fd,
                     headers:{"Content-Type":"multipart/form-data;boundary="+new Date().getTime()}
                 }).then(rsp=>{

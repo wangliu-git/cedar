@@ -109,8 +109,8 @@ import echarts from "echarts";
       }, 
       // 获取数据集列表
       async getDataList() {
-        const { data: res } = await this.$http.get(
-        "http://192.168.75.58/cedar/api/group/list.php");
+        const { data: res } = await this.axios.get(
+        "group/list.php");
         this.datalist = res.data;
         console.log(this.datalist)
       },
@@ -122,7 +122,7 @@ import echarts from "echarts";
         // 基于准备好的dom，初始化echarts实例
         // console.log(document.getElementById('tu'))   样式
         let myChart = this.$echarts.init(document.getElementById('tu'),'macarons')
-        const {data: res} = await this.$http.get("http://192.168.75.58/cedar/api/group/stat.php?group_id=9&field=sex")
+        const {data: res} = await this.axios.get("group/stat.php?group_id=9&field=sex")
         
         let datas = res.stat
         console.log(datas)

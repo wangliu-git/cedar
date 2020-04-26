@@ -461,11 +461,6 @@ export default {
       // 折叠面板默认打开
       activeNames: ["3","1","2"],
       tablelist: [], //病理号数组
-      queryInfo: {
-        page:1,         //页数
-        pagerows:10,    //每页显示的条数
-        count:0,        //数据总数
-      },
     }
   },
   created() {
@@ -505,8 +500,8 @@ export default {
     },
     // 获取病理号
     async getTableList() {
-      const { data: res } = await this.$http.get(
-        "http://192.168.75.58/cedar/api/report/list.php",
+      const { data: res } = await this.axios.get(
+        "report/list.php",
         {params:{page:this.queryInfo.page}}
       );
       console.log("getTableList",res);
@@ -519,14 +514,52 @@ export default {
     // 点击查看
     async look(row){
       this.zhezhao =! this.zhezhao  //不能没     
-      const { data :res} = await this.$http.get(
-        "http://192.168.75.58/cedar/api/report/onedata.php " ,{params:{id:row.id}}
+      const { data :res} = await this.axios.get(
+        "report/onedata.php " ,{params:{id:row.id}}
       );
       this.editForm = res.data;
       // this.editForm = Object.assign(res.data[0],res.data[1],res.data[2])
       // 表单对象
       console.log(this.editForm);   
     },
+    // 新增患者信息
+    async addFormList(editForm){
+      this.zhezhao = !this.zhezhao
+      this.editForm.help_diagnosis = this.help_diagnosis;
+      // const sicksList = JSON.stringify(sicksArr)      
+      let data={
+        "id":"",
+        "data":editForm
+      }
+      // 判断提交
+      if(editForm){
+          await this.axios.post('report/add.php',data).then(res =>{
+          console.log('res:',res);
+          var result = res.data;//JSON.parse(res.body);
+          if(result.result=="done"){
+            
+              this.$alert("提交成功", '提交结果', {
+                confirmButtonText: '确定',
+                type: 'success',
+                callback: action => {
+                },
+              });
+          }
+          else{
+              this.$alert("提交失败", '提交结果', {
+                confirmButtonText: '确定',
+                type: 'warning',
+                callback: action => {
+                },
+              });
+          }
+          })
+      }else {
+          console.log('error submit!!');
+          return false;
+          }    
+    },
+
   },
 }
 </script>

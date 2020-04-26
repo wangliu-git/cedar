@@ -1038,8 +1038,8 @@ export default {
   methods: {
     // 点击确定
     async sure(id){    
-      const { data : res } = await this.$http.post(
-        "http://192.168.75.58/cedar/api/dataset/edit.php",{params:{id:this.id,file_name:this.data.file_name,location:this.data.location}}
+      const { data : res } = await this.axios.post(
+        "dataset/edit.php",{params:{id:this.id,file_name:this.data.file_name,location:this.data.location}}
       );    
       console.log(this.data.file_name)
       console.log(res)
@@ -1050,8 +1050,8 @@ export default {
     async bianji(row){
       this.group = !this.group
       this.id = row.id    
-      const { data : res } = await this.$http.get(
-        "http://192.168.75.58/cedar/api/dataset/one.php?id=" + row.id
+      const { data : res } = await this.axios.get(
+        "dataset/one.php?id=" + row.id
       );
       console.log(res)
       this.data = res
@@ -1059,17 +1059,17 @@ export default {
     //点击数据集解析  将数据插入到列表中
     async jiexi(row){
       // 插入数据  excel_data/readjson.php
-      await this.$http.get("http://192.168.75.58/cedar/api/excel_data/readjson.php", {params:{id :row.id}}).then(res => {
+      await this.axios.get("excel_data/readjson.php", {params:{id :row.id}}).then(res => {
         console.log(res)
         console.log(res.data)
-         var result = res.body;//JSON.parse(res.body);
+         var result = res.data;//JSON.parse(res.body);
         if(result.result == 1){
             this.$alert("解析成功", '提交结果', {
               confirmButtonText: '确定',
               type: 'success',
               callback: action => {
                 this.search = !this.search
-                this.$http.get("http://192.168.75.58/cedar/api/dataset/list.php?id=", + row.id)
+                this.axios.get("dataset/list.php?id=", + row.id)
               },
             });
             
@@ -1090,8 +1090,8 @@ export default {
     // 点击数据集删除
     async dele(row){
       console.log(row.id)
-      const { data :res} = await this.$http.get(
-        "http://192.168.75.58/cedar/api/dataset/del.php" ,{params:{id:row.id}}
+      const { data :res} = await this.axios.get(
+        "dataset/del.php" ,{params:{id:row.id}}
       );
       // console.log(res)
     },
@@ -1102,8 +1102,8 @@ export default {
         // console.log(this.id)
         // this.editForm = JSON.parse(JSON.stringify(row))
         // console.log(this.editForm)         
-        const { data :res} = await this.$http.get(
-            "http://192.168.75.58/cedar/api/excel_data/onedata.php?id=" + row.id
+        const { data :res} = await this.axios.get(
+            "excel_data/onedata.php?id=" + row.id
         );
         // console.log("getTableList",res);
         // console.log(row.id) //53
@@ -1114,8 +1114,8 @@ export default {
     },
     // 获取数据集列表
     async getDataList() {
-        const { data : res } = await this.$http.get(
-            "http://192.168.75.58/cedar/api/dataset/list.php"
+        const { data : res } = await this.axios.get(
+            "dataset/list.php"
         );
         this.datalist = res.data;   
     },
@@ -1124,8 +1124,8 @@ export default {
       this.search =! this.search
       // console.log(row.id)
       // console.log(this.queryInfo.page)
-      const { data: res } = await this.$http.get(     
-      "http://192.168.75.58/cedar/api/excel_data/list.php?id=" + row.id, {params:{page:this.queryInfo.page}});
+      const { data: res } = await this.axios.get(     
+      "excel_data/list.php?id=" + row.id, {params:{page:this.queryInfo.page}});
       //console.log(row.id)
       this.tablelist = res.data
       //console.log(res.data)
@@ -1139,8 +1139,8 @@ export default {
     async getTableList() {  
       // console.log(row.id)
       // console.log(this.queryInfo.page)
-      const { data: res } = await this.$http.get(     
-      "http://192.168.75.58/cedar/api/excel_data/list.php?id=" + this.id, {params:{page:this.queryInfo.page}});
+      const { data: res } = await this.axios.get(     
+      "excel_data/list.php?id=" + this.id, {params:{page:this.queryInfo.page}});
       //console.log(row.id)
       this.tablelist = res.data
       //console.log(res.data)
@@ -1154,8 +1154,8 @@ export default {
     // 搜索
     async getTable() {      
       // console.log(row.id)
-      const { data: res } = await this.$http.get(
-      "http://192.168.75.58/cedar/api/excel_data/list.php?id=" + this.id, {params:{name:this.name,test_id:this.test_id}});
+      const { data: res } = await this.axios.get(
+      "excel_data/list.php?id=" + this.id, {params:{name:this.name,test_id:this.test_id}});
       console.log(this.test_id)
       console.log(this.id)
       console.log(this.name)
@@ -1173,8 +1173,8 @@ export default {
     async next(){
       this.id = this.id         
       console.log(this.id)
-      const { data :res} = await this.$http.get(
-      "http://192.168.75.58/cedar/api/excel_data/nextonedata.php?id=" + this.id);      
+      const { data :res} = await this.axios.get(
+      "excel_data/nextonedata.php?id=" + this.id);      
       if(res.ok ==0){
         return this.$message.error('已经是最后一个了')
       }
@@ -1313,8 +1313,8 @@ export default {
     },
     // 列表删除
     async del(row) {   
-      const { data: res } = await this.$http.get(
-      "http://192.168.75.58/cedar/api/excel_data/del.php" , {params:{id:row.id}});
+      const { data: res } = await this.axios.get(
+      "excel_data/del.php" , {params:{id:row.id}});
       this.$confirm("确定删除该数据？, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -1350,7 +1350,7 @@ export default {
       // console.log("data:",data);
       if(data){
       // console.log(data)
-       this.$http.post('http://192.168.75.58/cedar/api/report/add.php',data).then(function(res){
+       this.axios.post('report/add.php',data).then(function(res){
           console.log('res:',res); 
           var result = res.body;//JSON.parse(res.body);
           if(result.result=="done"){
@@ -1451,7 +1451,7 @@ export default {
         fd.append('_t1',new Date());
         axios({
             method:'post',
-            url:"http://192.168.75.58/cedar/api/upload_file/add.php",
+            url:"upload_file/add.php",
             data:fd,
             headers:{"Content-Type":"multipart/form-data;boundary="+new Date().getTime()}
         }).then(rsp=>{

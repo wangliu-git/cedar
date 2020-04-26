@@ -1067,7 +1067,7 @@ export default {
       console.log(this.id)
       // this.editForm = JSON.parse(JSON.stringify(row))
       // console.log(this.editForm)         
-      const { data :res} = await this.$http.get(
+      const { data :res} = await this.axios.get(
         "http://106.13.49.232/cedar/api/excel_data/onedata.php?id=" + row.id
       );
       // if(res.meta.status !== 200){
@@ -1086,7 +1086,7 @@ export default {
       console.log(this.id)
       // this.editForm = JSON.parse(JSON.stringify(row))
       // console.log(this.editForm)         
-      const { data :res} = await this.$http.get(
+      const { data :res} = await this.axios.get(
         "http://106.13.49.232/cedar/api/excel_data/onedata.php?id=" + row.id
       );
       // if(res.meta.status !== 200){
@@ -1254,14 +1254,14 @@ export default {
     },    
     // 获取数据集列表
     async getDataList() {
-      const { data : res } = await this.$http.get(
+      const { data : res } = await this.axios.get(
         "http://106.13.49.232/cedar/api/dataset/list.php"
       );
       this.datalist = res.data;    
     },
     // 获取病理号
     async getTableList() {
-      const { data: res } = await this.$http.get(
+      const { data: res } = await this.axios.get(
         "http://106.13.49.232/cedar/api/excel_data/list.php",
         this.tableinfo
       );
@@ -1288,7 +1288,7 @@ export default {
       
       console.log("data:",data);
 
-      //   this.$http.post('http://192.168.75.58/cedar/api/report/add.php',qs.stringify({id:"3",data:"bbb"})).then(reponse=>{
+      //   this.axios.post('report/add.php',qs.stringify({id:"3",data:"bbb"})).then(reponse=>{
       //  console.log(reponse)
      
       // })
@@ -1299,7 +1299,7 @@ export default {
                   var params = new URLSearchParams();
 
       if(data){
-        this.$http.post('http://106.13.49.232/cedar/api/report/add.php',data).then(function(res){
+        this.axios.post('http://106.13.49.232/cedar/api/report/add.php',data).then(function(res){
           console.log('res:',res); 
           var result = res.body;//JSON.parse(res.body);
           if(result.result=="done"){

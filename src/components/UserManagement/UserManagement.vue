@@ -106,7 +106,7 @@
     methods:{
       // 获取用户列表
       async getUserList(){
-        const {data :res} = await this.$http.get("http://192.168.75.58/cedar/api/user/list.php" ,{params:{page:this.queryInfo.page}})
+        const {data :res} = await this.axios.get("user/list.php" ,{params:{page:this.queryInfo.page}})
         // console.log(res)
         this.userlist = res.data
         this.queryInfo.page = parseInt(res.page);     
@@ -116,7 +116,7 @@
       // 点击修改
       async xiugai(row){
         this.group = !this.group
-        const {data : res} = await this.$http.get("http://192.168.75.58/cedar/api/user/one.php",{params:{id:row.id}})
+        const {data : res} = await this.axios.get("user/one.php",{params:{id:row.id}})
         console.log(res)
         this.userData =res
 
@@ -135,7 +135,7 @@
       async del(row){
         console.log(row.id)
         window.sessionStorage.clear()
-        const {data:res} = await this.$http.get('http://192.168.75.58/cedar/api/user/del.php',{params:{id:row.id}})
+        const {data:res} = await this.axios.get('user/del.php',{params:{id:row.id}})
         console.log(res)      
       },
     },

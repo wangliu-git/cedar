@@ -1066,8 +1066,8 @@ export default {
       console.log(this.id)
       // this.editForm = JSON.parse(JSON.stringify(row))
       // console.log(this.editForm)         
-      const { data :res} = await this.$http.get(
-        "http://192.168.75.58/cedar/api/excel_data/onedata.php?id=" + row.id
+      const { data :res} = await this.axios.get(
+        "excel_data/onedata.php?id=" + row.id
       );
       // if(res.meta.status !== 200){
       //   return this.$message.error('查询用户信息失败')
@@ -1085,8 +1085,8 @@ export default {
       console.log(this.id)
       // this.editForm = JSON.parse(JSON.stringify(row))
       // console.log(this.editForm)         
-      const { data :res} = await this.$http.get(
-        "http://192.168.75.58/cedar/api/excel_data/onedata.php?id=" + row.id
+      const { data :res} = await this.axios.get(
+        "excel_data/onedata.php?id=" + row.id
       );
       // if(res.meta.status !== 200){
       //   return this.$message.error('查询用户信息失败')
@@ -1256,15 +1256,15 @@ export default {
     },    
     // 获取数据集列表
     async getDataList() {
-      const { data : res } = await this.$http.get(
-        "http://192.168.75.58/cedar/api/dataset/list.php"
+      const { data : res } = await this.axios.get(
+        "dataset/list.php"
       );
       this.datalist = res.data;    
     },
     // 获取病理号
     async getTableList() {
-      const { data: res } = await this.$http.get(
-        "http://192.168.75.58/cedar/api/excel_data/list.php",
+      const { data: res } = await this.axios.get(
+        "excel_data/list.php",
         this.tableinfo
       );
       console.log("getTableList",res);
@@ -1289,7 +1289,7 @@ export default {
       console.log("data:",data);
       // 判断提交
       if(editForm){
-        this.$http.post('http://192.168.75.58/cedar/api/report/add.php',data).then(function(res){
+        this.axios.post('report/add.php',data).then(function(res){
           console.log('res:',res.body);
           var result = res.body;//JSON.parse(res.body);
           if(result.result=="done"){

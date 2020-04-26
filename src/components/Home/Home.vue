@@ -58,7 +58,7 @@
             <img src="./img/logo.png" alt="">           
           </div>
 
-          <div class="logo" :model="Form">
+          <div class="logo" >
             <img src="./img/head-portrait.png" alt="">
              <span>您好，志诺维思</span>
              <div class="shu"></div>

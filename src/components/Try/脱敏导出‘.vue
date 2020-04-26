@@ -36,8 +36,8 @@
      methods:{
         // 获取数据集列表
         async getDataList() {
-        const { data: res } = await this.$http.get(
-            "http://192.168.75.58/cedar/api/group/list.php"
+        const { data: res } = await this.axios.get(
+            "group/list.php"
         );
         this.datalist = res.data;
         console.log(this.datalist)
