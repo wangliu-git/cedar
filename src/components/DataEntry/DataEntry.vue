@@ -944,7 +944,7 @@
           </div>
           <div class="cun">
             <span>存储位置：</span>
-            <el-input style="width:400px" size="small" v-model="data.location"></el-input>
+            <el-input style="width:400px" size="small" v-model="item"></el-input>
           </div>
           <div class="sousuo">
             <el-input placeholder="请输入分组关键词..." style="width:500px">
@@ -952,11 +952,7 @@
             </el-input>
           </div>
           <div class="groupList">
-            <li>肝癌多中心项目-复旦肿瘤项目</li>
-            <li>肝癌多中心项目</li>
-            <li>淋巴瘤的流行病学研究</li>
-            <li>左半肝胆管腺癌病理分析</li>
-            <li>未分组</li>
+            <el-button style="width:300px" @click="addGroup(item)" v-model="data.location" v-for="(item, index) in groupLists" :key="index" :value="item" >{{item}}</el-button>
           </div>
           <div class="name">
             <span>新建分组名称 ：</span>
@@ -1033,9 +1029,38 @@ export default {
   
   created() {
     this.getDataList();
-    this.getTableList();  
+    this.getTableList(); 
+    // console.log(window.sessionStorage.uid) 
   },
   methods: {
+    // 点击添加分组
+    async addGroup(item,id){
+      console.log(item,this.id)
+      console.log(window.sessionStorage.uid)
+      var group_name = ''    
+      const {data} = await this.axios.post('group/add.php',{params:{group_name:item,id:this.id,userid:window.sessionStorage.uid}}).then( res =>{
+         var result = res.data;//JSON.parse(res.body);
+        if(result.result == 1){
+            this.$alert("添加成功", '提交结果', {
+              confirmButtonText: '确定',
+              type: 'success',
+              callback: action => {
+                this.search = !this.search
+                this.axios.get("dataset/list.php?id=", + row.id)
+              },
+            });
+            
+        }else{
+            this.$alert("添加失败", '提交结果', {
+              confirmButtonText: '确定',
+              type: 'warning',
+              callback: action => {
+              },
+            });
+          }
+      })
+      console.log(data)
+    },
     // 点击确定
     async sure(id){    
       const { data : res } = await this.axios.post(
@@ -1489,6 +1514,7 @@ export default {
   },
   data() { 
     return {   
+      groupLists:['肝癌多中心项目-复旦肿瘤医院','肺癌多中心项目','淋巴瘤的流行病学研究','左半肝胆管腺癌病理分析','未分组'],   //分组列表
       // 数据集列表
       data:[ ],
       // 列表参数
@@ -2200,7 +2226,7 @@ a {
   color: white;
   font-size: 16px;
 }
-.s {
+.s{
   background: rgba(255, 255, 255, 1);
   box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
   border-radius: 4px;
@@ -2245,7 +2271,7 @@ a {
   z-index 9
   .nei {
     border-radius: 5px;
-    width: 600px;
+    width: 550px;
     height: 588px;
     position: absolute;
     left: 0;
@@ -2289,10 +2315,11 @@ a {
         height: 300px;
         border: 1px solid #DCDFE6;
         margin: 20px 20px;
-        li {
-          list-style: none;
+        display flex
+        flex-flow column
+        justify-content space-evenly
+        .el-button{
           margin-left: 20px;
-          margin-top: 30px;
           font-size: 16px;
         }
       }

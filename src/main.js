@@ -9,8 +9,6 @@ import 'element-ui/lib/theme-chalk/index.css';
 
 // 入口文件
 import ElementUI from 'element-ui'
-
-
 import echarts from 'echarts'
 
 Vue.prototype.$echarts = echarts
@@ -55,6 +53,7 @@ axios.defaults.baseURL = 'http://192.168.75.58/cedar/api/'
 //   NProgress.done()
 //   return config
 // })
+
 Vue.use(VueResource)
 
 Vue.use(ElementUI)
