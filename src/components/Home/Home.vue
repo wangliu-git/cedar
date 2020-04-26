@@ -58,7 +58,7 @@
             <img src="./img/logo.png" alt="">           
           </div>
 
-          <div class="logo">
+          <div class="logo" :model="Form">
             <img src="./img/head-portrait.png" alt="">
              <span>您好，志诺维思</span>
              <div class="shu"></div>
@@ -99,6 +99,11 @@
       },
       handleClose(key, keyPath) {
         console.log(key, keyPath);
+      }
+    },
+    data(){
+      return{
+
       }
     }
   }

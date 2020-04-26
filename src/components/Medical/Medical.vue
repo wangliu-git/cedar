@@ -61,7 +61,7 @@
           </div>
           <div class="echarts">
             <div class="btns">
-              <el-button type="primary" plain @click="sex()">性别</el-button>
+              <el-button type="primary" plain>性别</el-button>
               <el-button type="primary" plain>年龄</el-button>
               <el-button type="primary" plain>籍贯</el-button>
               <el-button type="primary" plain>居住地</el-button>
@@ -81,15 +81,56 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-import axios from 'axios'
+
 import echarts from "echarts";
-// import func from '../../../vue-temp/vue-editor-bridge';
+
   export default {
     data() {
       return {
         activeNames: ['1'],
         datalist: [], //数据集数组
-        option:{
+        chartsData:[],   //图表数据
+       
+      };
+    },
+    mounted() {
+       this.$nextTick(function() {       
+        this.getDataList();  
+        this.drawLine();
+        // this.getEcharts();
+      })     
+    },
+    methods:{
+      // 点击编辑获取ID
+      bianji(row){
+        // console.log(row.id)
+        let group_id = row.id
+        console.log(group_id)        
+      }, 
+      // 获取数据集列表
+      async getDataList() {
+        const { data: res } = await this.$http.get(
+        "http://192.168.75.58/cedar/api/group/list.php");
+        this.datalist = res.data;
+        console.log(this.datalist)
+      },
+      // 图
+      
+      async  drawLine(){  
+
+        // myChart.showLoading(); myChart.hideLoading();  //等待效果
+        // 基于准备好的dom，初始化echarts实例
+        // console.log(document.getElementById('tu'))   样式
+        let myChart = this.$echarts.init(document.getElementById('tu'),'macarons')
+        const {data: res} = await this.$http.get("http://192.168.75.58/cedar/api/group/stat.php?group_id=9&field=sex")
+        
+        let datas = res.stat
+        console.log(datas)
+        for( var i in datas){
+          console.log(datas[i])
+          console.log(datas[i].sex)
+           myChart.setOption(
+           this.option={
             tooltip: {
               show:true,
               trigger:'axis', //对bar
@@ -109,7 +150,7 @@ import echarts from "echarts";
                 },
                 dataView: {},
                 saveAsImage: {
-                    pixelRatio: 2
+                  pixelRatio: 2
                 }
               }
             },
@@ -121,13 +162,14 @@ import echarts from "echarts";
             }],
             // 小图标
             legend: {
-                data: ['setosa', 'versicolor','virginica']
+                data: ['男','女']
             },
-            xAxis: {
-              data: ["4","4.5","5","5.5","6","6.5","7",],
-              
+            xAxis:{
+              data:datas[i].sex
             },
-            yAxis: {},       
+            yAxis:{
+              data:datas[i].value
+            },     
             grid: {
               left:'10%',            
               right:'10%',             
@@ -136,64 +178,27 @@ import echarts from "echarts";
               height:'90%',
                             
             },
-            series: [{
-              name: 'sex',
-              type: 'bar',          
-              data: []
-            },
-            {
-              name: 'versicolor',
-              type: 'bar',
-              data: [5, 18, 16, 10, 16, 20]
-            },
-            {
-              name: 'virginica',
-              type: 'bar',
-              data: [5, 20, 36, 21, 12, 25]
+            series:[{
+              name:datas[i].sex,
+              data:datas[i].value,
+              type:'bar'
             }]
-
-        },
-        field:'',
-        sex:'',
-      };
-    },
-    mounted() {
-       this.$nextTick(function() {       
-        this.getDataList();  
-        // this.getEcharts();
-      })     
-    },
-    methods:{
-      // 点击编辑获取ID
-      bianji(row){
-        // console.log(row.id)
-        let group_id = row.id
-        console.log(group_id)
-        this.drawLine(group_id);
-      },
- 
-      // 获取数据集列表
-      async getDataList() {
-        const { data: res } = await this.$http.get(
-        "http://192.168.75.58/cedar/api/group/list.php"
-      );
-      this.datalist = res.data;
-      console.log(this.datalist)
-      },
-      // 图
-      drawLine(group_id){
-        this.sex(sex)
-        // 基于准备好的dom，初始化echarts实例
-        // console.log(document.getElementById('tu'))   样式
-        let myChart = this.$echarts.init(document.getElementById('tu'),'macarons')
-        // 绘制图表
-        axios.get("http://192.168.75.58/cedar/api/group/stat.php",{params:{group_id:9,field:sex}}).then(function(data){
-          console.log(data)
-        })
-        myChart.setOption(this.options)      
-      }, 
+        },) 
+        }                  
+      },   
     },
   }
+      // charts(chartsData,name,value){
+      //   let seriesData = [];
+      //   chartsData.forEach(item=>{
+      //       let outObj = {};
+      //       outObj.name = item[name];
+      //       outObj.value = item[value];
+      //       seriesData.push(outObj);
+      //   });
+      //   console.log(seriesData)
+      //   return seriesData
+      // }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus" >

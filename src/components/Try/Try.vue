@@ -1,35 +1,62 @@
-var myChart = echarts.init(document.getElementById('main'));
-// 显示标题，图例和空的坐标轴
-myChart.setOption({
-    title: {
-        text: '异步数据加载示例'
-    },
-    tooltip: {},
-    legend: {
-        data:['销量']
-    },
-    xAxis: {
-        data: []
-    },
-    yAxis: {},
-    series: [{
-        name: '销量',
-        type: 'bar',
-        data: []
-    }]
-});
+<template>
+  <div id="details" style="width: 500px;height: 289px; box-sizing:border-box; line-height: 289px;"></div>
+</template>
 
-// 异步加载数据
-$.get('data.json').done(function (data) {
-    // 填入数据
-    myChart.setOption({
-        xAxis: {
-            data: data.categories
+<script>
+import axios from "axios";
+import echarts from "echarts";
+export default {
+    data(){
+        return{
+            charts:'',
+            //echarts data数据源
+            opinionData:[]
+        }
+    },
+    created(){
+        this.getlist()
+    },
+    methods:{
+        drawLine(id) {
+            this.charts =echarts.init(document.getElementById(id))
+            this.charts.setOption({
+            tooltip: {
+                trigger: 'axis'
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ["1","2","3","4","5"]
+            },
+            yAxis: {
+                type: 'value'
+            },
+
+            series: [{
+                name: '近七日收益',
+                type: 'line',
+                stack: '总量',
+                data: this.opinionData
+            }]
+        })
         },
-        series: [{
-            // 根据名字对应到相应的系列
-            name: '销量',
-            data: data.data
-        }]
-    });
-});
+        getlist(){
+            getOrderPoint().then(response=>{
+            //返回数据的时候将数据绑定到echarts data数据源上 并调用echarts函数
+                for(let i in response.data.data.weekDashBoardOrderVos){
+                    this.opinionData.push(response.data.data.weekDashBoardOrderVos[i].orderCount)
+                }
+                console.log(this.opinionData)
+                this.drawLine('main')
+            })
+        }
+    }
+}
+
+</script>
+<style></style>

@@ -70,7 +70,7 @@
     </div>
 
     <!--搜索 -->
-    <div class="s"  v-if="!luru">
+    <div class="s" v-if="!luru">
     
       <div class="search" v-if="search">
       
@@ -990,7 +990,7 @@
                 <div><span>民族：</span>{{editForm.nation}}</div>           
                 <div><span>籍贯：</span>{{editForm.birthplace}}</div>           
                 <div><span>居住地：</span>{{editForm.address_prov}}</div>           
-                <div><span>病理号：</span>{{editForm.patient_id}}</div>           
+                <div><span>病理号：</span>{{editForm.test_id}}</div>           
                 <div><span>送检科室：</span>{{editForm.department}}</div>           
                 <div><span>申请日期：</span>{{editForm.application_date}}</div>  
                 <div><span>报告日期：</span>{{editForm.report_date}}</div>        
@@ -1056,10 +1056,32 @@ export default {
       console.log(res)
       this.data = res
     },
-    //点击数据集解析
-    jiexi(row){
-      this.search =! this.search
-      const {data :res } = this.$http.get("http://192.168.75.58/cedar/api/dataset/list.php?id=", + row.id)
+    //点击数据集解析  将数据插入到列表中
+    async jiexi(row){
+      // 插入数据  excel_data/readjson.php
+      await this.$http.get("http://192.168.75.58/cedar/api/excel_data/readjson.php", {params:{id :row.id}}).then(res => {
+        console.log(res)
+        console.log(res.data)
+         var result = res.body;//JSON.parse(res.body);
+        if(result.result == 1){
+            this.$alert("解析成功", '提交结果', {
+              confirmButtonText: '确定',
+              type: 'success',
+              callback: action => {
+                this.search = !this.search
+                this.$http.get("http://192.168.75.58/cedar/api/dataset/list.php?id=", + row.id)
+              },
+            });
+            
+        }else{
+            this.$alert("解析失败", '提交结果', {
+              confirmButtonText: '确定',
+              type: 'warning',
+              callback: action => {
+              },
+            });
+          }
+      })
       console.log(row.id)
       this.id = row.id 
       console.log(this.id)
@@ -1071,7 +1093,7 @@ export default {
       const { data :res} = await this.$http.get(
         "http://192.168.75.58/cedar/api/dataset/del.php" ,{params:{id:row.id}}
       );
-      console.log(res)
+      // console.log(res)
     },
     // 点击病理号查看
     async look(row){         
@@ -1083,7 +1105,7 @@ export default {
         const { data :res} = await this.$http.get(
             "http://192.168.75.58/cedar/api/excel_data/onedata.php?id=" + row.id
         );
-        console.log("getTableList",res);
+        // console.log("getTableList",res);
         // console.log(row.id) //53
         this.editForm = res.data;
         // this.ihc = editform.helper_diagnosis.ihc
@@ -1099,34 +1121,35 @@ export default {
     },
     // 获取病理号
     async getTableList(row) {  
+      this.search =! this.search
       // console.log(row.id)
-      console.log(this.queryInfo.page)
+      // console.log(this.queryInfo.page)
       const { data: res } = await this.$http.get(     
       "http://192.168.75.58/cedar/api/excel_data/list.php?id=" + row.id, {params:{page:this.queryInfo.page}});
       //console.log(row.id)
       this.tablelist = res.data
       //console.log(res.data)
-      console.log("getTableList",res);   
+      // console.log("getTableList",res);   
       this.queryInfo.page = parseInt(res.page);     
       this.queryInfo.count = parseInt(res.count)  //总条数
       this.queryInfo.pagerows = res.pagerows  //每页显示多少条 
       this.id = row.id  
-      console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);             
+      // console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);             
     },
     async getTableList() {  
       // console.log(row.id)
-      console.log(this.queryInfo.page)
+      // console.log(this.queryInfo.page)
       const { data: res } = await this.$http.get(     
       "http://192.168.75.58/cedar/api/excel_data/list.php?id=" + this.id, {params:{page:this.queryInfo.page}});
       //console.log(row.id)
       this.tablelist = res.data
       //console.log(res.data)
-      console.log("getTableList",res);   
+      // console.log("getTableList",res);   
       this.queryInfo.page = parseInt(res.page);     
       this.queryInfo.count = parseInt(res.count)  //总条数
       this.queryInfo.pagerows = res.pagerows  //每页显示多少条 
     
-      console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);             
+      // console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);             
     },
     // 搜索
     async getTable() {      
@@ -1148,12 +1171,6 @@ export default {
     },
     // 点击下一个
     async next(){
-      // console.log('luru:',this.luru);
-      // this.luru =! this.luru  //不能没
-      // this.id = this.id
-      // console.log(this.id)
-      // this.editForm = JSON.parse(JSON.stringify(row))
-      // console.log(this.editForm)    
       this.id = this.id         
       console.log(this.id)
       const { data :res} = await this.$http.get(
@@ -1295,8 +1312,7 @@ export default {
       this.getTableList();
     },
     // 列表删除
-    async del(row) {
-      
+    async del(row) {   
       const { data: res } = await this.$http.get(
       "http://192.168.75.58/cedar/api/excel_data/del.php" , {params:{id:row.id}});
       this.$confirm("确定删除该数据？, 是否继续?", "提示", {
@@ -1358,6 +1374,7 @@ export default {
           console.log('error submit!!');
           return false;
         }    
+        this.next()
     }, 
     //上传文件方法
     uploadFile(){
@@ -1377,7 +1394,7 @@ export default {
         var that=this;
         setTimeout(function () {
             if(that.$refs.upload.$children[0].fileList.length==1){
-              that.$refs.upload.submit();
+              that.$refs.upload.submit();      
             }else{
               that.uploadLoading=false;
               that.$message({
@@ -1388,6 +1405,7 @@ export default {
               });
             };
         },100);
+        
     },
     handleRemove(file,fileList){
         console.log(file,fileList);
