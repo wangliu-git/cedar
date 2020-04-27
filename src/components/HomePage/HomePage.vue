@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="up">
-      <div class="green" :data="tongjiList">
+      <div class="green" >
         <div class="BD">
           <span style="font-size:36px;font-weight:400;color:rgba(255,255,255,1);">1886</span>
           <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">本单位数据导入</span>
@@ -166,7 +166,7 @@ export default {
     return {
       // 统计数据
       tongjiList:[],
-      value:'',
+      value:'',   //日期的值
       // 日期配置
       pickerOptions: {
         shortcuts: [
