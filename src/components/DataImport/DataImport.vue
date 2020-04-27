@@ -29,8 +29,8 @@
                                 :on-remove="handleRemove"
                                 :file-list="fileList"
                                 :auto-upload="false">
-                            <el-button slot="trigger" size="small" type="primary">选取Excel格式文件</el-button>
-                            <div slot="tip" class="el-upload_tip">只能上传.xls文件,且不超过1M</div>
+                            <el-button slot="trigger" size="small" type="primary">选取csv格式文件</el-button>
+                            <div slot="tip" class="el-upload_tip">只能上传.csv文件,且不超过1M</div>
                         </el-upload>
 
                     </el-col>
@@ -516,7 +516,7 @@ export default {
               type:'error',
               showClose:true,
               duration:3000,
-              message:'文件类型不是.xls文件!'
+              message:'文件类型不是.csv文件!'
           });
           return false;
       }
@@ -588,7 +588,7 @@ export default {
       uploadTemplateDialog:false,
       fileList:[],
       uploadLoading:false,
-      acceptFileType:'.xls',
+      acceptFileType:'.csv',
       downLoadLoading:'', 
       tablelist: [], //病理号数组
       datalist: [], //数据集数组

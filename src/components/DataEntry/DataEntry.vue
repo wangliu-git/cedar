@@ -20,7 +20,7 @@
                     <el-col :span="22">
                         <el-upload class="upload-demo"
                                 ref="upload"
-                                action=""
+                                action="http://192.168.75.58/cedar/api/upload_file/add.php"
                                 :accept="acceptFileType"
                                 :limit="1"
                                 :on-exceed="handleExceed"
@@ -29,8 +29,8 @@
                                 :on-remove="handleRemove"
                                 :file-list="fileList"
                                 :auto-upload="false">
-                            <el-button slot="trigger" size="small" type="primary">选取Excel格式文件</el-button>
-                            <div slot="tip" class="el-upload_tip">只能上传.xls文件,且不超过1M</div>
+                            <el-button slot="trigger" size="small" type="primary">选取csv格式文件</el-button>
+                            <div slot="tip" class="el-upload_tip">只能上传.csv文件,且不超过1M</div>
                         </el-upload>
 
                     </el-col>
@@ -672,34 +672,34 @@
                 </div>
 
                 <div class="ihc">  
-                      <!-- 遍历患者已有的免疫组化 -->
-                  <div v-show="seen" v-for="(item,idx) in editForm.helper_diagnosis.ihc" :key="idx">
+                      <!-- 遍历患者已有的免疫组化v-for="(item,idx) in editForm.helper_diagnosis.ihc" :key="idx" -->
+                  <div v-show="seen" >
                     <span class="titl">
                       <i class="iconfont icontubiaozhizuo-"></i>
                       {{ihc.name}}
                     </span>
-                    <div id="one"   v-for="(ihc, idx) in help_diagnosis.ihc" :key="idx">
+                    <div id="one"  v-for="(ihc,idx) in editForm.helper_diagnosis.ihc" :key="idx">
                       <!-- 循环myzh这个数组，来动态 + - 操作 -->
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.key_ihc.field_title}}：</span>                       
-                           <el-input v-model="item.mark" style="width:100px"></el-input>
+                           <el-input v-model="ihc.mark" style="width:100px"></el-input>
                         </div>
                       </div>
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.value_ihc.field_title}}：</span>
-                           <el-input v-model="item.value" style="width:100px"></el-input>
+                           <el-input v-model="ihc.value" style="width:100px"></el-input>
                         </div>
                       </div>
                       <!-- + - 操作只需要传入当前循环的数组 -->
                       <!-- 判断 必须是最后一条，才可以显示操作按钮 -->
                       <div class="handleBtnBox">
                         <!-- el-button: v-if="idx==testFZ.ihc.length-1" -->
-                        <el-button @click="ihcAddData(editForm.help_diagnosis.ihc,editForm.help_diagnosis.ihc[idx])">
+                        <el-button @click="ihcAddData(help_diagnosis.ihc,help_diagnosis.ihc[idx])">
                           <i class="iconfont iconaddTodo-nav"></i>
                         </el-button>
-                        <el-button @click="ihcDeleteData(editForm.help_diagnosis.ihc)">
+                        <el-button @click="ihcDeleteData(help_diagnosis.ihc)">
                           <i class="iconfont iconjianhao1"></i>
                         </el-button>
                       </div>
@@ -716,13 +716,13 @@
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.key_fish.field_title}}：</span>
-                          <el-input v-model="item.mark" style="width:100px"></el-input>                       
+                          <el-input v-model="fish.mark" style="width:100px"></el-input>                       
                         </div>
                       </div>
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.value_fish.field_title}}：</span>
-                          <el-input v-model="item.value" style="width:100px"></el-input>
+                          <el-input v-model="fish.value" style="width:100px"></el-input>
                         </div>
                       </div>
                       <!-- 不同的地方可以调用一个方法，不需要额外写-->
@@ -739,178 +739,7 @@
                     </div>
                   </div>
 
-                  <div v-show="seen2" v-for="(item,idx) in editForm.helper_diagnosis.rearrangement"
-                              :key="idx">
-                    <span class="titl">
-                      <i class="iconfont icontubiaozhizuo-"></i>
-                      {{rearrangement.name}}
-                    </span>
-                    <div id="three">
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.key_dna.field_title}}：</span>
-                          <el-input v-model="item.mark" style="width:100px"></el-input>
-                        </div>
-                      </div>
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.value_dna.field_title}}：</span>
-                          <el-input v-model="item.value" style="width:100px"></el-input>
-                        </div>
-                      </div>
-                      <div class="handleBtnBox">
-                        <el-button
-                          @click="ihcAddData(help_diagnosis.rearrangement,help_diagnosis.rearrangement[idx])"
-                        >
-                          <i class="iconfont iconaddTodo-nav"></i>
-                        </el-button>
-                        <el-button @click="ihcDeleteData(help_diagnosis.rearrangement)">
-                          <i class="iconfont iconjianhao1"></i>
-                        </el-button>
-                      </div>
-                    </div>
-                  </div>
 
-                  <div v-show="seen3">
-                    <span class="titl">
-                      <i class="iconfont icontubiaozhizuo-"></i>
-                      {{ish.name}}
-                    </span>
-                    <div id="four" v-for="(ish, idx) in help_diagnosis.ish" :key="idx">
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.key_ish.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="ish.mark">
-                            <el-option
-                              v-for="(item,index) in  FZ.key_ish.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.value_ish.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="ish.value">
-                            <el-option
-                              v-for="(item,index) in FZ.value_ish.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="handleBtnBox">
-                        <el-button
-                          @click="ihcAddData(help_diagnosis.ish,help_diagnosis.ish[idx])"
-                        >
-                          <i class="iconfont iconaddTodo-nav"></i>
-                        </el-button>
-                        <el-button @click="ihcDeleteData(help_diagnosis.ish)">
-                          <i class="iconfont iconjianhao1"></i>
-                        </el-button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div v-show="seen4">
-                    <span class="titl">
-                      <i class="iconfont icontubiaozhizuo-"></i>
-                      {{fcm.name}}
-                    </span>
-                    <div id="five" v-for="(fcm, idx) in help_diagnosis.fcm" :key="idx">
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.type_fcm.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="fcm.mark">
-                            <el-option
-                              v-for="(item,index) in  FZ.type_fcm.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.value_fcm.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="fcm.value">
-                            <el-option
-                              v-for="(item,index) in FZ.value_fcm.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="handleBtnBox">
-                        <el-button
-                          @click="ihcAddData(help_diagnosis.fcm,help_diagnosis.fcm[idx])"
-                        >
-                          <i class="iconfont iconaddTodo-nav"></i>
-                        </el-button>
-                        <el-button @click="ihcAddData(help_diagnosis.fcm)">
-                          <i class="iconfont iconjianhao1"></i>
-                        </el-button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div v-show="seen5">
-                    <span class="titl">
-                      <i class="iconfont icontubiaozhizuo-"></i>
-                      {{ngs.name}}
-                    </span>
-                    <div id="six" v-for="(ngs, idx) in help_diagnosis.ngs" :key="idx">
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.type_ngs.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="ngs.mark">
-                            <el-option
-                              v-for="(item,index) in FZ.type_ngs.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.value_ngs.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="ngs.value">
-                            <el-option
-                              v-for="(item,index) in FZ.value_ngs.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="handleBtnBox">
-                        <el-button
-                          @click="ihcAddData(help_diagnosis.ngs,help_diagnosis.ngs[idx])"
-                        >
-                          <i class="iconfont iconaddTodo-nav"></i>
-                        </el-button>
-                        <el-button @click="ihcAddData(help_diagnosis.ngs)">
-                          <i class="iconfont iconjianhao1"></i>
-                        </el-button>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </el-collapse-item>
@@ -1001,7 +830,7 @@
                 <div>诊断结论<span> 病理类型：</span>{{editForm.diagnosis}}</div>
                 <div><span>淋巴细胞来源：</span>{{editForm.type}}</div>
                 <div style="float:left">辅助诊断<span> 免疫组化：</span>
-                  <th  v-for="(item,index) in editForm.helper_diagnosis.ihc" :key="index" :value="item">
+                  <th v-for="(item,index) in editForm.helper_diagnosis.ihc" :key="index" :value="item">
                     <td>{{item.mark}}</td>
                     <td>{{item.value}}</td>
                   </th>            
@@ -1025,8 +854,7 @@ import allMessage from "../../staic/allMessage.json";
 import qs from "qs";//ulencode
 import axios from 'axios'
 
-export default {
-  
+export default { 
   created() {
     this.getDataList();
     this.getTableList(); 
@@ -1218,59 +1046,59 @@ export default {
     // 多选框
     func1: function(value) {
       if (this.checkList.length == 0) {
-        this.seen = true;
-        this.seen1 = true;
-        this.seen2 = true;
-        this.seen3 = true;
-        this.seen4 = true;
-        this.seen5 = true;
+        this.seen = false;
+        this.seen1 = false;
+        this.seen2 = false;
+        this.seen3 = false;
+        this.seen4 = false;
+        this.seen5 = false;
       }
       for (var i = 0; i < this.checkList.length; i++) {
         if (this.checkList[i] == "免疫组化") {
-          this.seen = false;
+          this.seen = true;
           break;
         } else {
-          this.seen = true;
+          this.seen = false;
         }
       }
       for (var i = 0; i < this.checkList.length; i++) {
         if (this.checkList[i] == "荧光原位杂交") {
-          this.seen1 = false;
+          this.seen1 = true;
           break;
         } else {
-          this.seen1 = true;
+          this.seen1 = false;
         }
       }
       for (var i = 0; i < this.checkList.length; i++) {
         if (this.checkList[i] == "淋巴瘤克隆性基因重排检测") {
-          this.seen2 = false;
+          this.seen2 = true;
           break;
         } else {
-          this.seen2 = true;
+          this.seen2 = false;
         }
       }
       for (var i = 0; i < this.checkList.length; i++) {
         if (this.checkList[i] == "原位杂交") {
-          this.seen3 = false;
+          this.seen3 = true;
           break;
         } else {
-          this.seen3 = true;
+          this.seen3 = false;
         }
       }
       for (var i = 0; i < this.checkList.length; i++) {
         if (this.checkList[i] == "流式细胞检测") {
-          this.seen4 = false;
+          this.seen4 = true;
           break;
         } else {
-          this.seen4 = true;
+          this.seen4 = false;
         }
       }
       for (var i = 0; i < this.checkList.length; i++) {
         if (this.checkList[i] == "ngs检测") {
-          this.seen5 = false;
+          this.seen5 = true;
           break;
         } else {
-          this.seen5 = true;
+          this.seen5 = false;
         }
       }
     }, 
@@ -1286,12 +1114,13 @@ export default {
     // 免疫租化增删
     ihcAddData(array, value) {
       //判断当前数组的对象是否有数据
+      console.log(array,value)
       if (value.mark.trim() || value.value.trim()) {
         //验证通过 添加新的一条
-        var value = {
-          mark: "",
-          value: ""
-        };
+        // var value = {
+        //   mark: "", 
+        //   value: ""
+        // };
         array.push(value);
       } else {
         alert("请检查输入是否正确");
@@ -1360,7 +1189,7 @@ export default {
         });
     },       
     // 新增患者信息
-     addFormList(editForm){
+    addFormList(editForm){
       this.zhezhao = !this.zhezhao
       this.id = this.id
       // console.log(this.id)   
@@ -1368,17 +1197,17 @@ export default {
       this.editForm.help_diagnosis = this.help_diagnosis;
       // const sicksList = JSON.stringify(sicksArr)      
       let data={
-          "id":this.id,
-          "data":editForm
+        "id":this.id,
+        "data":editForm
       }
       //data = qs.stringify(data);     
       // console.log("data:",data);
       if(data){
       // console.log(data)
-       this.axios.post('report/add.php',data).then(function(res){
+       this.axios.post('report/add.php',data).then(res => {
           console.log('res:',res); 
-          var result = res.body;//JSON.parse(res.body);
-          if(result.result=="done"){
+          var result = res.data;//JSON.parse(res.body);
+          if(result.result=='done'){
             this.$alert("提交成功", '提交结果', {
               confirmButtonText: '确定',
               type: 'success',
@@ -1412,7 +1241,7 @@ export default {
       },100);
     },
     handleExceed(files,fileList){
-        this.$message.warning('只能选择1个文件!');
+      this.$message.warning('只能选择1个文件!');
     },
     submitUpload(){
         this.uploadLoading=true;
@@ -1439,16 +1268,18 @@ export default {
         console.log(file);
     },
     beforeUpload(file){
+
+
         var that=this;
         //文件类型
         var fileName=file.name.substring(file.name.lastIndexOf('.')+1);
-        if(fileName!='xls'){
+        if(fileName!='csv'){
             that.uploadTemplateDialog=false;
             that.$message({
                 type:'error',
                 showClose:true,
                 duration:3000,
-                message:'文件类型不是.xls文件!'
+                message:'文件类型不是.csv文件!'
             });
             return false;
         }
@@ -1465,6 +1296,8 @@ export default {
             });
             return false;
         }
+
+    
         that.downloadLoading=that.$loading({
             lock:true,
             text:'数据导入中...',
@@ -1488,7 +1321,7 @@ export default {
                 that.uploadTemplateDialog=false;
                 that.$message.success(resp.resultMsg);
                 console.log(resp.resultMsg)
-                //that.queryData();//更新数据
+                that.queryData();//更新数据
             }else{
                 that.uploadTemplateDialog=false;
                 that.$message({
@@ -1510,10 +1343,14 @@ export default {
             });
         })
         return false;
-    } 
+    } ,
   },
   data() { 
     return {   
+      value:{
+        mark:'',
+        value:''
+      },
       groupLists:['肝癌多中心项目-复旦肿瘤医院','肺癌多中心项目','淋巴瘤的流行病学研究','左半肝胆管腺癌病理分析','未分组'],   //分组列表
       // 数据集列表
       data:[ ],
@@ -1535,7 +1372,7 @@ export default {
       uploadTemplateDialog:false,
       fileList:[],
       uploadLoading:false,
-      acceptFileType:'.xls',
+      acceptFileType:'.csv',
       downLoadLoading:'', 
       tablelist: [], //病理号数组
       datalist: [], //数据集数组
@@ -1700,6 +1537,29 @@ export default {
         type_ngs: {}, //标本类型
         value_ngs: {} //检测结果
       },
+       // // 更改后作用未知
+      mark: "", //免疫项对应数据初始化
+      value: "", //免疫项对应数据初始化
+      patient_info: [], //患者信息
+      patient_infoAll: {}, //患者信息对象
+      diagnosis_1_info: [], //原医疗机构
+      diagnosis_1_infoAll: {}, //原医疗机构信息对象
+      reportMessage: {}, //报告信息
+      reportResult: {}, //报告结论
+      reportMass: {}, //报告质量
+      diagnosis_2_info: [], //现医疗机构
+      diagnosis_2_infoAll: {}, //现医疗机构信息对象
+      reportMessage: {}, //报告信息
+      materMessage: {}, //取材信息
+      reportResult: {}, //诊断结论
+      helper_diagnosis: [], //辅助诊断
+      helper_diagnosisAll: {}, //辅助诊断信息对象
+      ihc: {}, //免疫组化信息对象
+      fish: {}, //荧光杂交信息对象
+      rearrangement: {}, //基因重排
+      ish: {}, //原位杂交
+      fcm: {}, //流式细胞检测
+      ngs: {}, //ngs检测
       //测试数据
       help_diagnosis: {
         ihc: [
@@ -1739,29 +1599,7 @@ export default {
           }
         ] //ngs数组
       },
-      // // 更改后作用未知
-      mark: "", //免疫项对应数据初始化
-      value: "", //免疫项对应数据初始化
-      patient_info: [], //患者信息
-      patient_infoAll: {}, //患者信息对象
-      diagnosis_1_info: [], //原医疗机构
-      diagnosis_1_infoAll: {}, //原医疗机构信息对象
-      reportMessage: {}, //报告信息
-      reportResult: {}, //报告结论
-      reportMass: {}, //报告质量
-      diagnosis_2_info: [], //现医疗机构
-      diagnosis_2_infoAll: {}, //现医疗机构信息对象
-      reportMessage: {}, //报告信息
-      materMessage: {}, //取材信息
-      reportResult: {}, //诊断结论
-      helper_diagnosis: [], //辅助诊断
-      helper_diagnosisAll: {}, //辅助诊断信息对象
-      ihc: {}, //免疫组化信息对象
-      fish: {}, //荧光杂交信息对象
-      rearrangement: {}, //基因重排
-      ish: {}, //原位杂交
-      fcm: {}, //流式细胞检测
-      ngs: {} //ngs检测
+     
     };
   },
   mounted() {

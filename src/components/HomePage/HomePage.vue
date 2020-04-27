@@ -1,15 +1,15 @@
 <template>
   <div class="main">
     <div class="up">
-      <div class="green">
+      <div class="green" :data="tongjiList">
         <div class="BD">
-          <span style="font-size:36px;font-weight:400;color:rgba(255,255,255,1);">1860</span>
+          <span style="font-size:36px;font-weight:400;color:rgba(255,255,255,1);">1886</span>
           <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">本单位数据导入</span>
-          <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">（待校验 1800 ：已校验 60）</span>
+          <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">（待校验 1000：已校验 800）</span>
         </div>
         <div class="jiao">
           <span style="font-size:16px;font-family:Microsoft YaHei;font-weight:bold;color:rgba(255,255,255,1)">
-            <img src="./img/rise.png" alt /> 17%
+            <img src="./img/rise.png" alt /> <span>17%</span>
           </span>
           <el-button round style="font-size:16px;font-family:Microsoft YaHei;font-weight:400;color:rgba(23,163,209,1);">去校验</el-button>
         </div>
@@ -22,7 +22,7 @@
         </div>
         <div class="luru">
           <span style="font-size:16px;font-family:Microsoft YaHei;font-weight:bold;color:rgba(255,255,255,1)">
-            <img src="./img/rise.png" alt /> 18%
+            <img src="./img/rise.png" alt /><span> 18%</span>
           </span>
           <el-button round style="font-size:16px;font-family:Microsoft YaHei;font-weight:400;color:rgba(23,163,209,1);">开始录入</el-button>  
         </div>
@@ -35,12 +35,13 @@
         </div>
         <div class="yuan">
           <span style="font-size:16px;font-family:Microsoft YaHei;font-weight:bold;color:rgba(255,255,255,1)">
-            <img src="./img/rise.png" alt /> 20%
+            <img src="./img/rise.png" alt /><span> 20%</span>
           </span>
           <el-button round style="font-size:16px;font-family:Microsoft YaHei;font-weight:400;color:rgba(23,163,209,1);">原单位报告录入</el-button>  
         </div>
       </div>
     </div>
+
     <div class="down">
       <div class="zx">
         <div class="title">
@@ -103,9 +104,11 @@ export default {
   mounted() {
     this.$nextTick(function() {
       this.drawLine();
+      this.tongji();
     });
   },
   methods: {
+    // echarts图
     drawLine() {
       // 基于准备好的dom，初始化echarts实例
       // console.log(document.getElementById("liu"));
@@ -136,11 +139,35 @@ export default {
           }
         ]
       });
+    },
+    // 统计数据
+    async tongji(){
+      let type = ''
+      let field = ''
+      let entry_status = ''
+      const {data :res } = await this.axios.get('excel_data/stat.php',{params:{type:1,field:entry_status}})
+      console.log(res)
+      let tongjiList = res
+      console.log(tongjiList.stat)
+      console.log(tongjiList.stat[0].entry_status)
+      // tongjiList.stat.map( (item ,index) => {
+      //   if(item.entry_status == 0){
+      //     this.item = item
+      //     console.log(item.entry_status)
+      //   }else{
+      //     this.item = item
+      //     console.log(item.entry_status)
+      //   }      
+      // })
+
     }
   },
   data() {
     return {
+      // 统计数据
+      tongjiList:[],
       value:'',
+      // 日期配置
       pickerOptions: {
         shortcuts: [
           {

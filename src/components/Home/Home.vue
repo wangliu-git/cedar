@@ -60,12 +60,10 @@
 
           <div class="logo" >
             <img src="./img/head-portrait.png" alt="">
-             <span>您好，志诺维思</span>
-             <div class="shu"></div>
-            
-            <el-button   @click="loginout"><i class="iconfont icontuichu"></i>退出</el-button>
-          </div>
-          
+             <span :model="username">您好，{{this.username}}</span>
+             <div class="shu"></div>           
+            <el-button  @click="loginout"><i class="iconfont icontuichu"></i>退出</el-button>
+          </div>          
         </el-header>
         <!-- 右侧主体 -->
         <el-main>    
@@ -78,13 +76,12 @@
 </template>
 
 <script type="text/ecmascript-6">
-
-
   export default {
     methods: {
       // 退出登录
       loginout(){
         this.$router.push('/login')
+        window.sessionStorage.clear()
       },
       goto(path){
         if (path==this.$route.path) {
@@ -103,11 +100,17 @@
     },
     data(){
       return{
-
+        username:''
       }
+    },
+    mounted(){
+     this.username =  window.sessionStorage.username
+      // console.log(username)
+      // this.username = window.sessionStorage.username
+      // return this.username
+      // console.log(this.username)
     }
   }
-
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus" >

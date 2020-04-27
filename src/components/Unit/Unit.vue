@@ -328,7 +328,7 @@
           <!--上传图片 -->
 
           <el-upload
-          action="https://jsonplaceholder.typicode.com/posts/"
+          action="http://192.168.75.58/cedar/api/diagnosis_origin/add.php"
           list-type="picture-card"
           :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove">
@@ -404,6 +404,7 @@ import allMessage from "../../staic/allMessage.json";
     // 保存
     baocun(){
       this.zhezhao =! this.zhezhao
+      this.axios.get('diagnosis_origin/add.php')
     },
     // 删除
     del() {
@@ -604,7 +605,7 @@ import allMessage from "../../staic/allMessage.json";
         case "ihc_quality":
           this.fMInstitution.ihc_quality = item;
           break;
-        case "problem_sli ce":
+        case "problem_slice":
           this.fMInstitution.problem_slice = item;
           break;
         case "patient_info":
