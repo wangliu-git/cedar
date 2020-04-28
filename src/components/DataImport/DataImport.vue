@@ -42,7 +42,7 @@
     <!--数据集列表  slot-scope="scope"  @click="jiexi"-->
     <div class="storageList">
       <div class="list" style="width:96%">
-        <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe>
+        <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe max-height="350">
           <el-table-column prop="file_name" label="数据集名称" width="300"></el-table-column>
           <el-table-column prop="upload_time" label="上传时间" width="300"></el-table-column>
           <el-table-column prop="percent" label="已校验：未检验" width="300"></el-table-column>

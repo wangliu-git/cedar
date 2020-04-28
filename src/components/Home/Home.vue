@@ -54,13 +54,7 @@
           </el-submenu>
           
 
-          <el-submenu :class="{on: $route.path === '/try'}" @click="goto('/try')"  index="6">
-            <template slot="title">
-              <i class="iconfont icondashujuzhenghe"></i>
-              <span >模拟试用</span>
-            </template>     
-              <el-menu-item index="try"><i class="iconfont icondian"></i>模拟试用</el-menu-item>         
-          </el-submenu>
+
 
           
           

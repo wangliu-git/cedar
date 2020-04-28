@@ -34,7 +34,7 @@
                 <el-table-column prop="group_username" label="创建人" width="250"></el-table-column>
                 <el-table-column fixed="right" label="操作" width="250">
                   <template slot-scope="scope">
-                    <el-button type="text" size="small"  @click="daoChu()">脱敏导出</el-button>
+                    <el-button type="text" size="small"  @click="daoChu(scope.row)">脱敏导出</el-button>
                     <el-button type="text" size="small" @click="jieshi = !jieshi"><i class="iconfont iconwenhao"></i></el-button>
                     <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>        
                   </template>
@@ -130,13 +130,13 @@
           </div>
           <div class="DCMain">
               <div class="storageList">            
-                  <el-table :data="datalist" highlight-current-row  border stripe>
-                      <el-table-column prop="id" label="项目编号"></el-table-column>
-                      <el-table-column prop="group_name" label="项目名称" width="100"></el-table-column>
-                      <el-table-column prop="group_logic" label="筛选逻辑" width="100"></el-table-column>
-                      <el-table-column prop="group_time" label="创建时间" width="100"></el-table-column>
-                      <el-table-column prop="group_username" label="创建人" width="100"></el-table-column>
-                      <el-table-column prop="group_username" label="创建人" width="100"></el-table-column>                   
+                  <el-table :data="minList" highlight-current-row  border stripe>
+                      <el-table-column prop="id" label="编号"></el-table-column>
+                      <el-table-column prop="patient_id" label="病人ID" width="100"></el-table-column>
+                      <el-table-column prop="test_id" label="病理号" width="100"></el-table-column>
+                      <el-table-column prop="name" label="姓名" width="100"></el-table-column>
+                      <el-table-column prop="cardid" label="导出ID" width="100"></el-table-column>
+                      <el-table-column prop="sex" label="性别" width="100"></el-table-column>                   
                   </el-table>
               </div>
               <div class="btns">
@@ -213,6 +213,7 @@
 export default {
   data() {
     return {
+      minList:[],
       // 脱敏导出解释
       jieshi:false,
       // 脱敏导出
@@ -275,14 +276,14 @@ export default {
     this.getTableList();
   },
   methods: {
-    async daoChu(){
+    async daoChu(row){
      this.daochu =! this.daochu
-      let group_id = ''
-      let z = ''
+      let group_id = ''   
       const { data: res } = await this.axios.get(
-        "group_report/list.php",{params:{group_id:16,z:1}}    
+        "group_report/list.php",{params:{group_id:row.id}}    
       )
       console.log(res.data)
+       this.minList = res.data
     },
     // 点击查看
     async look(row){
@@ -533,7 +534,7 @@ export default {
     z-index 9
     .DC{
         width:642px;
-        height 900px
+        height 400px
         background:rgba(255,255,255,1);
         box-shadow:0px 4px 20px 0px rgba(121,121,121,0.75);
         border-radius:0px 0px 4px 4px;

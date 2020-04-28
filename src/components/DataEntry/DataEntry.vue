@@ -20,7 +20,7 @@
                     <el-col :span="22">
                         <el-upload class="upload-demo"
                                 ref="upload"
-                                action="http://192.168.75.58/cedar/api/upload_file/add.php"
+                                action="http://106.13.49.232/cedar/api/upload_file/add.php"
                                 :accept="acceptFileType"
                                 :limit="1"
                                 :on-exceed="handleExceed"
@@ -51,14 +51,15 @@
         </el-button>  -->
     <div class="storageList">
       <div class="list" style="width:96%">
-        <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe>
-          <el-table-column prop="file_name" label="数据集名称" width="300" > </el-table-column>
+        <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe  max-height="350">
+          <el-table-column  prop="file_name" label="数据集名称" width="300" > </el-table-column>
           <el-table-column prop="upload_time" label="上传时间" width="300"></el-table-column>
           <el-table-column prop="percent" label="已录入：未录入" width="300"></el-table-column>
           <el-table-column prop="location" label="存储位置" width="300"></el-table-column>
           <el-table-column fixed="right" label="操作" width="300">
             <template slot-scope="scope">
               <el-button type="text" size="small"  @click="bianji(scope.row)">编辑</el-button>
+              <el-button type="text" size="small"  @click="chakan(scope.row)">查看</el-button>
               <el-button type="text" size="small" @click="dele(scope.row)">删除</el-button>
               <el-button class="jiexi" size="small" >
                 <span class="iconfont iconxiazai" @click="jiexi(scope.row)">开始解析</span>
@@ -862,6 +863,13 @@ export default {
     // console.log(window.sessionStorage.uid) 
   },
   methods: {
+    // 点击查看
+    async chakan(row){
+      this.search = !this.search
+      const {data :res} = await  this.axios.get("excel_data/list.php",{params:{id:row.id}})      
+      console.log(res)
+      this.tablelist = res.data
+    },
     // 点击添加分组
     async addGroup(item,id){
       console.log(item,this.id)
@@ -2511,6 +2519,7 @@ a {
           }
           .content {
             font-size: 14px;
+            height 60px
           }
         }
       }
