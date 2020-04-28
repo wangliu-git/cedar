@@ -8,7 +8,7 @@
         </el-input> 
       </div>
 
-      <el-collapse v-model="activeNames" :v-model="editForm">
+      <el-collapse v-model="activeNames" :v-model="sxForm">
         <el-collapse-item name="1">
           <template slot="title" style="background-color:rgba(232, 232, 232, 1)">
               <i class="iconfont icontubiaozhizuo-"></i>
@@ -18,39 +18,38 @@
                 
             <div class="ji">
               <span>姓名 ：</span>
-              <el-input  placeholder="请输入姓名" size="mini" style="width:200px" v-model="editForm.name"></el-input>
+              <el-input  placeholder="请输入姓名" size="mini" style="width:200px" v-model="sxForm.name"></el-input>
             </div> 
 
             <div class="ji">
               <span>性别 ：</span>
-              <el-select  placeholder="请选择性别" size="mini" style="width:200px" v-model="editForm.sex">
-                <el-option ></el-option>
-                <el-option ></el-option>
+              <el-select  placeholder="请选择性别" size="mini" style="width:200px" v-model="sxForm.sex">
+                <el-option></el-option>
               </el-select>
             </div> 
 
             <div class="ji">
               <span>出生日期 ：</span>
-                <el-date-picker  v-model="editForm.birthday" type="daterange" align="right" unlink-panels range-separator="至"
+                <el-date-picker  v-model="sxForm.birthday" type="daterange" align="right" unlink-panels range-separator="至"
                   start-placeholder="开始日期"  end-placeholder="结束日期"  size="mini" style="width:200px">
                 </el-date-picker>
             </div> 
 
             <div class="ji">
               <span>联系电话 ：</span>
-              <el-input size="mini" style="width:200px" placeholder="请输入电话" v-model="editForm.phone"></el-input>
+              <el-input size="mini" style="width:200px" placeholder="请输入电话" v-model="sxForm.phone"></el-input>
             </div> 
 
             <div class="ji">
               <span>籍贯 ：</span>
-              <el-select  placeholder="请选择" size="mini" style="width:200px" v-model="editForm.birthplace">
+              <el-select  placeholder="请选择" size="mini" style="width:200px" v-model="sxForm.birthplace">
                 <el-option></el-option>
               </el-select>
             </div> 
 
             <div class="ji">
               <span>民族 ：</span>
-              <el-select  placeholder="请选择" size="mini" style="width:200px" v-model="editForm.nation">
+              <el-select  placeholder="请选择" size="mini" style="width:200px" v-model="sxForm.nation">
                 <el-option></el-option>
               </el-select>
             </div> 
@@ -58,17 +57,17 @@
 
             <div class="ji">
               <span>居住地 ：</span>
-              <el-select  placeholder="请选择" size="mini" style="width:100px" v-model="editForm.address_prov">
+              <el-select  placeholder="请选择" size="mini" style="width:100px" v-model="sxForm.address_prov">
                 <el-option></el-option>
               </el-select>
-              <el-select  placeholder="请选择" size="mini" style="width:100px" v-model="editForm.address_prov">
+              <el-select  placeholder="请选择" size="mini" style="width:100px" v-model="sxForm.address_prov">
                 <el-option></el-option>
               </el-select>
             </div> 
 
             <div class="ji">
               <span>就诊类型 ：</span>
-              <el-select  placeholder="请选择" size="mini" style="width:200px" v-model="editForm.sample_type">
+              <el-select  placeholder="请选择" size="mini" style="width:200px" v-model="sxForm.sample_type">
                 <el-option></el-option>
               </el-select>
             </div>
@@ -84,53 +83,53 @@
           <div class="baogao">
             <div class="bao">
               <span>机构名称 ：</span>
-              <el-input v-model="editForm.organization"  placeholder="请输入名称" size="mini" style="width:200px"></el-input>
+              <el-input v-model="sxForm.organization"  placeholder="请输入名称" size="mini" style="width:200px"></el-input>
             </div> 
 
             <div class="bao">
               <span>病理号：</span>
-              <el-input v-model="editForm.test_id"  placeholder="请输入并病理号" size="mini" style="width:200px"></el-input>
+              <el-input v-model="sxForm.test_id"  placeholder="请输入并病理号" size="mini" style="width:200px"></el-input>
             </div> 
 
 
             <div class="bao">
               <span>申请日期 ：</span>
-              <el-date-picker  v-model="editForm.application_date" type="daterange" align="right" unlink-panels range-separator="至"
+              <el-date-picker  v-model="sxForm.application_date" type="daterange" align="right" unlink-panels range-separator="至"
                 start-placeholder="开始日期"  end-placeholder="结束日期"  size="mini" style="width:200px">
               </el-date-picker>
             </div> 
 
             <div class="bao">
               <span>报告日期 ：</span>
-              <el-date-picker  v-model="editForm.report_date"  type="daterange" align="right" unlink-panels range-separator="至"
+              <el-date-picker  v-model="sxForm.report_date"  type="daterange" align="right" unlink-panels range-separator="至"
                 start-placeholder="开始日期"  end-placeholder="结束日期"  size="mini" style="width:200px">
               </el-date-picker>
             </div> 
 
             <div class="bao">
               <span>病理类型 ：</span>
-                <el-select v-model="editForm" placeholder="请选择" size="mini" style="width:200px">
+                <el-select v-model="sxForm" placeholder="请选择" size="mini" style="width:200px">
                 <el-option> 大类</el-option>
               </el-select>
             </div> 
 
             <div class="bao">
               <span>详细类型 ：</span>
-                <el-select v-model="editForm" placeholder="请选择" size="mini" style="width:200px">
+                <el-select v-model="sxForm" placeholder="请选择" size="mini" style="width:200px">
                 <el-option>详细类型</el-option>
               </el-select>
             </div> 
 
             <div class="bao">
               <span>病理亚型 ：</span>
-                <el-select v-model="editForm"  placeholder="请选择" size="mini" style="width:200px">
+                <el-select v-model="sxForm"  placeholder="请选择" size="mini" style="width:200px">
                 <el-option> 亚型</el-option>
               </el-select>
             </div> 
 
             <div class="bao">
               <span>级别 ：</span>
-                <el-select v-model="editForm" placeholder="请选择" size="mini" style="width:200px">
+                <el-select v-model="sxForm" placeholder="请选择" size="mini" style="width:200px">
                 <el-option></el-option>
               </el-select>
             </div> 
@@ -138,7 +137,7 @@
 
             <div class="bao">
               <span>病理报告质量 ：</span>
-                <el-select v-model="editForm.report_quality" placeholder="请选择" size="mini" style="width:200px">
+                <el-select v-model="sxForm.report_quality" placeholder="请选择" size="mini" style="width:200px">
                 <el-option></el-option>
               </el-select>
             </div> 
@@ -157,33 +156,33 @@
 
             <div class="zhen">
               <span>病理号 ：</span>
-              <el-input v-model="editForm.test_id"  placeholder="请填写肿瘤数量" size="mini" style="width:200px"></el-input>
+              <el-input v-model="sxForm.test_id"  placeholder="请填写肿瘤数量" size="mini" style="width:200px"></el-input>
             </div> 
 
             <div class="zhen">
               <span>送检科室 ：</span>
-                <el-select v-model="editForm.department" placeholder="请选择" size="mini" style="width:200px">
+                <el-select v-model="sxForm.department" placeholder="请选择" size="mini" style="width:200px">
                 <el-option></el-option>
               </el-select>
             </div> 
 
             <div class="zhen">
               <span>申请日期 ：</span>
-              <el-date-picker  v-model="editForm.application_date"  type="daterange" align="right" unlink-panels range-separator="至"
+              <el-date-picker  v-model="sxForm.application_date"  type="daterange" align="right" unlink-panels range-separator="至"
                 start-placeholder="开始日期"  end-placeholder="结束日期"  size="mini" style="width:200px">
               </el-date-picker>
             </div> 
 
             <div class="zhen">
               <span>报告日期 ：</span>
-              <el-date-picker  v-model="editForm.report_date" type="daterange" align="right" unlink-panels range-separator="至"
+              <el-date-picker  v-model="sxForm.report_date" type="daterange" align="right" unlink-panels range-separator="至"
                 start-placeholder="开始日期"  end-placeholder="结束日期"  size="mini" style="width:200px">
               </el-date-picker>
             </div> 
 
             <div class="zhen">
               <span>标本类型 ：</span>
-                <el-select v-model="editForm.sample_type" placeholder="请选择" size="mini" style="width:200px">
+                <el-select v-model="sxForm.sample_type" placeholder="请选择" size="mini" style="width:200px">
                 <el-option></el-option>
               </el-select>
             </div> 
@@ -191,56 +190,56 @@
 
             <div class="zhen">
               <span>取材部位 ：</span>
-                <el-select v-model="editForm.sample_location" placeholder="请选择" size="mini" style="width:200px">
+                <el-select v-model="sxForm.sample_location" placeholder="请选择" size="mini" style="width:200px">
                 <el-option></el-option>
               </el-select>
             </div> 
 
             <div class="zhen">
               <span>病理类型 ：</span>
-                <el-select v-model="editForm" placeholder="请选择" size="mini" style="width:200px">
+                <el-select v-model="sxForm" placeholder="请选择" size="mini" style="width:200px">
                 <el-option> 大类</el-option>
               </el-select>
             </div> 
 
             <div class="zhen">
               <span>详细类型 ：</span>
-                <el-select v-model="editForm" placeholder="请选择" size="mini" style="width:200px">
+                <el-select v-model="sxForm" placeholder="请选择" size="mini" style="width:200px">
                 <el-option>详细类型</el-option>
               </el-select>
             </div> 
 
             <div class="zhen">
               <span>病理亚型 ：</span>
-                <el-select v-model="editForm" placeholder="请选择" size="mini" style="width:200px">
+                <el-select v-model="sxForm" placeholder="请选择" size="mini" style="width:200px">
                 <el-option> 亚型</el-option>
               </el-select>
             </div> 
 
             <div class="zhen">
               <span>级别 ：</span>
-                <el-select v-model="editForm" placeholder="请选择" size="mini" style="width:200px">
+                <el-select v-model="sxForm" placeholder="请选择" size="mini" style="width:200px">
                 <el-option></el-option>
               </el-select>
             </div> 
 
             <div class="zhen">
               <span>辅助诊断 ：标志物 </span>
-                <el-select v-model="editForm.mark" placeholder="请选择" size="mini" style="width:200px">
+                <el-select v-model="sxForm.mark" placeholder="请选择" size="mini" style="width:200px">
                 <el-option></el-option>
               </el-select>
             </div> 
 
             <div class="zhen">
               <span>切缘 ：</span>
-                <el-select v-model="editForm" placeholder="请选择" size="mini" style="width:200px">
+                <el-select v-model="sxForm" placeholder="请选择" size="mini" style="width:200px">
                 <el-option></el-option>
               </el-select>
             </div> 
 
             <div class="zhen">
               <span>检测结果 ：</span>
-                <el-select v-model="editForm.diagnosis" placeholder="请选择" size="mini" style="width:200px">
+                <el-select v-model="sxForm.diagnosis" placeholder="请选择" size="mini" style="width:200px">
                 <el-option></el-option>
               </el-select>
               <button size="mini" ><i class="iconfont iconic_join_dialing_norm"></i></button>
@@ -249,14 +248,14 @@
 
             <div class="zhen">
               <span>数据来源 ：</span>
-                <el-select v-model="editForm" placeholder="请选择" size="mini" style="width:200px">
+                <el-select v-model="sxForm" placeholder="请选择" size="mini" style="width:200px">
                 <el-option></el-option>
               </el-select>
             </div>
 
             <div class="zhen">
               <span>整合信息 ：</span>
-                <el-select v-model="editForm" placeholder="请选择" size="mini" style="width:200px">
+                <el-select v-model="sxForm" placeholder="请选择" size="mini" style="width:200px">
                 <el-option></el-option>
               </el-select>
             </div> 
@@ -265,10 +264,12 @@
         </el-collapse-item>
       </el-collapse>
 
-      <div class="footer">   
-          <el-button @click="inGroup(editForm)">加入分组</el-button>       
+      <div class="footer">
+          
+          <el-button @click="inGroup(sxForm)">加入分组</el-button>
+          
           <el-button>重置</el-button>
-          <el-button @click="shaixuan(editForm)">筛选</el-button>
+          <el-button @click="shaixuan(sxForm)">筛选</el-button>
       </div>
     </div>
 
@@ -276,7 +277,7 @@
     <div class="list">
         <div class="down">
           <el-table :data="tablelist" tooltip-effect="dark" style="width: 100%"   border   stripe>
-            <el-table-column type="selection" width="40"></el-table-column>                  
+            <el-table-column type="selection" width="40"></el-table-column>           
             <el-table-column prop="test_id" label="病理号" width="190"  sortable></el-table-column>
             <el-table-column prop="name" label="姓名" width="190"  sortable></el-table-column>
             <el-table-column prop="cancer," label="病种类型" width="190"  sortable></el-table-column>
@@ -370,28 +371,6 @@
         </div>
       </div>
     </div>
-
-    <!--分组 -->
-    <div class="out" v-if="group" :data="data">
-      <div class="nei">
-        <div class="title">
-          <span>请选择分组</span>
-          <span  @click="group =! group">
-            <i class="iconfont iconx"></i>
-          </span>
-        </div>
-        <div class="mian">              
-          <div class="groupList">
-            <el-button style="width:300px" @click="addGroup()" v-model="data.location" v-for="(item, index) in groupLists" :key="index" :value="item" >{{item}}</el-button>
-          </div>
-          <div class="button">
-          <!--@click="sure(id)" -->
-            <el-button plain size="small"  @click="group =! group">取消</el-button>
-            <el-button plain size="small" @click="sure(id)">确定</el-button>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -401,14 +380,9 @@ import allMessage from "../../staic/allMessage.json";
 export default {
   data() {
     return {
-      // 分组名称
-      group:false,
-      groupLists:['肝癌多中心项目-复旦肿瘤医院','肺癌多中心项目','淋巴瘤的流行病学研究','左半肝胆管腺癌病理分析','未分组'],   //分组列表
-      // 数据集列表
-      data:[ ],
       // 筛选条件名
       // ## 患者信息
-        editForm:{},  //筛选大对象
+        sxForm:{},  //筛选大对象
         name:'',      //姓名
         sex:'',         //性别
         birthday:'',       //出生日期
@@ -502,63 +476,11 @@ export default {
   created() {
     this.getTableList();  
   },
-  methods:{ 
-    // 点击添加分组
-    async addGroup(item){
-      // this.group =! this.group
-      console.log(item)
-      console.log(window.sessionStorage.uid)
-      var group_name = ''    
-      const {data :res} = await this.axios.post('group/add.php',{params:{group_name:item,userid:window.sessionStorage.uid}}).then( res =>{
-         var result = res.data;//JSON.parse(res.body);
-        if(result.result == 1){
-            this.$alert("添加成功", '提交结果', {
-              confirmButtonText: '确定',
-              type: 'success',
-              callback: action => {           
-              },
-            });          
-        }else{
-            this.$alert("添加失败", '提交结果', {
-              confirmButtonText: '确定',
-              type: 'warning',
-              callback: action => {
-              },
-            });
-          }
-      })
-      console.log(data)
-    },
-    inGroup(){
-      this.group =! this.group
-    },
-     // 点击确定
-    async sure(id){    
-      // const { data : res } = await this.axios.post(
-      //   "dataset/edit.php",{params:{id:this.id,file_name:this.data.file_name,location:this.data.location}}
-      // );    
-      // console.log(this.data.file_name)
-      // console.log(res)
-      // console.log(this.id)
-      this.group = !this.group
-    },
-
-  
-    // 点击选择框
-    toggleSelection(row){
-      console.log(row.id)
-    },
+  methods:{
     // 点击筛选
-    async shaixuan(editForm){
-      console.log(this.editForm) 
-      const {data : res} = await this.axios.get('report/list.php',{params:this.editForm})
-      console.log(res)
-      this.tablelist = res.data;
-      console.log(res.data);
-      this.queryInfo.page = parseInt(res.page);     
-      this.queryInfo.count = parseInt(res.count)  //总条数
-      this.queryInfo.pagerows = res.pagerows  //每页显示多少条 
-     
+    shaixuan(sxForm){
+      console.log(this.sxForm)  
+       
     },
     // 删除
     del(row) {
@@ -591,7 +513,7 @@ export default {
       this.queryInfo.page = newPage;
       this.getTableList();
     },
-    // // 获取病理号
+    // 获取病理号
     async getTableList() {
       const { data: res } = await this.axios.get(
         "report/list.php",
@@ -604,7 +526,6 @@ export default {
       this.queryInfo.count = parseInt(res.count)  //总条数
       this.queryInfo.pagerows = res.pagerows  //每页显示多少条 
     },
-
     // 点击查看
     async look(row){
       this.zhezhao =! this.zhezhao  //不能没     
@@ -767,6 +688,7 @@ export default {
     
 }
 
+
 .zhezhao{
     background #CCCBCE   
     position relative
@@ -920,79 +842,6 @@ export default {
     }
 }
 
-// 分组弹窗
-.out{
-  position:fixed;
-	left:0px;
-	top:0px;
-  width 100%
-  height 100%  
-	background-color :rgba(245,247,251,0.7);
-  z-index 9
-  .nei {
-    border-radius: 5px;
-    width: 550px;
-    height: 588px;
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    top: 0;
-    margin: auto;
-    background-color: #FAFAFA;
-		z-index 10;
-    // 头
-    .title {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px;
-      color: white;
-      background-color: rgba(41, 184, 252, 1);
-    }
-    // 主体
-    .mian {
-      background-color: #FAFAFA;
-      .ming{
-        margin-left: 20px;
-        margin-top 10px
-        span{
-          width 100px
-        }
-      }
-      .cun{
-        margin-left: 30px;
-        margin-top 10px
-        span{
-          width 100px
-        }
-      }
-      // 搜索
-      .sousuo {
-        margin: 20px 20px 10px 20px;
-      }
-      .groupList {
-        width: 500px;
-        height: 300px;
-        border: 1px solid #DCDFE6;
-        margin: 20px 20px;
-        display flex
-        flex-flow column
-        justify-content space-evenly
-        .el-button{
-          margin-left: 20px;
-          font-size: 16px;
-        }
-      }
-      .name {
-        margin-left: 20px;
-      }
-      .button {
-        float: right;
-        margin-top: 10px;
-        margin-right: 30px;
-      }
-    }
-  }
-}
 
+ 
 </style>

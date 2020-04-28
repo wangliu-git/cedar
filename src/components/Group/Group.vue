@@ -34,7 +34,7 @@
                 <el-table-column prop="group_username" label="创建人" width="250"></el-table-column>
                 <el-table-column fixed="right" label="操作" width="250">
                   <template slot-scope="scope">
-                    <el-button type="text" size="small"  @click="daochu =! daochu">脱敏导出</el-button>
+                    <el-button type="text" size="small"  @click="daoChu()">脱敏导出</el-button>
                     <el-button type="text" size="small" @click="jieshi = !jieshi"><i class="iconfont iconwenhao"></i></el-button>
                     <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>        
                   </template>
@@ -205,7 +205,7 @@
       </div>
     </div>
 
-
+    
   </div>
 </template>
 
@@ -275,6 +275,15 @@ export default {
     this.getTableList();
   },
   methods: {
+    async daoChu(){
+     this.daochu =! this.daochu
+      let group_id = ''
+      let z = ''
+      const { data: res } = await this.axios.get(
+        "group_report/list.php",{params:{group_id:16,z:1}}    
+      )
+      console.log(res.data)
+    },
     // 点击查看
     async look(row){
       this.zhezhao =! this.zhezhao  //不能没     
@@ -313,7 +322,7 @@ export default {
     // 获取数据集列表
     async getDataList() {
       const { data: res } = await this.axios.get(
-        "group/list.php"
+        "group/list.php"    
       );
       this.datalist = res.data;
       console.log(this.datalist)
@@ -532,7 +541,7 @@ export default {
         left: 0;
         bottom: 0;
         right: 0;
-        top: 20%;
+        top: 0;
         margin: auto;
        .DCTitle{
            width:642px;
@@ -711,5 +720,7 @@ export default {
       }
     }
 }
+
+
 
 </style>

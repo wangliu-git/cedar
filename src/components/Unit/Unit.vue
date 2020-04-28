@@ -45,9 +45,7 @@
                v-model="name"
             ></el-input>
             <el-button type="primary"  size="mini" @click="getTable">确定</el-button>
-            <el-button type="primary" size="mini" class="pass">
-              <i class="iconfont iconpiliangtongguo"></i> 批量通过
-            </el-button>
+     
           </div>
         </div>
         <div class="down">
@@ -62,9 +60,10 @@
             <el-table-column prop="entry_status" label="原单位诊断" show-overflow-tooltip width="200" sortable></el-table-column>
             <el-table-column fixed="right" label="操作" width="180">
               <template  slot-scope="scope">                 
-                <el-button type="text" size="small" @click="look(scope.row)" v-text="row.attached == 0 ? '添加' : '查看'"></el-button>
-                <el-button type="text" size="small" @click="bianji(scope.row)">编辑</el-button>                  
-                <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>            
+                <el-button type="text" size="small" @click="look(scope.row)" v-if="attached == !0">查看</el-button>
+                <el-button type="text" size="small" @click="tianjia(scope.row)" v-if="attached == 0">添加</el-button>
+                <el-button type="text" size="small" @click="bianji(scope.row)" v-if="attached == !0">编辑</el-button>                  
+                <el-button type="text" size="small" @click="del(scope.row)" v-if="attached == !0">删除</el-button>            
               </template>      
             </el-table-column>
           </el-table>
@@ -90,7 +89,7 @@
     </div>
 
     <!--遮罩 -->
-    <div class="YCon" v-if="zhezhao" :v-model="editForm">
+    <div class="YCon" v-if="zhezhao" :model="editForm">
       <div class="out">
         <div class="header">
           <span>编辑</span>
@@ -119,6 +118,7 @@
                     placeholder="请输入机构名称"
                     size="mini" style="width:180px"
                   ></el-input>
+                  <span>{{editForm.organization}}</span>
                 </div>
                 <div class="sickItem">
                   <span>{{fMInstitution.test_id.field_title}}:</span>
@@ -323,24 +323,62 @@
                 </div>
               </div>
             </div>
-          </el-collapse-item>
-          
+          </el-collapse-item>        
           <!--上传图片 -->
-
           <el-upload
-          action="http://192.168.75.58/cedar/api/diagnosis_origin/add.php"
-          list-type="picture-card"
-          :on-preview="handlePictureCardPreview"
-          :on-remove="handleRemove">
-          <i class="el-icon-plus"></i>
-        </el-upload>
+            action="http://192.168.75.58/cedar/api/diagnosis_origin/add.php"
+            list-type="picture-card"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove">
+            <i class="el-icon-plus"></i>
+          </el-upload>
         <el-dialog :visible.sync="dialogVisible">
           <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
         </el-collapse>       
         <div class="foot">
           <el-button @click="qingkong()">清空</el-button>
-          <el-button @click="baocun()">保存</el-button>
+          <el-button @click="baocun(editForm)">保存</el-button>
+        </div>
+      </div>
+    </div>
+
+    <!--分组 -->
+    <div class="out" v-if="!group" :data="data">
+      <div class="nei">
+        <div class="title">
+          <span>请选择分组</span>
+          <span  @click="group =! group">
+            <i class="iconfont iconx"></i>
+          </span>
+        </div>
+        <div class="mian">
+          <div class="ming">
+            <span>数据集名称：</span>
+            <el-input style="width:400px" size="small" v-model="data.file_name"></el-input>
+          </div>
+          <div class="cun">
+            <span>存储位置：</span>
+            <el-input style="width:400px" size="small" v-model="item"></el-input>
+          </div>
+          <div class="sousuo">
+            <el-input placeholder="请输入分组关键词..." style="width:500px">
+              <el-button slot="append">搜索</el-button>
+            </el-input>
+          </div>
+          <div class="groupList">
+            <el-button style="width:300px" @click="addGroup(item)" v-model="data.location" v-for="(item, index) in groupLists" :key="index" :value="item" >{{item}}</el-button>
+          </div>
+          <div class="name">
+            <span>新建分组名称 ：</span>
+            <el-input placeholder="请输入分组名称..." style="width:380px">
+              <el-button slot="append" >保存</el-button>
+            </el-input>
+          </div>
+          <div class="button">
+            <el-button plain size="small"  @click="group =! group">取消</el-button>
+            <el-button plain size="small" @click="sure(id)">确定</el-button>
+          </div>
         </div>
       </div>
     </div>
@@ -397,23 +435,15 @@ import allMessage from "../../staic/allMessage.json";
     async look(row){
       this.zhezhao =! this.zhezhao
       // console.log(row)
-      const {data:res } = await this.axios.get("diagnosis_origin/one.php",{params:{id:row.id,attached:row.acttached}})    
+      const {data:res } = await this.axios.get("diagnosis_origin/one.php",{params:{attached:row.acttached}})    
       console.log(res)
       //  this.editForm = res
       //  console.log(this.editForm)
     },
-    // 清空
-    qingkong(){
-      this.zhezhao =! this.zhezhao
-    },
-    // 保存
-    baocun(){
-      this.zhezhao =! this.zhezhao
-      this.axios.get('diagnosis_origin/add.php')
-    },
-    // 删除
-    del() {
-      this.$confirm('确定删除该数据？, 是否继续?', '提示', {
+    // 点击删除
+    async del(row){
+      const {data : res} = await this.axios('diagnosis_origin/del.php',{params:{id:row.id}}).then(res=>{
+        this.$confirm('确定删除该数据？, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
@@ -429,11 +459,70 @@ import allMessage from "../../staic/allMessage.json";
           message: '已取消删除'
         });
       });
+      })
+        console.log(res)
     },
+    // 点击添加
+    async tianjia(row){
+      this.zhezhao =! this.zhezhao
+      this.id = row.id    
+      this.attached = row.attached
+    },
+    // 清空
+    qingkong(){
+      this.zhezhao =! this.zhezhao
+    },
+    // 保存
+    baocun(id,editForm,attached){
+      this.zhezhao =! this.zhezhao   
+      this.id = this.id
+      this.editFrm = this.editForm
+      this.editFrm.detail_type = '淋巴瘤'
+      console.log(this.attached)
+      
+      let data={
+        "id":this.id,
+        "data":this.editForm
+      }
+      console.log(this.editForm)
+      console.log(this.id)
+      console.log(data)
+      if(data){
+       console.log(data)
+       this.axios.post('diagnosis_origin/add.php',data).then(res => {
+          console.log('res:',res); 
+          console.log(res.data)
+          var result = res.data;//JSON.parse(res.body);
+          if(result.result=='done'){
+            this.$alert("提交成功", '提交结果', {
+              confirmButtonText: '确定',
+              type: 'success',
+              callback: action => {
+                this.attached = 1
+              },
+            });
+            
+          }
+          else{
+            this.$alert("提交失败", '提交结果', {
+              confirmButtonText: '确定',
+              type: 'warning',
+              callback: action => {
+              },
+            });
+          }
+        })
+      }else {
+          console.log('error submit!!');
+          return false;
+        }   
+
+    },
+  
     // 获取病理号
     async getTableList(){
-      // let group_id = ''
-      const {data : res} = await this.axios.get('diagnosis_origin/list.php',{params:{page:this.queryInfo.page}})
+      let group_id = ''
+      const {data : res} = await this.axios.get('diagnosis_origin/list.php',{params:{page:this.queryInfo.page,group_id:16}})
       console.log("getTableList",res);
       this.tablelist = res.data;
       console.log(res.data);
@@ -473,6 +562,13 @@ import allMessage from "../../staic/allMessage.json";
 
   data() {
     return {
+      // 分组
+      group:false,
+      groupLists:['肝癌多中心项目-复旦肿瘤医院','肺癌多中心项目','淋巴瘤的流行病学研究','左半肝胆管腺癌病理分析','未分组'],   //分组列表
+      // 数据集列表
+      data:[ ],
+
+      attached:'',
       // 上传图片
       dialogImageUrl: '',
       dialogVisible: false,

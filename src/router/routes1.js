@@ -36,29 +36,13 @@ export default [
             // 数据录入
             {
                 path:'/dataentry',
-                component:DataEntry,
-                redirect:'/dataentry',
-                // 原单位报告
-                children:[
-                    {
-                        path:'/dataentry',
-                        component:DataEntry,
-                    }
-                ] 
+                component:DataEntry
         
             },
             // 数据导入
             {
                 path:'/dataimport',
-                component:DataImport,
-                redirect:'/dataimport',
-                // 原单位报告
-                children:[
-                    {
-                        path:'/dataimport',
-                        component:DataImport,
-                    }
-                ] 
+                component:DataImport
         
             },
             // 数据整合
@@ -105,29 +89,13 @@ export default [
             // 模拟试用
             {
                 path:'/try',
-                component:Try,
-                redirect:'/try',
-                // 原单位报告
-                children:[
-                    {
-                        path:'/try',
-                        component:Try,
-                    }
-                ] 
+                component:Try
         
             },
             // 用户管理
             {
                 path:'/usermanagement',
-                component:UserManagement,
-                redirect:'/usermanagement',
-                // 原单位报告
-                children:[
-                    {
-                        path:'/usermanagement',
-                        component:UserManagement,
-                    }
-                ]       
+                component:UserManagement        
             },
         ]
     },

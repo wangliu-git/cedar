@@ -9,7 +9,7 @@
           <el-button type="primary" size="small" >选择分组</el-button>
         </div>-->
       </div>
-      <div class="storageR" style="width=1100px">
+      <div class="storageR" >
         <div class="eContainer">
           <div id="myUpload">
             <el-input placeholder="请选择文件上传" size="mini" style="width:250px"></el-input>   
@@ -41,14 +41,14 @@
                 </span>
             </el-dialog>
         </div>
-        <el-button class="xiazai" size="small">
-          <span class="iconfont iconxiazai">下载excel模板</span>
-        </el-button>                 
+                     
         </div>
       </div>
     </div>
 
-    <!--数据集列表 @click="jiexi"-->
+    <!--数据集列表 @click="jiexi"   <el-button class="xiazai" size="small">
+          <span class="iconfont iconxiazai">下载excel模板</span>
+        </el-button>  -->
     <div class="storageList">
       <div class="list" style="width:96%">
         <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe>
@@ -574,7 +574,18 @@
                 </div>
 
                 <div class="sickIH">
-                  <!--取材信息 -->
+                  <!--取材信息 <div class="sickItem">
+                    <span>{{tMInstitution.sample_location.field_title}}:</span>
+                    <el-select name="sample_location" v-model="editForm.sample_location" size="mini">
+                      <el-option
+                        v-for="(item,index) in  tMInstitution.sample_location.field_values"
+                        :key="index"
+                        :value="item"
+                      >
+                        <span>{{item}}</span>
+                      </el-option>
+                    </el-select>
+                  </div>-->
                   <div class="title">
                     <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
                     {{materMessage.name}}:
@@ -592,18 +603,7 @@
                     </el-select>
                   </div>
 
-                  <div class="sickItem">
-                    <span>{{tMInstitution.sample_location.field_title}}:</span>
-                    <el-select name="sample_location" v-model="editForm.sample_location" size="mini">
-                      <el-option
-                        v-for="(item,index) in  tMInstitution.sample_location.field_values"
-                        :key="index"
-                        :value="item"
-                      >
-                        <span>{{item}}</span>
-                      </el-option>
-                    </el-select>
-                  </div>
+                  
 
                   <div class="sickItem">
                     <span>{{tMInstitution.sample_morphology.field_title}}:</span>
@@ -748,7 +748,8 @@
               <div class="text">
                 <span>原始文本</span>
                 <div class="content" >
-                 {{editForm.diagnosis_txt}}             
+                 <span>{{editForm.diagnosis_txt}}</span>
+                 
                 </div>
               </div>
             </div>
@@ -951,19 +952,15 @@ export default {
     // 点击病理号查看
     async look(row){         
         this.luru = !this.luru
-        this.id = row.id
-        // console.log(this.id)
-        // this.editForm = JSON.parse(JSON.stringify(row))
-        // console.log(this.editForm)         
+        this.id = row.id      
         const { data :res} = await this.axios.get(
             "excel_data/onedata.php?id=" + row.id
         );
-        // console.log("getTableList",res);
-        // console.log(row.id) //53
         this.editForm = res.data;
-        // this.ihc = editform.helper_diagnosis.ihc
-        // 表单对象
-        // console.log(this.editForm);   
+        console.log(this.editForm)
+        // // 处理数据
+        //  this.editForm.diagnosis_txt = this.editForm.diagnosis_txt.split("。")
+        // console.log(this.editForm.diagnosis_txt)
     },
     // 获取数据集列表
     async getDataList() {
@@ -1035,9 +1032,8 @@ export default {
       this.editForm = res.data;
       // 将ID赋值下一个ID
       this.id= res.id
-      // console.log(this.id)
       // this.editForm = Object.assign(res.data[0],res.data[1],res.data[2])
-      // 表单对象     
+
     },
     // 显示
     xianshi(){
@@ -1106,10 +1102,6 @@ export default {
     submit() {
       this.zhezhao = !this.zhezhao    
       this.report.help_diagnosis = this.help_diagnosis;
-      
-      // sicksArr.push(this.patient, this.origin, this.report);
-      // console.log(editForm)
-      // const sicksList = JSON.stringify(sicksArr);
     },    
     // 免疫租化增删
     ihcAddData(array, value) {
@@ -1134,27 +1126,7 @@ export default {
         alert("最少保留一个");
       }
     },
-    // 选择分组
-    choose() {
-      this.$confirm("确定选择该分组？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-        center: true
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "选择成功!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消选择"
-          });
-        });
-    },
+    
     // 切换每页显示多少条
     handleSizeChange(newSize) {
       this.queryInfo.pagerows = newSize;
@@ -1984,7 +1956,7 @@ a {
   height: 58px;
   
   .storageR {
-    width 1150px
+    
     height: 58px;
     background: rgba(255, 255, 255, 1);
     box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
@@ -2529,13 +2501,13 @@ a {
         box-shadow: 0px 1px 10px 0px rgba(179, 179, 179, 0.75);
         border-radius: 4px;
         .text {
-         
+          font-size 18px
           width: 1600px;
-          margin: 10px 30px;
+          margin: 6px 30px 0;  
           span {
-            height: 20px;
+            height: 30px;
             display: block;
-            margin: 10px 0;
+            margin-bottom 8px
           }
           .content {
             font-size: 14px;

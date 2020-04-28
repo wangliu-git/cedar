@@ -9,25 +9,14 @@
             <i class="iconfont iconshouye"></i>
             <span slot="title">首页</span>
           </el-menu-item>
-
-
-          <el-submenu  :class="{on: $route.path === '/dataentry'}" @click="goto('/dataentry')" index="4">
-            <template slot="title">
-              <i class="iconfont iconshujuluru"></i>
-              <span>数据录入</span>
-            </template>           
-              <el-menu-item index="dataentry"><i class="iconfont icondian"></i> 数据录入</el-menu-item>           
-          </el-submenu>
-
-
-          <el-submenu  :class="{on: $route.path === '/dataimport'}" @click="goto('/dataimport')" index="5">
-            <template slot="title">
-              <i class="iconfont iconshujudaoru"></i>
-              <span>数据导入</span>
-            </template>           
-              <el-menu-item index="dataimport"><i class="iconfont icondian"></i> 数据导入</el-menu-item>           
-          </el-submenu>
-
+          <el-menu-item  :class="{on: $route.path === '/dataentry'}" @click="goto('/dataentry')">
+            <i class="iconfont iconshujuluru"></i>
+            <span slot="title">数据录入</span>
+          </el-menu-item>
+          <el-menu-item  :class="{on: $route.path === '/dataimport'}" @click="goto('/dataimport')">
+            <i class="iconfont iconshujudaoru"></i>
+            <span slot="title">数据导入</span>
+          </el-menu-item>
           <el-submenu  :class="{on: $route.path === '/dataintegration'}" @click="goto('/dataintegration')" index="1">
             <template slot="title">
               <i class="iconfont icondashujuzhenghe"></i>
@@ -35,7 +24,6 @@
             </template>           
               <el-menu-item index="unit"><i class="iconfont icondian"></i> 原单位报告</el-menu-item>           
           </el-submenu>
-
           <el-submenu :class="{on: $route.path === '/datamanage'}" @click="goto('/datamanage')" index="2">
             <template slot="title">
               <i class="iconfont iconshujuguanli"></i>
@@ -44,7 +32,6 @@
               <el-menu-item index="/shaix"><i class="iconfont icondian"></i>  数据筛选</el-menu-item>
               <el-menu-item index="/group"><i class="iconfont icondian"></i>  分组管理</el-menu-item>       
           </el-submenu>
-
           <el-submenu :class="{on: $route.path === '/dataanalysis'}" @click="goto('/dataanalysis')"  index="3">
             <template slot="title">
               <i class="iconfont icondataAnalysis"></i>
@@ -53,26 +40,15 @@
               <el-menu-item index="medical"><i class="iconfont icondian"></i>  医学统计</el-menu-item>         
           </el-submenu>
           
-
-          <el-submenu :class="{on: $route.path === '/try'}" @click="goto('/try')"  index="6">
-            <template slot="title">
-              <i class="iconfont icondashujuzhenghe"></i>
-              <span >模拟试用</span>
-            </template>     
-              <el-menu-item index="try"><i class="iconfont icondian"></i>模拟试用</el-menu-item>         
-          </el-submenu>
-
+            <el-menu-item :class="{on: $route.path === '/try'}" @click="goto('/try')">
+            <i class="iconfont icondashujuzhenghe"></i>
+            <span slot="title">模拟试用</span>
+          </el-menu-item>
           
-          
-          <el-submenu :class="{on: $route.path === '/usermanagement'}" @click="goto('/usermanagement')"  index="7">
-            <template slot="title">
-              <i class="iconfont iconyonghuguanli"></i>
-              <span >用户管理</span>
-            </template>     
-              <el-menu-item index="usermanagement"><i class="iconfont icondian"></i>用户管理</el-menu-item>         
-          </el-submenu>
-          
-    
+          <el-menu-item  :class="{on: $route.path === '/usermanagement;'}" @click="goto('/usermanagement')">
+            <i class="iconfont iconyonghuguanli"></i>
+            <span slot="title">用户管理</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
       <el-container class="mian">

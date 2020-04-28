@@ -2,13 +2,7 @@
   <div style="width=100%" >
     <!--数据存储 -->
     <div class="storage">
-      <div class="storageL">
-        <div class="sContainer">
-          <span>数据存储 :</span>
-          <el-input placeholder="请选择数据存储分组..." size="small" style="width:250px"></el-input>
-          <el-button type="primary" size="small" @click="group =! group">选择分组</el-button>
-        </div>
-      </div>
+      
       <div class="storageR" >
         <div class="eContainer">
           <div>
@@ -51,7 +45,7 @@
         <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe>
           <el-table-column prop="file_name" label="数据集名称" width="300"></el-table-column>
           <el-table-column prop="upload_time" label="上传时间" width="300"></el-table-column>
-          <el-table-column prop="percent" label="已录入：未录入" width="300"></el-table-column>
+          <el-table-column prop="percent" label="已校验：未检验" width="300"></el-table-column>
           <el-table-column prop="location" label="存储位置" width="300"></el-table-column>
           <el-table-column fixed="right" label="操作" width="300">
             <template slot-scope="scope">
@@ -108,7 +102,7 @@
             <el-table-column prop="sex" label="性别" width="170" sortable></el-table-column>
             <el-table-column prop="age" label="年龄" width="170" sortable></el-table-column>
             <el-table-column prop="report_time" label="报告时间" show-overflow-tooltip width="170" sortable></el-table-column>
-            <el-table-column prop="entry_status" label="录入状态" show-overflow-tooltip width="170" sortable></el-table-column>
+            <el-table-column prop="entry_status" label="校验状态" show-overflow-tooltip width="170" sortable></el-table-column>
             <el-table-column prop="complete_degree" label="完整度" show-overflow-tooltip width="170" sortable></el-table-column>
             <el-table-column fixed="right" label="操作" width="170">             
                 <template  slot-scope="scope">                 
@@ -673,39 +667,14 @@ a {
 .storage {
   width: 100%;
   height: 58px;
-  .storageL {
-    width: 474px;
-    height: 58px;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
-    border-radius: 4px;
-    float: left;
-    .sContainer {
-      width: 420px;
-      height: 60px;
-      margin-left: 32px;
-      line-height: 58px;
-      span {
-        color: #333333;
-        font-size: 14px;
-        margin-right: 5px;
-      }
-      .el-button {
-        margin-left: -2px;
-        background-color: rgba(41, 184, 252, 1);
-        border-radius: 0px 4px 4px 0px;
-        
-      }
-    }
-  }
+ 
   .storageR {
-    width: 1150px;
+  
     height: 58px;
     background: rgba(255, 255, 255, 1);
     box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
     border-radius: 4px;
-    float: right;
-    margin-left: 9px;
+   
     .eContainer {
       height: 60px;
       line-height: 60px;
