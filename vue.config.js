@@ -1,16 +1,18 @@
 const path= require('path')
 module.exports = {
-  runtimeCompiler: true,//可以解析模板
-  lintOnSave: false, // 关闭EsLint的规则
-  css: { // 添加postcss配置
-    loaderOptions: {
+  //可以解析模板
+  runtimeCompiler: true,
+
+  // 关闭EsLint的规则
+  lintOnSave: false,
+
+  css: { loaderOptions: {
       postcss: {
-        plugins: [
-          // postcss
-        ]
+        plugins: []
       }
     }
   },
+
   configureWebpack:{
     resolve: {
       extensions: ['.js', '.vue', '.json'], // 可以省略的后缀名
@@ -21,6 +23,7 @@ module.exports = {
       }
     }
   },
+
   devServer: {
     open: true, // 自动打开浏览器
     proxy: {
@@ -36,4 +39,6 @@ module.exports = {
     },
     historyApiFallback: true,
   },
+
+  publicPath: '/cedar/'
 }

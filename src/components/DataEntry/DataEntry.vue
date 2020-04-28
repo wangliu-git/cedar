@@ -3,11 +3,11 @@
     <!--数据存储 -->
     <div class="storage">
       <div class="storageL">
-        <div class="sContainer">
+        <!--  <div class="sContainer">
           <span>数据存储 :</span>
           <el-input placeholder="请选择数据存储分组..." size="small" style="width:250px"></el-input>
           <el-button type="primary" size="small" >选择分组</el-button>
-        </div>
+        </div>-->
       </div>
       <div class="storageR" style="width=1100px">
         <div class="eContainer">
@@ -1929,6 +1929,7 @@ export default {
     });
   }
 };
+
 </script>
 
 <style>
@@ -1981,39 +1982,15 @@ a {
 .storage {
   width: 100%;
   height: 58px;
-  .storageL {
-    width: 474px;
-    height: 58px;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
-    border-radius: 4px;
-    float: left;
-    .sContainer {
-      width: 420px;
-      height: 60px;
-      margin-left: 32px;
-      line-height: 58px;
-      span {
-        color: #333333;
-        font-size: 14px;
-        margin-right: 5px;
-      }
-      .el-button {
-        margin-left: -2px;
-        background-color: rgba(41, 184, 252, 1);
-        border-radius: 0px 4px 4px 0px;
-        border: none;
-      }
-    }
-  }
+  
   .storageR {
     width 1150px
     height: 58px;
     background: rgba(255, 255, 255, 1);
     box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
     border-radius: 4px;
-    float: right;
-    margin-left: 9px;
+    
+   
     .eContainer {
       display flex
       height: 60px;

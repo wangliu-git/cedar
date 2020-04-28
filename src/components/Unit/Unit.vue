@@ -62,20 +62,20 @@
             <el-table-column prop="entry_status" label="原单位诊断" show-overflow-tooltip width="200" sortable></el-table-column>
             <el-table-column fixed="right" label="操作" width="180">
               <template  slot-scope="scope">                 
-                <el-button type="text" size="small" @click="look(scope.row)">查看</el-button>
+                <el-button type="text" size="small" @click="look(scope.row)" v-text="row.attached == 0 ? '添加' : '查看'"></el-button>
                 <el-button type="text" size="small" @click="bianji(scope.row)">编辑</el-button>                  
                 <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>            
               </template>      
             </el-table-column>
           </el-table>
-          <!--    :current-page="count"                      当前显示的页数
-                  :page-sizes="[10]"                        切换每页显示的条数
-                  :page-size="pagerows"                     当前每页显示的条数
-                  @size-change="handleSizeChange"           点击切换每页显示多少条
-                  @current-change="handleCurrentChange"     页码值发生了切换
-                  :total="count"                            共多少条           
-                  layout="total, sizes, prev, pager, next, jumper"
-                  -->
+        <!--    :current-page="count"                      当前显示的页数
+                :page-sizes="[10]"                        切换每页显示的条数
+                :page-size="pagerows"                     当前每页显示的条数
+                @size-change="handleSizeChange"           点击切换每页显示多少条
+                @current-change="handleCurrentChange"     页码值发生了切换
+                :total="count"                            共多少条           
+                layout="total, sizes, prev, pager, next, jumper"
+                -->
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -90,7 +90,7 @@
     </div>
 
     <!--遮罩 -->
-    <div class="YCon" v-if="zhezhao">
+    <div class="YCon" v-if="zhezhao" :v-model="editForm">
       <div class="out">
         <div class="header">
           <span>编辑</span>
@@ -393,9 +393,14 @@ import allMessage from "../../staic/allMessage.json";
         center: true
       });
     },
-    // 查看
-    look(){
+    // 点击查看--显示某个信息
+    async look(row){
       this.zhezhao =! this.zhezhao
+      // console.log(row)
+      const {data:res } = await this.axios.get("diagnosis_origin/one.php",{params:{id:row.id,attached:row.acttached}})    
+      console.log(res)
+      //  this.editForm = res
+      //  console.log(this.editForm)
     },
     // 清空
     qingkong(){
@@ -427,6 +432,7 @@ import allMessage from "../../staic/allMessage.json";
     },
     // 获取病理号
     async getTableList(){
+      // let group_id = ''
       const {data : res} = await this.axios.get('diagnosis_origin/list.php',{params:{page:this.queryInfo.page}})
       console.log("getTableList",res);
       this.tablelist = res.data;
