@@ -3,7 +3,7 @@
     <div class="up">
       <div class="green" >
         <div class="BD">
-          <span style="font-size:36px;font-weight:400;color:rgba(255,255,255,1);">160</span>
+          <span style="font-size:36px;font-weight:400;color:rgba(255,255,255,1);">260</span>
           <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">本单位数据导入量</span>
           <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">（待校验 260：已校验 0）</span>
         </div>
@@ -78,13 +78,13 @@
         </div>
         <div id="wang">
           <div class="one">
-            <span>10000</span>
+            <span>460</span>
           </div>
           <div class="two">
-            <span>7500</span>
+            <span>200</span>
           </div>
           <div class="three">
-            <span>5000</span>
+            <span>0</span>
           </div>
         </div>
         <div class="zi">
@@ -118,7 +118,7 @@ export default {
         // title: { text: '在Vue中使用echarts' },
         tooltip: {},
         xAxis: {
-          data: ["", "", "", "", "", ""]
+          data: ["2020-4-19", "2020-4-20", "2020-4-21", "2020-4-22", "2020-4-23", "2020-4-24"]
         },
         yAxis: {},
         // legend: {
@@ -367,21 +367,21 @@ export default {
 
       .one {
         width: 66px;
-        height: 470px;
+        height: 280px;
         background: rgba(28, 165, 255, 1);
         border-radius: 4px 4px 0px 0px;
       }
 
       .two {
         width: 66px;
-        height: 288px;
+        height: 120px;
         background: rgba(37, 193, 171, 1);
         border-radius: 4px 4px 0px 0px;
       }
 
       .three {
         width: 66px;
-        height: 202px;
+        height: 0;
         background: rgba(248, 182, 63, 1);
         border-radius: 4px 4px 0px 0px;
       }

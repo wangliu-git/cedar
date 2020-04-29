@@ -629,12 +629,21 @@
 
                   
 
-                  <div class="sickItem">
+                  <!-- <div class="sickItem">
                     <span>{{tMInstitution.sample_morphology.field_title}}:</span>
                     <el-input
                       type="text"
                       v-model="editForm.sample_morphology"
                       placeholder="请输入形态学描述"
+                      size="mini"
+                    ></el-input>
+                  </div>-->
+                  <div class="sickItem">
+                    <span>取材部位</span>
+                    <el-input
+                      type="text"
+                      v-model="editForm.sample_morphology"
+                      placeholder="请输入取材部位"
                       size="mini"
                     ></el-input>
                   </div>
