@@ -3,13 +3,13 @@
     <div class="up">
       <div class="green" >
         <div class="BD">
-          <span style="font-size:36px;font-weight:400;color:rgba(255,255,255,1);">1886</span>
-          <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">本单位数据导入</span>
-          <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">（待校验 1000：已校验 800）</span>
+          <span style="font-size:36px;font-weight:400;color:rgba(255,255,255,1);">160</span>
+          <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">本单位数据导入量</span>
+          <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">（待校验 260：已校验 0）</span>
         </div>
         <div class="jiao">
           <span style="font-size:16px;font-family:Microsoft YaHei;font-weight:bold;color:rgba(255,255,255,1)">
-            <img src="./img/rise.png" alt /> <span>17%</span>
+            <img src="./img/rise.png" alt /> <span>0%</span>
           </span>
           <el-button round style="font-size:16px;font-family:Microsoft YaHei;font-weight:400;color:rgba(23,163,209,1);">去校验</el-button>
         </div>
@@ -17,12 +17,12 @@
 
       <div class="orange">
         <div class="BL">
-          <span style="font-size:36px;font-weight:400;color:rgba(255,255,255,1);">1550</span>
-          <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">本单位数据录入</span>
+          <span style="font-size:36px;font-weight:400;color:rgba(255,255,255,1);">200</span>
+          <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">本单位数据录入量</span>
         </div>
         <div class="luru">
           <span style="font-size:16px;font-family:Microsoft YaHei;font-weight:bold;color:rgba(255,255,255,1)">
-            <img src="./img/rise.png" alt /><span> 18%</span>
+            <img src="./img/rise.png" alt /><span> 0%</span>
           </span>
           <el-button round style="font-size:16px;font-family:Microsoft YaHei;font-weight:400;color:rgba(23,163,209,1);">开始录入</el-button>  
         </div>
@@ -30,14 +30,14 @@
 
       <div class="blue">
         <div class="YL">
-         <span style="font-size:36px;font-weight:400;color:rgba(255,255,255,1);">1550</span>
-          <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">本单位数据录入</span>
+         <span style="font-size:36px;font-weight:400;color:rgba(255,255,255,1);">0</span>
+          <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">外院首诊报告数量</span>
         </div>
         <div class="yuan">
           <span style="font-size:16px;font-family:Microsoft YaHei;font-weight:bold;color:rgba(255,255,255,1)">
-            <img src="./img/rise.png" alt /><span> 20%</span>
+            <img src="./img/rise.png" alt /><span> 0%</span>
           </span>
-          <el-button round style="font-size:16px;font-family:Microsoft YaHei;font-weight:400;color:rgba(23,163,209,1);">原单位报告录入</el-button>  
+          <el-button round style="font-size:16px;font-family:Microsoft YaHei;font-weight:400;color:rgba(23,163,209,1);">外院首诊报告录入</el-button>  
         </div>
       </div>
     </div>
@@ -73,7 +73,7 @@
       </div>
       <div class="sx">
         <div class="title">
-          <i class="iconfont icontubiaozhizuo-">本单位病理报告量</i>
+          <i class="iconfont icontubiaozhizuo-">病理报告量详情</i>
           <span>详情</span>
         </div>
         <div id="wang">
@@ -88,9 +88,9 @@
           </div>
         </div>
         <div class="zi">
-          <span>本单位病理报告两</span>
-          <span>会诊报告</span>
-          <span>包含原诊断的会诊报告</span>
+          <span>本单位</span>
+          <span>本单位会诊</span>
+          <span>外单位首诊</span>
         </div>
       </div>
     </div>

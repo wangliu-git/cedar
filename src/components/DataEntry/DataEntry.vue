@@ -20,7 +20,7 @@
                     <el-col :span="22">
                         <el-upload class="upload-demo"
                                 ref="upload"
-                                action="http://192.168.75.58/cedar/api/upload_file/add.php"
+                                action="http://106.13.49.232/cedar/api/upload_file/add.php"
                                 :accept="acceptFileType"
                                 :limit="1"
                                 :on-exceed="handleExceed"
@@ -48,14 +48,14 @@
 
     <!--数据集列表 @click="jiexi"   <el-button class="xiazai" size="small">
           <span class="iconfont iconxiazai">下载excel模板</span>
-        </el-button>  -->
-    <div class="storageList">
+    </el-button>  -->
+    <div class="storageList" v-if="ji">
       <div class="list" style="width:96%">
         <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe  max-height="350">
-          <el-table-column  prop="file_name" label="数据集名称" width="300" > </el-table-column>
+          <el-table-column  prop="file_name" label="文件名称" width="300" > </el-table-column>
           <el-table-column prop="upload_time" label="上传时间" width="300"></el-table-column>
           <el-table-column prop="percent" label="已录入：未录入" width="300"></el-table-column>
-          <el-table-column prop="location" label="存储位置" width="300"></el-table-column>
+          <el-table-column prop="location" label="研究项目" width="300"></el-table-column>
           <el-table-column fixed="right" label="操作" width="300">
             <template slot-scope="scope">
               <el-button type="text" size="small"  @click="bianji(scope.row)">编辑</el-button>
@@ -71,7 +71,7 @@
     </div>
 
     <!--搜索 -->
-    <div class="s" v-if="!luru">
+    <div class="s" v-if="!sousuo">
     
       <div class="search" v-if="search">
       
@@ -812,11 +812,11 @@
         </div>
         <div class="mian">
           <div class="ming">
-            <span>数据集名称：</span>
+            <span>文件名称：</span>
             <el-input style="width:400px" size="small" v-model="data.file_name"></el-input>
           </div>
           <div class="cun">
-            <span>存储位置：</span>
+            <span>项目名称：</span>
             <el-input style="width:400px" size="small" v-model="item"></el-input>
           </div>
           <div class="sousuo">
@@ -889,6 +889,7 @@
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -998,12 +999,14 @@ export default {
       );
       // console.log(res)
     },
-    // 点击病理号查看
+    // 点击病理号录入
     async look(row){         
         this.luru = !this.luru
         this.id = row.id      
+        this.ji = !this.ji
+        this.sousuo = !this.sousuo
         const { data :res} = await this.axios.get(
-            "excel_data/onedata.php?id=" + row.id
+          "excel_data/onedata.php?id=" + row.id
         );
         this.editForm = res.data;
         console.log(this.editForm)
@@ -1087,6 +1090,8 @@ export default {
     // 显示
     xianshi(){
       this.luru =! this.luru     
+      this.ji =! this.ji 
+      this.sousuo = !this.sousuo    
     },
     // 多选框
     func1: function(value) {
@@ -1369,6 +1374,7 @@ export default {
   },
   data() { 
     return {   
+      ji:true,
       value:{
         mark:'',
         value:''
@@ -1416,7 +1422,7 @@ export default {
       seen5: true,
       checkList: ["免疫组化","荧光原位杂交","淋巴瘤克隆性基因重排检测","原位杂交","流式细胞检测","ngs检测"],
       // 折叠面板默认打开
-      activeNames: ["3","1","2"],
+      activeNames: ["3","1"],
       // 大数组
       sicksArr: [],
       // 表单提交信息      

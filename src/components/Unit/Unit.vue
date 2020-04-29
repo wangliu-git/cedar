@@ -97,8 +97,8 @@
         </div>
         
         <!-- 原医疗机构-->
-        <el-collapse   class="origin">
-          <el-collapse-item >
+        <el-collapse   class="origin" v-model="activeNames">
+          <el-collapse-item name="1">
             <template slot="title" style="background-color:rgba(232, 232, 232, 1)">
               <i class="iconfont icontubiaozhizuo-"></i>
               {{diagnosis_1_info.name}}
@@ -573,6 +573,8 @@ import allMessage from "../../staic/allMessage.json";
 
   data() {
     return {
+      // 折叠面板默认打开
+      activeNames: ["1"],
       // 分组
       group:false,
       groupLists:['肝癌多中心项目-复旦肿瘤医院','肺癌多中心项目','淋巴瘤的流行病学研究','左半肝胆管腺癌病理分析','未分组'],   //分组列表

@@ -52,16 +52,8 @@
       <el-collapse-item name="2">
         <template
           slot="title"
-          style="background-color:rgba(232, 232, 232, 1) ,border:1px solid,margin-left:10px"
-        >
-          <i class="iconfont icontubiaozhizuo-"></i>全部创建者的全部数据
-          <el-button
-            class="iconfont iconshujufenxi"
-            style="background:rgba(38,188,153,1);"
-            size="mini"
-          >
-            <span style="color:white">数据分析</span>
-          </el-button>
+          style="background-color:rgba(232, 232, 232, 1) ,border:1px solid,margin-left:10px">
+          <i class="iconfont icontubiaozhizuo-"></i>全部创建者的全部数据     
         </template>
 
         <!--全部创建者的数据 -->
