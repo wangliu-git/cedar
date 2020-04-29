@@ -335,24 +335,35 @@
                     <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
                     {{reportResult.name}}:
                   </div>
-                  <div class="sickItem">
-                    <span>{{fMInstitution.diagnosis.field_title}} :</span>
-                    <el-select placeholder="请选择" name="diagnosis" v-model="editForm.diagnosis" size="mini">
-                      <el-option
-                        v-for="(item,index) in fMInstitution.diagnosis.field_values"
-                        :key="index"
-                        :value="item"
-                      >
-                        <span>{{item}}</span>
+                    <div class="sickItem">
+                    <span>病理类型:</span>
+                    <el-select name="diagnosis"  placeholder="请选择病理类型" size="mini">
+                      <el-option>
                       </el-option>
                     </el-select>
                   </div>
+
                   <div class="sickItem">
-                    <span>{{fMInstitution.type.field_title}} ：</span>
-                    <el-select placeholder="请选择" name="type" v-model="editForm.type" size="mini">
-                      <el-option
-                        :value="fMInstitution.type.field_values"
-                      >{{fMInstitution.type.field_values == ""? "无数据" : fMInstitution.type.field_values}}</el-option>
+                    <span>详细类型:</span>
+                    <el-select name="diagnosis"  placeholder="请选择详细类型" size="mini">
+                      <el-option>
+                      </el-option>
+                    </el-select>
+                  </div>
+
+                  <div class="sickItem">
+                    <span>病理亚型:</span>
+                    <el-select name="diagnosis" v-model="editForm.diagnosis2"  placeholder="请选择病理亚型" size="mini">
+                      <el-option>
+                      </el-option>
+                    </el-select>
+                  </div>
+
+                  <div class="sickItem">
+                    <span>级别:</span>
+                    <el-select name="diagnosis"  placeholder="请选择级别" size="mini">
+                      <el-option>
+                      </el-option>
                     </el-select>
                   </div>
                 </div>

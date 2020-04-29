@@ -277,12 +277,13 @@ export default {
   },
   methods: {
     async daoChu(row){
+      console.log(row.id)
      this.daochu =! this.daochu
       let group_id = ''   
       const { data: res } = await this.axios.get(
         "group_report/list.php",{params:{group_id:row.id}}    
       )
-      console.log(res.data)
+      console.log(res)
        this.minList = res.data
     },
     // 点击查看

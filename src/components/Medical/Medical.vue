@@ -127,7 +127,7 @@ export default {
         "macarons"
       );
       const { data: res } = await this.axios.get(
-        "group/stat.php?group_id=9&field=sex"
+        "group/stat.php?group_id=1&field=sex"
       );
       let datas = res.stat;
       setEChart_barWithTool({

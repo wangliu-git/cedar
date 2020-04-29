@@ -2,8 +2,8 @@
   <div class="outest">
     <div class="sContainer">
       <span>选择分组 :</span>
-      <el-select  size="mini" style="width:250px"  placeholder="请选择分组">
-        <el-option>
+      <el-select  size="mini" style="width:250px"  placeholder="请选择分组" >
+        <el-option >
           <span></span>
         </el-option>
       </el-select> 
@@ -51,10 +51,10 @@
         <div class="down">
           <el-table ref="multipleTable" :data="tablelist" tooltip-effect="dark" style="width: 100%" border stripe >
             <el-table-column type="selection" width="40"></el-table-column>
-            <el-table-column prop="pa_id" label="病人ID" width="200" sortable></el-table-column>
+            <el-table-column prop="patient_id" label="病人ID" width="200" sortable></el-table-column>
             <el-table-column prop="test_id" label="病理号" width="200" sortable></el-table-column>
             <el-table-column prop="name" label="姓名" width="180" sortable></el-table-column>
-            <el-table-column prop="histologic_type" label="报告类型" width="200" sortable></el-table-column>
+            <el-table-column prop="diagnosis_type" label="就诊类型" width="200" sortable></el-table-column>
             <el-table-column prop="sex" label="性别" width="160" sortable></el-table-column>
             <el-table-column prop="age" label="年龄" width="160" sortable></el-table-column>
             <el-table-column prop="entry_status" label="原单位诊断" show-overflow-tooltip width="200" sortable></el-table-column>
@@ -394,8 +394,18 @@ import allMessage from "../../staic/allMessage.json";
  export default {
   created(){
     this.getTableList()
+    this.groupList()
   },
   methods: {
+    // 选择分组
+    groupList(){
+      const {data :res} = this.axios.get('group/list.php').then( res =>{
+        console.log(res)
+        this.groupList = res.data.data
+        console.log(res.data.data)
+      })
+      
+    },
     // 上传图片
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -464,6 +474,7 @@ import allMessage from "../../staic/allMessage.json";
     },
     // 点击添加
     async tianjia(row){
+      console.log(row)
       this.zhezhao =! this.zhezhao
       this.id = row.id    
       this.attached = row.attached
@@ -522,7 +533,7 @@ import allMessage from "../../staic/allMessage.json";
     // 获取病理号
     async getTableList(){
       let group_id = ''
-      const {data : res} = await this.axios.get('diagnosis_origin/list.php',{params:{page:this.queryInfo.page,group_id:16}})
+      const {data : res} = await this.axios.get('diagnosis_origin/list.php',{params:{page:this.queryInfo.page,group_id:1}})
       console.log("getTableList",res);
       this.tablelist = res.data;
       console.log(res.data);
@@ -639,6 +650,7 @@ import allMessage from "../../staic/allMessage.json";
   },
 
   mounted() {
+    
     // 原医疗机构诊断
     allMessage.formdata.map((sickItems, index) => {
       if (sickItems.field_index == 1) {
