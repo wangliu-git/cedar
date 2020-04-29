@@ -20,7 +20,7 @@
                     <el-col :span="22">
                         <el-upload class="upload-demo"
                                 ref="upload"
-                                action="http://106.13.49.232/cedar/api/upload_file/add.php"
+                                action="http://192.168.75.58/cedar/api/upload_file/add.php"
                                 :accept="acceptFileType"
                                 :limit="1"
                                 :on-exceed="handleExceed"
@@ -335,35 +335,47 @@
                     <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
                     {{reportResult.name}}:
                   </div>
-                    <div class="sickItem">
+                  <div class="sickItem">
                     <span>病理类型:</span>
                     <el-select name="diagnosis"  placeholder="请选择病理类型" size="mini">
-                      <el-option>
-                      </el-option>
+                      <el-option><span>前驱淋巴性肿瘤</span></el-option>
+                      <el-option>成熟B细胞淋巴瘤</el-option>
+                      <el-option>成熟T和NK细胞淋巴瘤</el-option>
+                      <el-option>淋巴瘤（类型无法确定）</el-option>
+                      <el-option>霍奇金淋巴瘤（类型无法确定）</el-option>
+                      <el-option>非霍奇金淋巴瘤（类型无法确定）</el-option>
+                      <el-option>淋巴组织非典型增生</el-option>
                     </el-select>
                   </div>
 
                   <div class="sickItem">
                     <span>详细类型:</span>
                     <el-select name="diagnosis"  placeholder="请选择详细类型" size="mini">
-                      <el-option>
-                      </el-option>
+                      <el-option>B淋巴母细胞白血病/淋巴瘤，非特殊类型</el-option>
+                      <el-option>B淋巴母细胞白血病/淋巴瘤伴t（9；22）（q34.1；q11.2）；BCR-ABL1</el-option>
+                      <el-option>B淋巴母细胞白血病/淋巴瘤伴t（v；11q23.3）；KMT2A重排</el-option>
+                      <el-option>B淋巴母细胞白血病/淋巴瘤伴t（12；21）（p13.2；q22.1）；ETV6-RUNX1</el-option>
+                      <el-option>B细胞淋巴瘤（亚型无法确定）</el-option>
+                      <el-option>B幼淋巴细胞白血病</el-option>
+                      <el-option>毛细胞白血病变异型</el-option>
                     </el-select>
                   </div>
 
                   <div class="sickItem">
                     <span>病理亚型:</span>
                     <el-select name="diagnosis" v-model="editForm.diagnosis2"  placeholder="请选择病理亚型" size="mini">
-                      <el-option>
-                      </el-option>
+                      <el-option>弥漫性大B细胞淋巴瘤（DLBCL），非特指型</el-option>
+                      <el-option>经典型霍奇金淋巴瘤</el-option>
                     </el-select>
                   </div>
 
                   <div class="sickItem">
                     <span>级别:</span>
                     <el-select name="diagnosis"  placeholder="请选择级别" size="mini">
-                      <el-option>
-                      </el-option>
+                      <el-option>结节硬化型（NS）</el-option>
+                      <el-option>富于淋巴细胞型（LP）</el-option>
+                      <el-option>混合细胞型（MC）</el-option>
+                      <el-option>淋巴细胞消减型（LD）</el-option>
                     </el-select>
                   </div>
                 </div>
@@ -637,32 +649,44 @@
                   <div class="sickItem">
                     <span>病理类型:</span>
                     <el-select name="diagnosis"  placeholder="请选择病理类型" size="mini">
-                      <el-option>
-                      </el-option>
+                      <el-option><span>前驱淋巴性肿瘤</span></el-option>
+                      <el-option>成熟B细胞淋巴瘤</el-option>
+                      <el-option>成熟T和NK细胞淋巴瘤</el-option>
+                      <el-option>淋巴瘤（类型无法确定）</el-option>
+                      <el-option>霍奇金淋巴瘤（类型无法确定）</el-option>
+                      <el-option>非霍奇金淋巴瘤（类型无法确定）</el-option>
+                      <el-option>淋巴组织非典型增生</el-option>
                     </el-select>
                   </div>
 
                   <div class="sickItem">
                     <span>详细类型:</span>
                     <el-select name="diagnosis"  placeholder="请选择详细类型" size="mini">
-                      <el-option>
-                      </el-option>
+                      <el-option>B淋巴母细胞白血病/淋巴瘤，非特殊类型</el-option>
+                      <el-option>B淋巴母细胞白血病/淋巴瘤伴t（9；22）（q34.1；q11.2）；BCR-ABL1</el-option>
+                      <el-option>B淋巴母细胞白血病/淋巴瘤伴t（v；11q23.3）；KMT2A重排</el-option>
+                      <el-option>B淋巴母细胞白血病/淋巴瘤伴t（12；21）（p13.2；q22.1）；ETV6-RUNX1</el-option>
+                      <el-option>B细胞淋巴瘤（亚型无法确定）</el-option>
+                      <el-option>B幼淋巴细胞白血病</el-option>
+                      <el-option>毛细胞白血病变异型</el-option>
                     </el-select>
                   </div>
 
                   <div class="sickItem">
                     <span>病理亚型:</span>
                     <el-select name="diagnosis" v-model="editForm.diagnosis2"  placeholder="请选择病理亚型" size="mini">
-                      <el-option>
-                      </el-option>
+                      <el-option>弥漫性大B细胞淋巴瘤（DLBCL），非特指型</el-option>
+                      <el-option>经典型霍奇金淋巴瘤</el-option>
                     </el-select>
                   </div>
 
                   <div class="sickItem">
                     <span>级别:</span>
                     <el-select name="diagnosis"  placeholder="请选择级别" size="mini">
-                      <el-option>
-                      </el-option>
+                      <el-option>结节硬化型（NS）</el-option>
+                      <el-option>富于淋巴细胞型（LP）</el-option>
+                      <el-option>混合细胞型（MC）</el-option>
+                      <el-option>淋巴细胞消减型（LD）</el-option>
                     </el-select>
                   </div>
 
@@ -820,26 +844,26 @@
     <div class="zhezhao" v-if="zhezhao" :model="editForm">
       <div class="look">
         <div class="header">
-            <span>查看病理信息</span>
-            <span @click="zhezhao = !zhezhao"><i class="iconfont iconx"></i></span>
+          <span>查看病理信息</span>
+          <span @click="zhezhao = !zhezhao"><i class="iconfont iconx"></i></span>
         </div>
 
         <div class="content">
             <div class="HZ">
-                <button>患者及报告信息</button>
-                <div><span>病人ID(住院号/门诊号) ：</span>{{editForm.patient_id}}</div>    
-                <div><span>姓名：</span>{{editForm.name}}</div>           
-                <div><span>性别：</span>{{editForm.sex}}</div>           
-                <div><span>出生日期：</span>{{editForm.birthday}}</div>           
-                <div><span>联系电话：</span>{{editForm.phone}}</div>           
-                <div><span>民族：</span>{{editForm.nation}}</div>           
-                <div><span>籍贯：</span>{{editForm.birthplace}}</div>           
-                <div><span>居住地：</span>{{editForm.address_prov}}</div>           
-                <div><span>病理号：</span>{{editForm.test_id}}</div>           
-                <div><span>送检科室：</span>{{editForm.department}}</div>           
-                <div><span>申请日期：</span>{{editForm.application_date}}</div>  
-                <div><span>报告日期：</span>{{editForm.report_date}}</div>        
-                <div><span>就诊类型：</span>{{editForm.diagnosis_type}}</div>                        
+              <button>患者及报告信息</button>
+              <div><span>病人ID(住院号/门诊号) ：</span>{{editForm.patient_id}}</div>    
+              <div><span>姓名：</span>{{editForm.name}}</div>           
+              <div><span>性别：</span>{{editForm.sex}}</div>           
+              <div><span>出生日期：</span>{{editForm.birthday}}</div>           
+              <div><span>联系电话：</span>{{editForm.phone}}</div>           
+              <div><span>民族：</span>{{editForm.nation}}</div>           
+              <div><span>籍贯：</span>{{editForm.birthplace}}</div>           
+              <div><span>居住地：</span>{{editForm.address_prov}}</div>           
+              <div><span>病理号：</span>{{editForm.test_id}}</div>           
+              <div><span>送检科室：</span>{{editForm.department}}</div>           
+              <div><span>申请日期：</span>{{editForm.application_date}}</div>  
+              <div><span>报告日期：</span>{{editForm.report_date}}</div>        
+              <div><span>就诊类型：</span>{{editForm.diagnosis_type}}</div>                        
             </div>
             <div class="BDW">
                 <button>本单位原文</button>
@@ -873,7 +897,6 @@ import uuid from "uuid";
 import allMessage from "../../staic/allMessage.json";
 import qs from "qs";//ulencode
 import axios from 'axios'
-
 export default { 
   created() {
     this.getDataList();
@@ -896,22 +919,22 @@ export default {
       const {data} = await this.axios.post('group/add.php',{params:{group_name:item,id:this.id,userid:window.sessionStorage.uid}}).then( res =>{
          var result = res.data;//JSON.parse(res.body);
         if(result.result == 1){
-            this.$alert("添加成功", '提交结果', {
-              confirmButtonText: '确定',
-              type: 'success',
-              callback: action => {
-                this.search = !this.search
-                this.axios.get("dataset/list.php?id=", + row.id)
-              },
-            });
+          this.$alert("添加成功", '提交结果', {
+            confirmButtonText: '确定',
+            type: 'success',
+            callback: action => {
+              this.search = !this.search
+              this.axios.get("dataset/list.php?id=", + row.id)
+            },
+          });
             
         }else{
-            this.$alert("添加失败", '提交结果', {
-              confirmButtonText: '确定',
-              type: 'warning',
-              callback: action => {
-              },
-            });
+          this.$alert("添加失败", '提交结果', {
+            confirmButtonText: '确定',
+            type: 'warning',
+            callback: action => {
+            },
+          });
           }
       })
       console.log(data)
@@ -944,22 +967,22 @@ export default {
         console.log(res.data)
          var result = res.data;//JSON.parse(res.body);
         if(result.result == 1){
-            this.$alert("解析成功", '提交结果', {
-              confirmButtonText: '确定',
-              type: 'success',
-              callback: action => {
-                this.search = !this.search
-                this.axios.get("dataset/list.php?id=", + row.id)
-              },
-            });
+          this.$alert("解析成功", '提交结果', {
+            confirmButtonText: '确定',
+            type: 'success',
+            callback: action => {
+              this.search = !this.search
+              this.axios.get("dataset/list.php?id=", + row.id)
+            },
+          });
             
         }else{
-            this.$alert("解析失败", '提交结果', {
-              confirmButtonText: '确定',
-              type: 'warning',
-              callback: action => {
-              },
-            });
+          this.$alert("解析失败", '提交结果', {
+            confirmButtonText: '确定',
+            type: 'warning',
+            callback: action => {
+            },
+          });
           }
       })
       console.log(row.id)
@@ -1928,7 +1951,6 @@ export default {
     });
   }
 };
-
 </script>
 
 <style>
@@ -1962,8 +1984,6 @@ export default {
   margin-right: 3px;
 }
 </style>
-
-
 <style scoped lang="stylus" rel="stylesheet/stylus" >
 .jiexi {
   background-color #409EFF

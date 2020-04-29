@@ -650,7 +650,7 @@ import allMessage from "../../staic/allMessage.json";
   },
 
   mounted() {
-    
+     this.getTableList()
     // 原医疗机构诊断
     allMessage.formdata.map((sickItems, index) => {
       if (sickItems.field_index == 1) {
