@@ -98,9 +98,9 @@
             
             <el-table-column prop="test_id" label="病理号" width="170"></el-table-column>
             <el-table-column prop="name" label="姓名" width="170" sortable></el-table-column>
-            <el-table-column prop="histologic_type" label="组织学类型" width="170" sortable></el-table-column>
-            <el-table-column prop="sex" label="性别" width="170" sortable></el-table-column>
-            <el-table-column prop="age" label="年龄" width="170" sortable></el-table-column>
+            <el-table-column prop="diagnosis2" label="病理类型" width="200" sortable></el-table-column>
+            <el-table-column prop="sex" label="性别" width="150" sortable></el-table-column>
+            <el-table-column prop="age" label="年龄" width="150" sortable></el-table-column>
             <el-table-column prop="report_time" label="报告时间" show-overflow-tooltip width="170" sortable></el-table-column>
             <el-table-column prop="entry_status" label="校验状态" show-overflow-tooltip width="170" sortable></el-table-column>
             <el-table-column prop="complete_degree" label="完整度" show-overflow-tooltip width="170" sortable></el-table-column>
@@ -401,13 +401,15 @@ export default {
       console.log(this.queryInfo.page)
       this.getTableList();
     },
-    // 新增患者信息
+    // 查看患者信息
     async addFormList(editForm){
         this.zhezhao = !this.zhezhao
+         this.id = this.id
+         console.log(this.id)
         this.editForm.help_diagnosis = this.help_diagnosis;
         // const sicksList = JSON.stringify(sicksArr)      
         let data={
-          "id":"",
+          "id":this.id,
           "data":editForm
         }
         // 判断提交
@@ -434,9 +436,15 @@ export default {
             }
             })
         }else {
-            console.log('error submit!!');
-            return false;
-            }    
+        console.log('error submit!!');
+        return false;
+        }    
+    },
+    //检验患者信息
+    jiaoyan(row,editForm){
+      console.log(row.id)
+      this.zhezhao = !this.zhezhao
+      this.editForm.help_diagnosis = this.help_diagnosis;
     },
     // 点击折叠面板
     handleChange(val) {

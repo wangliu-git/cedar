@@ -10,7 +10,6 @@ import 'element-ui/lib/theme-chalk/index.css';
 // 入口文件
 import ElementUI from 'element-ui'
 import echarts from 'echarts'
-
 Vue.prototype.$echarts = echarts
 // 引入基本模板
 
@@ -26,7 +25,6 @@ require('echarts/lib/component/title')
 // // 判断data的属性  如果是对象转换成ulencode的字符串
 // if (data instanceof Object) {
 //    config.data = qs.stringify(data)
-
 // }
 
 

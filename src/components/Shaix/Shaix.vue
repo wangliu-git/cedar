@@ -232,13 +232,6 @@
             </div> 
 
             <div class="zhen">
-              <span>切缘 ：</span>
-                <el-select v-model="editForm" placeholder="请选择" size="mini" style="width:200px">
-                <el-option></el-option>
-              </el-select>
-            </div> 
-
-            <div class="zhen">
               <span>检测结果 ：</span>
                 <el-select v-model="editForm.diagnosis" placeholder="请选择" size="mini" style="width:200px">
                 <el-option></el-option>
@@ -247,21 +240,25 @@
               <button size="mini"><i class="iconfont iconjianhao1"></i></button>             
             </div> 
 
-            <div class="zhen">
+           
+              
+           </div>
+
+          <div class="yuan">
+            <div class="lai">
               <span>数据来源 ：</span>
                 <el-select v-model="editForm" placeholder="请选择" size="mini" style="width:200px">
                 <el-option></el-option>
               </el-select>
             </div>
 
-            <div class="zhen">
+            <div class="lai">
               <span>整合信息 ：</span>
                 <el-select v-model="editForm" placeholder="请选择" size="mini" style="width:200px">
                 <el-option></el-option>
               </el-select>
-            </div> 
-
-          </div>  
+            </div>
+          </div>
         </el-collapse-item>
       </el-collapse>
 
@@ -276,14 +273,13 @@
     <div class="list">
         <div class="down">
           <el-table :data="tablelist" tooltip-effect="dark" style="width: 100%"   border   stripe>
-            <el-table-column type="selection" width="40"></el-table-column>                  
-            <el-table-column prop="test_id" label="病理号" width="190"  sortable></el-table-column>
-            <el-table-column prop="name" label="姓名" width="190"  sortable></el-table-column>
-            <el-table-column prop="cancer," label="病种类型" width="190"  sortable></el-table-column>
-            <el-table-column prop="histologic_type" label="组织学类型" width="190"  sortable></el-table-column>
-            <el-table-column prop="sex" label="性别" width="190"  sortable></el-table-column>
-            <el-table-column prop="age" label="年龄" width="190"  sortable></el-table-column>
-            <el-table-column prop="report_date" label="报告时间" show-overflow-tooltip width="190"  sortable></el-table-column>
+            <el-table-column type="selection" width="50"></el-table-column>                  
+            <el-table-column prop="test_id" label="病理号" width="200"  sortable></el-table-column>
+            <el-table-column prop="name" label="姓名" width="200"  sortable></el-table-column>
+            <el-table-column prop="diagnosis2" label="病种亚型" width="250"  sortable></el-table-column>      
+            <el-table-column prop="sex" label="性别" width="200"  sortable></el-table-column>
+            <el-table-column prop="age" label="年龄" width="200"  sortable></el-table-column>
+            <el-table-column prop="report_date" label="报告时间" show-overflow-tooltip width="200"  sortable></el-table-column>
             <el-table-column fixed="right" label="操作" width="200">             
               <template  slot-scope="scope">                 
                 <el-button type="text" size="small" @click="look(scope.row)">查看</el-button>
@@ -612,21 +608,23 @@ export default {
         "report/onedata.php " ,{params:{id:row.id}}
       );
       this.editForm = res.data;
+      this.id = row.id
       // this.editForm = Object.assign(res.data[0],res.data[1],res.data[2])
       // 表单对象
       console.log(this.editForm);   
     },
     // 新增患者信息
-    async addFormList(editForm){
+    async addFormList(id,editForm){
       this.zhezhao = !this.zhezhao
+      this.id =this.id
       this.editForm.help_diagnosis = this.help_diagnosis;
       // const sicksList = JSON.stringify(sicksArr)      
       let data={
-        "id":"",
+        "id":this.id,
         "data":editForm
       }
       // 判断提交
-      if(editForm){
+      if(data){
           await this.axios.post('report/add.php',data).then(res =>{
           console.log('res:',res);
           var result = res.data;//JSON.parse(res.body);
@@ -737,6 +735,19 @@ export default {
       span {
         display: inline-block;
         width: 130px;
+      }
+    }
+  }
+  .yuan{
+    display flex
+    flex-wrap wrap
+    .lai{
+     
+      margin-top 20px
+      margin-left 20px
+      span {
+        display: inline-block;
+        width: 105px;
       }
     }
   }

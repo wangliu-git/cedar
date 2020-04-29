@@ -107,9 +107,9 @@
             <el-table-column type="selection" width="40"></el-table-column>            
             <el-table-column prop="test_id" label="病理号" width="170"  sortable></el-table-column>
             <el-table-column prop="name" label="姓名" width="170"  sortable></el-table-column>
-            <el-table-column prop="histologic_type" label="组织学类型" width="170" sortable></el-table-column>
-            <el-table-column prop="sex" label="性别" width="170" sortable></el-table-column>
-            <el-table-column prop="age" label="年龄" width="170" sortable></el-table-column>
+            <el-table-column prop="diagnosis2" label="病理类型" width="200" sortable></el-table-column>
+            <el-table-column prop="sex" label="性别" width="150" sortable></el-table-column>
+            <el-table-column prop="age" label="年龄" width="150" sortable></el-table-column>
             <el-table-column prop="report_time" label="报告时间" show-overflow-tooltip width="170" sortable></el-table-column>
             <el-table-column prop="entry_status" label="录入状态" show-overflow-tooltip width="170" sortable></el-table-column>
             <el-table-column prop="complete_degree" label="完整度" show-overflow-tooltip width="170" sortable></el-table-column>
@@ -624,30 +624,37 @@
                     {{reportResult.name}}:
                   </div>
                   <div class="sickItem">
-                    <span>{{tMInstitution.diagnosis.field_title}}:</span>
-                    <el-select name="diagnosis" v-model="editForm.diagnosis" size="mini">
-                      <el-option
-                        v-for="(item,index) in  tMInstitution.diagnosis.field_values"
-                        :key="index"
-                        :value="item"
-                      >
-                        <span>{{item}}</span>
+                    <span>病理类型:</span>
+                    <el-select name="diagnosis"  placeholder="请选择病理类型" size="mini">
+                      <el-option>
                       </el-option>
                     </el-select>
                   </div>
 
                   <div class="sickItem">
-                    <span>{{tMInstitution.type.field_title}}:</span>
-                    <el-select name="type" v-model="editForm.type" size="mini">
-                      <el-option
-                        v-for="(item,index) in  tMInstitution.type.field_values"
-                        :key="index"
-                        :value="item"
-                      >
-                        <span>{{item}}</span>
+                    <span>详细类型:</span>
+                    <el-select name="diagnosis"  placeholder="请选择详细类型" size="mini">
+                      <el-option>
                       </el-option>
                     </el-select>
                   </div>
+
+                  <div class="sickItem">
+                    <span>病理亚型:</span>
+                    <el-select name="diagnosis" v-model="editForm.diagnosis2"  placeholder="请选择病理亚型" size="mini">
+                      <el-option>
+                      </el-option>
+                    </el-select>
+                  </div>
+
+                  <div class="sickItem">
+                    <span>级别:</span>
+                    <el-select name="diagnosis"  placeholder="请选择级别" size="mini">
+                      <el-option>
+                      </el-option>
+                    </el-select>
+                  </div>
+
                 </div>
 
                 <!--辅助诊断 -->
@@ -1228,7 +1235,8 @@ export default {
         var that=this;
         setTimeout(function () {
             if(that.$refs.upload.$children[0].fileList.length==1){
-              that.$refs.upload.submit();      
+              that.$refs.upload.submit();   
+              that.$alert('上传成功')   
             }else{
               that.uploadLoading=false;
               that.$message({

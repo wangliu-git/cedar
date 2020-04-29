@@ -37,6 +37,7 @@
                     <el-button type="text" size="small"  @click="daoChu(scope.row)">脱敏导出</el-button>
                     <el-button type="text" size="small" @click="jieshi = !jieshi"><i class="iconfont iconwenhao"></i></el-button>
                     <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>        
+                    <el-button type="text" size="small" @click="chakan(scope.row)">查看</el-button>        
                   </template>
                 </el-table-column>
               </el-table>
@@ -47,7 +48,7 @@
     </el-collapse>
 
     <!--折叠面板2--创建者-->
-    <el-collapse v-model="activeNames" style="margin-top:20px">
+    <el-collapse v-model="activeNames" style="margin-top:20px" v-if="chuangjian">
       <el-collapse-item name="2">
         <template
           slot="title"
@@ -64,19 +65,17 @@
         </template>
 
         <!--全部创建者的数据 -->
-        <div class="down">
+        <div class="down" >
           <el-table :data="tablelist" tooltip-effect="dark" style="width: 100%" border stripe>
             <el-table-column type="selection" width="40"></el-table-column>
-
-            <el-table-column prop="test_id" label="病理号" width="170" sortable></el-table-column>
-            <el-table-column prop="name" label="姓名" width="170" sortable></el-table-column>
-            <el-table-column prop="histologic_type" label="组织学类型" width="170" sortable></el-table-column>
-            <el-table-column prop="sex" label="性别" width="170" sortable></el-table-column>
-            <el-table-column prop="age" label="年龄" width="170" sortable></el-table-column>
-            <el-table-column prop="report_time" label="报告时间" show-overflow-tooltip width="170" sortable></el-table-column>
-            <el-table-column prop="entry_status" label="录入状态" show-overflow-tooltip width="170" sortable></el-table-column>
-            <el-table-column prop="complete_degree" label="完整度" show-overflow-tooltip width="170" sortable></el-table-column>
-            <el-table-column fixed="right" label="操作" width="170">
+            <el-table-column prop="test_id" label="病理号" width="190" sortable></el-table-column>
+            <el-table-column prop="name" label="姓名" width="190" sortable></el-table-column>
+            <el-table-column prop="diagnosis2" label="病理亚型" width="190" sortable></el-table-column>
+            <el-table-column prop="diagnosis2" label="病理亚型" width="190" sortable></el-table-column>
+            <el-table-column prop="sex" label="性别" width="190" sortable></el-table-column>
+            <el-table-column prop="age" label="年龄" width="190" sortable></el-table-column>
+            <el-table-column prop="report_date" label="报告时间" show-overflow-tooltip width="190" sortable></el-table-column>
+                 <el-table-column fixed="right" label="操作" width="190">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="look(scope.row)">查看</el-button>
 
@@ -130,7 +129,7 @@
           </div>
           <div class="DCMain">
               <div class="storageList">            
-                  <el-table :data="minList" highlight-current-row  border stripe>
+                  <el-table :data="minList" highlight-current-row  border stripe max-height="270">
                       <el-table-column prop="id" label="编号"></el-table-column>
                       <el-table-column prop="patient_id" label="病人ID" width="100"></el-table-column>
                       <el-table-column prop="test_id" label="病理号" width="100"></el-table-column>
@@ -213,6 +212,7 @@
 export default {
   data() {
     return {
+      chuangjian:false,
       minList:[],
       // 脱敏导出解释
       jieshi:false,
@@ -273,7 +273,7 @@ export default {
   },
   created() {
     this.getDataList();
-    this.getTableList();
+    
   },
   methods: {
     async daoChu(row){
@@ -292,6 +292,7 @@ export default {
         "report/onedata.php " ,{params:{id:row.id}}
       );
       this.editForm = res.data;
+      this.id = row.id
       // this.editForm = Object.assign(res.data[0],res.data[1],res.data[2])
       // 表单对象
       console.log(this.editForm);   
@@ -328,29 +329,18 @@ export default {
       this.datalist = res.data;
       console.log(this.datalist)
     },
+
     // 切换每页显示多少条
     handleSizeChange(newSize) {
       this.queryInfo.pagerows = newSize;
-      this.getTableList();
+      this.chakana();
     },
     // 点击页数
     handleCurrentChange(newPage) {
       this.queryInfo.page = newPage;
-      this.getTableList();
+      this.chakana();
     },
-    // 获取病理号
-    async getTableList() {
-      const { data: res } = await this.axios.get(
-        "group_report/list.php",
-        {params:{page:this.queryInfo.page}}
-      );
-      console.log("getTableList",res);
-      this.tablelist = res.data;
-      console.log(res.data);
-      this.queryInfo.page = parseInt(res.page);     
-      this.queryInfo.count = parseInt(res.count)  //总条数
-      this.queryInfo.pagerows = res.pagerows  //每页显示多少条 
-    },
+
     // 病理号删除
     async dele(row) {
       const { data: res } = await this.axios.get(
@@ -364,17 +354,46 @@ export default {
       // this.queryInfo.count = parseInt(res.count)  //总条数
       // this.queryInfo.pagerows = res.pagerows  //每页显示多少条 
     },
+    // 病理号查看
+    chakan(row){
+      this.chuangjian  = !this.chuangjian
+      console.log(row)
+      let group_id = ''
+      const {data:res} = this.axios.get('report/list.php',{params:{group_id:row.id}}).then( res => {
+      console.log(res)
+      this.tablelist = res.data.data
+      this.queryInfo.page = parseInt(res.data.page);     
+      this.queryInfo.count = parseInt(res.data.count)  //总条数
+       console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);             
+  
+      })
+      
+    },
+    chakana(){        
+      const {data:res} = this.axios.get('report/list.php',{params:{page:this.queryInfo.page}}).then( res => {
+      console.log(res)
+      this.tablelist = res.data.data
+      this.queryInfo.page = parseInt(res.data.page);     
+      this.queryInfo.count = parseInt(res.data.count)  //总条数
+       console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);             
+  
+      })
+      
+    },
+
     // 新增患者信息
-    async addFormList(editForm){
+    async addFormList(id,editForm){
       this.zhezhao = !this.zhezhao
+      this.id = this.id
+      console.log(this.id)
       this.editForm.help_diagnosis = this.help_diagnosis;
       // const sicksList = JSON.stringify(sicksArr)      
       let data={
-        "id":"",
+        "id": this.id,
         "data":editForm
       }
       // 判断提交
-      if(editForm){
+      if(data){
           await this.axios.post('report/add.php',data).then(res =>{
           console.log('res:',res);
           var result = res.data;//JSON.parse(res.body);
