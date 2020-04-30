@@ -563,7 +563,7 @@
           <!-- 按钮-->
           <div class="header">
             <span @click="luru=!luru">编辑</span>
-            <span><i class="inonfont iconx"></i></span>
+            <span><i class="inonfont iconfork"></i></span>
           </div>
           <!-- 表单-->
           <div class="formList"  :v-model="editForm">
@@ -789,7 +789,7 @@
                         </div>
                         <div class="sickItems">
                           <span class="two">{{fMInstitution.he_quality.field_title}}:</span>
-                          <el-select name="he_quality" v-model="editForm.he_quality" size="mini">
+                          <el-select name="he_quality" v-model="editForm.he_quality" size="mini" style="width:90px">
                             <el-option
                               v-for="(item,index) in fMInstitution.he_quality.field_values"
                               :key="index"
@@ -811,7 +811,7 @@
                         </div>
                         <div class="sickItems">
                           <span class="four">{{fMInstitution.ihc_quality.field_title}}:</span>
-                          <el-select name="ihc_quality" v-model="editForm.ihc_quality" size="mini">
+                          <el-select name="ihc_quality" v-model="editForm.ihc_quality" size="mini" style="width:90px">
                             <el-option
                               v-for="(item,index) in fMInstitution.ihc_quality.field_values"
                               :key="index"
@@ -823,7 +823,7 @@
                         </div>
                         <div class="sickItems">
                           <span class="five">{{fMInstitution.problem_slice.field_title}}</span>
-                          <el-select name="problem_slice" v-model="editForm.problem_slice" size="mini">
+                          <el-select name="problem_slice" v-model="editForm.problem_slice" size="mini"  style="width:90px">
                             <el-option
                               v-for="(item,index) in fMInstitution.problem_slice.field_values"
                               :key="index"
@@ -838,7 +838,7 @@
                         <span class="titles">病理会诊申请单质量：</span>
                         <div class="sickItems">
                           <span class="h">{{fMInstitution.patient_info.field_title}}:</span>
-                          <el-select name="patient_info" v-model="editForm.patient_info" size="mini">
+                          <el-select name="patient_info" v-model="editForm.patient_info" size="mini" style="width:90px">
                             <el-option
                               v-for="(item,index) in fMInstitution.patient_info.field_values"
                               :key="index"
@@ -850,7 +850,7 @@
                         </div>
                         <div class="sickItems">
                           <span class="h">{{fMInstitution.history_info.field_title}}:</span>
-                          <el-select name="history_info" v-model="editForm.history_info" size="mini">
+                          <el-select name="history_info" v-model="editForm.history_info" size="mini" style="width:90px">
                             <el-option
                               v-for="(item,index) in fMInstitution.history_info.field_values"
                               :key="index"
@@ -862,7 +862,7 @@
                         </div>
                         <div class="sickItems">
                           <span class="h">{{fMInstitution.sample_info.field_title}}:</span>
-                          <el-select name="sample_info" v-model="editForm.sample_info" size="mini">
+                          <el-select name="sample_info" v-model="editForm.sample_info" size="mini" style="width:90px">
                             <el-option
                               v-for="(item,index) in fMInstitution.sample_info.field_values"
                               :key="index"
@@ -877,7 +877,7 @@
                         <span class="titles">其他临床资料提交情况：</span>
                         <div class="sickItems">
                           <span>{{fMInstitution.record.field_title}}:</span>
-                          <el-select name="record" v-model="editForm.record" size="mini">
+                          <el-select name="record" v-model="editForm.record" size="mini" style="width:90px">
                             <el-option
                               v-for="(item,index) in fMInstitution.record.field_values"
                               :key="index"
@@ -889,7 +889,7 @@
                         </div>
                         <div class="sickItems">
                           <span>{{fMInstitution.helper_report.field_title}}:</span>
-                          <el-select name="helper_report" v-model="editForm.helper_report" size="mini">
+                          <el-select name="helper_report" v-model="editForm.helper_report" size="mini" style="width:90px">
                             <el-option
                               v-for="(item,index) in fMInstitution.helper_report.field_values"
                               :key="index"
@@ -1129,7 +1129,10 @@
                   </div>
                 </div>
               </el-collapse-item>
-              <el-button type="primary" @click="submit()" class="commit" style="width:100%">提交</el-button>
+              <div class="btn"> 
+                <el-button type="primary" plain @click="clear(editForm)">清空</el-button>
+                <el-button type="primary" plain>保存</el-button>
+              </div>
             </el-collapse>
           </div>
         </div>
@@ -1774,6 +1777,10 @@ export default {
     this.getTableList();
   },
   methods: {
+    // 重置
+    clear(editForm){
+      this.editForm = {}
+    },
     // 多选框
     func1: function(value) {
       if (this.checkList.length == 0) {
@@ -2715,7 +2722,7 @@ export default {
           margin-left: 20px;
           font-size: 16px;
         }
-      }
+      }\
 
       .name {
         margin-left: 20px;
@@ -2739,10 +2746,10 @@ export default {
   height 100%  
 	background-color :rgba(245,247,251,0.7);
   z-index 9
+  overflow-y auto
   .container {
     border-radius: 5px;
-    width: 1000px;
-    height: 588px;
+    width: 1200px;
     position: absolute;
     left: 0;
     bottom: 0;
@@ -2754,8 +2761,7 @@ export default {
     .el-input {
       width: 200px;
     }
-    .form {
-      height: 1900px;
+    .form {   
       background: rgba(255, 255, 255, 1);
       box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
       border-radius: 4px;
@@ -2791,13 +2797,13 @@ export default {
             flex-wrap: wrap;          
             margin: 10px auto;
             .sickItem {
-              width: 260px;
+              width: 300px;
               display: inline-block;
               height: 50px;
               display: flex;
               justify-content: space-around;
               align-items: center;
-              margin-left: 30px;
+              margin-left: 40px;
               span {
                 display: inline-block;
                 width: 60px;
@@ -2834,14 +2840,13 @@ export default {
               .kuai {
                 display: flex;
                 flex-flow: row;
-                width: 1500px;
                 height: 200px;
-                margin-top: 28px;
+                margin-top: 20px;
                 // 报告质量下的块
                 .p-one {
                   border: 1px solid rgba(224, 224, 224, 1);
-                  width: 600px;
-                  margin-left: 50px;
+                  width: 450px;
+                  margin-left: 30px;
                   height: 190px;
                   .titles {
                     display: block;
@@ -2851,7 +2856,7 @@ export default {
                     line-height: 30px;
                     background-color: rgba(232, 232, 232, 1);
                   }
-                  .sickItems {
+                  .sickItems {               
                     display: flex;
                     flex-flow: row;
                     justify-content: space-between;
@@ -2884,8 +2889,8 @@ export default {
                 }
                 .p-two {
                   border: 1px solid rgba(224, 224, 224, 1);
-                  width: 500px;
-                  margin-left: 40px;
+                  width: 300px;
+                  margin-left: 30px;
                   height: 190px;
                   .titles {
                     display: block;
@@ -2911,8 +2916,8 @@ export default {
                 }
                 .p-three {
                   border: 1px solid rgba(224, 224, 224, 1);
-                  width: 500px;
-                  margin-left: 40px;
+                  width: 250px;
+                  margin-left: 30px;
                   height: 190px;
                   .titles {
                     display: block;
@@ -2927,12 +2932,12 @@ export default {
                     flex-flow: row;
                     justify-content: space-between;
                     flex-wrap: wrap;
-                    margin-left: 30px;
+                    margin-left: 20px;
                     float: left;
                     height: 50px;
                     line-height: 50px;
                     span {
-                      width: 150px;
+                      width: 120px;
                     }
                   }
                 }
@@ -2970,17 +2975,17 @@ export default {
               flex-flow: row;
               flex-wrap: wrap;
               .titl {
-                margin: 10px 80px;
+                margin: 10px 40px;
                 background-color: #EFEEF1;
                 height: 40px;
                 line-height: 40px;
               }
               #one {
-                width: 420px;
+                width: 385px;
                 background: rgba(249, 249, 249, 1);
                 border: 1px solid rgba(229, 229, 229, 1);
                 border-radius: 4px;
-                margin: 0 80px;
+                margin: 0 40px;
                 padding-bottom: 20px;
                 .sickI {
                   display: inline-block;
@@ -2994,7 +2999,6 @@ export default {
                 }
                 position: relative;
                 display: flex;
-                align-items: center;
                 padding-top: 20px;
               }
               #two {
@@ -3112,32 +3116,13 @@ export default {
               }
           }
         }
-        .el-button {
-          background: rgba(117, 209, 253, 1);
-          border-radius: 4px;
-          border: none;
-        }
-        .textCon {
-          margin-left: -40px;
-          position: fixed;
-          bottom: 0px;
-          z-index: 9;      
-          background: rgba(255, 255, 255, 1);
-          box-shadow: 0px 1px 10px 0px rgba(179, 179, 179, 0.75);
-          border-radius: 4px;
-          .text {
-            font-size 18px
-            width: 1600px;
-            margin: 6px 30px 0;  
-            span {
-              height: 30px;
-              display: block;
-              margin-bottom 8px
-            }
-            .content {
-              font-size: 14px;
-              height 60px
-            }
+        .btn{
+          .el-button {
+            position relative
+            left 50%
+            transform translateX(-50%)
+            margin 10px
+            
           }
         }
       }

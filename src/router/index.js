@@ -11,7 +11,7 @@ Vue.use(VueRouter)
 //   // }
 // })
 const router = new VueRouter({
-  mode:'history', //路由模式，没有#
+  // mode:'history', //路由模式，没有#
   routes,
   base : '/cedar/'
   // scrollBehavior(){

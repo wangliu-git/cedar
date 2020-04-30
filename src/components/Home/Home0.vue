@@ -22,29 +22,27 @@
               <i class="iconfont icondashujuzhenghe"></i>
               <span>数据整合</span>
             </template>           
-              <el-menu-item index="unit"><i class="iconfont icondian"></i> 原单位报告</el-menu-item>           
+              <el-menu-item index="unit">. 原单位报告</el-menu-item>           
           </el-submenu>
           <el-submenu :class="{on: $route.path === '/datamanage'}" @click="goto('/datamanage')" index="2">
             <template slot="title">
               <i class="iconfont iconshujuguanli"></i>
               <span>数据管理</span>
             </template>  
-              <el-menu-item index="/shaix"><i class="iconfont icondian"></i>  数据筛选</el-menu-item>
-              <el-menu-item index="/group"><i class="iconfont icondian"></i>  分组管理</el-menu-item>       
+              <el-menu-item index="/shaix">. 数据筛选</el-menu-item>
+              <el-menu-item index="/group">. 分组管理</el-menu-item>       
           </el-submenu>
           <el-submenu :class="{on: $route.path === '/dataanalysis'}" @click="goto('/dataanalysis')"  index="3">
             <template slot="title">
               <i class="iconfont icondataAnalysis"></i>
               <span >数据分析</span>
             </template>     
-              <el-menu-item index="medical"><i class="iconfont icondian"></i>  医学统计</el-menu-item>         
+              <el-menu-item index="medical">. 医学统计</el-menu-item>         
           </el-submenu>
-          
-            <el-menu-item :class="{on: $route.path === '/try'}" @click="goto('/try')">
+          <el-menu-item :class="{on: $route.path === '/try'}" @click="goto('/try')">
             <i class="iconfont icondashujuzhenghe"></i>
             <span slot="title">模拟试用</span>
           </el-menu-item>
-          
           <el-menu-item  :class="{on: $route.path === '/usermanagement;'}" @click="goto('/usermanagement')">
             <i class="iconfont iconyonghuguanli"></i>
             <span slot="title">用户管理</span>

@@ -36,14 +36,12 @@ export default [
             // 数据录入
             {
                 path:'/dataentry',
-                component:DataEntry
-        
+                component:DataEntry,      
             },
             // 数据导入
             {
                 path:'/dataimport',
-                component:DataImport
-        
+                component:DataImport,       
             },
             // 数据整合
             {
@@ -57,11 +55,12 @@ export default [
                         component:Unit,
                     }
                 ]  
+                
             },
             // 数据管理
             {
                 path:'/datamanage',
-                component:DataManage,
+                component:DataManage, 
                 children:[
                     {
                         path:'/shaix',
@@ -71,8 +70,7 @@ export default [
                         path:'/group',
                         component:Group,
                     }
-                ]
-        
+                ]     
             },
             // 数据分析
             {
@@ -89,13 +87,12 @@ export default [
             // 模拟试用
             {
                 path:'/try',
-                component:Try
-        
+                component:Try,     
             },
             // 用户管理
             {
                 path:'/usermanagement',
-                component:UserManagement        
+                component:UserManagement,
             },
         ]
     },

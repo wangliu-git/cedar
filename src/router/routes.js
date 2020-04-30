@@ -27,17 +27,23 @@ export default [
     {
         path:'/home',
         component:Home,
+        redirect:'/homepage',
         children:[
             // 首页
             {
                 path:'/homepage',
                 component:HomePage,
+                children:[
+                    {
+                        path:'/homepage',
+                        component:HomePage,
+                    }
+                ]  
             },
             // 数据录入
             {
                 path:'/dataentry',
                 component:DataEntry,
-                redirect:'/dataentry',
                 // 原单位报告
                 children:[
                     {
@@ -51,7 +57,6 @@ export default [
             {
                 path:'/dataimport',
                 component:DataImport,
-                redirect:'/dataimport',
                 // 原单位报告
                 children:[
                     {
@@ -106,28 +111,24 @@ export default [
             {
                 path:'/try',
                 component:Try,
-                redirect:'/try',
-                // 原单位报告
                 children:[
                     {
                         path:'/try',
-                        component:Try,
+                        component:Try
                     }
-                ] 
+                ]
         
             },
             // 用户管理
             {
                 path:'/usermanagement',
-                component:UserManagement,
-                redirect:'/usermanagement',
-                // 原单位报告
+                component:UserManagement  ,
                 children:[
                     {
                         path:'/usermanagement',
-                        component:UserManagement,
+                        component:UserManagement
                     }
-                ]       
+                ]      
             },
         ]
     },

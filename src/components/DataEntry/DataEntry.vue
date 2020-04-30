@@ -835,7 +835,7 @@ export default {
   methods: {
     // 点击查看
      async chakan(row,index){
-      // this.search = !this.search
+      this.search = !this.search
       console.log(index,row)
       const {data :res} = await  this.axios.get("excel_data/list.php",{params:{id:row.id}})      
       console.log(res)
@@ -890,8 +890,7 @@ export default {
       this.data = res
     },
     //点击数据集解析  将数据插入到列表中
-    async jiexi(row){
-      
+    async jiexi(row){   
        const loading = this.$loading({
           lock: true,
           text: '正在解析中，请耐心等待呦',
@@ -1040,7 +1039,7 @@ export default {
       this.luru =! this.luru     
       this.ji =! this.ji 
       this.sousuo = !this.sousuo   
-      this.getTableList(row);  
+ 
     },
     // 多选框
     func1: function(value) {
