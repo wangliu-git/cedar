@@ -4,7 +4,7 @@ import App from './App.vue'
 import router from './router/index'
 import VueResource from 'vue-resource'
 import './plugins/element.js'
-
+import '../public/js/macarons '
 import 'element-ui/lib/theme-chalk/index.css';
 
 // 入口文件

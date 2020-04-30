@@ -205,7 +205,7 @@
             <div class="bao">
               <span>{{fMInstitution.report_quality.field_title}} :</span>
               <el-select
-                placeholder="请选择"
+                placeholder="请选择报告质量"
                 name="report_quality"
                 v-model="editForm.report_quality"
                 size="mini"
@@ -287,7 +287,12 @@
 
             <div class="zhen">
               <span>{{tMInstitution.sample_location.field_title}}:</span>
-              <el-select name="sample_location" v-model="editForm.sample_location" size="mini">
+              <el-select
+                name="sample_location"
+                v-model="editForm.sample_location"
+                size="mini"
+                placeholder="请选择取材部位"
+              >
                 <el-option
                   v-for="(item,index) in  tMInstitution.sample_location.field_values"
                   :key="index"
@@ -354,7 +359,7 @@
 
       <div class="footer">
         <el-button @click="inGroup(editForm)">加入分组</el-button>
-        <el-button>重置</el-button>
+        <el-button @click="reset()">重置</el-button>
         <el-button @click="shaixuan(editForm)">筛选</el-button>
       </div>
     </div>
@@ -550,6 +555,586 @@
         </div>
       </div>
     </div>
+
+    <!--表单 -->
+    <div class="sick" v-if="luru">
+      <div class="container" id="dataImport" >
+        <div class="form">
+          <!-- 按钮-->
+          <div class="header">
+            <span @click="luru=!luru">编辑</span>
+            <span><i class="inonfont iconx"></i></span>
+          </div>
+          <!-- 表单-->
+          <div class="formList"  :v-model="editForm">
+            <!-- 折叠面板-->
+            <!-- 患者信息-->
+            <el-collapse v-model="activeName"  class="HZ">
+              <el-collapse-item name="1">
+                <template slot="title" style="background-color:rgba(232, 232, 232, 1)">
+                  <i class="iconfont icontubiaozhizuo-"></i>
+                  {{patient_infoAll.name}}:
+                </template>
+                <!-- 患者信息内容-->
+                <div class="HZdown">
+                  <!--病人ID -->
+                  <div class="sickItem">
+                    <span>{{showInfo.patient_id.field_title}}:</span>
+                    <el-input
+                      type="text"
+                      maxlength="10"
+                      show-word-limit
+                      v-model="editForm.patient_id"
+                      name="patient_id"
+                      size="mini"
+                      placeholder="请输入住院号/门诊号"
+                    ></el-input>
+                  </div>
+                  <!--姓名 <span v-show="editForm.name.length >= maxL">{{textShow}}</span> -->
+                  <div class="sickItem">
+                    <span>{{showInfo.name.field_title}}:</span>
+                    <el-input
+                      type="text"                   
+                      size="mini"
+                      v-model="editForm.name"
+                      name="name"
+                      placeholder="请输入姓名"
+                    ></el-input>                 
+                  </div>
+                  <!--性別 -->
+                  <div class="sickItem">
+                    <span>{{showInfo.sex.field_title}}:</span>
+                    <el-select placeholder="请选择" name="sex" v-model="editForm.sex" size="mini">
+                      <el-option v-for="item in showInfo.sex.field_values" :key="item" :value="item">
+                        <span>{{item}}</span>
+                      </el-option>
+                    </el-select>
+                  </div>
+                  <!--出生日期 -->
+                  <div class="sickItem">
+                    <span>{{showInfo.birthday.field_title}}:</span>
+                    <el-date-picker
+                      style="width:200px"
+                      name="birthday"
+                      v-model="editForm.birthday"
+                      type="date"
+                      size="mini"
+                      placeholder="选择日期"
+                    ></el-date-picker>
+                  </div>
+                  <!-- 联系电话-->
+                  <div class="sickItem">
+                    <span>{{showInfo.phone.field_title}}:</span>
+                    <el-input
+                      type="tel"
+                      maxlength="11"
+                      size="mini"
+                      v-model="editForm.phone"
+                      name="phone"
+                      placeholder="请输入电话"
+                    ></el-input>
+                  </div>
+                  <!--民族-->
+                  <div class="sickItem">
+                    <span>{{showInfo.nation.field_title}}:</span>
+                    <el-select placeholder="请选择" name="nation" v-model="editForm.nation" size="mini">
+                      <el-option
+                        v-for="(item) in showInfo.nation.field_values"
+                        :key="item"
+                        :value="item"
+                      >
+                        <span>{{item}}</span>
+                      </el-option>
+                    </el-select>
+                  </div>
+                  <!--籍贯-->
+                  <div class="sickItem">
+                    <span>{{showInfo.birthplace.field_title}}:</span>
+                    <el-select
+                      placeholder="请选择"
+                      name="birthplace"
+                      v-model="editForm.birthplace"
+                      size="mini"
+                    >
+                      <el-option
+                        v-for="(provinces) in showInfo.birthplace.field_values"
+                        :key="provinces"
+                        :value="provinces"
+                      >
+                        <span>{{provinces}}</span>
+                      </el-option>
+                    </el-select>
+                  </div>
+                  <!--居住地-->
+                  <div class="sickItem">
+                    <span>{{showInfo.address_prov.field_title}}:</span>
+                    <el-select
+                      placeholder="请选择"
+                      name="birthplace"
+                      v-model="editForm.address_prov"
+                      size="mini"
+                    >
+                      <el-option
+                        v-for="(provinces) in showInfo.birthplace.field_values"
+                        :key="provinces"
+                        :value="provinces"
+                      >
+                        <span>{{provinces}}</span>
+                      </el-option>
+                    </el-select>
+                  </div>
+                  <!--  市/区
+                  <select name="birthplace" v-model="patient.address_prov">
+                  <option v-on="changeaddress_prov(cities)" v-for="(cities) in showInfo.birthplace.field_values.cities" :key="cities" :value="citles">{{provinces.citles}}</option>
+                  </select>-->
+                </div>
+              </el-collapse-item>
+            </el-collapse>
+
+            <!-- 原医疗机构-->
+            <el-collapse v-model="activeName"  class="origin">
+              <el-collapse-item name="2">
+                <template slot="title" style="background-color:rgba(232, 232, 232, 1)">
+                  <i class="iconfont icontubiaozhizuo-"></i>
+                  {{diagnosis_1_info.name}}
+                </template>
+                <div class="origindown">
+                  <!--报告信息 -->
+                  <div class="sickIH">
+                    <div class="title">
+                      <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
+                      {{reportMessage.name}}:
+                    </div>
+                    <div class="sickItem">
+                      <span>{{fMInstitution.organization.field_title}}:</span>
+                      <el-input
+                        type="text"
+                        v-model="editForm.organization"
+                        placeholder="请输入机构名称"
+                        size="mini"
+                      ></el-input>
+                    </div>
+                    <div class="sickItem">
+                      <span>{{fMInstitution.test_id.field_title}}:</span>
+                      <el-input type="text" v-model="editForm.test_id" placeholder="请输入病理号" size="mini"></el-input>
+                    </div>
+                    <div class="sickItem">
+                      <span>{{fMInstitution.application_date.field_title}}:</span>
+                      <el-date-picker
+                        name="application_date"
+                        v-model="editForm.application_date"
+                        type="date"
+                        size="mini"
+                        placeholder="选择日期"
+                      ></el-date-picker>
+                    </div>
+                    <div class="sickItem">
+                      <span>{{fMInstitution.report_date.field_title}}:</span>
+                      <el-date-picker
+                        name="report_date"
+                        v-model="editForm.report_date"
+                        type="date"
+                        size="mini"
+                        placeholder="选择日期"
+                      ></el-date-picker>
+                    </div>
+                  </div>
+                  <!--诊断结论 -->
+                  <div class="sickIH">
+                    <div class="title">
+                      <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
+                      {{reportResult.name}}:
+                    </div>
+                    <div class="sickItem">
+                      <span>病理类型:</span>
+                      <el-cascader size="mini" :options="options" :props="{ checkStrictly: true }" clearable></el-cascader>                   
+                    </div>                 
+                  </div>
+                  <!--报告质量  可折叠-->
+                  <div class="sickIH">
+                    <div class="title">
+                      <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
+                      {{reportMass.name}}:
+                      <span
+                        style="margin-left:50px"
+                      >{{fMInstitution.report_quality.field_title}} :</span>
+                      <el-select
+                        placeholder="请选择"
+                        name="report_quality"
+                        v-model="editForm.report_quality"
+                        size="mini"
+                      >
+                        <el-option
+                          v-for="(item,index) in fMInstitution.report_quality.field_values"
+                          :key="index"
+                          :value="item"
+                        >
+                          <span>{{item}}</span>
+                        </el-option>
+                      </el-select>
+                    </div>
+
+                    <div class="kuai">
+                      <div class="p-one">
+                        <span class="titles">病理检材质量</span>
+                        <div class="sickItems">
+                          <span class="one">{{fMInstitution.he_number.field_title}}:</span>
+                          <el-input
+                            type="text"
+                            v-model="editForm.he_number"
+                            size="mini"
+                            style="width:100px"
+                          ></el-input>
+                          {{fMInstitution.he_number.field_tail}}
+                        </div>
+                        <div class="sickItems">
+                          <span class="two">{{fMInstitution.he_quality.field_title}}:</span>
+                          <el-select name="he_quality" v-model="editForm.he_quality" size="mini">
+                            <el-option
+                              v-for="(item,index) in fMInstitution.he_quality.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                        <div class="sickItems">
+                          <span class="three">{{fMInstitution.ihc_number.field_title}}:</span>
+                          <el-input
+                            type="text"
+                            v-model="editForm.ihc_number"
+                            size="mini"
+                            style="width:100px"
+                          ></el-input>
+                          {{fMInstitution.he_number.field_tail}}
+                        </div>
+                        <div class="sickItems">
+                          <span class="four">{{fMInstitution.ihc_quality.field_title}}:</span>
+                          <el-select name="ihc_quality" v-model="editForm.ihc_quality" size="mini">
+                            <el-option
+                              v-for="(item,index) in fMInstitution.ihc_quality.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                        <div class="sickItems">
+                          <span class="five">{{fMInstitution.problem_slice.field_title}}</span>
+                          <el-select name="problem_slice" v-model="editForm.problem_slice" size="mini">
+                            <el-option
+                              v-for="(item,index) in fMInstitution.problem_slice.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                      <div class="p-two">
+                        <span class="titles">病理会诊申请单质量：</span>
+                        <div class="sickItems">
+                          <span class="h">{{fMInstitution.patient_info.field_title}}:</span>
+                          <el-select name="patient_info" v-model="editForm.patient_info" size="mini">
+                            <el-option
+                              v-for="(item,index) in fMInstitution.patient_info.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                        <div class="sickItems">
+                          <span class="h">{{fMInstitution.history_info.field_title}}:</span>
+                          <el-select name="history_info" v-model="editForm.history_info" size="mini">
+                            <el-option
+                              v-for="(item,index) in fMInstitution.history_info.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                        <div class="sickItems">
+                          <span class="h">{{fMInstitution.sample_info.field_title}}:</span>
+                          <el-select name="sample_info" v-model="editForm.sample_info" size="mini">
+                            <el-option
+                              v-for="(item,index) in fMInstitution.sample_info.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                      <div class="p-three">
+                        <span class="titles">其他临床资料提交情况：</span>
+                        <div class="sickItems">
+                          <span>{{fMInstitution.record.field_title}}:</span>
+                          <el-select name="record" v-model="editForm.record" size="mini">
+                            <el-option
+                              v-for="(item,index) in fMInstitution.record.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                        <div class="sickItems">
+                          <span>{{fMInstitution.helper_report.field_title}}:</span>
+                          <el-select name="helper_report" v-model="editForm.helper_report" size="mini">
+                            <el-option
+                              v-for="(item,index) in fMInstitution.helper_report.field_values"
+                              :key="index"
+                              :value="item"
+                            >{{item}}</el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </el-collapse-item>
+            </el-collapse>
+
+            <!-- 本医疗机构-->
+            <el-collapse v-model="activeName" class="report">
+              <el-collapse-item name="3">
+                <template slot="title" style="background-color:rgba(232, 232, 232, 1)">
+                  <i class="iconfont icontubiaozhizuo-"></i>
+                  {{diagnosis_2_info.name}}
+                </template>
+                <div class="reportdown">
+                  <div class="sickIH">
+                    <!--报告信息 -->
+                    <div class="title">
+                      <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
+                      {{reportMessage.name}}:
+                    </div>
+                    <div class="sickItem">
+                      <span>{{tMInstitution.test_id.field_title}}:</span>
+                      <el-input type="text" v-model="editForm.test_id" placeholder="请输入病理号" size="mini"></el-input>
+                    </div>
+
+                    <div class="sickItem">
+                      <span>{{tMInstitution.department.field_title}}:</span>
+                      <el-input
+                        type="text"
+                        v-model="editForm.department"
+                        placeholder="请输入机构名称"
+                        size="mini"
+                      ></el-input>
+                    </div>
+
+                    <div class="sickItem">
+                      <span>{{tMInstitution.application_date.field_title}}:</span>
+                      <el-date-picker
+                        name="application_date"
+                        v-model="editForm.application_date"
+                        type="date"
+                        size="mini"
+                        placeholder="选择日期"
+                      ></el-date-picker>
+                    </div>
+
+                    <div class="sickItem">
+                      <span>{{tMInstitution.report_date.field_title}}:</span>
+                      <el-date-picker
+                        name="test_id"
+                        v-model="editForm.report_date"
+                        type="date"
+                        size="mini"
+                        placeholder="选择日期"
+                      ></el-date-picker>
+                    </div>
+                    <div class="sickItem">
+                      <span>{{tMInstitution.diagnosis_type.field_title}}：</span>
+                      <el-select name="diagnosis_type" v-model="editForm.diagnosis_type" size="mini">
+                        <el-option
+                          v-for="(item,index) in  tMInstitution.diagnosis_type.field_values"
+                          :key="index"
+                          :value="item"
+                        >
+                          <span>{{item}}</span>
+                        </el-option>
+                      </el-select>
+                    </div>
+                  </div>
+
+                  <div class="sickIH">
+                    <!--取材信息 <div class="sickItem">
+                      <span>{{tMInstitution.sample_location.field_title}}:</span>
+                      <el-select name="sample_location" v-model="editForm.sample_location" size="mini">
+                        <el-option
+                          v-for="(item,index) in  tMInstitution.sample_location.field_values"
+                          :key="index"
+                          :value="item"
+                        >
+                          <span>{{item}}</span>
+                        </el-option>
+                      </el-select>
+                    </div>-->
+                    <div class="title">
+                      <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
+                      {{materMessage.name}}:
+                    </div>
+                    <div class="sickItem">
+                      <span>{{tMInstitution.sample_type.field_title}}:</span>
+                      <el-select name="sample_type" v-model="editForm.sample_type" size="mini">
+                        <el-option
+                          v-for="(item,index) in  tMInstitution.sample_type.field_values"
+                          :key="index"
+                          :value="item"
+                        >
+                          <span>{{item}}</span>
+                        </el-option>
+                      </el-select>
+                    </div>
+
+                    
+
+                    <!-- <div class="sickItem">
+                      <span>{{tMInstitution.sample_morphology.field_title}}:</span>
+                      <el-input
+                        type="text"
+                        v-model="editForm.sample_morphology"
+                        placeholder="请输入形态学描述"
+                        size="mini"
+                      ></el-input>
+                    </div>-->
+                    <div class="sickItem">
+                      <span>取材部位</span>
+                      <el-input
+                        type="text"
+                        v-model="editForm.sample_morphology"
+                        placeholder="请输入取材部位"
+                        size="mini"
+                      ></el-input>
+                    </div>
+                  </div>
+
+                  <div class="sickIH">
+                    <!--就诊结论 -->
+                    <div class="title">
+                      <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
+                      {{reportResult.name}}:
+                    </div>
+                    <div class="sickItem">
+                      <span>病理类型:</span>
+                      <el-cascader size="mini" :options="options" :props="{ checkStrictly: true }" clearable></el-cascader>              
+                    </div>
+
+                  
+
+                  </div>
+
+                  <!--辅助诊断 -->
+                  <div class="sickIH">
+                    <div class="title">
+                      <span>
+                        <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
+                        {{helper_diagnosis.name}}:
+                      </span>
+                      <el-checkbox-group
+                        v-model="checkList"
+                        @change="func1"
+                        style="display: initial;"
+                      >
+                        <el-checkbox  style="margin-left=10px" label="免疫组化"></el-checkbox>
+                        <el-checkbox label="荧光原位杂交"></el-checkbox>
+                        <el-checkbox label="淋巴瘤克隆性基因重排检测"></el-checkbox>
+                        <el-checkbox label="原位杂交"></el-checkbox>
+                        <el-checkbox label="流式细胞检测"></el-checkbox>
+                        <el-checkbox label="ngs检测"></el-checkbox>
+                      </el-checkbox-group>
+                    </div>
+                  </div>
+
+                  <div class="ihc">  
+                        <!-- 遍历患者已有的免疫组化v-for="(item,idx) in editForm.helper_diagnosis.ihc" :key="idx" -->
+                    <div v-show="seen" >
+                      <span class="titl">
+                        <i class="iconfont icontubiaozhizuo-"></i>
+                        {{ihc.name}}
+                      </span>
+                      <div id="one"  v-for="(ihc,idx) in editForm.helper_diagnosis.ihc" :key="idx">
+                        <!-- 循环myzh这个数组，来动态 + - 操作 -->
+                        <div class="sickI">
+                          <div class="sickIt">
+                            <span class="name">{{FZ.key_ihc.field_title}}：</span>                       
+                            <el-input v-model="ihc.mark" style="width:100px"></el-input>
+                          </div>
+                        </div>
+                        <div class="sickI">
+                          <div class="sickIt">
+                            <span class="name">{{FZ.value_ihc.field_title}}：</span>
+                            <el-input v-model="ihc.value" style="width:100px"></el-input>
+                          </div>
+                        </div>
+                        <!-- + - 操作只需要传入当前循环的数组 -->
+                        <!-- 判断 必须是最后一条，才可以显示操作按钮 -->
+                        <div class="handleBtnBox">
+                          <!-- el-button: v-if="idx==testFZ.ihc.length-1" -->
+                          <el-button @click="ihcAddData(help_diagnosis.ihc,help_diagnosis.ihc[idx])">
+                            <i class="iconfont iconaddTodo-nav"></i>
+                          </el-button>
+                          <el-button @click="ihcDeleteData(help_diagnosis.ihc)">
+                            <i class="iconfont iconjianhao1"></i>
+                          </el-button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div v-show="seen1" v-for="(item,idx) in editForm.helper_diagnosis.fish"
+                                :key="idx">
+                      <span class="titl">
+                        <i class="iconfont icontubiaozhizuo-"></i>
+                        {{fish.name}}
+                      </span>
+                      <div id="two">
+                        <div class="sickI">
+                          <div class="sickIt">
+                            <span class="name">{{FZ.key_fish.field_title}}：</span>
+                            <el-input v-model="fish.mark" style="width:100px"></el-input>                       
+                          </div>
+                        </div>
+                        <div class="sickI">
+                          <div class="sickIt">
+                            <span class="name">{{FZ.value_fish.field_title}}：</span>
+                            <el-input v-model="fish.value" style="width:100px"></el-input>
+                          </div>
+                        </div>
+                        <!-- 不同的地方可以调用一个方法，不需要额外写-->
+                        <div class="handleBtnBox">
+                          <el-button
+                            @click="ihcAddData(help_diagnosis.fish,help_diagnosis.fish[idx])"
+                          >
+                            <i class="iconfont iconaddTodo-nav"></i>
+                          </el-button>
+                          <el-button @click="ihcDeleteData(help_diagnosis.fish)">
+                            <i class="iconfont iconjianhao1"></i>
+                          </el-button>
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+              </el-collapse-item>
+              <el-button type="primary" @click="submit()" class="commit" style="width:100%">提交</el-button>
+            </el-collapse>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -559,430 +1144,362 @@ import allMessage from "../../staic/allMessage.json";
 export default {
   data() {
     return {
+      checkList: ["免疫组化","荧光原位杂交","淋巴瘤克隆性基因重排检测","原位杂交","流式细胞检测","ngs检测"],
+      seen: true,
+      seen1: true,
+      seen2: true,
+      seen3: true,
+      seen4: true,
+      seen5: true,
+      // 大表单
+      luru:false,
       val: "",
       // 分组名称
       group: false,
       // 级联选择器
-      options: [
-        {
-          value: "成熟T和NK细胞淋巴瘤",
-          label: "成熟T和NK细胞淋巴瘤",
-          children: [
-            {
-              value: "T细胞淋巴瘤（亚型无法确定）",
-              label: "T细胞淋巴瘤（亚型无法确定）"
-            },
-            {
-              value: "T幼淋巴细胞白血病",
-              label: "T幼淋巴细胞白血病"
-            },
-            {
-              value: "T大颗粒淋巴细胞白血病",
-              label: "T大颗粒淋巴细胞白血病"
-            },
-            {
-              value: "NK细胞慢性淋巴增殖性疾病",
-              label: "NK细胞慢性淋巴增殖性疾病"
-            },
-            {
-              value: "侵袭性NK细胞白血病",
-              label: "侵袭性NK细胞白血病"
-            },
-            {
-              value: "儿童系统性EBV阳性T细胞淋巴瘤",
-              label: "儿童系统性EBV阳性T细胞淋巴瘤"
-            },
-            {
-              value: "慢性活动性EBV感染（T细胞和NK细胞型），系统性",
-              label: "慢性活动性EBV感染（T细胞和NK细胞型），系统性"
-            },
-            {
-              value: "种痘水疱病样淋巴组织增殖性疾病",
-              label: "种痘水疱病样淋巴组织增殖性疾病"
-            },
-            {
-              value: "严重蚊虫叮咬过敏症",
-              label: "严重蚊虫叮咬过敏症"
-            },
-            {
-              value: "成人T细胞白血病/淋巴瘤",
-              label: "成人T细胞白血病/淋巴瘤"
-            },
-            {
-              value: "结外NK/T细胞淋巴瘤，鼻型",
-              label: "结外NK/T细胞淋巴瘤，鼻型"
-            },
-            {
-              value: "肠病相关T细胞淋巴瘤",
-              label: "肠病相关T细胞淋巴瘤"
-            },
-            {
-              value: "单形性嗜上皮性肠道T细胞淋巴瘤",
-              label: "单形性嗜上皮性肠道T细胞淋巴瘤"
-            },
-            {
-              value: "肠道T细胞淋巴瘤，非特指型",
-              label: "肠道T细胞淋巴瘤，非特指型"
-            },
-            {
-              value: "胃肠道惰性T细胞增殖性疾病",
-              label: "胃肠道惰性T细胞增殖性疾病"
-            },
-            {
-              value: "肝脾T细胞淋巴瘤",
-              label: "肝脾T细胞淋巴瘤"
-            },
-            {
-              value: "皮下脂膜炎样T细胞淋巴瘤",
-              label: "皮下脂膜炎样T细胞淋巴瘤"
-            },
-            {
-              value: "蕈样肉芽肿",
-              label: "蕈样肉芽肿"
-            },
-            {
-              value: "Sezary综合征",
-              label: "Sezary综合征"
-            },
-            {
-              value: "淋巴瘤样丘疹病",
-              label: "淋巴瘤样丘疹病"
-            },
-            {
-              value: "原发性皮肤间变性大细胞淋巴瘤",
-              label: "原发性皮肤间变性大细胞淋巴瘤"
-            },
-            {
-              value: "原发性皮肤γδT细胞淋巴瘤",
-              label: "原发性皮肤γδT细胞淋巴瘤"
-            },
-            {
-              value: "原发性皮肤CD8阳性侵袭性嗜表皮性细胞毒性T细胞淋巴瘤",
-              label: "原发性皮肤CD8阳性侵袭性嗜表皮性细胞毒性T细胞淋巴瘤"
-            },
-            {
-              value: "原发性皮肤肢端CD8阳性T细胞淋巴瘤",
-              label: "原发性皮肤肢端CD8阳性T细胞淋巴瘤"
-            },
-            {
-              value: "原发性皮肤CD4阳性小/中等大小T细胞增殖性疾病",
-              label: "原发性皮肤CD4阳性小/中等大小T细胞增殖性疾病"
-            },
-            {
-              value: "外周T细胞淋巴瘤，非特指型",
-              label: "外周T细胞淋巴瘤，非特指型"
-            },
-            {
-              value: "血管免疫母细胞T细胞淋巴瘤",
-              label: "血管免疫母细胞T细胞淋巴瘤"
-            },
-            {
-              value: "滤泡T细胞淋巴瘤",
-              label: "滤泡T细胞淋巴瘤"
-            },
-            {
-              value: "伴滤泡辅助T细胞表型的结内外周T细胞淋巴瘤",
-              label: "伴滤泡辅助T细胞表型的结内外周T细胞淋巴瘤"
-            },
-            {
-              value: "间变性大细胞淋巴瘤，ALK阳性",
-              label: "间变性大细胞淋巴瘤，ALK阳性"
-            },
-            {
-              value: "间变性大细胞淋巴瘤，ALK阴性",
-              label: "间变性大细胞淋巴瘤，ALK阴性"
-            },
-            {
-              value: "乳房植入物相关的间变性大细胞淋巴瘤",
-              label: "乳房植入物相关的间变性大细胞淋巴瘤"
-            },
-            {
-              value: "其他T细胞淋巴瘤",
-              label: "其他T细胞淋巴瘤"
-            }
-          ]
+      options: [{
+        value: '成熟T和NK细胞淋巴瘤',
+        label: '成熟T和NK细胞淋巴瘤',
+        children: [{
+        value: 'T细胞淋巴瘤（亚型无法确定）',
+        label: 'T细胞淋巴瘤（亚型无法确定）'
+        },{
+        value: 'T幼淋巴细胞白血病',
+        label: 'T幼淋巴细胞白血病'
+        },{
+        value: 'T大颗粒淋巴细胞白血病',
+        label: 'T大颗粒淋巴细胞白血病'
+        },{
+        value: 'NK细胞慢性淋巴增殖性疾病',
+        label: 'NK细胞慢性淋巴增殖性疾病'
+        },{
+        value: '侵袭性NK细胞白血病',
+        label: '侵袭性NK细胞白血病'
+        },{
+        value: '儿童系统性EBV阳性T细胞淋巴瘤',
+        label: '儿童系统性EBV阳性T细胞淋巴瘤'
+        },{
+        value: '慢性活动性EBV感染（T细胞和NK细胞型），系统性',
+        label: '慢性活动性EBV感染（T细胞和NK细胞型），系统性'
+        },{
+        value: '种痘水疱病样淋巴组织增殖性疾病',
+        label: '种痘水疱病样淋巴组织增殖性疾病'
+        },{
+        value: '严重蚊虫叮咬过敏症',
+        label: '严重蚊虫叮咬过敏症'
+        },{
+        value: '成人T细胞白血病/淋巴瘤',
+        label: '成人T细胞白血病/淋巴瘤'
+        },{
+        value: '结外NK/T细胞淋巴瘤，鼻型',
+        label: '结外NK/T细胞淋巴瘤，鼻型'
+        },{
+        value: '肠病相关T细胞淋巴瘤',
+        label: '肠病相关T细胞淋巴瘤'
+        },{
+        value: '单形性嗜上皮性肠道T细胞淋巴瘤',
+        label: '单形性嗜上皮性肠道T细胞淋巴瘤'
+        },{
+        value: '肠道T细胞淋巴瘤，非特指型',
+        label: '肠道T细胞淋巴瘤，非特指型'
+        },{
+        value: '胃肠道惰性T细胞增殖性疾病',
+        label: '胃肠道惰性T细胞增殖性疾病'
+        },{
+        value: '肝脾T细胞淋巴瘤',
+        label: '肝脾T细胞淋巴瘤'
+        },{
+        value: '皮下脂膜炎样T细胞淋巴瘤',
+        label: '皮下脂膜炎样T细胞淋巴瘤'
+        },{
+        value: '蕈样肉芽肿',
+        label: '蕈样肉芽肿'
+        },{
+        value: 'Sezary综合征',
+        label: 'Sezary综合征'
+        },{
+        value: '淋巴瘤样丘疹病',
+        label: '淋巴瘤样丘疹病'
+        },{
+        value: '原发性皮肤间变性大细胞淋巴瘤',
+        label: '原发性皮肤间变性大细胞淋巴瘤'
+        },{
+        value: '原发性皮肤γδT细胞淋巴瘤',
+        label: '原发性皮肤γδT细胞淋巴瘤'
+        },{
+        value: '原发性皮肤CD8阳性侵袭性嗜表皮性细胞毒性T细胞淋巴瘤',
+        label: '原发性皮肤CD8阳性侵袭性嗜表皮性细胞毒性T细胞淋巴瘤'
+        },{
+        value: '原发性皮肤肢端CD8阳性T细胞淋巴瘤',
+        label: '原发性皮肤肢端CD8阳性T细胞淋巴瘤'
+        },{
+        value: '原发性皮肤CD4阳性小/中等大小T细胞增殖性疾病',
+        label: '原发性皮肤CD4阳性小/中等大小T细胞增殖性疾病'
+        },{
+        value: '外周T细胞淋巴瘤，非特指型',
+        label: '外周T细胞淋巴瘤，非特指型'
+        },{
+        value: '血管免疫母细胞T细胞淋巴瘤',
+        label: '血管免疫母细胞T细胞淋巴瘤'
+        },{
+        value: '滤泡T细胞淋巴瘤',
+        label: '滤泡T细胞淋巴瘤'
+        },{
+        value: '伴滤泡辅助T细胞表型的结内外周T细胞淋巴瘤',
+        label: '伴滤泡辅助T细胞表型的结内外周T细胞淋巴瘤'
+        },{
+        value: '间变性大细胞淋巴瘤，ALK阳性',
+        label: '间变性大细胞淋巴瘤，ALK阳性'
+        },{
+        value: '间变性大细胞淋巴瘤，ALK阴性',
+        label: '间变性大细胞淋巴瘤，ALK阴性'
+        },{
+        value: '乳房植入物相关的间变性大细胞淋巴瘤',
+        label: '乳房植入物相关的间变性大细胞淋巴瘤'
+        },{
+        value: '其他T细胞淋巴瘤',
+        label: '其他T细胞淋巴瘤'
+        }]
         },
         {
-          value: "前驱淋巴性肿瘤",
-          label: "前驱淋巴性肿瘤",
-          children: [
-            {
-              value: "B淋巴母细胞白血病/淋巴瘤，非特殊类型",
-              label: "B淋巴母细胞白血病/淋巴瘤，非特殊类型"
-            },
-            {
-              value:
-                "B淋巴母细胞白血病/淋巴瘤伴t（9；22）（q34.1；q11.2）；BCR-ABL1",
-              label:
-                "B淋巴母细胞白血病/淋巴瘤伴t（9；22）（q34.1；q11.2）；BCR-ABL1"
-            },
-            {
-              value: "B淋巴母细胞白血病/淋巴瘤伴t（v；11q23.3）；KMT2A重排",
-              label: "B淋巴母细胞白血病/淋巴瘤伴t（v；11q23.3）；KMT2A重排"
-            },
-            {
-              value:
-                "B淋巴母细胞白血病/淋巴瘤伴t（12；21）（p13.2；q22.1）；ETV6-RUNX1",
-              label:
-                "B淋巴母细胞白血病/淋巴瘤伴t（12；21）（p13.2；q22.1）；ETV6-RUNX1"
-            },
-            {
-              value: "B淋巴母细胞白血病/淋巴瘤伴超二倍体",
-              label: "B淋巴母细胞白血病/淋巴瘤伴超二倍体"
-            },
-            {
-              value: "B淋巴母细胞白血病/淋巴瘤伴低二倍体",
-              label: "B淋巴母细胞白血病/淋巴瘤伴低二倍体"
-            },
-            {
-              value:
-                "B淋巴母细胞白血病/淋巴瘤伴t（5；14）（q31.1；q32.3）；IL3-IGH",
-              label:
-                "B淋巴母细胞白血病/淋巴瘤伴t（5；14）（q31.1；q32.3）；IL3-IGH"
-            },
-            {
-              value:
-                "B淋巴母细胞白血病/淋巴瘤伴t（1；19）（q23；p13.3）；TCF3-PBX1",
-              label:
-                "B淋巴母细胞白血病/淋巴瘤伴t（1；19）（q23；p13.3）；TCF3-PBX1"
-            },
-            {
-              value: "B淋巴母细胞白血病/淋巴瘤，BCR-ABL1样",
-              label: "B淋巴母细胞白血病/淋巴瘤，BCR-ABL1样"
-            },
-            {
-              value: "B淋巴母细胞白血病/淋巴瘤伴iAMP21",
-              label: "B淋巴母细胞白血病/淋巴瘤伴iAMP21"
-            },
-            {
-              value: "T淋巴母细胞白血病/淋巴瘤",
-              label: "T淋巴母细胞白血病/淋巴瘤"
-            },
-            {
-              value: "早期T前驱淋巴母细胞白血病",
-              label: "早期T前驱淋巴母细胞白血病"
-            },
-            {
-              value: "自然杀伤（NK）淋巴母细胞白血病/淋巴瘤",
-              label: "自然杀伤（NK）淋巴母细胞白血病/淋巴瘤"
-            }
-          ]
+          value: '前驱淋巴性肿瘤',
+          label: '前驱淋巴性肿瘤',
+          children: [{
+          value: 'B淋巴母细胞白血病/淋巴瘤，非特殊类型',
+          label: 'B淋巴母细胞白血病/淋巴瘤，非特殊类型'
+          },{
+          value: 'B淋巴母细胞白血病/淋巴瘤伴t（9；22）（q34.1；q11.2）；BCR-ABL1',
+          label: 'B淋巴母细胞白血病/淋巴瘤伴t（9；22）（q34.1；q11.2）；BCR-ABL1'
+          },{
+          value: 'B淋巴母细胞白血病/淋巴瘤伴t（v；11q23.3）；KMT2A重排',
+          label: 'B淋巴母细胞白血病/淋巴瘤伴t（v；11q23.3）；KMT2A重排'
+          },{
+          value: 'B淋巴母细胞白血病/淋巴瘤伴t（12；21）（p13.2；q22.1）；ETV6-RUNX1',
+          label: 'B淋巴母细胞白血病/淋巴瘤伴t（12；21）（p13.2；q22.1）；ETV6-RUNX1'
+          },{
+          value: 'B淋巴母细胞白血病/淋巴瘤伴超二倍体',
+          label: 'B淋巴母细胞白血病/淋巴瘤伴超二倍体'
+          },{
+          value: 'B淋巴母细胞白血病/淋巴瘤伴低二倍体',
+          label: 'B淋巴母细胞白血病/淋巴瘤伴低二倍体'
+          },{
+          value: 'B淋巴母细胞白血病/淋巴瘤伴t（5；14）（q31.1；q32.3）；IL3-IGH',
+          label: 'B淋巴母细胞白血病/淋巴瘤伴t（5；14）（q31.1；q32.3）；IL3-IGH'
+          },{
+          value: 'B淋巴母细胞白血病/淋巴瘤伴t（1；19）（q23；p13.3）；TCF3-PBX1',
+          label: 'B淋巴母细胞白血病/淋巴瘤伴t（1；19）（q23；p13.3）；TCF3-PBX1'
+          },{
+          value: 'B淋巴母细胞白血病/淋巴瘤，BCR-ABL1样',
+          label: 'B淋巴母细胞白血病/淋巴瘤，BCR-ABL1样'
+          },{
+          value: 'B淋巴母细胞白血病/淋巴瘤伴iAMP21',
+          label: 'B淋巴母细胞白血病/淋巴瘤伴iAMP21'
+          },{
+          value: 'T淋巴母细胞白血病/淋巴瘤',
+          label: 'T淋巴母细胞白血病/淋巴瘤'
+          },{
+          value: '早期T前驱淋巴母细胞白血病',
+          label: '早期T前驱淋巴母细胞白血病'
+          },{
+          value: '自然杀伤（NK）淋巴母细胞白血病/淋巴瘤',
+          label: '自然杀伤（NK）淋巴母细胞白血病/淋巴瘤'
+          }]
         },
         {
-          value: "成熟B细胞淋巴瘤",
-          label: "成熟B细胞淋巴瘤",
-          children: [
-            {
-              value: "B细胞淋巴瘤（亚型无法确定）",
-              label: "B细胞淋巴瘤（亚型无法确定）"
-            },
-            {
-              value: "慢性淋巴细胞白血病（CLL）/小淋巴细胞淋巴瘤（SLL）",
-              label: "慢性淋巴细胞白血病（CLL）/小淋巴细胞淋巴瘤（SLL）"
-            },
-            {
-              value: "单克隆B淋巴细胞增多症（MBL）",
-              label: "单克隆B淋巴细胞增多症（MBL）"
-            },
-            {
-              value: "B幼淋巴细胞白血病",
-              label: "B幼淋巴细胞白血病"
-            },
-            {
-              value: "脾边缘区细胞淋巴瘤",
-              label: "脾边缘区细胞淋巴瘤"
-            },
-            {
-              value: "毛细胞白血病",
-              label: "毛细胞白血病"
-            },
-            {
-              value: "脾B细胞淋巴瘤/白血病，不能分类",
-              label: "脾B细胞淋巴瘤/白血病，不能分类"
-            },
-            {
-              value: "脾弥漫性红髓小B细胞淋巴瘤",
-              label: "脾弥漫性红髓小B细胞淋巴瘤"
-            },
-            {
-              value: "毛细胞白血病变异型",
-              label: "毛细胞白血病变异型"
-            },
-            {
-              value: "淋巴浆细胞淋巴瘤",
-              label: "淋巴浆细胞淋巴瘤"
-            },
-            {
-              value: "意义不明的单克隆丙种球蛋白病（MGUS），IgM型",
-              label: "意义不明的单克隆丙种球蛋白病（MGUS），IgM型"
-            },
-            {
-              value: "Mu重链病",
-              label: "Mu重链病"
-            },
-            {
-              value: "Gamma重链病",
-              label: "Gamma重链病"
-            },
-            {
-              value: "Alpha重链病",
-              label: "Alpha重链病"
-            },
-            {
-              value: "意义不明的单克隆丙种球蛋白病（MGUS），非IgM型",
-              label: "意义不明的单克隆丙种球蛋白病（MGUS），非IgM型"
-            },
-            {
-              value: "浆细胞骨髓瘤",
-              label: "浆细胞骨髓瘤"
-            },
-            {
-              value: "骨孤立性浆细胞瘤",
-              label: "骨孤立性浆细胞瘤"
-            },
-            {
-              value: "骨外浆细胞瘤",
-              label: "骨外浆细胞瘤"
-            },
-            {
-              value: "单克隆免疫球蛋白沉积病",
-              label: "单克隆免疫球蛋白沉积病"
-            },
-            {
-              value: "结外黏膜相关淋巴组织边缘区淋巴瘤（MALT淋巴瘤）",
-              label: "结外黏膜相关淋巴组织边缘区淋巴瘤（MALT淋巴瘤）"
-            },
-            {
-              value: "结内边缘区淋巴瘤",
-              label: "结内边缘区淋巴瘤"
-            },
-            {
-              value: "滤泡性淋巴瘤",
-              label: "滤泡性淋巴瘤"
-            },
-            {
-              value: "儿童型滤泡性淋巴瘤",
-              label: "儿童型滤泡性淋巴瘤"
-            },
-            {
-              value: "伴IRF4重排大B细胞淋巴瘤",
-              label: "伴IRF4重排大B细胞淋巴瘤"
-            },
-            {
-              value: "原发皮肤滤泡中心细胞淋巴瘤",
-              label: "原发皮肤滤泡中心细胞淋巴瘤"
-            },
-            {
-              value: "套细胞淋巴瘤",
-              label: "套细胞淋巴瘤"
-            },
-            {
-              value: "弥漫性大B细胞淋巴瘤（DLBCL），非特指型",
-              label: "弥漫性大B细胞淋巴瘤（DLBCL），非特指型"
-            },
-            {
-              value: "富于T细胞/组织细胞大B细胞淋巴瘤",
-              label: "富于T细胞/组织细胞大B细胞淋巴瘤"
-            },
-            {
-              value: "原发中枢神经系统弥漫性大B细胞淋巴瘤",
-              label: "原发中枢神经系统弥漫性大B细胞淋巴瘤"
-            },
-            {
-              value: "原发皮肤弥漫性大B细胞淋巴瘤，腿型",
-              label: "原发皮肤弥漫性大B细胞淋巴瘤，腿型"
-            },
-            {
-              value: "EBV+弥漫性大B细胞淋巴瘤，非特指型",
-              label: "EBV+弥漫性大B细胞淋巴瘤，非特指型"
-            },
-            {
-              value: "EBV+黏膜皮肤溃疡",
-              label: "EBV+黏膜皮肤溃疡"
-            },
-            {
-              value: "慢性炎症相关弥漫性大B细胞淋巴瘤",
-              label: "慢性炎症相关弥漫性大B细胞淋巴瘤"
-            },
-            {
-              value: "淋巴瘤样肉芽肿",
-              label: "淋巴瘤样肉芽肿"
-            },
-            {
-              value: "原发性纵隔（胸腺）大B细胞淋巴瘤",
-              label: "原发性纵隔（胸腺）大B细胞淋巴瘤"
-            },
-            {
-              value: "血管内大B细胞淋巴瘤",
-              label: "血管内大B细胞淋巴瘤"
-            },
-            {
-              value: "ALK阳性大B细胞淋巴瘤",
-              label: "ALK阳性大B细胞淋巴瘤"
-            },
-            {
-              value: "浆母细胞性淋巴瘤",
-              label: "浆母细胞性淋巴瘤"
-            },
-            {
-              value: "原发渗出性淋巴瘤",
-              label: "原发渗出性淋巴瘤"
-            },
-            {
-              value: "多中心Castleman病",
-              label: "多中心Castleman病"
-            },
-            {
-              value: "HHV8阳性弥漫性大B细胞淋巴瘤，非特指型",
-              label: "HHV8阳性弥漫性大B细胞淋巴瘤，非特指型"
-            },
-            {
-              value: "HHV8阳性亲生发中心淋巴组织增殖性疾病",
-              label: "HHV8阳性亲生发中心淋巴组织增殖性疾病"
-            },
-            {
-              value: "Burkitt淋巴瘤",
-              label: "Burkitt淋巴瘤"
-            },
-            {
-              value: "伴11q异常的Burkitt样淋巴瘤",
-              label: "伴11q异常的Burkitt样淋巴瘤"
-            },
-            {
-              value: "高级别B细胞淋巴瘤，伴MYC和BCL2和（或）BCL6重排",
-              label: "高级别B细胞淋巴瘤，伴MYC和BCL2和（或）BCL6重排"
-            },
-            {
-              value: "高级别B细胞淋巴瘤，非特指型",
-              label: "高级别B细胞淋巴瘤，非特指型"
-            },
-            {
-              value: "介于DLBCL和经典霍奇金淋巴瘤之间的不能分类的B细胞淋巴瘤",
-              label: "介于DLBCL和经典霍奇金淋巴瘤之间的不能分类的B细胞淋巴瘤"
-            },
-            {
-              value: "其他B细胞淋巴瘤",
-              label: "其他B细胞淋巴瘤"
-            }
-          ]
+          value: '成熟B细胞淋巴瘤',
+          label: '成熟B细胞淋巴瘤',
+          children: [{
+          value: 'B细胞淋巴瘤（亚型无法确定）',
+          label: 'B细胞淋巴瘤（亚型无法确定）'
+          },{
+          value: '慢性淋巴细胞白血病（CLL）/小淋巴细胞淋巴瘤（SLL）',
+          label: '慢性淋巴细胞白血病（CLL）/小淋巴细胞淋巴瘤（SLL）'
+          },{
+          value: '单克隆B淋巴细胞增多症（MBL）',
+          label: '单克隆B淋巴细胞增多症（MBL）'
+          },{
+          value: 'B幼淋巴细胞白血病',
+          label: 'B幼淋巴细胞白血病'
+          },{
+          value: '脾边缘区细胞淋巴瘤',
+          label: '脾边缘区细胞淋巴瘤'
+          },{
+          value: '毛细胞白血病',
+          label: '毛细胞白血病'
+          },{
+          value: '脾B细胞淋巴瘤/白血病，不能分类',
+          label: '脾B细胞淋巴瘤/白血病，不能分类'
+          },{
+          value: '脾弥漫性红髓小B细胞淋巴瘤',
+          label: '脾弥漫性红髓小B细胞淋巴瘤'
+          },{
+          value: '毛细胞白血病变异型',
+          label: '毛细胞白血病变异型'
+          },{
+          value: '淋巴浆细胞淋巴瘤',
+          label: '淋巴浆细胞淋巴瘤'
+          },{
+          value: '意义不明的单克隆丙种球蛋白病（MGUS），IgM型',
+          label: '意义不明的单克隆丙种球蛋白病（MGUS），IgM型'
+          },{
+          value: 'Mu重链病',
+          label: 'Mu重链病'
+          },{
+          value: 'Gamma重链病',
+          label: 'Gamma重链病'
+          },{
+          value: 'Alpha重链病',
+          label: 'Alpha重链病'
+          },{
+          value: '意义不明的单克隆丙种球蛋白病（MGUS），非IgM型',
+          label: '意义不明的单克隆丙种球蛋白病（MGUS），非IgM型'
+          },{
+          value: '浆细胞骨髓瘤',
+          label: '浆细胞骨髓瘤'
+          },{
+          value: '骨孤立性浆细胞瘤',
+          label: '骨孤立性浆细胞瘤'
+          },{
+          value: '骨外浆细胞瘤',
+          label: '骨外浆细胞瘤'
+          },{
+          value: '单克隆免疫球蛋白沉积病',
+          label: '单克隆免疫球蛋白沉积病'
+          },{
+          value: '结外黏膜相关淋巴组织边缘区淋巴瘤（MALT淋巴瘤）',
+          label: '结外黏膜相关淋巴组织边缘区淋巴瘤（MALT淋巴瘤）'
+          },{
+          value: '结内边缘区淋巴瘤',
+          label: '结内边缘区淋巴瘤'
+          },{
+          value: '滤泡性淋巴瘤',
+          label: '滤泡性淋巴瘤',
+          children: [{
+          value: '1',
+          label: '1'
+          },{
+          value: '2',
+          label: '2'
+          },{
+          value: '3a',
+          label: '3a'
+          },{
+          value: '3b',
+          label: '3b'
+          }]
+          },{
+          value: '儿童型滤泡性淋巴瘤',
+          label: '儿童型滤泡性淋巴瘤'
+          },{
+          value: '伴IRF4重排大B细胞淋巴瘤',
+          label: '伴IRF4重排大B细胞淋巴瘤'
+          },{
+          value: '原发皮肤滤泡中心细胞淋巴瘤',
+          label: '原发皮肤滤泡中心细胞淋巴瘤'
+          },{
+          value: '套细胞淋巴瘤',
+          label: '套细胞淋巴瘤'
+          },{
+          value: '弥漫性大B细胞淋巴瘤（DLBCL），非特指型',
+          label: '弥漫性大B细胞淋巴瘤（DLBCL），非特指型',
+          children: [{
+          value: '生发中心亚型',
+          label: '生发中心亚型'
+          },{
+          value: '活化B细胞亚型',
+          label: '活化B细胞亚型'
+          }]
+          },{
+          value: '富于T细胞/组织细胞大B细胞淋巴瘤',
+          label: '富于T细胞/组织细胞大B细胞淋巴瘤'
+          },{
+          value: '原发中枢神经系统弥漫性大B细胞淋巴瘤',
+          label: '原发中枢神经系统弥漫性大B细胞淋巴瘤'
+          },{
+          value: '原发皮肤弥漫性大B细胞淋巴瘤，腿型',
+          label: '原发皮肤弥漫性大B细胞淋巴瘤，腿型'
+          },{
+          value: 'EBV+弥漫性大B细胞淋巴瘤，非特指型',
+          label: 'EBV+弥漫性大B细胞淋巴瘤，非特指型'
+          },{
+          value: 'EBV+黏膜皮肤溃疡',
+          label: 'EBV+黏膜皮肤溃疡'
+          },{
+          value: '慢性炎症相关弥漫性大B细胞淋巴瘤',
+          label: '慢性炎症相关弥漫性大B细胞淋巴瘤'
+          },{
+          value: '淋巴瘤样肉芽肿',
+          label: '淋巴瘤样肉芽肿'
+          },{
+          value: '原发性纵隔（胸腺）大B细胞淋巴瘤',
+          label: '原发性纵隔（胸腺）大B细胞淋巴瘤'
+          },{
+          value: '血管内大B细胞淋巴瘤',
+          label: '血管内大B细胞淋巴瘤'
+          },{
+          value: 'ALK阳性大B细胞淋巴瘤',
+          label: 'ALK阳性大B细胞淋巴瘤'
+          },{
+          value: '浆母细胞性淋巴瘤',
+          label: '浆母细胞性淋巴瘤'
+          },{
+          value: '原发渗出性淋巴瘤',
+          label: '原发渗出性淋巴瘤'
+          },{
+          value: '多中心Castleman病',
+          label: '多中心Castleman病'
+          },{
+          value: 'HHV8阳性弥漫性大B细胞淋巴瘤，非特指型',
+          label: 'HHV8阳性弥漫性大B细胞淋巴瘤，非特指型'
+          },{
+          value: 'HHV8阳性亲生发中心淋巴组织增殖性疾病',
+          label: 'HHV8阳性亲生发中心淋巴组织增殖性疾病'
+          },{
+          value: 'Burkitt淋巴瘤',
+          label: 'Burkitt淋巴瘤'
+          },{
+          value: '伴11q异常的Burkitt样淋巴瘤',
+          label: '伴11q异常的Burkitt样淋巴瘤'
+          },{
+          value: '高级别B细胞淋巴瘤，伴MYC和BCL2和（或）BCL6重排',
+          label: '高级别B细胞淋巴瘤，伴MYC和BCL2和（或）BCL6重排'
+          },{
+          value: '高级别B细胞淋巴瘤，非特指型',
+          label: '高级别B细胞淋巴瘤，非特指型'
+          },{
+          value: '介于DLBCL和经典霍奇金淋巴瘤之间的不能分类的B细胞淋巴瘤',
+          label: '介于DLBCL和经典霍奇金淋巴瘤之间的不能分类的B细胞淋巴瘤'
+          },{
+          value: '其他B细胞淋巴瘤',
+          label: '其他B细胞淋巴瘤'
+          }]
         },
         {
-          value: "霍奇金淋巴瘤",
-          label: "霍奇金淋巴瘤",
-          children: [
-            {
-              value: "霍奇金淋巴瘤（亚型无法确定）",
-              label: "霍奇金淋巴瘤（亚型无法确定）"
-            },
-            {
-              value: "结节性淋巴细胞为主型霍奇金淋巴瘤",
-              label: "结节性淋巴细胞为主型霍奇金淋巴瘤"
-            },
-            {
-              value: "经典型霍奇金淋巴瘤",
-              label: "经典型霍奇金淋巴瘤"
-            }
-          ]
+          value: '霍奇金淋巴瘤',
+          label: '霍奇金淋巴瘤',
+          children: [{
+          value: '霍奇金淋巴瘤（亚型无法确定）',
+          label: '霍奇金淋巴瘤（亚型无法确定）'
+          },{
+          value: '结节性淋巴细胞为主型霍奇金淋巴瘤',
+          label: '结节性淋巴细胞为主型霍奇金淋巴瘤'
+          },{
+          value: '经典型霍奇金淋巴瘤',
+          label: '经典型霍奇金淋巴瘤',
+          children: [{
+          value: '结节硬化型（NS）',
+          label: '结节硬化型（NS）'
+          },{
+          value: '富于淋巴细胞型（LP）',
+          label: '富于淋巴细胞型（LP）'
+          },{
+          value: '混合细胞型（MC）',
+          label: '混合细胞型（MC）'
+          },{
+          value: '淋巴细胞消减型（LD）',
+          label: '淋巴细胞消减型（LD）'
+          }]
+          }]
         }
       ],
       groupLists: [
@@ -1011,7 +1528,6 @@ export default {
         application_date: "", //申请日期
         report_date: "" //报告日期
       }, //筛选大对象
-
       //病理类型
       //详细类型
       //病理亚型
@@ -1033,7 +1549,6 @@ export default {
       //切缘
       //数据来源
       //整合信息
-
       tablelist: [], //病理号数组
       zhezhao: false,
       id: "", //列表参数
@@ -1047,6 +1562,7 @@ export default {
       editForm: {},
       // 折叠面板默认打开
       activeNames: ["3", "1", "2"],
+      activeName: ["1"],
       tablelist: [], //病理号数组
       // 大数组
       sicksArr: [],
@@ -1258,6 +1774,73 @@ export default {
     this.getTableList();
   },
   methods: {
+    // 多选框
+    func1: function(value) {
+      if (this.checkList.length == 0) {
+        this.seen = false;
+        this.seen1 = false;
+        this.seen2 = false;
+        this.seen3 = false;
+        this.seen4 = false;
+        this.seen5 = false;
+      }
+      for (var i = 0; i < this.checkList.length; i++) {
+        if (this.checkList[i] == "免疫组化") {
+          this.seen = true;
+          break;
+        } else {
+          this.seen = false;
+        }
+      }
+      for (var i = 0; i < this.checkList.length; i++) {
+        if (this.checkList[i] == "荧光原位杂交") {
+          this.seen1 = true;
+          break;
+        } else {
+          this.seen1 = false;
+        }
+      }
+      for (var i = 0; i < this.checkList.length; i++) {
+        if (this.checkList[i] == "淋巴瘤克隆性基因重排检测") {
+          this.seen2 = true;
+          break;
+        } else {
+          this.seen2 = false;
+        }
+      }
+      for (var i = 0; i < this.checkList.length; i++) {
+        if (this.checkList[i] == "原位杂交") {
+          this.seen3 = true;
+          break;
+        } else {
+          this.seen3 = false;
+        }
+      }
+      for (var i = 0; i < this.checkList.length; i++) {
+        if (this.checkList[i] == "流式细胞检测") {
+          this.seen4 = true;
+          break;
+        } else {
+          this.seen4 = false;
+        }
+      }
+      for (var i = 0; i < this.checkList.length; i++) {
+        if (this.checkList[i] == "ngs检测") {
+          this.seen5 = true;
+          break;
+        } else {
+          this.seen5 = false;
+        }
+      }
+    }, 
+    // 编辑按钮
+    bianji(row){
+      this.luru = !this.luru
+    },
+    // 重置按钮
+    reset(editForm) {
+      this.editForm = {};
+    },
     //选中列表行
     handleSelectionChange(val) {
       this.selectionData = val;
@@ -1360,6 +1943,7 @@ export default {
     // 点击页数
     handleCurrentChange(newPage) {
       this.queryInfo.page = newPage;
+      console.log(this.queryInfo.page)
       this.getTableList();
     },
     // // 获取病理号
@@ -2141,6 +2725,421 @@ export default {
         float: right;
         margin-top: 10px;
         margin-right: 30px;
+      }
+    }
+  }
+}
+
+// 表单
+.sick{
+  position:fixed;
+	left:0px;
+	top:0px;
+  width 100%
+  height 100%  
+	background-color :rgba(245,247,251,0.7);
+  z-index 9
+  .container {
+    border-radius: 5px;
+    width: 1000px;
+    height: 588px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    top: 0;
+    margin: auto;
+    background-color: #FAFAFA;
+		z-index 10;
+    .el-input {
+      width: 200px;
+    }
+    .form {
+      height: 1900px;
+      background: rgba(255, 255, 255, 1);
+      box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
+      border-radius: 4px;
+      position: relative;
+      // 按钮
+      .header {
+        border-bottom: 1px solid rgba(232, 232, 232, 1);
+        height: 30px;
+        display flex
+        justify-content: space-between;
+        background #1CB1FF
+        line-height 30px
+        just
+        span{
+          color white
+          margin-left 20px
+          margin-right 20px
+        }
+
+        .iconfont {
+          color: white;
+        }
+      }
+      // 表单
+      .formList {
+        .HZ {
+          margin: 20px;
+          background-color: rgba(250, 250, 250, 1);
+          border-radius: 5px;
+          .HZdown {
+            display: flex;
+            justify-content: space-evently;
+            flex-wrap: wrap;          
+            margin: 10px auto;
+            .sickItem {
+              width: 260px;
+              display: inline-block;
+              height: 50px;
+              display: flex;
+              justify-content: space-around;
+              align-items: center;
+              margin-left: 30px;
+              span {
+                display: inline-block;
+                width: 60px;
+              }
+            }
+          }
+        }
+        // 原医疗机构信息内容
+        .origin {
+          margin: 20px;
+          border-radius: 5px;
+          .origindown {
+            .buju {
+              margin-left: 50px;
+            }
+            .sickIH {
+              .title {
+                background-color: #EFEEF1;
+                margin: 10px 20px;
+                height: 35px;
+                line-height: 35px;
+                border-left: 5px #3190E8 solid;
+                padding-left: 10px;
+              }
+              .sickItem {
+                display: inline-block;
+                margin: 10px;
+                margin-left: 50px;
+                span {
+                  display: inline-block;
+                  width: 112px;
+                }
+              }
+              .kuai {
+                display: flex;
+                flex-flow: row;
+                width: 1500px;
+                height: 200px;
+                margin-top: 28px;
+                // 报告质量下的块
+                .p-one {
+                  border: 1px solid rgba(224, 224, 224, 1);
+                  width: 600px;
+                  margin-left: 50px;
+                  height: 190px;
+                  .titles {
+                    display: block;
+                    padding-left: 20px;
+                    border-bottom: 1px solid rgba(224, 224, 224, 1);
+                    height: 30px;
+                    line-height: 30px;
+                    background-color: rgba(232, 232, 232, 1);
+                  }
+                  .sickItems {
+                    display: flex;
+                    flex-flow: row;
+                    justify-content: space-between;
+                    flex-wrap: wrap;
+                    margin-left: 20px;
+                    float: left;
+                    height: 50px;
+                    line-height: 50px;
+                    .one {
+                      display: inline-block;
+                      width: 100px;
+                    }
+                    .three {
+                      display: inline-block;
+                      width: 100px;
+                    }
+                    .two {
+                      display: inline-block;
+                      width: 50px;
+                    }
+                    .four {
+                      display: inline-block;
+                      width: 50px;
+                    }
+                    .five {
+                      display: inline-block;
+                      width: 295px;
+                    }
+                  }
+                }
+                .p-two {
+                  border: 1px solid rgba(224, 224, 224, 1);
+                  width: 500px;
+                  margin-left: 40px;
+                  height: 190px;
+                  .titles {
+                    display: block;
+                    padding-left: 20px;
+                    border-bottom: 1px solid rgba(224, 224, 224, 1);
+                    height: 30px;
+                    line-height: 30px;
+                    background-color: rgba(232, 232, 232, 1);
+                  }
+                  .sickItems {
+                    display: flex;
+                    flex-flow: row;
+                    justify-content: space-between;
+                    flex-wrap: wrap;
+                    margin-left: 30px;
+                    float: left;
+                    height: 50px;
+                    line-height: 50px;
+                    span {
+                      width: 150px;
+                    }
+                  }
+                }
+                .p-three {
+                  border: 1px solid rgba(224, 224, 224, 1);
+                  width: 500px;
+                  margin-left: 40px;
+                  height: 190px;
+                  .titles {
+                    display: block;
+                    padding-left: 20px;
+                    border-bottom: 1px solid rgba(224, 224, 224, 1);
+                    height: 30px;
+                    line-height: 30px;
+                    background-color: rgba(232, 232, 232, 1);
+                  }
+                  .sickItems {
+                    display: flex;
+                    flex-flow: row;
+                    justify-content: space-between;
+                    flex-wrap: wrap;
+                    margin-left: 30px;
+                    float: left;
+                    height: 50px;
+                    line-height: 50px;
+                    span {
+                      width: 150px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        // 本医疗机构
+        .report {
+          margin: 20px;
+          border-radius: 5px;
+          .reportdown {
+            .sickIH {
+              .title {
+                background-color: #EFEEF1;
+                margin: 10px 20px;
+                height: 35px;
+                line-height: 35px;
+                border-left: 5px #3190E8 solid;
+                padding-left: 10px;
+              }
+              .sickItem {
+                display: inline-block;
+                margin: 10px;
+                margin-left: 50px;
+                span {
+                  display: inline-block;
+                  width: 110px;
+                }
+              }
+            }
+            .ihc {
+              display: inline;
+              display: flex;
+              flex-flow: row;
+              flex-wrap: wrap;
+              .titl {
+                margin: 10px 80px;
+                background-color: #EFEEF1;
+                height: 40px;
+                line-height: 40px;
+              }
+              #one {
+                width: 420px;
+                background: rgba(249, 249, 249, 1);
+                border: 1px solid rgba(229, 229, 229, 1);
+                border-radius: 4px;
+                margin: 0 80px;
+                padding-bottom: 20px;
+                .sickI {
+                  display: inline-block;
+                  .sickIt {
+                    margin: 0 10px;
+                    .name {
+                      display: inline-block;
+                      width: 70px;
+                    }
+                  }
+                }
+                position: relative;
+                display: flex;
+                align-items: center;
+                padding-top: 20px;
+              }
+              #two {
+                width: 420px;
+                background: rgba(249, 249, 249, 1);
+                border: 1px solid rgba(229, 229, 229, 1);
+                border-radius: 4px;
+                margin: 0 80px;
+                padding-bottom: 20px;
+                position: relative;
+                display: flex;
+                align-items: center;
+                padding-top: 20px;
+                .sickI {
+                  display: inline-block;
+                  .sickIt {
+                    margin: 0 10px;
+                    .name {
+                      display: inline-block;
+                      width: 70px;
+                    }
+                  }
+                }             
+              }
+              #three {
+                width: 420px;
+                background: rgba(249, 249, 249, 1);
+                border: 1px solid rgba(229, 229, 229, 1);
+                border-radius: 4px;
+                margin: 0 80px;
+                padding-bottom: 20px;                            
+                position: relative;
+                display: flex;
+                align-items: center;
+                padding-top: 20px;
+                .sickI {
+                  display: inline-block;
+                  .sickIt {
+                    margin: 0 10px;
+                    .name {
+                      display: inline-block;
+                      width: 70px;
+                    }
+                  }
+                }
+              }
+              #four {
+                width: 420px;
+                background: rgba(249, 249, 249, 1);
+                border: 1px solid rgba(229, 229, 229, 1);
+                border-radius: 4px;
+                margin: 0 80px;
+                padding-bottom: 20px;
+                position: relative;
+                display: flex;
+                align-items: center;
+                padding-top: 20px;
+                .sickI {
+                  display: inline-block;
+                  .sickIt {
+                    margin: 0 10px;
+                    .name {
+                      display: inline-block;
+                      width: 70px;
+                    }
+                  }
+                }
+              
+              }
+              #five {
+                width: 420px;
+                background: rgba(249, 249, 249, 1);
+                border: 1px solid rgba(229, 229, 229, 1);
+                border-radius: 4px;
+                margin: 0 80px;
+                padding-bottom: 20px;
+                position: relative;
+                display: flex;
+                align-items: center;
+                padding-top: 20px;
+                .sickI {
+                  display: inline-block;
+                  .sickIt {
+                    margin: 0 10px;
+                    .name {
+                      display: inline-block;
+                      width: 70px;
+                    }
+                  }
+                }             
+              }
+              #six {
+                width: 420px;
+                background: rgba(249, 249, 249, 1);
+                border: 1px solid rgba(229, 229, 229, 1);
+                border-radius: 4px;
+                margin: 0 80px;
+                padding-bottom: 20px;
+                position: relative;
+                display: flex;
+                align-items: center;
+                padding-top: 20px;
+                .sickI {
+                  display: inline-block;
+                  .sickIt {
+                    margin: 0 10px;
+                    .name {
+                      display: inline-block;
+                      width: 70px;
+                    }
+                  }
+                }
+              
+              }
+              }
+          }
+        }
+        .el-button {
+          background: rgba(117, 209, 253, 1);
+          border-radius: 4px;
+          border: none;
+        }
+        .textCon {
+          margin-left: -40px;
+          position: fixed;
+          bottom: 0px;
+          z-index: 9;      
+          background: rgba(255, 255, 255, 1);
+          box-shadow: 0px 1px 10px 0px rgba(179, 179, 179, 0.75);
+          border-radius: 4px;
+          .text {
+            font-size 18px
+            width: 1600px;
+            margin: 6px 30px 0;  
+            span {
+              height: 30px;
+              display: block;
+              margin-bottom 8px
+            }
+            .content {
+              font-size: 14px;
+              height 60px
+            }
+          }
+        }
       }
     }
   }
