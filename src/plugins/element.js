@@ -27,7 +27,9 @@ import {
     Option,
     DatePicker,
     Upload,
-    Dialog
+    Dialog,
+    Loading ,
+    Cascader,
     
     
 } from 'element-ui'
@@ -58,10 +60,13 @@ Vue.use(Option)
 Vue.use(DatePicker)
 Vue.use(Upload)
 Vue.use(Dialog)
+Vue.use(Loading)
+Vue.use(Cascader)
 
 
 
 
+Vue.prototype.$Loading = Loading
 Vue.prototype.$message = Message
 Vue.prototype.$alert = MessageBox.alert
 Vue.prototype.$confirm = MessageBox.confirm

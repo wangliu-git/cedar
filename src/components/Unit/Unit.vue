@@ -326,7 +326,7 @@
           </el-collapse-item>        
           <!--上传图片 -->
           <el-upload
-            action="http://192.168.75.58/cedar/api/diagnosis_origin/add.php"
+            action="http://106.13.49.232/cedar/api/diagnosis_origin/add.php"
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove">
@@ -580,7 +580,6 @@ import allMessage from "../../staic/allMessage.json";
       groupLists:['肝癌多中心项目-复旦肿瘤医院','肺癌多中心项目','淋巴瘤的流行病学研究','左半肝胆管腺癌病理分析','未分组'],   //分组列表
       // 数据集列表
       data:[ ],
-
       attached:'',
       // 上传图片
       dialogImageUrl: '',

@@ -4,7 +4,7 @@ import App from './App.vue'
 import router from './router/index'
 import VueResource from 'vue-resource'
 import './plugins/element.js'
-import '../public/js/macarons.js'
+
 import 'element-ui/lib/theme-chalk/index.css';
 
 // 入口文件
@@ -37,8 +37,9 @@ import axios from 'axios'
 Vue.prototype.axios= axios
 
 // axios.defaults.headers.post['content-Type'] = 'application/x-www-form-urlencoded'
-// axios.defaults.baseURL = 'http://106.13.49.232/cedar/api/'
-axios.defaults.baseURL = 'http://192.168.75.58/cedar/api/'
+axios.defaults.baseURL = 'http://106.13.49.232/cedar/api/'
+// axios.defaults.baseURL = 'http://localhost/cedar/api/'
+// axios.defaults.baseURL = 'http://192.168.75.58/cedar/api/'
 
 
 // // 请求头拦截
@@ -58,7 +59,7 @@ Vue.use(VueResource)
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 
-new Vue({
+ new Vue({
   router,
   render: h => h(App)
 }).$mount('#app')

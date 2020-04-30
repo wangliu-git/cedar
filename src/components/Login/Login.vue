@@ -62,7 +62,7 @@ export default {
           if (valid) {
             // 结构赋值
             const {data:res} = await this.axios.post('user/login.php',{params:{username:this.Form.username,pass:this.Form.pass}})
-            // console.log(res)
+            console.log(res)
             // 判断登录成功失败
             if (res.uid = res.uid){
               this.$message({
