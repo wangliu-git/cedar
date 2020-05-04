@@ -25,7 +25,7 @@
             <!--性別 -->
             <div class="ji">
               <span>{{showInfo.sex.field_title}}:</span>
-              <el-select placeholder="请选择性别" name="sex" v-model="editForm.sex" size="mini">
+              <el-select placeholder="请选择性别" name="sex" v-model="editForm.sex" size="mini" multiple>
                 <el-option v-for="item in showInfo.sex.field_values" :key="item" :value="item">
                   <span>{{item}}</span>
                 </el-option>
@@ -65,7 +65,7 @@
                 placeholder="请选择"
                 name="birthplace"
                 v-model="editForm.birthplace"
-                size="mini"
+                size="mini" multiple
               >
                 <el-option
                   v-for="(provinces) in showInfo.birthplace.field_values"
@@ -80,7 +80,7 @@
 
             <div class="ji">
               <span>{{showInfo.nation.field_title}}:</span>
-              <el-select placeholder="请选择" name="nation" v-model="editForm.nation" size="mini">
+              <el-select placeholder="请选择" name="nation" v-model="editForm.nation" size="mini" multiple>
                 <el-option v-for="(item) in showInfo.nation.field_values" :key="item" :value="item">
                   <span>{{item}}</span>
                 </el-option>
@@ -94,7 +94,7 @@
                 placeholder="请选择"
                 size="mini"
                 style="width:100px"
-                v-model="editForm.address_prov"
+                v-model="editForm.address_prov" multiple
               >
                 <el-option
                   v-for="(provinces) in showInfo.birthplace.field_values"
@@ -107,8 +107,8 @@
               <el-select
                 placeholder="请选择"
                 size="mini"
-                style="width:100px"
-                v-model="editForm.address_prov"
+                style="width:100px" 
+                v-model="editForm.address_prov"  multiple
               >
                 <el-option
                   v-for="(provinces) in showInfo.birthplace.field_values"
@@ -123,7 +123,7 @@
             <div class="ji">
               <span>{{tMInstitution.diagnosis_type.field_title}}：</span>
 
-              <el-select name="diagnosis_type" v-model="editForm.diagnosis_type" size="mini">
+              <el-select name="diagnosis_type" v-model="editForm.diagnosis_type" size="mini" multiple>
                 <el-option
                   v-for="(item,index) in  tMInstitution.diagnosis_type.field_values"
                   :key="index"
@@ -208,7 +208,7 @@
                 placeholder="请选择报告质量"
                 name="report_quality"
                 v-model="editForm.report_quality"
-                size="mini"
+                size="mini" multiple
               >
                 <el-option
                   v-for="(item,index) in fMInstitution.report_quality.field_values"
@@ -274,7 +274,7 @@
             <div class="zhen">
               <span>{{tMInstitution.diagnosis_type.field_title}}：</span>
 
-              <el-select name="diagnosis_type" v-model="editForm.diagnosis_type" size="mini">
+              <el-select name="diagnosis_type" v-model="editForm.diagnosis_type" size="mini" multiple>
                 <el-option
                   v-for="(item,index) in  tMInstitution.diagnosis_type.field_values"
                   :key="index"
@@ -291,8 +291,8 @@
                 name="sample_location"
                 v-model="editForm.sample_location"
                 size="mini"
-                placeholder="请选择取材部位"
-              >
+                placeholder="请选择取材部位" multiple
+              > 
                 <el-option
                   v-for="(item,index) in  tMInstitution.sample_location.field_values"
                   :key="index"
@@ -315,7 +315,7 @@
 
             <div class="zhen">
               <span>辅助诊断 ：标志物</span>
-              <el-select v-model="editForm.mark" placeholder="请选择" size="mini" style="width:200px">
+              <el-select v-model="editForm.mark" placeholder="请选择" size="mini" style="width:200px" multiple>
                 <el-option></el-option>
               </el-select>
             </div>
@@ -326,7 +326,7 @@
                 v-model="editForm.diagnosis"
                 placeholder="请选择"
                 size="mini"
-                style="width:200px"
+                style="width:200px" multiple
               >
                 <el-option></el-option>
               </el-select>
@@ -342,14 +342,14 @@
           <div class="yuan">
             <div class="lai">
               <span>数据来源 ：</span>
-              <el-select v-model="editForm" placeholder="请选择" size="mini" style="width:200px">
+              <el-select v-model="editForm" placeholder="请选择" size="mini" style="width:200px" multiple>
                 <el-option></el-option>
               </el-select>
             </div>
 
             <div class="lai">
               <span>整合信息 ：</span>
-              <el-select v-model="editForm" placeholder="请选择" size="mini" style="width:200px">
+              <el-select v-model="editForm" placeholder="请选择" size="mini" style="width:200px" multiple>
                 <el-option></el-option>
               </el-select>
             </div>
@@ -358,7 +358,7 @@
       </el-collapse>
 
       <div class="footer">
-        <el-button @click="inGroup(editForm)">加入分组</el-button>
+        <el-button @click="inGroup(ids)">加入分组</el-button>
         <el-button @click="reset()">重置</el-button>
         <el-button @click="shaixuan(editForm)">筛选</el-button>
       </div>
@@ -366,7 +366,7 @@
 
     <!--  列表-->
     <!-- :selectable="selectable"  获取状态
-    @selection-change="handleSelectionChange">  选中列表行-->
+    >  选中列表行-->
     <div class="list">
       <div class="down">
         <el-table
@@ -375,10 +375,14 @@
           style="width: 100%"
           border
           stripe
-          @selection-change="handleSelectionChange"
+          ref="table"
+          @current-change="handleSelectionChange"
         >
-          >
-          <el-table-column type="selection" width="50" :selectable="selectable"></el-table-column>
+          <el-table-column width="50" >
+            <template slot-scope="scope">
+              <el-checkbox v-model="scope.row.checked"></el-checkbox>
+            </template>
+          </el-table-column>
           <el-table-column prop="test_id" label="病理号" width="200" sortable></el-table-column>
           <el-table-column prop="name" label="姓名" width="200" sortable></el-table-column>
           <el-table-column prop="diagnosis2" label="病种亚型" width="250" sortable></el-table-column>
@@ -399,13 +403,13 @@
             </template>
           </el-table-column>
         </el-table>
-        <!--    :current-page="count"                      当前显示的页数
-                :page-sizes="[10]"                        切换每页显示的条数
-                :page-size="pagerows"                    当前每页显示的条数
-                @size-change="handleSizeChange"           点击切换每页显示多少条
-                @current-change="handleCurrentChange"     页码值发生了切换
-                :total="count"                            共多少条           
-                layout="total, sizes, prev, pager, next, jumper"
+      <!--    :current-page="count"                      当前显示的页数
+              :page-sizes="[10]"                        切换每页显示的条数
+              :page-size="pagerows"                    当前每页显示的条数
+              @size-change="handleSizeChange"           点击切换每页显示多少条
+              @current-change="handleCurrentChange"     页码值发生了切换
+              :total="count"                            共多少条           
+              layout="total, sizes, prev, pager, next, jumper"
         -->
         <el-pagination
           @size-change="handleSizeChange"
@@ -538,14 +542,13 @@
         </div>
         <div class="mian">
           <div class="groupList">
-            <el-button
-              style="width:300px"
-              @click="addGroup()"
-              v-model="data.location"
-              v-for="(item, index) in groupLists"
-              :key="index"
-              :value="item"
-            >{{item}}</el-button>
+             <el-button style="width:300px" @click="group_id(it)" v-for="(it, index) in this.groupList" :key="index" :value="it.group_name">{{it.group_name}}</el-button>
+           </div>
+          <div class="name">
+            <span>新建分组名称 ：</span>
+            <el-input placeholder="请输入分组名称..." style="width:380px" v-model="groupName">
+              <el-button slot="append" @click="addGroup(groupName)">保存</el-button>
+            </el-input>
           </div>
           <div class="button">
             <!--@click="sure(id)" -->
@@ -1147,6 +1150,11 @@ import allMessage from "../../staic/allMessage.json";
 export default {
   data() {
     return {
+      ids:[],   //ID 们
+      multipleSelection: [],  //复选框
+      // 新建分组名
+      groupName:'',
+      multiple:true,
       checkList: ["免疫组化","荧光原位杂交","淋巴瘤克隆性基因重排检测","原位杂交","流式细胞检测","ngs检测"],
       seen: true,
       seen1: true,
@@ -1506,11 +1514,7 @@ export default {
         }
       ],
       groupLists: [
-        "肝癌多中心项目-复旦肿瘤医院",
-        "肺癌多中心项目",
-        "淋巴瘤的流行病学研究",
-        "左半肝胆管腺癌病理分析",
-        "未分组"
+       
       ], //分组列表
       // 数据集列表
       data: [],
@@ -1518,7 +1522,7 @@ export default {
       // ## 患者信息
       
         name: "", //姓名
-        sex: "", //性别
+        sex: [], //性别
         birthday: "", //出生日期
         phone: "", //联系电话
         birthplace: "", //籍贯
@@ -1775,8 +1779,36 @@ export default {
   },
   created() {
     this.getTableList();
+    this.groupList()
   },
+ 
   methods: {
+    
+    // 点击复选框
+    // select(row){
+    //   console.log(row)
+    // },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+      console.log( this.multipleSelection)
+    },
+    // 获取选择分组
+    groupList(){
+      const {data :res} = this.axios.get('group/list.php').then( res =>{
+        console.log(res)
+        this.groupList = res.data.data
+        // this.groupList.map( ( items ,index ) => {
+        //   console.log(items)
+        // })
+        console.log(res.data.data)
+      })     
+    },
+    // 添加分组名
+    addGroup(groupName){
+      checkList.push(groupName)
+      this.checkList = this.checkList
+      console.log(this.checkList)
+    },
     // 保存
     baocun(editForm){
        this.id = this.id
@@ -1890,28 +1922,14 @@ export default {
     // 重置按钮
     reset(editForm) {
       this.editForm = {};
-    },
-    //选中列表行
-    handleSelectionChange(val) {
-      this.selectionData = val;
-    },
-    // 获取复选框的状态
-    selectable(row, index) {
-      if (row.status == 1) {
-        console.log(row, index);
-        return true;
-      } else {
-        return false;
-      }
-    },
-
+    }, 
     // 点击添加分组
     async addGroup(item) {
       // this.group =! this.group
-      console.log(item);
-      console.log(window.sessionStorage.uid);
+      // console.log(item);
+      // console.log(window.sessionStorage.uid);
       var group_name = "";
-      const { data: res } = await this.axios
+      const { data : res} = await this.axios
         .post("group/add.php", {
           params: { group_name: item, userid: window.sessionStorage.uid }
         })
@@ -1933,23 +1951,23 @@ export default {
         });
       console.log(data);
     },
-    inGroup() {
+    inGroup(ids) {
+      console.log(this.ids)
       this.group = !this.group;
+    },
+    group_id(it){
+      console.log(it.id)
+      this.id = it.id
+      this.sure(it)
     },
     // 点击确定
-    async sure(id) {
-      // const { data : res } = await this.axios.post(
-      //   "dataset/edit.php",{params:{id:this.id,file_name:this.data.file_name,location:this.data.location}}
-      // );
-      // console.log(this.data.file_name)
-      // console.log(res)
-      // console.log(this.id)
+    async sure(ids,id) {
+     console.log(this.id)
+      const { data : res } = await this.axios.post(
+        "dataset/edit.php",{params:{ids:this.ids,id:this.id}}
+      );   
+      console.log(res)
       this.group = !this.group;
-    },
-
-    // 点击选择框
-    toggleSelection(row) {
-      console.log(row.id);
     },
     // 点击筛选
     async shaixuan(editForm) {
@@ -2001,14 +2019,31 @@ export default {
       const { data: res } = await this.axios.get("report/list.php", {
         params: { page: this.queryInfo.page }
       });
-      console.log("getTableList", res);
+      // console.log("getTableList", res);
       this.tablelist = res.data;
-      console.log(res.data);
+      // console.log(res.data);
       this.queryInfo.page = parseInt(res.page);
       this.queryInfo.count = parseInt(res.count); //总条数
       this.queryInfo.pagerows = res.pagerows; //每页显示多少条
+      this.tablelist.forEach(item => {
+        item.checked = true  //默认选中
+        // console.log(item)
+        this.multipleSelection.push(item.id)
+        this.ids = this.multipleSelection
+        // console.log(this.ids)
+      });     
     },
-
+    // 点击框
+    handleSelectionChange (row) {
+      this.tablelist.forEach(item => {
+        // 排他,点击
+        if (item.id == row.id) {
+          item.checked = true
+          console.log(item.id)
+        }
+      })
+      console.log(row)
+    },
     // 点击查看
     async look(row) {
       this.zhezhao = !this.zhezhao; //不能没
@@ -2754,18 +2789,17 @@ export default {
 
       .groupList {
         width: 500px;
-        height: 300px;
         border: 1px solid #DCDFE6;
         margin: 20px 20px;
         display: flex;
         flex-flow: column;
         justify-content: space-evenly;
-
         .el-button {
           margin-left: 20px;
           font-size: 16px;
+          margin-top: 10px;
         }
-      }\
+      }
 
       .name {
         margin-left: 20px;

@@ -333,7 +333,7 @@
                   </div>
                   <div class="sickItem">
                     <span>病理类型:</span>
-                    <el-cascader v-model="editForm.diagnosis2" size="mini" :options="options" :props="{ checkStrictly: true }" clearable></el-cascader>                   
+                    <el-cascader v-model="editForm.jilian" size="mini" :options="options" :props="{ checkStrictly: true }" clearable></el-cascader>                   
                   </div>                 
                 </div>
                 <!--报告质量  可折叠-->
@@ -614,7 +614,7 @@
                   </div>
                   <div class="sickItem">
                     <span>病理类型:</span>
-                    <el-cascader size="mini"   v-model="editForm.diagnosis2":options="options" :props="{ checkStrictly: true }" clearable></el-cascader>              
+                    <el-cascader size="mini"   v-model="editForm.jilian" :options="options" :props="{ checkStrictly: true }" clearable></el-cascader>              
                   </div>
 
                 
@@ -753,12 +753,12 @@
             </el-input>
           </div>
           <div class="groupList">
-            <el-button style="width:300px" @click="addGroup(item)" v-model="data.location" v-for="(item, index) in groupLists" :key="index" :value="item" >{{item}}</el-button>
+            <el-button style="width:300px"  v-for="(it, index) in this.groupList" :key="index" :value="it.group_name">{{it.group_name}}</el-button>
           </div>
           <div class="name">
             <span>新建分组名称 ：</span>
-            <el-input placeholder="请输入分组名称..." style="width:380px">
-              <el-button slot="append" >保存</el-button>
+            <el-input placeholder="请输入分组名称..." style="width:380px" v-model="groupName">
+              <el-button slot="append" @click="addGroup(groupName)">保存</el-button>
             </el-input>
           </div>
           <div class="button">
@@ -830,9 +830,21 @@ export default {
   created() {
     this.getDataList();
     this.getTableList();   
+    this.groupList()
     // console.log(window.sessionStorage.uid) 
   },
   methods: {
+    // 选择分组
+    groupList(){
+      const {data :res} = this.axios.get('group/list.php').then( res =>{
+        console.log(res)
+        this.groupList = res.data.data
+        // this.groupList.map( ( items ,index ) => {
+        //   console.log(items)
+        // })
+        console.log(res.data.data)
+      })     
+    },
     // 点击查看
      async chakan(row,index){
       this.search = !this.search
@@ -1107,8 +1119,9 @@ export default {
     submit() {
       this.zhezhao = !this.zhezhao    
       this.report.help_diagnosis = this.help_diagnosis;
-      this.diagnosis2 = this.editForm.diagnosis2
-      console.log(this.diagnosis2)
+      this.jilian = this.editForm.jilian
+           
+      console.log(this.editForm)
     },    
     // 免疫租化增删
     ihcAddData(array, value) {
@@ -1328,13 +1341,14 @@ export default {
   },
   data() { 
     return {   
+      groupName:'',
       sousuo:false,
       ji:true,  
       value:{
         mark:'',
         value:''
       },
-      diagnosis2:'',
+      jilian:'',
       groupLists:['肝癌多中心项目-复旦肿瘤医院','肺癌多中心项目','淋巴瘤的流行病学研究','左半肝胆管腺癌病理分析','未分组'],   //分组列表
       // 数据集列表
       data:[ ],

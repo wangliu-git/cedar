@@ -353,11 +353,11 @@ export default {
       console.log(row)
       let group_id = ''
       const {data:res} = this.axios.get('report/list.php',{params:{group_id:row.id}}).then( res => {
-      console.log(res)
-      this.tablelist = res.data.data
-      this.queryInfo.page = parseInt(res.data.page);     
-      this.queryInfo.count = parseInt(res.data.count)  //总条数
-       console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);             
+        console.log(res)
+        this.tablelist = res.data.data
+        this.queryInfo.page = parseInt(res.data.page);     
+        this.queryInfo.count = parseInt(res.data.count)  //总条数
+        console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);             
   
       })
       
