@@ -1131,7 +1131,7 @@
               </el-collapse-item>
               <div class="btn"> 
                 <el-button type="primary" plain @click="clear(editForm)">清空</el-button>
-                <el-button type="primary" plain>保存</el-button>
+                <el-button type="primary" plain @click="baocun(editForm)">保存</el-button>
               </div>
             </el-collapse>
           </div>
@@ -1516,7 +1516,7 @@ export default {
       data: [],
       // 筛选条件名
       // ## 患者信息
-      editForm: {
+      
         name: "", //姓名
         sex: "", //性别
         birthday: "", //出生日期
@@ -1529,8 +1529,8 @@ export default {
         organization: "", //机构名称
         test_id: "", //病理号
         application_date: "", //申请日期
-        report_date: "" //报告日期
-      }, //筛选大对象
+        report_date: "", //报告日期
+     //筛选大对象
       //病理类型
       //详细类型
       //病理亚型
@@ -1777,6 +1777,49 @@ export default {
     this.getTableList();
   },
   methods: {
+    // 保存
+    baocun(editForm){
+       this.id = this.id
+      // console.log(this.id)   
+      this.editForm = this.editForm
+      this.editForm.help_diagnosis = this.help_diagnosis;
+      // const sicksList = JSON.stringify(sicksArr)      
+      let data={
+        "id":this.id,
+        "data":editForm
+      }
+      //data = qs.stringify(data);     
+      // console.log("data:",data);
+      if(data){
+      // console.log(data)
+        this.axios.post('report/edit.php',data).then(res => {
+          console.log('res:',res); 
+          console.log(data)
+          var result = res.data;//JSON.parse(res.body);
+          console.log(result.result)
+          if(result.result){
+            this.$alert("提交成功", '提交结果', {
+              confirmButtonText: '确定',
+              type: 'success',
+              callback: action => {
+                
+              },
+            });
+          }
+          else{
+            this.$alert("提交失败", '提交结果', {
+              confirmButtonText: '确定',
+              type: 'warning',
+              callback: action => {
+              },
+            });
+          }
+        })
+      }else {
+          console.log('error submit!!');
+          return false;
+        }  
+    },
     // 重置
     clear(editForm){
       this.editForm = {}

@@ -14,7 +14,7 @@
                     <el-col :span="22">
                         <el-upload class="upload-demo"
                                 ref="upload"
-                                action=""
+                                action="http://106.13.49.232/cedar/api/upload_file/add.php"
                                 :accept="acceptFileType"
                                 :limit="1"
                                 :on-exceed="handleExceed"
@@ -23,8 +23,8 @@
                                 :on-remove="handleRemove"
                                 :file-list="fileList"
                                 :auto-upload="false">
-                            <el-button slot="trigger" size="small" type="primary">选取csv格式文件</el-button>
-                            <div slot="tip" class="el-upload_tip">只能上传.csv文件,且不超过1M</div>
+                            <el-button slot="trigger" size="small" type="primary">选取json格式文件</el-button>
+                            <div slot="tip" class="el-upload_tip">只能上传.json文件,且不超过1M</div>
                         </el-upload>
 
                     </el-col>
@@ -50,9 +50,8 @@
           <el-table-column fixed="right" label="操作" width="300">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="bianji(scope.row)">编辑</el-button>
-              <el-button type="text" size="small">
-                <a href="javascript:;">删除</a>
-              </el-button>
+              <el-button type="text" size="small">删除</el-button>
+              <el-button type="text" size="small" @click="chakanj(scope.row)">查看</el-button>
               <el-button class="jiexi" size="small">
                 <span class="iconfont iconxiazai" @click="jiexi(scope.row)">开始解析</span>
               </el-button>
@@ -182,7 +181,7 @@
         <div class="footer">
             <div class="btn">
                 <el-button plain @click="zhezhao = !zhezhao">返回</el-button>
-                <el-button plain @click="addFormList(editForm)">确认校验通过</el-button> 
+                <el-button plain @click="pass(editForm)">确认校验通过</el-button> 
             </div>  
         </div>
       </div>
@@ -876,7 +875,7 @@
                 </div>
               </div>
             </el-collapse-item>
-            <el-button type="primary" @click="submit()" class="commit" style="width:100%">提交</el-button>
+            <el-button type="primary" @click="submit(editForm)" class="commit" style="width:100%">提交</el-button>
             <div class="textCon">
               <div class="text">
                 <span>原始文本</span>
@@ -902,6 +901,14 @@ export default {
     this.getDataList();       
   },
   methods:{
+    // 点击查看
+     async chakanj(row){
+      this.chakan = !this.chakan
+      console.log(row)
+      const {data :res} = await  this.axios.get("excel_data/list.php",{params:{id:row.id}})      
+      console.log(res)
+      this.tablelist = res.data
+    },
     // 点击返回列表
     xianshi(){
       this.chakan =! this.chakan     
@@ -951,7 +958,7 @@ export default {
               callback: action => {
               },
             });
-          }
+        }
       })
       // console.log(row.id)
       this.id = row.id 
@@ -968,8 +975,9 @@ export default {
     },
     // 点击病理号查看
     async look(row){         
-      this.zhezhao = !this.zhezhao 
-      // this.ji = !this.ji 
+      this.luru = !this.luru 
+      this.ji = !this.ji 
+      this.chakan = !this.chakan 
       const { data :res} = await this.axios.get(
         "excel_data/onedata.php" ,{params:{id:row.id}}
       );
@@ -980,17 +988,40 @@ export default {
     //点击病理号校验
     jiaoyan(row){
       console.log(row.id)
-      this.chakan = ! this.chakan
-      this.ji = ! this.ji
-      this.luru = ! this.luru
-      // this.zhezhao = !this.zhezhao
-      const {data:res} = this.axios.get('excel_data/onedata.php',{params:{id:row.id}}).then( res =>{
+      // this.chakan = ! this.chakan
+      // this.ji = ! this.ji
+      // this.luru = ! this.luru
+      this.zhezhao = !this.zhezhao    
+      this.id  = row.id
+      // this.editForm.help_diagnosis = this.help_diagnosis;
+    },
+    // 校验通过
+    pass(editForm,id){
+       const {data:res} = this.axios.get('excel_data/check.php',{params:{id:this.id}}).then( res =>{
         
         this.editForm = res.data;
         console.log(this.editForm)
+        this.zhezhao = !this.zhezhao  
+        var result = res.data;//JSON.parse(res.body);
+        if(result.result ){
+            this.$alert("校验成功", '提交结果', {
+              confirmButtonText: '确定',
+              type: 'success',
+              callback: action => {
+                this.chakan =! this.chakan
+                this.axios.get("dataset/list.php?id=", + row.id)
+              },
+            });           
+        }else{
+            this.$alert("校验失败", '提交结果', {
+              confirmButtonText: '确定',
+              type: 'warning',
+              callback: action => {
+              },
+            });
+        }
         
       })
-      // this.editForm.help_diagnosis = this.help_diagnosis;
     },
     // 表单提交
     submit(editForm) {
@@ -1304,13 +1335,13 @@ export default {
       var that=this;
       //文件类型
       var fileName=file.name.substring(file.name.lastIndexOf('.')+1);
-      if(fileName!='xls'){
+      if(fileName!='json'){
           that.uploadTemplateDialog=false;
           that.$message({
               type:'error',
               showClose:true,
               duration:3000,
-              message:'文件类型不是.csv文件!'
+              message:'文件类型不是.json文件!'
           });
           return false;
       }
@@ -1385,7 +1416,7 @@ export default {
       uploadTemplateDialog:false,
       fileList:[],
       uploadLoading:false,
-      acceptFileType:'.csv',
+      acceptFileType:'.json',
       downLoadLoading:'', 
       tablelist: [], //病理号数组
       datalist: [], //数据集数组

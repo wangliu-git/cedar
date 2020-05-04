@@ -333,7 +333,7 @@
                   </div>
                   <div class="sickItem">
                     <span>病理类型:</span>
-                    <el-cascader size="mini" :options="options" :props="{ checkStrictly: true }" clearable></el-cascader>                   
+                    <el-cascader v-model="editForm.diagnosis2" size="mini" :options="options" :props="{ checkStrictly: true }" clearable></el-cascader>                   
                   </div>                 
                 </div>
                 <!--报告质量  可折叠-->
@@ -614,7 +614,7 @@
                   </div>
                   <div class="sickItem">
                     <span>病理类型:</span>
-                    <el-cascader size="mini" :options="options" :props="{ checkStrictly: true }" clearable></el-cascader>              
+                    <el-cascader size="mini"   v-model="editForm.diagnosis2":options="options" :props="{ checkStrictly: true }" clearable></el-cascader>              
                   </div>
 
                 
@@ -935,11 +935,14 @@ export default {
       this.getTableList(row);        
     },
     // 点击数据集删除
-    async dele(row){
+     async dele(row){
       console.log(row.id)
       const { data :res} = await this.axios.get(
-        "dataset/del.php" ,{params:{id:row.id}}
-      );
+        "dataset/del.php" ,{params:{id:row.id}}).then( res =>{
+        this.$alert("删除成功！")
+        })
+      this.getDataList()
+      
       // console.log(res)
     },
     // 点击病理号录入
@@ -1104,6 +1107,8 @@ export default {
     submit() {
       this.zhezhao = !this.zhezhao    
       this.report.help_diagnosis = this.help_diagnosis;
+      this.diagnosis2 = this.editForm.diagnosis2
+      console.log(this.diagnosis2)
     },    
     // 免疫租化增删
     ihcAddData(array, value) {
@@ -1140,9 +1145,8 @@ export default {
       this.getTableList();
     },
     // 列表删除
-    async del(row) {   
-      const { data: res } = await this.axios.get(
-      "excel_data/del.php" , {params:{id:row.id}});
+     del(row) {   
+      
       this.$confirm("确定删除该数据？, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -1150,9 +1154,13 @@ export default {
         center: true
       })
         .then(() => {
+         const { data: res } =   this.axios.get(
+      "excel_data/del.php" , {params:{id:row.id}});
           this.$message({
             type: "success",
-            message: "删除成功!"
+            message: "删除成功!",
+            
+
           });
         })
         .catch(() => {
@@ -1326,6 +1334,7 @@ export default {
         mark:'',
         value:''
       },
+      diagnosis2:'',
       groupLists:['肝癌多中心项目-复旦肿瘤医院','肺癌多中心项目','淋巴瘤的流行病学研究','左半肝胆管腺癌病理分析','未分组'],   //分组列表
       // 数据集列表
       data:[ ],

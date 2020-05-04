@@ -5,7 +5,7 @@
           <el-input placeholder="搜索"  size="small" class="input-with-select" >
             <el-button slot="append" class=" iconfont iconsousuo" size="small"></el-button>
           </el-input> 
-            <el-button class="iconfont iconic_join_dialing_norm" size="small">添加</el-button>
+            <el-button class="iconfont iconic_join_dialing_norm" size="small" @click="add(userData)">添加</el-button>
             <el-button class="iconfont iconpiliangshanchu" size="small">批量删除</el-button>
         </div>
         <div class="down" style="width:96%">
@@ -17,8 +17,9 @@
             <el-table-column prop="memo" label="备注" width="280"></el-table-column>
             <el-table-column fixed="right" label="操作" width="280">
               <template  slot-scope="scope"> 
-                <el-button type="text" size="small"><span @click="xiugai(scope.row)"><a href="javascript:;">修改</a></span></el-button>
-                <el-button type="text" size="small"><span  @click="del(scope.row)"><a href="javascript:;">删除</a></span></el-button>
+                <el-button type="text" size="small"><span @click="chakan(scope.row)">修改</span></el-button>
+                
+                <el-button type="text" size="small"><span @click="del(scope.row)">删除</span></el-button>
               </template>  
             </el-table-column>
           </el-table>
@@ -46,8 +47,8 @@
               </el-form-item>
               <el-form-item label="权限" prop="region">
                 <el-select v-model="userData.role_id" placeholder="请选择权限" style="width:300px" size="mini">
-                  <el-option label="区域一" value="shanghai">管理员</el-option>
-                  <el-option label="区域二" value="beijing"></el-option>
+                  <el-option label="管理员" value="shanghai"></el-option>
+                  <el-option label="测试" value="beijing"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="新密码" prop="pass">
@@ -58,7 +59,39 @@
               </el-form-item>
               <el-form-item>
                 <el-button plain @click="group =! group">取消</el-button>
-                <el-button plain @click="group =! group">确定</el-button>
+                <el-button plain @click="bianji(userData)">确定</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+        </div>
+      </div>
+
+      <div class="zhezhao"  v-if="!Add">
+        <div class="message" >
+          <div class="up">
+              <span>修改</span>
+              <span @click="Add =! Add"><i class="iconfont iconx"></i></span>
+          </div>
+          <div class="down">
+            <el-form :model="userData" :rules="rules"  label-width="100px" class="demo-ruleForm">
+              <el-form-item label="用户名" prop="username">
+                <el-input v-model="userData.username" style="width:300px" size="mini" ></el-input>
+              </el-form-item>
+              <el-form-item label="权限" prop="region">
+                <el-select v-model="userData.role_id" placeholder="请选择权限" style="width:300px" size="mini">
+                  <el-option label="管理员" value="shanghai"></el-option>
+                  <el-option label="测试" value="beijing"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="新密码" prop="pass">
+                <el-input v-model="userData.password" style="width:300px" size="mini" placeholder="请设置新密码" ></el-input>
+              </el-form-item>
+              <el-form-item label="备注"  maxlength="256" show-word-limit style="width:300px" size="mini" prop="memo">
+                <el-input type="textarea" v-model="userData.memo" style="width:300px" size="mini" placeholder="请输入内容"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button plain @click="group =! group">取消</el-button>
+                <el-button plain @click="tianjia(userData)">确定</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -71,8 +104,15 @@
   export default {
     data() {
       return {
+        Add:true,
         // 用户信息
-        userData:[],
+        userData:{
+          username:'',
+          password:'',
+          role_id:'',
+          memo:''
+
+        },
         // 分页器
         queryInfo:{
           page:1,         //页数
@@ -114,12 +154,33 @@
         this.queryInfo.pagerows = res.pagerows  //每页显示多少条    
       },
       // 点击修改
-      async xiugai(row){
+      async chakan(row){
         this.group = !this.group
         const {data : res} = await this.axios.get("user/one.php",{params:{id:row.id}})
         console.log(res)
         this.userData =res
-
+      },
+      // 点击添加
+      add(userData){
+        this.Add = !this.Add
+      },
+      async tianjia(){
+        this.username = this.userData.username
+        this.password = this.userData.password
+        this.role_id = this.userData.role_id
+        this.memo = this.userData.memo
+        this.Add = !this.Add
+        const {data :res} = await this.axios.get(
+          'user/add.php',
+          {params:{username:this.userData.username,role_id:this.userData.role_id,password:this.userData.password,memo:this.userData.memo}})
+        console.log(res)
+      },
+      // 点击弹框确定
+      async bianji(userData){
+        this.group = !this.group
+        const {data : res} = await this.axios.get("user/edit.php",{params:{username:this.userData.username,password:this.userData.password,role_id:this.userData.role_id,memo:this.userData.memo}})
+        console.log(res)
+        this.userData =res
       },
       // 切换每页显示多少条
       handleSizeChange(newSize) {
@@ -136,7 +197,25 @@
         console.log(row.id)
         window.sessionStorage.clear()
         const {data:res} = await this.axios.get('user/del.php',{params:{id:row.id}})
-        console.log(res)      
+        console.log(res) 
+        this.$confirm("确定删除该用户？, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });     
       },
     },
     mounted(){

@@ -103,7 +103,9 @@
   export default {
     methods: {
       // 退出登录
-      loginout(){
+      async loginout(){
+        const {data :res} = await this.axios.get('user/logout.php')
+        console.log(res)
         this.$router.push('/login')
         window.sessionStorage.clear()
       },
