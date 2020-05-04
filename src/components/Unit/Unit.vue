@@ -8,7 +8,6 @@
         </el-option>
       </el-select> 
     </div> 
-
     <!--搜索 -->
     <div class="entry">
       <div class="search">
@@ -87,15 +86,13 @@
         </div>
       </div>
     </div>
-
     <!--遮罩 -->
     <div class="YCon" v-if="zhezhao" :model="editForm">
       <div class="out">
         <div class="header">
           <span>编辑</span>
           <span><i class="iconfont iconx" @click="zhezhao =!zhezhao"></i></span>
-        </div>
-        
+        </div>       
         <!-- 原医疗机构-->
         <el-collapse   class="origin" v-model="activeNames">
           <el-collapse-item name="1">
@@ -333,15 +330,15 @@
           </el-collapse-item>        
           <!--上传图片 -->
           <el-upload
-            action="http://106.13.49.232/cedar/api/diagnosis_origin/add.php"
+          v-model="photo"
+            :action="upLoadUrl"
+            multiple
             list-type="picture-card"
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove">
+            ref="imgUpload" :on-success="imgSuccess" :on-remove="imgRemove" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" :headers="headerMsg"
+            :on-preview="handlePictureCardPreview">
             <i class="el-icon-plus"></i>
           </el-upload>
-        <el-dialog :visible.sync="dialogVisible">
-          <img width="100%" :src="dialogImageUrl" alt="">
-        </el-dialog>
+ 
         </el-collapse>       
         <div class="foot">
           <el-button @click="qingkong()">清空</el-button>
@@ -349,7 +346,6 @@
         </div>
       </div>
     </div>
-
     <!--分组 -->
     <div class="out" v-if="!group" :data="data">
       <div class="nei">
@@ -389,21 +385,25 @@
         </div>
       </div>
     </div>
-
   </div>
-  
 </template>
 
 <script type="text/ecmascript-6">
-import uuid from "uuid";
-import allMessage from "../../staic/allMessage.json";
+  import uuid from "uuid";
+  import allMessage from "../../staic/allMessage.json";
 
  export default {
   created(){
     this.getTableList()
     this.groupList()
   },
-  methods: {
+  methods: { 
+    // 上传图片成功
+    imgSuccess (res, file, fileList) {
+      console.log(res)
+      console.log(file)
+      console.log(fileList)  // 这里可以获得上传成功的相关信息
+    },
     // 选择分组
     groupList(){
       const {data :res} = this.axios.get('group/list.php').then( res =>{
@@ -415,13 +415,15 @@ import allMessage from "../../staic/allMessage.json";
         console.log(res.data.data)
       })     
     },
-    // // 上传图片
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
+      // this.dialogVisible = true;
+      this.dialogVisible = dialogImageUrl.map(item => {
+        return {
+          name: item,
+          url: item
+        }
+      });
     },
     // 选择分组假弹窗
     choose() {
@@ -499,6 +501,7 @@ import allMessage from "../../staic/allMessage.json";
       this.id = this.id
       this.editForm = this.editForm
       this.jilian = this.editForm.jilian
+      this.photo = this.editForm.photo
       console.log(this.jilian)
       this.editForm.detail_type = '淋巴瘤'
       // console.log(this.atstached)    
@@ -584,6 +587,8 @@ import allMessage from "../../staic/allMessage.json";
   },
   data() {
     return {
+      photo:'',
+      upLoadUrl:'http://106.13.49.232/cedar/api/diagnosis_origin/add.php',
       // 级联选择器
       options: [{
         value: '成熟T和NK细胞淋巴瘤',

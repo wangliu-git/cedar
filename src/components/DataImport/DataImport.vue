@@ -1,8 +1,7 @@
 <template>
   <div style="width=100%" >
     <!--数据存储 -->
-    <div class="storage">
-      
+    <div class="storage"> 
       <div class="storageR" >
         <div class="eContainer">
           <div>
@@ -10,35 +9,33 @@
             <el-button type="primary" size="mini" @click="uploadFile">导入</el-button>
             <!--上传-->
             <el-dialog title="上传" width="40%" :visible.sync="uploadTemplateDialog">
-                <el-row>
-                    <el-col :span="22">
-                        <el-upload class="upload-demo"
-                                ref="upload"
-                                action="http://106.13.49.232/cedar/api/upload_file/add.php"
-                                :accept="acceptFileType"
-                                :limit="1"
-                                :on-exceed="handleExceed"
-                                :before-upload="beforeUpload"
-                                :on-preview="handlePreview"
-                                :on-remove="handleRemove"
-                                :file-list="fileList"
-                                :auto-upload="false">
-                            <el-button slot="trigger" size="small" type="primary">选取json格式文件</el-button>
-                            <div slot="tip" class="el-upload_tip">只能上传.json文件,且不超过1M</div>
-                        </el-upload>
-
-                    </el-col>
-                </el-row>
+              <el-row>
+                <el-col :span="22">
+                  <el-upload class="upload-demo"
+                    ref="upload"
+                    action="http://106.13.49.232/cedar/api/upload_file/add.php"
+                    :accept="acceptFileType"
+                    :limit="1"
+                    :on-exceed="handleExceed"
+                    :before-upload="beforeUpload"
+                    :on-preview="handlePreview"
+                    :on-remove="handleRemove"
+                    :file-list="fileList"
+                    :auto-upload="false">
+                    <el-button slot="trigger" size="small" type="primary">选取json格式文件</el-button>
+                    <div slot="tip" class="el-upload_tip">只能上传.json文件,且不超过1M</div>
+                  </el-upload>
+                </el-col>
+              </el-row>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="submitUpload" type="primary" size="mini" :loading="uploadLoading" > 确定上传</el-button>
-                    <el-button @click="uploadTemplateDialog=false" size="mini">取消</el-button>
+                  <el-button @click="submitUpload" type="primary" size="mini" :loading="uploadLoading" > 确定上传</el-button>
+                  <el-button @click="uploadTemplateDialog=false" size="mini">取消</el-button>
                 </span>
             </el-dialog>
           </div>         
         </div>
       </div>
     </div>
-
     <!--数据集列表  slot-scope="scope"  @click="jiexi"-->
     <div class="storageList" v-if="!ji">
       <div class="list" style="width:96%">
@@ -93,8 +90,7 @@
             border           
             stripe          
           >
-            <el-table-column type="selection" width="40"></el-table-column>
-            
+            <el-table-column type="selection" width="40"></el-table-column>           
             <el-table-column prop="test_id" label="病理号" width="170"></el-table-column>
             <el-table-column prop="name" label="姓名" width="170" sortable></el-table-column>
             <el-table-column prop="diagnosis2" label="病理类型" width="200" sortable></el-table-column>
@@ -104,11 +100,11 @@
             <el-table-column prop="entry_status" label="校验状态" show-overflow-tooltip width="170" sortable></el-table-column>
             <el-table-column prop="complete_degree" label="完整度" show-overflow-tooltip width="170" sortable></el-table-column>
             <el-table-column fixed="right" label="操作" width="170">             
-                <template  slot-scope="scope">                 
-                   <el-button type="text" size="small" @click="look(scope.row)">查看</el-button>
-                   <el-button type="text" size="small" @click="jiaoyan(scope.row)">校验</el-button>                   
-                    <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>            
-                </template>            
+              <template  slot-scope="scope">                 
+                <el-button type="text" size="small" @click="jiaoyan(scope.row)">查看</el-button>
+                <el-button type="text" size="small" @click="look(scope.row) ">校验</el-button>                  
+                <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>            
+              </template>            
             </el-table-column>
           </el-table>
           <!--    :current-page="count"                      当前显示的页数
@@ -139,50 +135,48 @@
     <div class="zhezhao" v-if="zhezhao" >
       <div class="look">
         <div class="header">
-            <span>查看病理信息</span>
-            <span @click="zhezhao = !zhezhao"><i class="iconfont iconx"></i></span>
+          <span>查看病理信息</span>
+          <span @click="zhezhao = !zhezhao"><i class="iconfont iconx"></i></span>
         </div>
-
         <div class="content">
-            <div class="HZ">
-                <button>患者及报告信息</button>
-                <div><span>病人ID(住院号/门诊号) ：</span>{{editForm.patient_id}}</div>    
-                <div><span>姓名：</span>{{editForm.name}}</div>           
-                <div><span>性别：</span>{{editForm.sex}}</div>           
-                <div><span>出生日期：</span>{{editForm.birthday}}</div>           
-                <div><span>联系电话：</span>{{editForm.phone}}</div>           
-                <div><span>民族：</span>{{editForm.nation}}</div>           
-                <div><span>籍贯：</span>{{editForm.birthplace}}</div>           
-                <div><span>居住地：</span>{{editForm.address_prov}}</div>           
-                <div><span>病理号：</span>{{editForm.test_id}}</div>           
-                <div><span>送检科室：</span>{{editForm.department}}</div>           
-                <div><span>申请日期：</span>{{editForm.application_date}}</div>  
-                <div><span>报告日期：</span>{{editForm.report_date}}</div>        
-                <div><span>就诊类型：</span>{{editForm.diagnosis_type}}</div>                        
+          <div class="HZ">
+            <button>患者及报告信息</button>
+            <div><span>病人ID(住院号/门诊号) ：</span>{{editForm.patient_id}}</div>    
+            <div><span>姓名：</span>{{editForm.name}}</div>           
+            <div><span>性别：</span>{{editForm.sex}}</div>           
+            <div><span>出生日期：</span>{{editForm.birthday}}</div>           
+            <div><span>联系电话：</span>{{editForm.phone}}</div>           
+            <div><span>民族：</span>{{editForm.nation}}</div>           
+            <div><span>籍贯：</span>{{editForm.birthplace}}</div>           
+            <div><span>居住地：</span>{{editForm.address_prov}}</div>           
+            <div><span>病理号：</span>{{editForm.test_id}}</div>           
+            <div><span>送检科室：</span>{{editForm.department}}</div>           
+            <div><span>申请日期：</span>{{editForm.application_date}}</div>  
+            <div><span>报告日期：</span>{{editForm.report_date}}</div>        
+            <div><span>就诊类型：</span>{{editForm.diagnosis_type}}</div>                        
+          </div>
+          <div class="BDW">
+              <button>本单位原文</button>
+              <span>{{editForm.diagnosis_txt}}</span>                
+          </div>
+          <div class="ZD">
+            <button>本单位诊断信息</button>
+            <div>诊断结论<span> 病理类型：</span>{{editForm.diagnosis}}</div>
+            <div><span>淋巴细胞来源：</span>{{editForm.type}}</div>
+            <div style="float:left">辅助诊断<span> 免疫组化：</span>
+              <th  v-for="(item,index) in editForm.helper_diagnosis.ihc" :key="index" :value="item">
+                <td>{{item.mark}}</td>
+                <td>{{item.value}}</td>
+              </th>                
             </div>
-            <div class="BDW">
-                <button>本单位原文</button>
-                <span>{{editForm.diagnosis_txt}}</span>                
-            </div>
-            <div class="ZD">
-                <button>本单位诊断信息</button>
-                <div>诊断结论<span> 病理类型：</span>{{editForm.diagnosis}}</div>
-                <div><span>淋巴细胞来源：</span>{{editForm.type}}</div>
-                <div style="float:left">辅助诊断<span> 免疫组化：</span>
-                  <th  v-for="(item,index) in editForm.helper_diagnosis.ihc" :key="index" :value="item">
-                    <td>{{item.mark}}</td>
-                    <td>{{item.value}}</td>
-                  </th>                
-                </div>
-
-            </div>
+          </div>
         </div>
 
         <div class="footer">
-            <div class="btn">
-                <el-button plain @click="zhezhao = !zhezhao">返回</el-button>
-                <el-button plain @click="pass(editForm)">确认校验通过</el-button> 
-            </div>  
+          <div class="btn">
+            <el-button plain @click="zhezhao = !zhezhao">返回</el-button>
+            <el-button plain @click="pass(editForm)">确认校验通过</el-button> 
+          </div>  
         </div>
       </div>
     </div>
@@ -928,8 +922,7 @@ export default {
     },
     // 校验通过
     pass(editForm,id){
-       const {data:res} = this.axios.get('excel_data/check.php',{params:{id:this.id}}).then( res =>{
-        
+       const {data:res} = this.axios.get('excel_data/check.php',{params:{id:this.id}}).then( res =>{       
         this.editForm = res.data;
         console.log(this.editForm)
         this.zhezhao = !this.zhezhao  
@@ -950,8 +943,7 @@ export default {
               callback: action => {
               },
             });
-        }
-        
+        }        
       })
     },
     // 表单提交

@@ -846,7 +846,7 @@ export default {
       })     
     },
     // 点击查看
-     async chakan(row,index){
+    async chakan(row,index){
       this.search = !this.search
       console.log(index,row)
       const {data :res} = await  this.axios.get("excel_data/list.php",{params:{id:row.id}})      
@@ -947,7 +947,7 @@ export default {
       this.getTableList(row);        
     },
     // 点击数据集删除
-     async dele(row){
+    async dele(row){
       console.log(row.id)
       const { data :res} = await this.axios.get(
         "dataset/del.php" ,{params:{id:row.id}}).then( res =>{
@@ -1024,7 +1024,7 @@ export default {
       console.log(this.id)
       console.log(this.name)
       this.tablelist = res.data
-       this.queryInfo.page = parseInt(res.page);     
+      this.queryInfo.page = parseInt(res.page);     
       this.queryInfo.count = parseInt(res.count)  //总条数
       console.log(res.data)
       console.log("getTableList",res);   
@@ -1046,15 +1046,13 @@ export default {
       this.editForm = res.data;
       // 将ID赋值下一个ID
       this.id= res.id
-      // this.editForm = Object.assign(res.data[0],res.data[1],res.data[2])
-
+      // this.editForm = Object.assign(res.data[0],res.data[1],res.data[2]
     },
     // 显示
     xianshi(){
       this.luru =! this.luru     
       this.ji =! this.ji 
       this.sousuo = !this.sousuo   
- 
     },
     // 多选框
     func1: function(value) {
@@ -1119,8 +1117,7 @@ export default {
     submit() {
       this.zhezhao = !this.zhezhao    
       this.report.help_diagnosis = this.help_diagnosis;
-      this.jilian = this.editForm.jilian
-           
+      this.jilian = this.editForm.jilian          
       console.log(this.editForm)
     },    
     // 免疫租化增删
@@ -1145,8 +1142,7 @@ export default {
       } else {
         alert("最少保留一个");
       }
-    },
-    
+    },   
     // 切换每页显示多少条
     handleSizeChange(newSize) {
       this.queryInfo.pagerows = newSize;
@@ -1158,8 +1154,7 @@ export default {
       this.getTableList();
     },
     // 列表删除
-     del(row) {   
-      
+    del(row) {         
       this.$confirm("确定删除该数据？, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -1171,9 +1166,7 @@ export default {
       "excel_data/del.php" , {params:{id:row.id}});
           this.$message({
             type: "success",
-            message: "删除成功!",
-            
-
+            message: "删除成功!",        
           });
         })
         .catch(() => {
