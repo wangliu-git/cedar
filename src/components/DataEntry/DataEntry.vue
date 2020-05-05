@@ -71,8 +71,8 @@
     </div>
 
     <!--搜索 -->
-    <div class="s" v-if="!sousuo">   
-      <div class="search" v-if="search">
+    <div class="s" v-if="sousuo">   
+      <div class="search" >
         <div class="up">
           <span>精准搜索 :</span>
           <el-input
@@ -817,7 +817,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -829,7 +828,7 @@ import axios from 'axios'
 export default { 
   created() {
     this.getDataList();
-    this.getTableList();   
+    // this.getTableList();   
     this.groupList()
     // console.log(window.sessionStorage.uid) 
   },
@@ -843,12 +842,14 @@ export default {
         //   console.log(items)
         // })
         console.log(res.data.data)
+        this.$set(this.groupList)
       })     
     },
     // 点击查看
     async chakan(row,index){
-      this.search = !this.search
+      this.sousuo = true
       console.log(index,row)
+      this.row=row;
       const {data :res} = await  this.axios.get("excel_data/list.php",{params:{id:row.id}})      
       console.log(res)
       this.tablelist = res.data
@@ -865,11 +866,10 @@ export default {
             confirmButtonText: '确定',
             type: 'success',
             callback: action => {
-              this.search = !this.search
+              // this.search = !this.search
               this.axios.get("dataset/list.php?id=", + row.id)
             },
-          });
-            
+          });         
         }else{
           this.$alert("添加失败", '提交结果', {
             confirmButtonText: '确定',
@@ -877,7 +877,7 @@ export default {
             callback: action => {
             },
           });
-          }
+        }
       })
       console.log(data)
     },
@@ -903,30 +903,26 @@ export default {
     },
     //点击数据集解析  将数据插入到列表中
     async jiexi(row){   
-       const loading = this.$loading({
-          lock: true,
-          text: '正在解析中，请耐心等待呦',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)'
-        });
-      
+      const loading = this.$loading({
+        lock: true,
+        text: '正在解析中，请耐心等待呦',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });     
       // 插入数据  excel_data/readjson.php
       await this.axios.get("excel_data/readjson.php", {params:{id :row.id}}).then(res => {
-        console.log(res)
-        console.log(res.data)
-        console.log(row.index)
-         var result = res.data;//JSON.parse(res.body);
-        
-          if(result.result == 1){
-            
-          this.$alert("解析成功", '提交结果', {
-           
+        // console.log(res)
+        // console.log(res.data)
+        // console.log(row.index)
+        var result = res.data;//JSON.parse(res.body);     
+          if(result.result == 1){           
+          this.$alert("解析成功", '提交结果', {          
             confirmButtonText: '确定',
             type: 'success',
             callback: action => {
-              this.search = !this.search
+              this.sousuo = true
               this.axios.get("dataset/list.php?id=", + row.id)
-               loading.close();
+              loading.close();
             },
           });
             
@@ -938,13 +934,12 @@ export default {
               loading.close();
             },
           });
-          }
-       
+          }     
       })
       console.log(row.id)
       this.id = row.id 
       console.log(this.id)
-      this.getTableList(row);        
+      this.getTableList2(row);        
     },
     // 点击数据集删除
     async dele(row){
@@ -952,17 +947,17 @@ export default {
       const { data :res} = await this.axios.get(
         "dataset/del.php" ,{params:{id:row.id}}).then( res =>{
         this.$alert("删除成功！")
-        })
-      this.getDataList()
+        this.getDataList()
+      })    
       
-      // console.log(res)
+      console.log(res)
     },
     // 点击病理号录入
     async look(row){         
         this.luru = !this.luru
         this.id = row.id      
         this.ji = !this.ji
-        this.sousuo = !this.sousuo
+        this.sousuo = false
         const { data :res} = await this.axios.get(
           "excel_data/onedata.php?id=" + row.id
         );
@@ -975,17 +970,18 @@ export default {
     },
     // 获取数据集列表
     async getDataList() {
-        const { data : res } = await this.axios.get(
-          "dataset/list.php"
-        )
-          console.log(res)
-   
-        this.datalist = res.data; 
-        console.log(this.datalist)  
+      alert(1)
+      const { data : res } = await this.axios.get(
+        "dataset/list.php"
+      )
+      console.log(res)
+      this.datalist = res.data; 
+      console.log(this.datalist)  
     },
     // 获取病理号
-    async getTableList(row) {  
-      this.search =! this.search
+    async getTableList2(row) {  
+      // this.search =! this.search
+      // alert("gt2"+this.sousuo);
       // console.log(row.id)
       // console.log(this.queryInfo.page)
       const { data: res } = await this.axios.get(     
@@ -997,17 +993,17 @@ export default {
       this.queryInfo.page = parseInt(res.page);     
       this.queryInfo.count = parseInt(res.count)  //总条数
       this.queryInfo.pagerows = res.pagerows  //每页显示多少条 
-      this.id = row.id  
+      this.id = row.id 
       // console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);             
     },
-    async getTableList() {  
+    async getTableList() {     
       // console.log(row.id)
       // console.log(this.queryInfo.page)
       const { data: res } = await this.axios.get(     
       "excel_data/list.php?id=" + this.id, {params:{page:this.queryInfo.page}});
       //console.log(row.id)
       this.tablelist = res.data
-      //console.log(res.data)
+      // console.log("getTableList2",res)
       // console.log("getTableList",res);   
       this.queryInfo.page = parseInt(res.page);     
       this.queryInfo.count = parseInt(res.count)  //总条数
@@ -1027,7 +1023,7 @@ export default {
       this.queryInfo.page = parseInt(res.page);     
       this.queryInfo.count = parseInt(res.count)  //总条数
       console.log(res.data)
-      console.log("getTableList",res);   
+      // console.log("getTableList",res);   
       // this.queryInfo.page = res.page     
       // this.count = res.count  //总条数
       // this.queryInfo.pagerows = res.pagerows  //每页显示多少条        
@@ -1042,7 +1038,7 @@ export default {
       if(res.ok ==0){
         return this.$message.error('已经是最后一个了')
       }
-      console.log("getTableList",res);
+      // console.log("getTableList",res);
       this.editForm = res.data;
       // 将ID赋值下一个ID
       this.id= res.id
@@ -1052,7 +1048,7 @@ export default {
     xianshi(){
       this.luru =! this.luru     
       this.ji =! this.ji 
-      this.sousuo = !this.sousuo   
+      this.sousuo = true  
     },
     // 多选框
     func1: function(value) {
@@ -1200,7 +1196,8 @@ export default {
               confirmButtonText: '确定',
               type: 'success',
               callback: action => {
-                
+                this.tablelist = []
+                this.getTableList2(this.row); 
               },
             });
           }
@@ -1212,6 +1209,7 @@ export default {
               },
             });
           }
+           this.$set(this.groupList)
         })
       }else {
           console.log('error submit!!');
@@ -1239,6 +1237,7 @@ export default {
             if(that.$refs.upload.$children[0].fileList.length==1){
               that.$refs.upload.submit();   
               that.$alert('上传成功')   
+              that.datalist = []
               that.getDataList();
             }else{
               that.uploadLoading=false;
@@ -1366,11 +1365,12 @@ export default {
       acceptFileType:'.csv',
       downLoadLoading:'', 
       tablelist: [], //病理号数组
+      row:{},//缓存的row
       datalist: [], //数据集数组
       id:'',
       formdata:{},
       group: true,
-      search: false,
+      // search: false,
       luru: false,
       zhezhao: false,  
       count:0,   
