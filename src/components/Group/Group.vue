@@ -274,7 +274,7 @@ export default {
       console.log(res)
       this.minList = res.data
     },
-    // 点击查看
+    // 点击病理号查看
     async look(row){
       this.zhezhao =! this.zhezhao  //不能没     
       const { data :res} = await this.axios.get(
@@ -298,6 +298,7 @@ export default {
         const { data: res } = await this.axios.get(
         "group/del.php " , {params:{id:row.id}});
         console.log(res)
+        this.getDataList();
         this.$message({
           type: "success",
           message: "删除成功!"
@@ -310,7 +311,7 @@ export default {
         });
       });
     },    
-    // 获取数据集列表
+    // 获取分组列表
     async getDataList() {
       const { data: res } = await this.axios.get(
         "group/list.php"    
@@ -341,9 +342,9 @@ export default {
       // this.queryInfo.count = parseInt(res.count)  //总条数
       // this.queryInfo.pagerows = res.pagerows  //每页显示多少条 
     },
-    // 病理号查看
+    // 点击分组查看
     chakan(row){
-      this.chuangjian  = !this.chuangjian
+      this.chuangjian  = true
       console.log(row)
       let group_id = ''
       const {data:res} = this.axios.get('report/list.php',{params:{group_id:row.id}}).then( res => {
@@ -354,6 +355,7 @@ export default {
         console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);              
       })     
     },
+    // 点击分组查看
     chakana(){        
       const {data:res} = this.axios.get('report/list.php',{params:{page:this.queryInfo.page}}).then( res => {
       console.log(res)

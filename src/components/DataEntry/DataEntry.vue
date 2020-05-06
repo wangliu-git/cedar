@@ -36,26 +36,27 @@
                     </el-col>
                 </el-row>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="submitUpload" type="primary" size="mini" :loading="uploadLoading" > 确定上传</el-button>
-                    <el-button @click="uploadTemplateDialog=false" size="mini">取消</el-button>
+                  <el-button @click="submitUpload" type="primary" size="mini" :loading="uploadLoading" > 确定上传</el-button>
+                  <el-button @click="uploadTemplateDialog=false" size="mini">取消</el-button>
                 </span>
             </el-dialog>
-        </div>
-                     
+        </div>                
         </div>
       </div>
     </div>
 
     <!--数据集列表 @click="jiexi"   <el-button class="xiazai" size="small">
-          <span class="iconfont iconxiazai">下载excel模板</span>
+    <span class="iconfont iconxiazai">下载excel模板</span>    <span>{{this.L_W}}</span>
     </el-button>  -->
     <div class="storageList" v-if="ji">
       <div class="list" style="width:96%">
-        <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe  max-height="350" :row-click="chakan">
+        <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe  :row-click="chakan">
           <el-table-column  prop="file_name" label="文件名称" width="300" > </el-table-column>
-          <el-table-column prop="upload_time" label="上传时间" width="300"></el-table-column>
-          <el-table-column prop="percent" label="已录入：未录入" width="300"></el-table-column>
-          <el-table-column prop="location" label="研究项目" width="300"></el-table-column>
+          <el-table-column  prop="upload_time" label="上传时间" width="300"></el-table-column>
+          <el-table-column  label="已录入:未录入" width="300" >
+            <template slot-scope="scope">{{ scope.row.exec_line}} : {{ scope.row.total_line }}</template>
+          </el-table-column>
+            <el-table-column prop="location" label="研究项目" width="300"></el-table-column>
           <el-table-column fixed="right" label="操作" width="300">
             <template slot-scope="scope">
               <el-button type="text" size="small"  @click="bianji(scope.row)">编辑</el-button>
@@ -68,6 +69,16 @@
           </el-table-column>
         </el-table>
       </div>
+
+      <el-pagination style="margin:10px 30%"
+            @size-change="handleSizeChange1"
+            @current-change="handleCurrentChange1"
+            :current-page="shuInfo.page"
+            :page-sizes="[5]"
+            :page-size="shuInfo.pagerows" 
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="shuInfo.count"
+          ></el-pagination>
     </div>
 
     <!--搜索 -->
@@ -710,8 +721,6 @@
                       </div>
                     </div>
                   </div>
-
-
                 </div>
               </div>
             </el-collapse-item>
@@ -817,6 +826,7 @@
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -841,33 +851,38 @@ export default {
         // this.groupList.map( ( items ,index ) => {
         //   console.log(items)
         // })
-        console.log(res.data.data)
-        this.$set(this.groupList)
+        // console.log(res.data.data)
+        // this.$set(this.groupList)
       })     
     },
     // 点击查看
     async chakan(row,index){
       this.sousuo = true
+      console.log(row.id)
       console.log(index,row)
       this.row=row;
       const {data :res} = await  this.axios.get("excel_data/list.php",{params:{id:row.id}})      
       console.log(res)
+      this.id = row.id
       this.tablelist = res.data
+      this.queryInfo.page = parseInt(res.page);     
+      this.queryInfo.count = parseInt(res.count)  //总条数
+      this.queryInfo.pagerows = res.pagerows  //每页显示多少条 
     },
-    // 点击添加分组
+    // 点击添加分组保存
     async addGroup(item,id){
-      console.log(item,this.id)
-      console.log(window.sessionStorage.uid)
+      // console.log(item,this.id)
+      // console.log(window.sessionStorage.uid)
       var group_name = ''    
       const {data} = await this.axios.post('group/add.php',{params:{group_name:item,id:this.id,userid:window.sessionStorage.uid}}).then( res =>{
          var result = res.data;//JSON.parse(res.body);
-        if(result.result == 1){
-          this.$alert("添加成功", '提交结果', {
+        if(result.result == 1){       
+          this.$alert("添加成功", '提交结果', {           
             confirmButtonText: '确定',
             type: 'success',
             callback: action => {
-              // this.search = !this.search
-              this.axios.get("dataset/list.php?id=", + row.id)
+              // this.search = !this.search     
+              this.groupList()        
             },
           });         
         }else{
@@ -879,7 +894,7 @@ export default {
           });
         }
       })
-      console.log(data)
+      // console.log(data)
     },
     // 点击确定
     async sure(id){    
@@ -969,26 +984,39 @@ export default {
         // console.log(this.editForm.diagnosis_txt)
     },
     // 获取数据集列表
-    async getDataList() {
-      alert(1)
+    async getDataList() {   
+      // alert(1)  
+      let type = ''     
       const { data : res } = await this.axios.get(
-        "dataset/list.php"
+        "dataset/list.php",{params:{type:1,page:this.shuInfo.page}}
       )
       console.log(res)
       this.datalist = res.data; 
-      console.log(this.datalist)  
+      this.shuInfo.page = parseInt(res.page);     
+      this.shuInfo.count = parseInt(res.count)  //总条数
+      this.shuInfo.pagerows = res.pagerows  //每页显示多少条 
+      // this.datalist.map( (item,index) => {
+        // 拼接已录入和未录入
+        // this.L_W = item.exec_line + ':' + item.total_line
+        //  console.log(this.L_W)  
+        // this.total_line = item.total_line
+        // this.exec_line = item.exec_line
+        // console.log(item.total_line)
+      // }) 
+      console.log(this.datalist)      
     },
     // 获取病理号
     async getTableList2(row) {  
+      alert(1)
       // this.search =! this.search
       // alert("gt2"+this.sousuo);
       // console.log(row.id)
       // console.log(this.queryInfo.page)
       const { data: res } = await this.axios.get(     
-      "excel_data/list.php?id=" + row.id, {params:{page:this.queryInfo.page}});
+      "excel_data/list.php" , {params:{id:row.id,page:this.queryInfo.page}});
       //console.log(row.id)
       this.tablelist = res.data
-      //console.log(res.data)
+      console.log(res.data)
       // console.log("getTableList",res);   
       this.queryInfo.page = parseInt(res.page);     
       this.queryInfo.count = parseInt(res.count)  //总条数
@@ -996,6 +1024,7 @@ export default {
       this.id = row.id 
       // console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);             
     },
+    // 点击切换页码
     async getTableList() {     
       // console.log(row.id)
       // console.log(this.queryInfo.page)
@@ -1012,17 +1041,17 @@ export default {
       // console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);             
     },
     // 搜索
-    async getTable() {      
-      // console.log(row.id)
-      const { data: res } = await this.axios.get(
-      "excel_data/list.php?id=" + this.id, {params:{name:this.name,test_id:this.test_id}});
-      console.log(this.test_id)
+    async getTable(id) {      
       console.log(this.id)
-      console.log(this.name)
+      const { data: res } = await this.axios.get(
+      "excel_data/list.php", {params:{id:this.id,name:this.name,test_id:this.test_id}});
+      // console.log(this.test_id)
+      // console.log(this.id)
+      // console.log(this.name)
       this.tablelist = res.data
       this.queryInfo.page = parseInt(res.page);     
       this.queryInfo.count = parseInt(res.count)  //总条数
-      console.log(res.data)
+      // console.log(res.data)
       // console.log("getTableList",res);   
       // this.queryInfo.page = res.page     
       // this.count = res.count  //总条数
@@ -1139,15 +1168,25 @@ export default {
         alert("最少保留一个");
       }
     },   
-    // 切换每页显示多少条
+    // 病理号切换每页显示多少条
     handleSizeChange(newSize) {
       this.queryInfo.pagerows = newSize;
       this.getTableList();
     },
-    // 点击页数
+    // 病理号点击页数
     handleCurrentChange(newPage) {
       this.queryInfo.page = newPage;
       this.getTableList();
+    },
+    // 数据集切换每页显示多少条
+    handleSizeChange1(newSize) {
+      this.shuInfo.pagerows = newSize;
+      this.getDataList();
+    },
+    // 数据集点击页数
+    handleCurrentChange1(newPage) {
+      this.shuInfo.page = newPage;
+      this.getDataList();
     },
     // 列表删除
     del(row) {         
@@ -1157,20 +1196,20 @@ export default {
         type: "warning",
         center: true
       })
-        .then(() => {
-         const { data: res } =   this.axios.get(
-      "excel_data/del.php" , {params:{id:row.id}});
-          this.$message({
-            type: "success",
-            message: "删除成功!",        
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
+      .then(() => {
+        const { data: res } =   this.axios.get(
+        "excel_data/del.php" , {params:{id:row.id}});
+        this.$message({          
+          type: "success",
+          message: "删除成功!",   
         });
+      })
+      .catch(() => {
+        this.$message({
+          type: "info",
+          message: "已取消删除"
+        });
+      });
     },       
     // 新增患者信息
     addFormList(editForm){
@@ -1189,7 +1228,7 @@ export default {
       if(data){
       // console.log(data)
         this.axios.post('report/add.php',data).then(res => {
-          console.log('res:',res); 
+          // console.log('res:',res); 
           var result = res.data;//JSON.parse(res.body);
           if(result.result=='done'){
             this.$alert("提交成功", '提交结果', {
@@ -1232,8 +1271,8 @@ export default {
     },
     submitUpload(){
         this.uploadLoading=true;
-        var that=this;
-        setTimeout(function () {
+        var that=this;       
+        setTimeout(function () {       
             if(that.$refs.upload.$children[0].fileList.length==1){
               that.$refs.upload.submit();   
               that.$alert('上传成功')   
@@ -1296,7 +1335,7 @@ export default {
       axios({
           method:'post',
           url:"upload_file/add.php",
-          data:fd,
+          data:fd,        
           headers:{"Content-Type":"multipart/form-data;boundary="+new Date().getTime()}
       }).then(rsp=>{
           that.downloadLoading.close();
@@ -1333,6 +1372,11 @@ export default {
   },
   data() { 
     return {   
+      item:'',
+      // 拼接录入和未录入
+      exec_line:'',
+      total_line:'',
+      L_W:'',
       groupName:'',
       sousuo:false,
       ji:true,  
@@ -1352,12 +1396,18 @@ export default {
       // 搜索参数
       test_id:'',
       name:'',
-      // 分页器
+      // 病理号分页器
       queryInfo:{
         page:1,         //页数
         pagerows:10,    //每页显示的条数
         count:0,        //数据总数
-      },     
+      },  
+      // 数据集分页器
+      shuInfo:{
+        page:1,         //页数
+        pagerows:5,    //每页显示的条数
+        count:0,        //数据总数
+      },    
       // 上传
       uploadTemplateDialog:false,
       fileList:[],
@@ -1935,8 +1985,7 @@ export default {
             value: ""
           }
         ] //ngs数组
-      },
-     
+      },    
     };
   },
   mounted() {
@@ -2361,11 +2410,11 @@ a {
   background: rgba(255, 255, 255, 1);
   box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
   border-radius: 4px;
+
   .list {
     padding-top: 15px;
     margin-left: 30px;
-    margin-top: 20px;
-    padding-bottom: 20px;
+    margin-top: 20px;   
     .el-table {
       border-top: 1px solid rgba(0, 160, 233, 1);
     }
@@ -2461,7 +2510,6 @@ a {
       }
       .groupList {
         width: 500px;
-        height: 300px;
         border: 1px solid #DCDFE6;
         margin: 20px 20px;
         display flex

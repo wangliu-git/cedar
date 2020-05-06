@@ -44,6 +44,7 @@
                 end-placeholder="结束日期"
                 size="mini"
                 style="width:200px"
+                
               ></el-date-picker>
             </div>
             <!-- 联系电话-->

@@ -3,13 +3,13 @@
     <div class="up">
       <div class="green" >
         <div class="BD">
-          <span style="font-size:36px;font-weight:400;color:rgba(255,255,255,1);">260</span>
+          <span style="font-size:36px;font-weight:400;color:rgba(255,255,255,1);">{{tongjiList1.total}}</span>
           <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">本单位数据导入量</span>
-          <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">（待校验 260：已校验 0）</span>
+          <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">（待校验 {{tongjiList1.not_ok}}：已校验 {{tongjiList1.ok}}）</span>
         </div>
         <div class="jiao">
           <span style="font-size:16px;font-family:Microsoft YaHei;font-weight:bold;color:rgba(255,255,255,1)">
-            <img src="./img/rise.png" alt /> <span>0%</span>
+            <img src="./img/rise.png" alt /> <span>{{tongjiList1.up_degree}}%</span>
           </span>
           <el-button round style="font-size:16px;font-family:Microsoft YaHei;font-weight:400;color:rgba(23,163,209,1);">去校验</el-button>
         </div>
@@ -17,12 +17,12 @@
 
       <div class="orange">
         <div class="BL">
-          <span style="font-size:36px;font-weight:400;color:rgba(255,255,255,1);">200</span>
+          <span style="font-size:36px;font-weight:400;color:rgba(255,255,255,1);">{{tongjiList2.total}}</span>
           <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">本单位数据录入量</span>
         </div>
         <div class="luru">
           <span style="font-size:16px;font-family:Microsoft YaHei;font-weight:bold;color:rgba(255,255,255,1)">
-            <img src="./img/rise.png" alt /><span> 0%</span>
+            <img src="./img/rise.png" alt /><span> {{tongjiList2.up_degree}}%</span>
           </span>
           <el-button round style="font-size:16px;font-family:Microsoft YaHei;font-weight:400;color:rgba(23,163,209,1);">开始录入</el-button>  
         </div>
@@ -30,12 +30,12 @@
 
       <div class="blue">
         <div class="YL">
-         <span style="font-size:36px;font-weight:400;color:rgba(255,255,255,1);">0</span>
+         <span style="font-size:36px;font-weight:400;color:rgba(255,255,255,1);">{{tongjiList3.total}}</span>
           <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">外院首诊报告数量</span>
         </div>
         <div class="yuan">
           <span style="font-size:16px;font-family:Microsoft YaHei;font-weight:bold;color:rgba(255,255,255,1)">
-            <img src="./img/rise.png" alt /><span> 0%</span>
+            <img src="./img/rise.png" alt /><span>  {{tongjiList3.up_degree}}%</span>
           </span>
           <el-button round style="font-size:16px;font-family:Microsoft YaHei;font-weight:400;color:rgba(23,163,209,1);">外院首诊报告录入</el-button>  
         </div>
@@ -73,18 +73,17 @@
       </div>
       <div class="sx">
         <div class="title">
-          <i class="iconfont icontubiaozhizuo-">病理报告量详情</i>
-          <span>详情</span>
+          <i class="iconfont icontubiaozhizuo-">病理报告量详情</i>         
         </div>
         <div id="wang">
           <div class="one">
-            <span>460</span>
+            <span>{{reportLists.total1}}</span>
           </div>
           <div class="two">
-            <span>200</span>
+            <span>{{reportLists.total2}}</span>
           </div>
           <div class="three">
-            <span>0</span>
+            <span>{{reportLists.total3}}</span>
           </div>
         </div>
         <div class="zi">
@@ -104,7 +103,10 @@ export default {
   mounted() {
     this.$nextTick(function() {
       this.drawLine();
-      this.tongji();
+      this.tongji1();
+      this.tongji2();
+      this.tongji3();
+      this.reportList()
     });
   },
   methods: {
@@ -140,32 +142,58 @@ export default {
         ]
       });
     },
-    // 统计数据
-    async tongji(){
+    // 统计数据1
+    async tongji1(){
       let type = ''
-      let field = ''
-      let entry_status = ''
-      const {data :res } = await this.axios.get('excel_data/stat.php',{params:{type:1,field:entry_status}})
+      const {data :res } = await this.axios.get('excel_data/stat.php',{params:{type:1}})
       console.log(res)
-      let tongjiList = res
-      console.log(tongjiList.stat)
-      console.log(tongjiList.stat[0].entry_status)
-      // tongjiList.stat.map( (item ,index) => {
-      //   if(item.entry_status == 0){
-      //     this.item = item
-      //     console.log(item.entry_status)
-      //   }else{
-      //     this.item = item
-      //     console.log(item.entry_status)
-      //   }      
-      // })
+      this.tongjiList1 = res
+      // this.percent1 = parseFloat((this.tongjiList1.ok / this.tongjiList1.total) *100).toFixed(1)
+      // console.log(this.percent1)
+    },
+    // 统计数据2
+    async tongji2(){
+      let type = ''
+      const {data :res } = await this.axios.get('excel_data/stat.php',{params:{type:2}})
+      console.log(res)
+      this.tongjiList2= res
+      // this.percent2 = parseFloat((this.tongjiList2.ok / this.tongjiList2.total) *100).toFixed(1)
+      // console.log(this.percent2)
+      
+    },
+    // 统计数据3
+    async tongji3(){
+      let type = ''
+      const {data :res } = await this.axios.get('diagnosis_origin/stat.php')
+      // console.log(res)
+      this.tongjiList3= res
+      // this.percent3 = parseFloat((this.tongjiList2.ok / this.tongjiList2.total) *100).toFixed(1)
+      // console.log(this.percent2)
+      
+    },
+    // 获取报告量详情
+    async reportList(){
+      const { data : res} = await this.axios.get('report/stat.php')
+      console.log(res)
+      this.reportLists = res
+      console.log(this.reportLists.total1)
+      let one = document.getElementsByClassName('one')
+      console.log(one)
+      one.style.backgroundColor  = 'red'
+    },
 
-    }
+    
   },
   data() {
     return {
+      // 报告量统计
+      reportLists:[],
       // 统计数据
-      tongjiList:[],
+      tongjiList1:[],
+      tongjiList2:[],
+      tongjiList3:[],
+      // percent1:'',   //导入百分比
+      // percent2:'',   //录入百分比
       value:'',   //日期的值
       // 日期配置
       pickerOptions: {
@@ -371,17 +399,15 @@ export default {
         background: rgba(28, 165, 255, 1);
         border-radius: 4px 4px 0px 0px;
       }
-
       .two {
         width: 66px;
         height: 120px;
         background: rgba(37, 193, 171, 1);
         border-radius: 4px 4px 0px 0px;
       }
-
       .three {
         width: 66px;
-        height: 0;
+        height: 50px;
         background: rgba(248, 182, 63, 1);
         border-radius: 4px 4px 0px 0px;
       }

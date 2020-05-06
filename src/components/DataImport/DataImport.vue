@@ -39,10 +39,12 @@
     <!--数据集列表  slot-scope="scope"  @click="jiexi"-->
     <div class="storageList" v-if="!ji">
       <div class="list" style="width:96%">
-        <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe max-height="350">
+        <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe >
           <el-table-column prop="file_name" label="文件名称" width="300"></el-table-column>
           <el-table-column prop="upload_time" label="上传时间" width="300"></el-table-column>
-          <el-table-column prop="percent" label="已校验：未检验" width="300"></el-table-column>
+          <el-table-column  label="已校验：未检验" width="300">
+             <template slot-scope="scope">{{ scope.row.exec_line}} : {{ scope.row.total_line }}</template>
+          </el-table-column>
           <el-table-column prop="location" label="研究项目" width="300"></el-table-column>
           <el-table-column fixed="right" label="操作" width="300">
             <template slot-scope="scope">
@@ -56,6 +58,15 @@
           </el-table-column>
         </el-table>
       </div>
+      <el-pagination style="margin:10px 30%"
+            @size-change="handleSizeChange1"
+            @current-change="handleCurrentChange1"
+            :current-page="shuInfo.page"
+            :page-sizes="[5]"
+            :page-size="shuInfo.pagerows" 
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="shuInfo.count"
+          ></el-pagination>
     </div>
 
     <!--搜索 -->
@@ -817,18 +828,19 @@ export default {
     // 选择分组
     groupList(){
       const {data :res} = this.axios.get('group/list.php').then( res =>{
-        console.log(res)
+        // console.log(res)
         this.groupList = res.data.data
         // this.groupList.map( ( items ,index ) => {
         //   console.log(items)
         // })
-        console.log(res.data.data)
+        // console.log(res.data.data)
       })     
     },
-    // 点击查看数据集
+    // 点击查看数据集显示病理数据
     async chakanj(row){
-      this.chakan = !this.chakan
+      this.chakan = true
       console.log(row)
+      this.row=row;
       const {data :res} = await  this.axios.get("excel_data/list.php",{params:{id:row.id}})      
       console.log(res)
       this.tablelist = res.data
@@ -891,10 +903,13 @@ export default {
     },
     // 点击数据集删除
     async dele(row){
-      console.log(row.id)
+      // console.log(row.id)
       const { data :res} = await this.axios.get(
         "dataset/del.php" ,{params:{id:row.id}}
-      );
+      ).then( res =>{
+        this.$alert("删除成功！")
+        this.getDataList()
+      });
       console.log(res)
     },
     // 点击病理号查看
@@ -905,7 +920,7 @@ export default {
       const { data :res} = await this.axios.get(
         "excel_data/onedata.php" ,{params:{id:row.id}}
       );
-      console.log("getTableList",res);
+      // console.log("getTableList",res);
       this.editForm = res.data;
       this.id = row.id
       // console.log(this.editForm);   
@@ -924,7 +939,7 @@ export default {
     pass(editForm,id){
        const {data:res} = this.axios.get('excel_data/check.php',{params:{id:this.id}}).then( res =>{       
         this.editForm = res.data;
-        console.log(this.editForm)
+        // console.log(this.editForm)
         this.zhezhao = !this.zhezhao  
         var result = res.data;//JSON.parse(res.body);
         if(result.result ){
@@ -950,9 +965,9 @@ export default {
     submit(editForm) {
       this.zhezhao = !this.zhezhao
       this.id = this.id
-      console.log(this.id)   
+      // console.log(this.id)   
       this.editFrm = this.editForm
-      console.log(this.editForm)
+      // console.log(this.editForm)
       this.jilian = this.editForm.jilian
       this.editForm.help_diagnosis = this.help_diagnosis;
       // const sicksList = JSON.stringify(sicksArr)      
@@ -963,15 +978,16 @@ export default {
       //data = qs.stringify(data);     
       // console.log("data:",data);
       if(data){
-      console.log(data)
+      // console.log(data)
        this.axios.post('report/add.php',data).then(res => {
           console.log('res:',res); 
           var result = res.data;//JSON.parse(res.body);
           if(result.result=='done'){
+            this.getTableList2(this.row); 
             this.$alert("提交成功", '提交结果', {
               confirmButtonText: '确定',
-              type: 'success',
-              callback: action => {
+              type: 'success',             
+              callback: action => {                
               },
             });
           }
@@ -1003,17 +1019,21 @@ export default {
       // 将ID赋值下一个ID
       this.id= res.id
       // this.editForm = Object.assign(res.data[0],res.data[1],res.data[2])
-
     },
     // 获取数据集列表
     async getDataList() {
+      let type = ''
         const { data : res } = await this.axios.get(
-            "dataset/list.php"
+          "dataset/list.php",{params:{type:2,page:this.shuInfo.page}}
         );
-        this.datalist = res.data;   
+        this.datalist = res.data;  
+        this.shuInfo.page = parseInt(res.page);     
+        this.shuInfo.count = parseInt(res.count)  //总条数
+        this.shuInfo.pagerows = res.pagerows  //每页显示多少条
+        console.log(res)
     },
     // 获取病理号
-    async getTableList(row) {  
+    async getTableList2(row) {  
       // console.log(row.id)
       console.log(this.queryInfo.page)
       const { data: res } = await this.axios.get(     
@@ -1028,6 +1048,7 @@ export default {
       this.id = row.id  
       console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);             
     },
+    // 点击切换页码获取数据
     async getTableList() {  
       // console.log(row.id)
       console.log(this.queryInfo.page)
@@ -1039,8 +1060,7 @@ export default {
       // console.log("getTableList",res);   
       this.queryInfo.page = parseInt(res.page);     
       this.queryInfo.count = parseInt(res.count)  //总条数
-      this.queryInfo.pagerows = res.pagerows  //每页显示多少条 
-    
+      this.queryInfo.pagerows = res.pagerows  //每页显示多少条    
       // console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);             
     },
     // 病理号删除
@@ -1084,22 +1104,33 @@ export default {
       // this.queryInfo.pagerows = res.pagerows  //每页显示多少条        
       // console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);        
     },
-    // 切换每页显示多少条
+    // 病理号切换每页显示多少条
     handleSizeChange(newSize) {
       this.queryInfo.pagerows = newSize;
       this.getTableList();
     },
-    // 点击页数
+    // 病理号点击页数
     handleCurrentChange(newPage) {
       this.queryInfo.page = newPage;
-      console.log(this.queryInfo.page)
+      // console.log(this.queryInfo.page)
+      this.getTableList();
+    },
+    // 数据集切换每页显示多少条
+    handleSizeChange1(newSize) {
+      this.shuInfo.pagerows = newSize;
+      this.getTableList();
+    },
+    // 数据集点击页数
+    handleCurrentChange1(newPage) {
+      this.shuInfo.page = newPage;
+      // console.log(this.shuInfo.page)
       this.getTableList();
     },
     // 查看患者信息
     async addFormList(editForm){
         this.zhezhao = !this.zhezhao
          this.id = this.id
-         console.log(this.id)
+        //  console.log(this.id)
         this.editForm.help_diagnosis = this.help_diagnosis;
         // const sicksList = JSON.stringify(sicksArr)      
         let data={
@@ -1109,10 +1140,10 @@ export default {
         // 判断提交
         if(editForm){
             await this.axios.post('report/add.php',data).then(res =>{
-            console.log('res:',res);
+            // console.log('res:',res);
             var result = res.data;//JSON.parse(res.body);
             if(result.result=="done"){
-              
+              this.getTableList()
                 this.$alert("提交成功", '提交结果', {
                   confirmButtonText: '确定',
                   type: 'success',
@@ -1196,7 +1227,7 @@ export default {
     }, 
     // 点击折叠面板
     handleChange(val) {
-      console.log(val);
+      // console.log(val);
     },
     // 选择分组
     choose() {
@@ -1238,6 +1269,9 @@ export default {
         setTimeout(function () {
             if(that.$refs.upload.$children[0].fileList.length==1){
                 that.$refs.upload.submit();
+                that.$alert('上传成功')   
+                that.datalist = []
+                that.getDataList();
             }else{
                 that.uploadLoading=false;
                 that.$message({
@@ -1250,10 +1284,10 @@ export default {
         },100);
     },
     handleRemove(file,fileList){
-        console.log(file,fileList);
+        // console.log(file,fileList);
     },
     handlePreview(file){
-        console.log(file);
+        // console.log(file);
     },
     beforeUpload(file){
       var that=this;
@@ -1295,6 +1329,7 @@ export default {
           method:'post',
           url:"upload_file/add.php",
           data:fd,
+          
           headers:{"Content-Type":"multipart/form-data;boundary="+new Date().getTime()}
       }).then(rsp=>{
           that.downloadLoading.close();
@@ -1331,6 +1366,13 @@ export default {
   },
   data() { 
     return {  
+      row:{},//缓存的row
+      // 数据集分页器
+      shuInfo:{
+        page:1,         //页数
+        pagerows:5,    //每页显示的条数
+        count:0,        //数据总数
+      }, 
       jilian:'',
       groupName:'',  //分组名
       // 级联选择器
@@ -2313,8 +2355,6 @@ a {
     padding-top: 15px;
     margin-left: 30px;
     margin-top: 20px;
-    padding-bottom: 20px;
-
     .el-table {
       border-top: 1px solid rgba(0, 160, 233, 1);
     }
