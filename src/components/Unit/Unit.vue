@@ -115,7 +115,7 @@
                     placeholder="请输入机构名称"
                     size="mini" style="width:180px"
                   ></el-input>
-                  <span>{{editForm.organization}}</span>
+                 
                 </div>
                 <div class="sickItem">
                   <span>{{fMInstitution.test_id.field_title}}:</span>

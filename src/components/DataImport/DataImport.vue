@@ -59,14 +59,14 @@
         </el-table>
       </div>
       <el-pagination style="margin:10px 30%"
-            @size-change="handleSizeChange1"
-            @current-change="handleCurrentChange1"
-            :current-page="shuInfo.page"
-            :page-sizes="[5]"
-            :page-size="shuInfo.pagerows" 
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="shuInfo.count"
-          ></el-pagination>
+        @size-change="handleSizeChange1"
+        @current-change="handleCurrentChange1"
+        :current-page="shuInfo.page"
+        :page-sizes="[5]"
+        :page-size="shuInfo.pagerows" 
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="shuInfo.count"
+        ></el-pagination>
     </div>
 
     <!--搜索 -->
@@ -928,7 +928,6 @@ export default {
     //点击病理号查看
     jiaoyan(row){
       console.log(row.id)
- 
       this.zhezhao = true    
       this.id  = row.id
       // this.editForm.help_diagnosis = this.help_diagnosis;
@@ -1020,7 +1019,7 @@ export default {
     },
     // 获取数据集列表
     async getDataList() {
-      // alert(1)
+      alert(1)
       let type = ''
         const { data : res } = await this.axios.get(
           "dataset/list.php",{params:{type:2,page:this.shuInfo.page}}
@@ -1118,13 +1117,13 @@ export default {
     // 数据集切换每页显示多少条
     handleSizeChange1(newSize) {
       this.shuInfo.pagerows = newSize;
-      this.getTableList();
+      this.getDataList();
     },
     // 数据集点击页数
     handleCurrentChange1(newPage) {
       this.shuInfo.page = newPage;
       // console.log(this.shuInfo.page)
-      this.getTableList();
+      this.getDataList();
     },
     // 查看患者信息
     async addFormList(editForm){
@@ -1269,8 +1268,7 @@ export default {
           if(that.$refs.upload.$children[0].fileList.length==1){
             that.$refs.upload.submit();
             that.$alert('上传成功')   
-            that.datalist = []
-            that.getDataList();            
+                     
           }else{
             that.uploadLoading=false;
             that.$message({
@@ -1280,6 +1278,8 @@ export default {
               message:'请选择文件!'
             });
           };
+           that.datalist = []
+            that.getDataList();  
         },10);
     },
     handleRemove(file,fileList){
