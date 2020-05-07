@@ -20,12 +20,12 @@
           </el-submenu>
 
 
-          <el-submenu  :class="{on: $route.path === '/dataimport'}" @click="goto('/dataimport')" index="5">
+          <el-submenu   @click="goto('/dataimport')" index="5">
             <template slot="title">
               <i class="iconfont iconshujudaoru"></i>
               <span>数据导入</span>
             </template>           
-              <el-menu-item index="dataimport"><i class="iconfont icondian"></i> 数据导入</el-menu-item>           
+              <el-menu-item index="dataimport" :class="{on: $route.path === '/dataimport'}"><i class="iconfont icondian"></i> 数据导入</el-menu-item>           
           </el-submenu>
 
           <el-submenu  :class="{on: $route.path === '/dataintegration'}" @click="goto('/dataintegration')" index="1">
@@ -224,7 +224,7 @@ el-button el-button--default{
     border-right none
 
     .on{
-      background white
+      background-color  white
     }
   }
  

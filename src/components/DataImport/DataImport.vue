@@ -1020,7 +1020,7 @@ export default {
     },
     // 获取数据集列表
     async getDataList() {
-      alert(1)
+      // alert(1)
       let type = ''
         const { data : res } = await this.axios.get(
           "dataset/list.php",{params:{type:2,page:this.shuInfo.page}}

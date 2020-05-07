@@ -76,7 +76,7 @@
           <i class="iconfont icontubiaozhizuo-">病理报告量详情</i>         
         </div>
         <div id="wang">
-          <div class="one">
+         <!-- <div class="one">
             <span>{{reportLists.total1}}</span>
           </div>
           <div class="two">
@@ -85,12 +85,9 @@
           <div class="three">
             <span>{{reportLists.total3}}</span>
           </div>
+          -->
         </div>
-        <div class="zi">
-          <span>本单位</span>
-          <span>本单位会诊</span>
-          <span>外单位首诊</span>
-        </div>
+       
       </div>
     </div>
   </div>
@@ -180,7 +177,38 @@ export default {
       // let one = document.getElementsByClassName('one')
       // console.log(one)
       // one.style.backgroundColor  = 'red'
-    },   
+      // echarts图
+      // 基于准备好的dom，初始化echarts实例
+      // console.log(document.getElementById("liu"));
+      let myCharts = this.$echarts.init(document.getElementById("wang"));
+      // 绘制图表
+      myCharts.setOption({
+        // title: { text: '在Vue中使用echarts' },
+        xAxis: {
+          data: ["本单位", "本单位会诊", "外单位首诊"]
+        },
+        yAxis: {},
+        // legend: {
+        //   data:['销量']
+        // },
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true,
+          height: "90%"
+        },
+        series: [
+          {
+            name: "销量",
+            type: "bar",
+            data: [5, 20, 36, 10, 10, 20]
+          }
+        ]
+      });
+    },
+
+    
   },
   data() {
     return {

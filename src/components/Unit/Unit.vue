@@ -509,8 +509,8 @@
         "id":this.id,
         "data":this.editForm
       }
-      // console.log(this.editForm)
-      // console.log(this.id)
+      console.log(this.editForm)
+      console.log(this.id)
   
       if(data){
        console.log(data)
@@ -547,6 +547,7 @@
     },
     // 获取病理号
     async getTableList(it){
+      alert(1)
       // console.log(it)
       let group_id = ''
       const {data : res} = await this.axios.get('diagnosis_origin/list.php',{params:{page:this.queryInfo.page,group_id:1}})
