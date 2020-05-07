@@ -5,7 +5,7 @@
           <el-input placeholder="搜索"  size="small" class="input-with-select" >
             <el-button slot="append" class=" iconfont iconsousuo" size="small"></el-button>
           </el-input> 
-            <el-button class="iconfont iconic_join_dialing_norm" size="small" @click="add(userData)">添加</el-button>
+            <el-button class="iconfont iconic_join_dialing_norm" size="small" @click="add()">添加</el-button>
             <el-button class="iconfont iconpiliangshanchu" size="small">批量删除</el-button>
         </div>
 
@@ -36,11 +36,11 @@
       </div> 
 
       <!-- 修改-->   
-      <div class="zhezhao"  v-if="!group">
+      <div class="zhezhao"  v-if="group">
         <div class="message" >
           <div class="up">
               <span>修改</span>
-              <span @click="group =! group"><i class="iconfont iconx"></i></span>
+              <span @click="group =false"><i class="iconfont iconx"></i></span>
           </div>
           <div class="down">
             <el-form :model="userData" :rules="rules"  label-width="100px" class="demo-ruleForm">
@@ -49,8 +49,8 @@
               </el-form-item>
               <el-form-item label="权限" prop="region">
                 <el-select v-model="userData.role_id" placeholder="请选择权限" style="width:300px" size="mini">
-                  <el-option label="管理员" value="shanghai"></el-option>
-                  <el-option label="测试" value="beijing"></el-option>
+                  <el-option value="管理员" ></el-option>
+                  <el-option value="测试" ></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="新密码" prop="pass">
@@ -60,7 +60,7 @@
                 <el-input type="textarea" v-model="userData.memo" style="width:300px" size="mini" placeholder="请输入内容"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button plain @click="group =! group">取消</el-button>
+                <el-button plain @click="group =false">取消</el-button>
                 <el-button plain @click="bianji(userData)">确定</el-button>
               </el-form-item>
             </el-form>
@@ -69,31 +69,31 @@
       </div>
 
         <!-- 添加-->
-      <div class="zhezhao"  v-if="!Add">
+      <div class="zhezhao"  v-if="Add">
         <div class="message" >
           <div class="up">
               <span>修改</span>
-              <span @click="Add =! Add"><i class="iconfont iconx"></i></span>
+              <span @click="Add =false"><i class="iconfont iconx"></i></span>
           </div>
           <div class="down">
-            <el-form  :rules="rules"  label-width="100px" class="demo-ruleForm">
+            <el-form  :rules="rules" :model="addUserList" label-width="100px" class="demo-ruleForm">
               <el-form-item label="用户名" prop="username">
-                <el-input v-model="addData.username" style="width:300px" size="mini" ></el-input>
+                <el-input v-model="addUserList.username" style="width:300px" size="mini" ></el-input>
               </el-form-item>
               <el-form-item label="权限" prop="region">
-                <el-select v-model="addData.role_id" placeholder="请选择权限" style="width:300px" size="mini">
+                <el-select v-model="addUserList.role_id" placeholder="请选择权限" style="width:300px" size="mini">
                   <el-option label="管理员" value="shanghai"></el-option>
                   <el-option label="测试" value="beijing"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="新密码" prop="pass">
-                <el-input v-model="addData.password" style="width:300px" size="mini" placeholder="请设置新密码" ></el-input>
+                <el-input v-model="addUserList.password" style="width:300px" size="mini" placeholder="请设置新密码" ></el-input>
               </el-form-item>
               <el-form-item label="备注"  maxlength="256" show-word-limit style="width:300px" size="mini" prop="memo">
-                <el-input type="textarea" v-model="addData.memo" style="width:300px" size="mini" placeholder="请输入内容"></el-input>
+                <el-input type="textarea" v-model="addUserList.memo" style="width:300px" size="mini" placeholder="请输入内容"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button plain @click="group =! group">取消</el-button>
+                <el-button plain @click="Add =false ">取消</el-button>
                 <el-button plain @click="tianjia()">确定</el-button>
               </el-form-item>
             </el-form>
@@ -107,28 +107,28 @@
   export default {
     data() {
       return {
-        Add:true,
-        // 用户信息
+        Add:false,
+        // 修改用户信息
         userData:{
           username:'',
           password:'',
           role_id:'',
           memo:''
         },
-        // 添加用户信息
-        addData:{
+        // 添加用户信息     
+        addUserList:{
           username:'',
           password:'',
           role_id:'',
-          memo:''
-        },
+          memo:'',    
+         },
         // 分页器
         queryInfo:{
           page:1,         //页数
           pagerows:10,    //每页显示的条数
           count:0,        //数据总数
         },  
-        group:true,
+        group:false,
         ruleForm: {
           name: '',
           region: '',
@@ -157,7 +157,7 @@
       async getUserList(){
         // alert(1)
         const {data :res} = await this.axios.get("user/list.php" ,{params:{page:this.queryInfo.page}})
-        // console.log(res)
+        console.log(res)
         this.userlist = res.data
         this.queryInfo.page = parseInt(res.page);     
         this.queryInfo.count = parseInt (res.count)  //总条数
@@ -165,38 +165,39 @@
       },
       // 点击用户列表修改
       async chakan(row){
-        this.group = !this.group
+        this.group = true
         const {data : res} = await this.axios.get("user/one.php",{params:{id:row.id}})
         console.log(res)
         this.userData =res
+        this.id = row.id
         this.getUserList()
       },
-      // 点击添加按钮
+      // 点击添加按钮出现对话框
       add(){
-        this.Add = !this.Add
-        
+        this.Add = true                     
       },
       // 点击添加弹框确定
       async tianjia(){    
-        this.Add = !this.Add
-        const {data :res} = await this.axios.get(
-          'user/add.php',
-          {params:{username:this.addData.username,role_id:this.addData.role_id,password:this.addData.password,memo:this.addData.memo}})
-          this.getUserList()
-        console.log(res)
+        this.Add = false
+        console.log(this.addUserList)
+        const res = await this.axios.get(
+          'user/add.php',{params:{username:this.addUserList.username,password:this.addUserList.password,role_id:this.addUserList.role_id,memo:this.addUserList.memo}})       
+        console.log(res.data)
+        this.getUserList()
       },
       // 点击修改弹窗的确定
-      async bianji(userData){
-        // console.log(this.userData)
-        this.group = !this.group
-        const {data : res} = await this.axios.get("user/edit.php",{param:this.userData})
-        // console.log(res)
-        this.userData =res
+      async bianji(id){
+        console.log(this.id)
+        this.group = false
+        const  res = await this.axios.get("user/edit.php",{params:{id:this.id,username:this.userData.username,password:this.userData.password,role_id:this.userData.role_id,memo:this.userData.memo}}).then(res =>{
+           console.log(res)
+        })
+             
         this.getUserList()
       },
       // 切换每页显示多少条
       handleSizeChange(newSize) {
-        this.queryInfo.pagerows = newSize;
+        this.queryInfo.pagerows = newwSize;
         this.getUserList();
       },
       // 点击页数

@@ -52,8 +52,8 @@
             <i class="iconfont iconbuzhou-icon"></i>
             <span>选择分析 ：</span>
             <el-select placeholder="请选择" size="small">
-              <el-option>淋巴瘤各个亚型临床病理特征相关分析</el-option>
-            </el-select>
+              <el-option v-for="(item,index)  in choose" :key="index" :value="item">{{item}}</el-option>
+            </el-select> 
           </div>
           <div>
             <i class="iconfont iconbuzhou-xian1"></i>
@@ -74,8 +74,8 @@
             <el-button type="primary" plain>免疫组化检测率</el-button>
             <el-button type="primary" plain>免疫组化阳性率</el-button>
             <el-button type="primary" plain>分子指标检测率</el-button>
-            <el-button type="primary" plain>报告等级</el-button>
             <el-button type="primary" plain>诊断时长</el-button>
+            <el-button type="primary" plain>各个病理类型分布</el-button>
           </div>
           <div id="tu"></div>
         </div>
@@ -91,6 +91,8 @@ import echarts from "echarts";
 export default {
   data() {
     return {
+      // 选择分析选项
+      choose:["淋巴瘤整体临床病理特征相关分析","淋巴瘤各个病理类型临床病理特征相关分析"],
       activeNames: ["1"],
       datalist: [], //数据集数组
       chartsData: [] ,//图表数据
@@ -118,7 +120,6 @@ export default {
       console.log(this.datalist);
     },
     // 图
-
     async drawLine() {
       // myChart.showLoading(); myChart.hideLoading();  //等待效果
       // 基于准备好的dom，初始化echarts实例
@@ -348,70 +349,6 @@ export default {
         myChart.clear();
         myChart.setOption(option, { notMerge: true });
       }
-
-      // return;
-      // console.log(datas)
-      // for( var i in datas){
-      //   console.log(datas[i])
-      //   console.log(datas[i].sex)
-
-      // }
-
-      //  myChart.setOption(
-      //    this.option={
-      //     tooltip: {
-      //       show:true,
-      //       trigger:'axis', //对bar
-      //       axisPointer:{
-      //         type:'shadow',
-      //         label:{
-      //           backgroundColor:'#E9EEF3'
-      //         }
-      //       }
-      //     },
-      //     // 切换工具栏
-      //     toolbox: {
-      //       // y: 'bottom',
-      //       feature: {
-      //         magicType: {
-      //           type: ['stack', 'tiled','line','bar',]
-      //         },
-      //         dataView: {},
-      //         saveAsImage: {
-      //           pixelRatio: 2
-      //         }
-      //       }
-      //     },
-      //     // X轴移动
-      //     dataZoom: [{
-      //         type: 'inside'
-      //     }, {
-      //         type: 'slider'
-      //     }],
-      //     // 小图标
-      //     legend: {
-      //         data: ['男','女']
-      //     },
-      //     xAxis:{
-      //       data:datas[i].sex
-      //     },
-      //     yAxis:{
-      //       data:datas[i].value
-      //     },
-      //     grid: {
-      //       left:'10%',
-      //       right:'10%',
-      //       bottom:'3%',
-      //       containLabel:true,
-      //       height:'90%',
-
-      //     },
-      //     series:[{
-      //       name:datas[i].sex,
-      //       data:datas[i].value,
-      //       type:'bar'
-      //     }]
-      // },)
     }
   }
 };

@@ -177,9 +177,9 @@ export default {
       console.log(res)
       this.reportLists = res
       console.log(this.reportLists.total1)
-      let one = document.getElementsByClassName('one')
-      console.log(one)
-      one.style.backgroundColor  = 'red'
+      // let one = document.getElementsByClassName('one')
+      // console.log(one)
+      // one.style.backgroundColor  = 'red'
     },
 
     

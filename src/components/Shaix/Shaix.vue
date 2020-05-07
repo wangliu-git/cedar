@@ -109,7 +109,7 @@
                 placeholder="请选择"
                 size="mini"
                 style="width:100px" 
-                v-model="editForm.address_prov"  multiple
+                v-model="editForm.address_city"  multiple
               >
                 <el-option
                   v-for="(provinces) in showInfo.birthplace.field_values"
@@ -364,7 +364,6 @@
         <el-button @click="shaixuan(editForm)">筛选</el-button>
       </div>
     </div>
-
     <!--  列表-->
     <!-- :selectable="selectable"  获取状态
     >  选中列表行-->
@@ -429,7 +428,7 @@
       <div class="look">
         <div class="header">
           <span>查看病理信息</span>
-          <span @click="zhezhao = !zhezhao">
+          <span @click="zhezhao = false">
             <i class="iconfont iconx"></i>
           </span>
         </div>
@@ -522,13 +521,6 @@
             </div>
           </div>
         </div>
-
-        <div class="footer">
-          <div class="btn">
-            <el-button plain @click="zhezhao = !zhezhao">返回</el-button>
-            <el-button plain @click="addFormList(editForm)">确认校验通过</el-button>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -536,8 +528,8 @@
     <div class="out" v-if="group" :data="data">
       <div class="nei">
         <div class="title">
-          <span>请选择分组</span>
-          <span @click="group =! group">
+          <span >请选择分组</span>
+          <span @click="group =false">
             <i class="iconfont iconx"></i>
           </span>
         </div>
@@ -553,7 +545,7 @@
           </div>
           <div class="button">
             <!--@click="sure(id)" -->
-            <el-button plain size="small" @click="group =! group">取消</el-button>
+            <el-button plain size="small" @click="group =false">取消</el-button>
             <el-button plain size="small" @click="sure(id)">确定</el-button>
           </div>
         </div>
@@ -566,7 +558,7 @@
         <div class="form">
           <!-- 按钮-->
           <div class="header">
-            <span @click="luru=!luru">编辑</span>
+            <span @click="luru=false">编辑</span>
             <span><i class="inonfont iconfork"></i></span>
           </div>
           <!-- 表单-->
@@ -1515,14 +1507,11 @@ export default {
           }]
         }
       ],
-      groupLists: [
-       
-      ], //分组列表
+      groupLists: [ ], //分组列表
       // 数据集列表
       data: [],
       // 筛选条件名
-      // ## 患者信息
-      
+      // ## 患者信息    
         name: "", //姓名
         sex: [], //性别
         birthday: "", //出生日期
@@ -1782,8 +1771,7 @@ export default {
   created() {
     this.getTableList();
     this.groupList()
-  },
- 
+  }, 
   methods: { 
     // 点击复选框获取ID们
     handleSelectionChange(val) {
@@ -1832,7 +1820,8 @@ export default {
               confirmButtonText: '确定',
               type: 'success',
               callback: action => {
-                
+                this.getTableList()
+                this.luru = false
               },
             });
           }
@@ -1846,9 +1835,9 @@ export default {
           }
         })
       }else {
-          console.log('error submit!!');
-          return false;
-        }  
+        console.log('error submit!!');
+        return false;
+      }  
     },
     // 重置
     clear(editForm){
@@ -1915,7 +1904,7 @@ export default {
     }, 
     // 编辑按钮
     bianji(row){
-      this.luru = !this.luru
+      this.luru = true
     },
     // 重置按钮
     reset(editForm) {
@@ -1923,7 +1912,6 @@ export default {
     }, 
     // 点击添加分组
     async addGroup(item,ids) {
-      // this.group =! this.group
       // console.log(item);
       // console.log(window.sessionStorage.username);
       var group_name = "";  
@@ -1951,8 +1939,8 @@ export default {
       console.log(data);
     },
     inGroup(ids) {
-      // console.log(this.ids)
-      this.group = !this.group;
+      //console.log(this.ids)
+      this.group = false
     },
     // 点击拿到分组的ID
     group_id(it){
@@ -1962,22 +1950,34 @@ export default {
     },
     // 点击确定
     async sure(id) {
-    //  console.log(this.id)
-    //   const { data : res } = await this.axios.post(
-    //     "dataset/edit.php",{params:{id:this.id}}
-    //   );   
-    //   // console.log(res)
-      this.group = !this.group;
+     this.group = false;
     },
     // 点击筛选
     async shaixuan(editForm) {
       console.log(this.editForm);
+      let group_id = ''
       const { data: res } = await this.axios.get("report/list.php", {
-        params: this.editForm
+        params: {
+          group_id:1,
+          test_id:this.editForm.test_id,
+          name:this.editForm.name,
+          sex:this.editForm.sex,
+          nation:this.editForm.nation,
+          birthplace:this.editForm.birthplace,
+          address_prov:this.editForm.address_prov,
+          address_city:this.editForm.address_city,
+          report_quality:this.editForm.report_quality,
+          diagnosis_type:this.editForm.diagnosis_type,
+          sample_location:this.editForm.sample_location,
+          // test_id:this.editForm.test_id,
+          // test_id:this.editForm.test_id,
+          // test_id:this.editForm.test_id,
+          // test_id:this.editForm.test_id,
+        }
       });
       console.log(res);
       this.tablelist = res.data;
-      console.log(res.data);
+      // console.log(res.data);
       this.queryInfo.page = parseInt(res.page);
       this.queryInfo.count = parseInt(res.count); //总条数
       this.queryInfo.pagerows = res.pagerows; //每页显示多少条
@@ -1990,18 +1990,19 @@ export default {
         type: "warning",
         center: true
       })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
+      .then(() => {
+        this.getTableList()
+        this.$message({
+          type: "success",
+          message: "删除成功!"
         });
+      })
+      .catch(() => {
+        this.$message({
+          type: "info",
+          message: "已取消删除"
+        });
+      });
     },
     // 切换每页显示多少条
     handleSizeChange(newSize) {
@@ -2046,7 +2047,7 @@ export default {
     },
     // 点击查看
     async look(row) {
-      this.zhezhao = !this.zhezhao; //不能没
+      this.zhezhao = true; //不能没
       const { data: res } = await this.axios.get("report/onedata.php ", {
         params: { id: row.id }
       });
@@ -2056,41 +2057,7 @@ export default {
       // 表单对象
       console.log(this.editForm);
     },
-    // 新增患者信息
-    async addFormList(id, editForm) {
-      this.zhezhao = !this.zhezhao;
-      this.id = this.id;
-      this.jilian = this.editForm.jilian
-      this.editForm.help_diagnosis = this.help_diagnosis;
-      // const sicksList = JSON.stringify(sicksArr)
-      let data = {
-        id: this.id,
-        data: editForm
-      };
-      // 判断提交
-      if (data) {
-        await this.axios.post("report/add.php", data).then(res => {
-          console.log("res:", res);
-          var result = res.data; //JSON.parse(res.body);
-          if (result.result == "done") {
-            this.$alert("提交成功", "提交结果", {
-              confirmButtonText: "确定",
-              type: "success",
-              callback: action => {}
-            });
-          } else {
-            this.$alert("提交失败", "提交结果", {
-              confirmButtonText: "确定",
-              type: "warning",
-              callback: action => {}
-            });
-          }
-        });
-      } else {
-        console.log("error submit!!");
-        return false;
-      }
-    }
+   
   },
   mounted() {
     // 患者信息

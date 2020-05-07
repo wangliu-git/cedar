@@ -37,7 +37,7 @@
       </div>
     </div>
     <!--数据集列表  slot-scope="scope"  @click="jiexi"-->
-    <div class="storageList" v-if="!ji">
+    <div class="storageList" v-if="ji">
       <div class="list" style="width:96%">
         <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe >
           <el-table-column prop="file_name" label="文件名称" width="300"></el-table-column>
@@ -49,7 +49,7 @@
           <el-table-column fixed="right" label="操作" width="300">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="bianji(scope.row)">编辑</el-button>
-              <el-button type="text" size="small">删除</el-button>
+              <el-button type="text" size="small" @click="dele(scope.row)">删除</el-button>
               <el-button type="text" size="small" @click="chakanj(scope.row)">查看</el-button>
               <el-button class="jiexi" size="small">
                 <span class="iconfont iconxiazai" @click="jiexi(scope.row)">开始解析</span>
@@ -147,7 +147,7 @@
       <div class="look">
         <div class="header">
           <span>查看病理信息</span>
-          <span @click="zhezhao = !zhezhao"><i class="iconfont iconx"></i></span>
+          <span @click="zhezhao = false"><i class="iconfont iconx"></i></span>
         </div>
         <div class="content">
           <div class="HZ">
@@ -185,18 +185,18 @@
 
         <div class="footer">
           <div class="btn">
-            <el-button plain @click="zhezhao = !zhezhao">返回</el-button>
+            <el-button plain @click="zhezhao = false">返回</el-button>
             <el-button plain @click="pass(editForm)">确认校验通过</el-button> 
           </div>  
         </div>
       </div>
     </div>
     <!--分组 -->
-    <div class="out" v-if="!group" :data="data">
+    <div class="out" v-if="group" :data="data">
       <div class="nei" >
         <div class="title">
           <span>请选择分组</span>
-          <span  @click="group =! group">
+          <span  @click="group =false">
             <i class="iconfont iconx"></i>
           </span>
         </div>
@@ -224,7 +224,7 @@
             </el-input>
           </div>
           <div class="button">
-            <el-button plain size="small" @click="group =! group">取消</el-button>
+            <el-button plain size="small" @click="group =false">取消</el-button>
             <el-button plain size="small" @click="sure(id)">确定</el-button>
           </div>
         </div>
@@ -847,9 +847,9 @@ export default {
     },
     // 点击返回列表
     xianshi(){
-      this.chakan =! this.chakan     
-      this.ji =! this.ji     
-      this.luru =! this.luru    
+      this.chakan =true     
+      this.ji =true     
+      this.luru =false    
     },
     // 点击确定
     async sure(id){    
@@ -859,11 +859,11 @@ export default {
       console.log(this.data.file_name)
       console.log(res)
       console.log(this.id)
-      this.group = !this.group
+      this.group = false
     },
     // 点击数据集编辑
     async bianji(row){
-      this.group = !this.group
+      this.group = true
       this.id = row.id    
       const { data : res } = await this.axios.get(
         "dataset/one.php?id=" + row.id
@@ -883,7 +883,7 @@ export default {
               confirmButtonText: '确定',
               type: 'success',
               callback: action => {
-                this.chakan =! this.chakan
+                this.chakan =true
                 this.axios.get("dataset/list.php?id=", + row.id)
               },
             });           
@@ -912,11 +912,11 @@ export default {
       });
       console.log(res)
     },
-    // 点击病理号查看
+    // 点击病理号校验
     async look(row){         
-      this.luru = !this.luru 
-      this.ji = !this.ji 
-      this.chakan = !this.chakan 
+      this.luru = true
+      this.ji = false 
+      this.chakan = false
       const { data :res} = await this.axios.get(
         "excel_data/onedata.php" ,{params:{id:row.id}}
       );
@@ -925,13 +925,11 @@ export default {
       this.id = row.id
       // console.log(this.editForm);   
     },
-    //点击病理号校验
+    //点击病理号查看
     jiaoyan(row){
       console.log(row.id)
-      // this.chakan = ! this.chakan
-      // this.ji = ! this.ji
-      // this.luru = ! this.luru
-      this.zhezhao = !this.zhezhao    
+ 
+      this.zhezhao = true    
       this.id  = row.id
       // this.editForm.help_diagnosis = this.help_diagnosis;
     },
@@ -940,14 +938,14 @@ export default {
        const {data:res} = this.axios.get('excel_data/check.php',{params:{id:this.id}}).then( res =>{       
         this.editForm = res.data;
         // console.log(this.editForm)
-        this.zhezhao = !this.zhezhao  
+        this.zhezhao = false  
         var result = res.data;//JSON.parse(res.body);
         if(result.result ){
             this.$alert("校验成功", '提交结果', {
               confirmButtonText: '确定',
               type: 'success',
               callback: action => {
-                this.chakan =! this.chakan
+                
                 this.axios.get("dataset/list.php?id=",{params:{id:this.id}})
               },
             });           
@@ -963,7 +961,7 @@ export default {
     },
     // 表单提交
     submit(editForm) {
-      this.zhezhao = !this.zhezhao
+      this.zhezhao = false
       this.id = this.id
       // console.log(this.id)   
       this.editFrm = this.editForm
@@ -1022,6 +1020,7 @@ export default {
     },
     // 获取数据集列表
     async getDataList() {
+      alert(1)
       let type = ''
         const { data : res } = await this.axios.get(
           "dataset/list.php",{params:{type:2,page:this.shuInfo.page}}
@@ -1074,6 +1073,7 @@ export default {
         center: true
       })
         .then(() => {
+          this.getTableList2()
           this.$message({
             type: "success",
             message: "删除成功!"
@@ -1090,10 +1090,10 @@ export default {
     async getTable() {      
       // console.log(row.id)
       const { data: res } = await this.axios.get(
-      "excel_data/list.php?id=" + this.id, {params:{name:this.name,test_id:this.test_id}});
-      console.log(this.test_id)
-      console.log(this.id)
-      console.log(this.name)
+      "excel_data/list.php" , {params:{id:this.id,name:this.name,test_id:this.test_id}});
+      // console.log(this.test_id)
+      // console.log(this.id)
+      // console.log(this.name)
       this.tablelist = res.data
        this.queryInfo.page = parseInt(res.page);     
       this.queryInfo.count = parseInt(res.count)  //总条数
@@ -1128,7 +1128,7 @@ export default {
     },
     // 查看患者信息
     async addFormList(editForm){
-        this.zhezhao = !this.zhezhao
+        this.zhezhao = true
          this.id = this.id
         //  console.log(this.id)
         this.editForm.help_diagnosis = this.help_diagnosis;
@@ -1164,8 +1164,7 @@ export default {
         console.log('error submit!!');
         return false;
         }    
-    },
-    
+    },   
     // 多选框
     func1: function(value) {
       if (this.checkList.length == 0) {
@@ -1266,22 +1265,22 @@ export default {
     submitUpload(){
         this.uploadLoading=true;
         var that=this;
-        setTimeout(function () {
-            if(that.$refs.upload.$children[0].fileList.length==1){
-                that.$refs.upload.submit();
-                that.$alert('上传成功')   
-                that.datalist = []
-                that.getDataList();
-            }else{
-                that.uploadLoading=false;
-                that.$message({
-                    type:'error',
-                    showClose:true,
-                    duration:3000,
-                    message:'请选择文件!'
-                });
-            };
-        },100);
+        setTimeout(function () {        
+          if(that.$refs.upload.$children[0].fileList.length==1){
+            that.$refs.upload.submit();
+            that.$alert('上传成功')   
+            that.datalist = []
+            that.getDataList();            
+          }else{
+            that.uploadLoading=false;
+            that.$message({
+              type:'error',
+              showClose:true,
+              duration:3000,
+              message:'请选择文件!'
+            });
+          };
+        },10);
     },
     handleRemove(file,fileList){
         // console.log(file,fileList);
@@ -1721,7 +1720,7 @@ export default {
           }]
         }
       ],
-      ji:false,  
+      ji:true,  
       luru:false,
       // 数据集列表
       data:[ ],
@@ -1735,7 +1734,7 @@ export default {
       tablelist: [], //病理号数组
       datalist: [], //数据集数组
       id:'',     //列表参数
-      group: true,      //分组弹框
+      group: false,      //分组弹框
       chakan: false,    //数据集列表信息
       zhezhao: false,  //单个患者信息
       // 搜索参数
@@ -1757,7 +1756,6 @@ export default {
       seen4: true,
       seen5: true,
       checkList: ["免疫组化","荧光原位杂交","淋巴瘤克隆性基因重排检测","原位杂交","流式细胞检测","ngs检测"],
-  
       // 大数组
       sicksArr: [],
       // 表单提交信息      

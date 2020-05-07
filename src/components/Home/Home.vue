@@ -11,12 +11,12 @@
           </el-menu-item>
 
 
-          <el-submenu  :class="{on: $route.path === '/dataentry'}" @click="goto('/dataentry')" index="4">
+          <el-submenu   @click="goto('/dataentry')" index="4">
             <template slot="title">
               <i class="iconfont iconshujuluru"></i>
               <span>数据录入</span>
             </template>           
-              <el-menu-item index="dataentry"><i class="iconfont icondian"></i> 数据录入</el-menu-item>           
+              <el-menu-item index="dataentry" :class="{on: $route.path === '/dataentry'}"><i class="iconfont icondian" ></i> 数据录入</el-menu-item>           
           </el-submenu>
 
 
@@ -52,7 +52,7 @@
             </template>     
               <el-menu-item index="medical"><i class="iconfont icondian"></i>  医学统计</el-menu-item>         
           </el-submenu>
-          
+          <!--
           <el-submenu :class="{on: $route.path === '/try'}" @click="goto('/try')"  index="8">
             <template slot="title">
               <i class="iconfont iconyonghuguanli"></i>
@@ -60,7 +60,7 @@
             </template>     
               <el-menu-item index="try"><i class="iconfont icondian"></i>模拟试用</el-menu-item>         
           </el-submenu>
-
+        -->
 
           
           
@@ -224,7 +224,7 @@ el-button el-button--default{
     border-right none
 
     .on{
-      background #bbffcc
+      background white
     }
   }
  
