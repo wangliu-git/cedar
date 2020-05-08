@@ -292,6 +292,9 @@ a{
         height 50px
         margin-top 10px
       }
+      span{
+        margin-left 10px
+      }
     }
   }
   .zhezhao{

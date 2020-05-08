@@ -63,7 +63,7 @@
         </el-table>
       </div>
 
-      <el-pagination style="margin:10px 30%"
+      <el-pagination style="margin:10px 35%"
             @size-change="handleSizeChange1"
             @current-change="handleCurrentChange1"
             :current-page="shuInfo.page"
@@ -810,7 +810,7 @@ export default {
   methods: {
     // 获取选择分组
     groupLists(){
-      alert(1)
+      // alert(1)
       const {data :res} = this.axios.get('group/list.php').then( res =>{
         console.log(res)
         this.groupList = res.data.data
@@ -818,10 +818,10 @@ export default {
       })     
     },
     // 点击查看
-    async chakan(row,index){
+    async chakan(row){
       this.sousuo = true
       console.log(row.id)
-      console.log(index,row)
+      console.log(row)
       this.row=row;
       const {data :res} = await  this.axios.get("excel_data/list.php",{params:{id:row.id}})      
       console.log(res)
@@ -2502,8 +2502,7 @@ a {
         display flex
         flex-flow column
         overflow scroll
-        .el-button{   
-            
+        .el-button{            
           font-size: 16px;
         }
       }

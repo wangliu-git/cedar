@@ -2521,7 +2521,9 @@ export default {
   .down {
     padding-bottom: 60px;
     border-top: 1px solid rgba(28, 165, 255, 1);
-
+    span{
+      margin-left 10px
+    }
     .el-pagination {
       float: right;
       margin: 10px 10px 0 0;

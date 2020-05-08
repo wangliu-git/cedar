@@ -58,7 +58,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <el-pagination style="margin:10px 30%"
+      <el-pagination style="margin:10px 35%"
         @size-change="handleSizeChange1"
         @current-change="handleCurrentChange1"
         :current-page="shuInfo.page"
@@ -821,19 +821,47 @@ import axios from 'axios'
 export default {
   created() {
     this.getDataList();       
-    this.groupList()
+    
   },
   methods:{
     // 选择分组
-    groupList(){
+    groupLists(){
       const {data :res} = this.axios.get('group/list.php').then( res =>{
         // console.log(res)
         this.groupList = res.data.data
-        // this.groupList.map( ( items ,index ) => {
-        //   console.log(items)
-        // })
-        // console.log(res.data.data)
       })     
+    },
+    // 点击添加分组保存
+    async addGroup(item,id){
+      // console.log(item,this.id)
+      // console.log(window.sessionStorage.uid)
+      var group_name = ''    
+      const res = await this.axios.post('group/add.php',{params:{group_name:item,id:this.id,userid:window.sessionStorage.uid}}).then( res =>{
+        console.log(res)
+        this.groupList.push(res.data.data.params)
+        console.log(this.groupList)
+         var result = res.data;//JSON.parse(res.body);
+        if(result.result == 1){       
+          this.$alert("添加成功", '提交结果', {           
+            confirmButtonText: '确定',
+            type: 'success',
+            callback: action => {
+              // this.search = !this.search    
+              this.groupList = [] 
+              this.groupLists() 
+              this.groupName = ''       
+            },
+          });         
+        }else{
+          this.$alert("添加失败", '提交结果', {
+            confirmButtonText: '确定',
+            type: 'warning',
+            callback: action => {
+            },
+          });
+        }
+      })
+      // console.log(data)
     },
     // 点击查看数据集显示病理数据
     async chakanj(row){
@@ -846,7 +874,7 @@ export default {
       this.queryInfo.page = parseInt(res.page);     
       this.queryInfo.count = parseInt(res.count)  //总条数
       this.queryInfo.pagerows = res.pagerows  //每页显示多少条 
-       this.id = row.id  
+      this.id = row.id  
     },
     // 点击返回列表
     xianshi(){
@@ -874,6 +902,7 @@ export default {
       );
       // console.log(res)
       this.data = res
+      this.groupLists()
     },
     //点击数据集解析
     jiexi(row){  
@@ -1369,6 +1398,7 @@ export default {
   },
   data() { 
     return {  
+      groupList:[],
       wenjian:true,
       row:{},//缓存的row
       // 数据集分页器
@@ -2610,7 +2640,7 @@ a {
         }
       }
       .cun{
-        margin-left: 30px;
+        margin-left: 20px;
         margin-top 10px
         span{
           width 100px
@@ -2629,6 +2659,9 @@ a {
         display flex
         flex-flow column
         overflow scroll
+        .el-button{            
+          font-size: 16px;
+        }
       }
 
       .name {

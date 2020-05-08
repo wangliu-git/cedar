@@ -42,6 +42,15 @@
                 </el-table-column>
               </el-table>
             </div>
+            <el-pagination style="margin-left:35%"
+            @size-change="handleSizeChange1"
+            @current-change="handleCurrentChange1"
+            :current-page="shuInfo.page"
+            :page-sizes="[10]"
+            :page-size="shuInfo.pagerows" 
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="shuInfo.count"
+            ></el-pagination>
           </div>
         </div>      
       </el-collapse-item>
@@ -69,8 +78,8 @@
             <el-table-column prop="report_date" label="报告时间" show-overflow-tooltip width="190" sortable></el-table-column>
             <el-table-column fixed="right" label="操作" width="190">
               <template slot-scope="scope">
-                <el-button type="text" size="small" @click="look(scope.row)">查看</el-button>
-                <el-button type="text" size="small" @click="dele(scope.row)">删除</el-button>
+                <el-button type="text" size="small" @click="look(scope.row)"><span>查看</span></el-button>
+                <el-button type="text" size="small" @click="dele(scope.row)"><span>删除</span></el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -214,6 +223,12 @@ export default {
         pagerows:10,    //每页显示的条数
         count:0,        //数据总数
       }, 
+      // 分组分页器
+      shuInfo:{
+        page:1,         //页数
+        pagerows:5,    //每页显示的条数
+        count:0,        //数据总数
+      }, 
       activeNames: ["1", "2"],
       datalist: [], //数据集数组
       tablelist: [], //病理号数组
@@ -327,6 +342,10 @@ export default {
       );
       this.datalist = res.data;
       console.log(this.datalist)
+      this.shuInfo.page = parseInt(res.page);     
+      this.shuInfo.count = parseInt(res.count)  //总条数
+      this.shuInfo.pagerows = res.pagerows  //每页显示多少条
+      console.log(res)
     },
     // 切换每页显示多少条
     handleSizeChange(newSize) {
@@ -337,6 +356,17 @@ export default {
     handleCurrentChange(newPage) {
       this.queryInfo.page = newPage;
       this.chakana();
+    },
+    // 数据集切换每页显示多少条
+    handleSizeChange1(newSize) {
+      this.shuInfo.pagerows = newSize;
+      this.getDataList();
+    },
+    // 数据集点击页数
+    handleCurrentChange1(newPage) {
+      this.shuInfo.page = newPage;
+      // console.log(this.shuInfo.page)
+      this.getDataList();
     },
     // 病理号删除
     async dele(row) {
@@ -450,13 +480,8 @@ export default {
   }
 
   .storageList {
-    margin-top: 20px;
-    padding-bottom: 20px;
-
     .list {
-      padding-top: 10px;
       margin-left: 30px;
-
       .el-table {
         border-top: 1px solid rgba(0, 160, 233, 1);
         margin: 10px 0;
@@ -473,7 +498,9 @@ export default {
   margin-top: 20px;
   padding-bottom: 60px;
   margin: 20px 20px;
-
+  span{
+    margin-left 10px
+  }
   .el-pagination {
     float: right;
     margin: 10px 10px 0 0;
