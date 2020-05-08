@@ -166,7 +166,7 @@
             <div class="bao">
               <span>{{fMInstitution.application_date.field_title}}:</span>
               <el-date-picker
-                v-model="editForm.application_date"
+                v-model="editForm.application_Ydate"
                 type="daterange"
                 align="right"
                 unlink-panels
@@ -181,7 +181,7 @@
             <div class="bao">
               <span>{{fMInstitution.report_date.field_title}}:</span>
               <el-date-picker
-                v-model="editForm.report_date"
+                v-model="editForm.report_Ydate"
                 type="daterange"
                 align="right"
                 unlink-panels
@@ -376,7 +376,7 @@
           border
           stripe
           ref="table"
-          @current-change="handleSelectionChange"
+          @current-change="handleSelectionChange" :header-cell-style="{color:'#333333'}"
         >
           <el-table-column width="50" >
             <template slot-scope="scope">
@@ -397,9 +397,9 @@
           ></el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="look(scope.row)">查看</el-button>
-              <el-button type="text" size="small" @click="bianji(scope.row)">编辑</el-button>
-              <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>
+              <el-button type="text" size="small" @click="look(scope.row)"><span>查看</span></el-button>
+              <el-button type="text" size="small" @click="bianji(scope.row)"><span>编辑</span></el-button>
+              <el-button type="text" size="small" @click="del(scope.row)"><span>删除</span></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -1579,8 +1579,8 @@ export default {
       origin: {
         organization: "", //机构名称
         test_id: "", //病理号
-        application_date: "", //申请日期
-        report_date: "", //报告日期
+        application_Ydate: "", //申请日期
+        report_Ydate: "", //报告日期
         diagnosis: "", //诊断结论
         type: "", //淋巴瘤细胞来源
         report_quality: "", //原病理报告质量

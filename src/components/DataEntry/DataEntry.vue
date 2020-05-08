@@ -1,19 +1,12 @@
 <template>
   <div class="mainContainer" ref="form">
     <!--数据存储 -->
-    <div class="storage">
-      <div class="storageL">
-        <!--  <div class="sContainer">
-          <span>数据存储 :</span>
-          <el-input placeholder="请选择数据存储分组..." size="small" style="width:250px"></el-input>
-          <el-button type="primary" size="small" >选择分组</el-button>
-        </div>-->
-      </div>
+    <div class="storage" v-if="wenjian">
       <div class="storageR" >
         <div class="eContainer">
           <div id="myUpload">
-            <el-input placeholder="请选择文件上传" size="mini" style="width:250px"></el-input>   
-            <el-button type="primary" size="mini" @click="uploadFile">导入</el-button>
+            <!-- <el-input placeholder="请选择文件上传" size="mini" style="width:250px"></el-input>   -->
+            <el-button type="primary" size="mini" @click="uploadFile">导入文件</el-button>
             <!--上传-->
             <el-dialog title="上传" width="40%" :visible.sync="uploadTemplateDialog">
                 <el-row>
@@ -50,7 +43,7 @@
     </el-button>  -->
     <div class="storageList" v-if="ji">
       <div class="list" style="width:96%">
-        <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe  :row-click="chakan">
+        <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe  :row-click="chakan"  :header-cell-style="{color:'#333333'}">
           <el-table-column  prop="file_name" label="文件名称" width="300" > </el-table-column>
           <el-table-column  prop="upload_time" label="上传时间" width="300"></el-table-column>
           <el-table-column  label="已录入:未录入" width="300" >
@@ -59,9 +52,9 @@
             <el-table-column prop="location" label="研究项目" width="300"></el-table-column>
           <el-table-column fixed="right" label="操作" width="300">
             <template slot-scope="scope">
-              <el-button type="text" size="small"  @click="bianji(scope.row)">编辑</el-button>
-              <el-button type="text" size="small" @click="chakan(scope.row,scope.$index)">查看</el-button>
-              <el-button type="text" size="small" @click="dele(scope.row)">删除</el-button>
+              <el-button type="text" size="small"  @click="bianji(scope.row)"><span>编辑</span></el-button>
+              <el-button type="text" size="small" @click="chakan(scope.row,scope.$index)"><span>查看</span></el-button>
+              <el-button type="text" size="small" @click="dele(scope.row)"><span>删除</span></el-button>
               <el-button class="jiexi" size="small" >
                 <span class="iconfont iconxiazai" @click="jiexi(scope.row)">开始解析</span>
               </el-button>
@@ -99,8 +92,7 @@
             prefix-icon="el-icon-search"
             style="width:180px"
             v-model="name"
-          ></el-input>
-          
+          ></el-input>         
           <el-button type="primary" size="mini" @click="getTable">确定</el-button>
           <el-button type="primary" size="mini" class="pass">
             <i class="iconfont iconpiliangtongguo"></i> 批量通过
@@ -111,7 +103,7 @@
             :data="tablelist"
             tooltip-effect="dark"
             style="width: 100%"           
-            border           
+            border        :header-cell-style="{color:'#333333'}"    
             stripe>
             <el-table-column type="selection" width="40"></el-table-column>            
             <el-table-column prop="test_id" label="病理号" width="170"  sortable></el-table-column>
@@ -124,8 +116,8 @@
             <el-table-column prop="complete_degree" label="完整度" show-overflow-tooltip width="170" sortable></el-table-column>
             <el-table-column fixed="right" label="操作" width="170">             
                 <template  slot-scope="scope">                 
-                  <el-button type="text" size="small" @click="look(scope.row)">录入</el-button>                  
-                  <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>            
+                  <el-button type="text" size="small" @click="look(scope.row)"><span>录入</span></el-button>                  
+                  <el-button type="text" size="small" @click="del(scope.row)"><span>删除</span></el-button>            
                 </template>            
             </el-table-column>
           </el-table>
@@ -184,7 +176,7 @@
                     v-model="editForm.patient_id"
                     name="patient_id"
                     size="mini"
-                    placeholder="请输入住院号/门诊号"
+                    placeholder="请输入住院号/门诊号" style="width:200px"
                   ></el-input>
                 </div>
                 <!--姓名 <span v-show="editForm.name.length >= maxL">{{textShow}}</span> -->
@@ -195,13 +187,24 @@
                     size="mini"
                     v-model="editForm.name"
                     name="name"
-                    placeholder="请输入姓名"
+                    placeholder="请输入姓名" style="width:200px"
+                  ></el-input>                 
+                </div>
+
+                <div class="sickItem">
+                  <span>年龄:</span>
+                  <el-input
+                    type="text"                   
+                    size="mini"
+                    v-model="editForm.age"
+                    name="age"
+                    placeholder="请输入年龄" style="width:200px"
                   ></el-input>                 
                 </div>
                 <!--性別 -->
                 <div class="sickItem">
                   <span>{{showInfo.sex.field_title}}:</span>
-                  <el-select placeholder="请选择" name="sex" v-model="editForm.sex" size="mini">
+                  <el-select placeholder="请选择" name="sex" v-model="editForm.sex" size="mini" style="width:200px">
                     <el-option v-for="item in showInfo.sex.field_values" :key="item" :value="item">
                       <span>{{item}}</span>
                     </el-option>
@@ -227,14 +230,14 @@
                     maxlength="11"
                     size="mini"
                     v-model="editForm.phone"
-                    name="phone"
-                    placeholder="请输入电话"
+                    name="phone" 
+                    placeholder="请输入电话" style="width:200px"
                   ></el-input>
                 </div>
                 <!--民族-->
                 <div class="sickItem">
                   <span>{{showInfo.nation.field_title}}:</span>
-                  <el-select placeholder="请选择" name="nation" v-model="editForm.nation" size="mini">
+                  <el-select placeholder="请选择" name="nation" v-model="editForm.nation" size="mini" style="width:200px">
                     <el-option
                       v-for="(item) in showInfo.nation.field_values"
                       :key="item"
@@ -251,7 +254,7 @@
                     placeholder="请选择"
                     name="birthplace"
                     v-model="editForm.birthplace"
-                    size="mini"
+                    size="mini" style="width:200px"
                   >
                     <el-option
                       v-for="(provinces) in showInfo.birthplace.field_values"
@@ -269,7 +272,7 @@
                     placeholder="请选择"
                     name="birthplace"
                     v-model="editForm.address_prov"
-                    size="mini"
+                    size="mini" style="width:200px"
                   >
                     <el-option
                       v-for="(provinces) in showInfo.birthplace.field_values"
@@ -308,17 +311,17 @@
                       type="text"
                       v-model="editForm.organization"
                       placeholder="请输入机构名称"
-                      size="mini"
+                      size="mini" style="width:200px"
                     ></el-input>
                   </div>
                   <div class="sickItem">
                     <span>{{fMInstitution.test_id.field_title}}:</span>
-                    <el-input type="text" v-model="editForm.test_id" placeholder="请输入病理号" size="mini"></el-input>
+                    <el-input type="text" v-model="editForm.test_id" placeholder="请输入病理号" size="mini" style="width:200px"></el-input>
                   </div>
                   <div class="sickItem">
                     <span>{{fMInstitution.application_date.field_title}}:</span>
                     <el-date-picker
-                      name="application_date"
+                      name="application_date" style="width:200px"
                       v-model="editForm.application_date"
                       type="date"
                       size="mini"
@@ -328,7 +331,7 @@
                   <div class="sickItem">
                     <span>{{fMInstitution.report_date.field_title}}:</span>
                     <el-date-picker
-                      name="report_date"
+                      name="report_date" style="width:200px"
                       v-model="editForm.report_date"
                       type="date"
                       size="mini"
@@ -359,7 +362,7 @@
                       placeholder="请选择"
                       name="report_quality"
                       v-model="editForm.report_quality"
-                      size="mini"
+                      size="mini" style="width:200px"
                     >
                       <el-option
                         v-for="(item,index) in fMInstitution.report_quality.field_values"
@@ -608,7 +611,7 @@
                     <span>取材部位</span>
                     <el-input
                       type="text"
-                      v-model="editForm.sample_morphology"
+                      v-model="editForm.sample_location"
                       placeholder="请输入取材部位"
                       size="mini"
                     ></el-input>
@@ -683,39 +686,6 @@
                       </div>
                     </div>
                   </div>
-
-                  <div v-show="seen1" v-for="(item,idx) in editForm.helper_diagnosis.fish"
-                              :key="idx">
-                    <span class="titl">
-                      <i class="iconfont icontubiaozhizuo-"></i>
-                      {{fish.name}}
-                    </span>
-                    <div id="two">
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.key_fish.field_title}}：</span>
-                          <el-input v-model="fish.mark" style="width:100px"></el-input>                       
-                        </div>
-                      </div>
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.value_fish.field_title}}：</span>
-                          <el-input v-model="fish.value" style="width:100px"></el-input>
-                        </div>
-                      </div>
-                      <!-- 不同的地方可以调用一个方法，不需要额外写-->
-                      <div class="handleBtnBox">
-                        <el-button
-                          @click="ihcAddData(help_diagnosis.fish,help_diagnosis.fish[idx])"
-                        >
-                          <i class="iconfont iconaddTodo-nav"></i>
-                        </el-button>
-                        <el-button @click="ihcDeleteData(help_diagnosis.fish)">
-                          <i class="iconfont iconjianhao1"></i>
-                        </el-button>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </el-collapse-item>
@@ -738,18 +708,18 @@
       <div class="nei">
         <div class="title">
           <span>请选择分组</span>
-          <span  @click="group =! group">
+          <span  @click="group =true">
             <i class="iconfont iconx"></i>
           </span>
         </div>
         <div class="mian">
           <div class="ming">
             <span>文件名称：</span>
-            <el-input style="width:400px" size="small" v-model="data.file_name"></el-input>
+            <el-input style="width:420px" size="small" v-model="data.file_name"></el-input>
           </div>
           <div class="cun">
             <span>项目名称：</span>
-            <el-input style="width:400px" size="small" v-model="item"></el-input>
+            <el-input style="width:420px" size="small" v-model="data.location"></el-input>
           </div>
           <div class="sousuo">
             <el-input placeholder="请输入分组关键词..." style="width:500px">
@@ -757,7 +727,7 @@
             </el-input>
           </div>
           <div class="groupList">
-            <el-button style="width:300px"  v-for="(it, index) in this.groupList" :key="index" :value="it.group_name">{{it.group_name}}</el-button>
+            <el-button   v-for="(it, index) in this.groupList" :key="index" :value="it.group_name">{{it.group_name}}</el-button>
           </div>
           <div class="name">
             <span>新建分组名称 ：</span>
@@ -766,7 +736,7 @@
             </el-input>
           </div>
           <div class="button">
-            <el-button plain size="small"  @click="group =! group">取消</el-button>
+            <el-button plain size="small"  @click="group =true">取消</el-button>
             <el-button plain size="small" @click="sure(id)">确定</el-button>
           </div>
         </div>
@@ -834,20 +804,17 @@ export default {
   created() {
     this.getDataList();
     // this.getTableList();   
-    this.groupList()
+    
     // console.log(window.sessionStorage.uid) 
   },
   methods: {
-    // 选择分组
-    groupList(){
+    // 获取选择分组
+    groupLists(){
+      alert(1)
       const {data :res} = this.axios.get('group/list.php').then( res =>{
         console.log(res)
         this.groupList = res.data.data
-        // this.groupList.map( ( items ,index ) => {
-        //   console.log(items)
-        // })
-        // console.log(res.data.data)
-        // this.$set(this.groupList)
+        console.log(this.groupList)
       })     
     },
     // 点击查看
@@ -869,9 +836,9 @@ export default {
       // console.log(item,this.id)
       // console.log(window.sessionStorage.uid)
       var group_name = ''    
-      const {data} = await this.axios.post('group/add.php',{params:{group_name:item,id:this.id,userid:window.sessionStorage.uid}}).then( res =>{
-        console.log(res.data)
-        this.groupList.push(res.data.params.group_name)
+      const res = await this.axios.post('group/add.php',{params:{group_name:item,id:this.id,userid:window.sessionStorage.uid}}).then( res =>{
+        // console.log(res)
+        this.groupList.push(res.data.data.params)
         console.log(this.groupList)
          var result = res.data;//JSON.parse(res.body);
         if(result.result == 1){       
@@ -879,8 +846,10 @@ export default {
             confirmButtonText: '确定',
             type: 'success',
             callback: action => {
-              // this.search = !this.search     
-              this.groupList()        
+              // this.search = !this.search    
+              this.groupList = [] 
+              this.groupLists() 
+              this.groupName = ''       
             },
           });         
         }else{
@@ -913,6 +882,7 @@ export default {
       );
       console.log(res)
       this.data = res
+      this.groupLists()
     },
     //点击数据集解析  将数据插入到列表中
     async jiexi(row){   
@@ -937,17 +907,16 @@ export default {
               this.axios.get("dataset/list.php?id=", + row.id)
               loading.close();
             },
-          });
-            
+          });          
         }else{
-          this.$alert("解析失败", '提交结果', {
+          this.$alert("解析失败,请检查", '提交结果', {
             confirmButtonText: '确定',
             type: 'warning',
             callback: action => {
               loading.close();
             },
           });
-          }     
+        }     
       })
       console.log(row.id)
       this.id = row.id 
@@ -957,19 +926,21 @@ export default {
     // 点击数据集删除
     async dele(row){
       console.log(row.id)
-      const { data :res} = await this.axios.get(
+      const res = await this.axios.get(
         "dataset/del.php" ,{params:{id:row.id}}).then( res =>{
         this.$alert("删除成功！")
+        this.datalist = []
         this.getDataList()
       })    
       
-      console.log(res)
+      // console.log(res)
     },
     // 点击病理号录入
-    async look(row){         
+    async look(row){        
+      this.wenjian = false 
         this.luru = !this.luru
         this.id = row.id      
-        this.ji = !this.ji
+        this.ji = false
         this.sousuo = false
         const { data :res} = await this.axios.get(
           "excel_data/onedata.php?id=" + row.id
@@ -983,7 +954,7 @@ export default {
     },
     // 获取数据集列表
     async getDataList() {   
-      // alert(1)  
+      // console.log(1)  
       let type = ''     
       const { data : res } = await this.axios.get(
         "dataset/list.php",{params:{type:1,page:this.shuInfo.page}}
@@ -994,18 +965,18 @@ export default {
       this.shuInfo.count = parseInt(res.count)  //总条数
       this.shuInfo.pagerows = res.pagerows  //每页显示多少条 
       // this.datalist.map( (item,index) => {
-        // 拼接已录入和未录入
-        // this.L_W = item.exec_line + ':' + item.total_line
-        //  console.log(this.L_W)  
-        // this.total_line = item.total_line
-        // this.exec_line = item.exec_line
-        // console.log(item.total_line)
+      // 拼接已录入和未录入
+      // this.L_W = item.exec_line + ':' + item.total_line
+      //  console.log(this.L_W)  
+      // this.total_line = item.total_line
+      // this.exec_line = item.exec_line
+      // console.log(item.total_line)
       // }) 
       console.log(this.datalist)      
     },
     // 获取病理号
     async getTableList2(row) {  
-      alert(1)
+      // alert(1)
       // this.search =! this.search
       // alert("gt2"+this.sousuo);
       // console.log(row.id)
@@ -1034,8 +1005,7 @@ export default {
       // console.log("getTableList",res);   
       this.queryInfo.page = parseInt(res.page);     
       this.queryInfo.count = parseInt(res.count)  //总条数
-      this.queryInfo.pagerows = res.pagerows  //每页显示多少条 
-    
+      this.queryInfo.pagerows = res.pagerows  //每页显示多少条     
       // console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);             
     },
     // 搜索
@@ -1073,8 +1043,9 @@ export default {
     },
     // 显示
     xianshi(){
+      this.wenjian  =true
       this.luru =! this.luru     
-      this.ji =! this.ji 
+      this.ji =true
       this.sousuo = true  
     },
     // 多选框
@@ -1210,7 +1181,7 @@ export default {
       });
     },       
     // 新增患者信息
-    addFormList(editForm){
+    addFormList(editForm){   
       this.zhezhao = !this.zhezhao
       this.id = this.id
       // console.log(this.id)   
@@ -1270,21 +1241,21 @@ export default {
     submitUpload(){
         this.uploadLoading=true;
         var that=this;       
-        setTimeout(function () {       
-            if(that.$refs.upload.$children[0].fileList.length==1){
-              that.$refs.upload.submit();   
-              that.$alert('上传成功')   
-              that.datalist = []
-              that.getDataList();
-            }else{
-              that.uploadLoading=false;
-              that.$message({
-                  type:'error',
-                  showClose:true,
-                  duration:3000,
-                  message:'请选择文件!'
-              });
-            };
+        setTimeout(function () {               
+          if(that.$refs.upload.$children[0].fileList.length==1){
+            that.$refs.upload.submit();   
+            that.$alert('上传成功')   
+            that.datalist = []
+            that.getDataList()            
+          }else{
+            that.uploadLoading=false;
+            that.$message({
+              type:'error',
+              showClose:true,
+              duration:3000,
+              message:'请选择文件!'
+            });
+          };
         },100);
         
     },
@@ -1369,7 +1340,8 @@ export default {
     } ,
   },
   data() { 
-    return {   
+    return {       
+      wenjian:true,  //上传文件
       item:'',
       // 拼接录入和未录入
       exec_line:'',
@@ -1383,7 +1355,7 @@ export default {
         value:''
       },
       jilian:'',
-      groupLists:['肝癌多中心项目-复旦肿瘤医院','肺癌多中心项目','淋巴瘤的流行病学研究','左半肝胆管腺癌病理分析','未分组'],   //分组列表
+      groupList:[],   //分组列表
       // 数据集列表
       data:[ ],
       // 列表参数
@@ -1870,7 +1842,7 @@ export default {
         sample_morphology: "", //形态学描述
         diagnosis: "", //诊断结论
         type: "", //淋细胞瘤来源
-        helper_diagnosis: "" //辅助诊断
+        // helper_diagnosis: "" //辅助诊断
       },
       // 以下是原诊断机构信息
       fMInstitution: {
@@ -1941,7 +1913,7 @@ export default {
       reportMessage: {}, //报告信息
       materMessage: {}, //取材信息
       reportResult: {}, //诊断结论
-      helper_diagnosis: [], //辅助诊断
+      // helper_diagnosis: [], //辅助诊断
       helper_diagnosisAll: {}, //辅助诊断信息对象
       ihc: {}, //免疫组化信息对象
       fish: {}, //荧光杂交信息对象
@@ -1950,7 +1922,7 @@ export default {
       fcm: {}, //流式细胞检测
       ngs: {}, //ngs检测
       //测试数据
-      help_diagnosis: {
+      helper_diagnosis: {
         ihc: [
           {
             mark: "", //标志物
@@ -2319,7 +2291,11 @@ export default {
 };
 </script>
 
+
 <style>
+.el-button+.el-button {
+  margin-left: 0
+}
 #dataImport .el-collapse-item__header {
   background-color: #fafafc !important;
   height: 35px;
@@ -2351,6 +2327,7 @@ export default {
 }
 </style>
 <style scoped lang="stylus" rel="stylesheet/stylus" >
+
 .jiexi {
   background-color #409EFF
   &:hover{
@@ -2387,9 +2364,9 @@ a {
         margin-right: 5px;
       }
       .el-button {
-        margin-left: -2px;
+        
         background-color: rgba(41, 184, 252, 1);
-        border-radius: 0px 4px 4px 0px;
+        
         border: none;
         &:hover {
           background-color: rgba(38, 188, 153, 1);
@@ -2412,13 +2389,15 @@ a {
   background: rgba(255, 255, 255, 1);
   box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
   border-radius: 4px;
-
   .list {
     padding-top: 15px;
     margin-left: 30px;
     margin-top: 20px;   
     .el-table {
       border-top: 1px solid rgba(0, 160, 233, 1);
+    }
+    span{
+      margin-left 10px
     }
   }
 }
@@ -2452,6 +2431,11 @@ a {
       .pass {
         float: right;
         margin: 10px;
+      }
+    }
+    .down{
+      span{
+        margin-left 10px
       }
     }
     .el-pagination {
@@ -2500,8 +2484,8 @@ a {
         }
       }
       .cun{
-        margin-left: 30px;
-        margin-top 10px
+        margin-left: 20px;
+        margin-top 5px
         span{
           width 100px
         }
@@ -2512,13 +2496,14 @@ a {
       }
       .groupList {
         width: 500px;
+        height 280px
         border: 1px solid #DCDFE6;
         margin: 20px 20px;
         display flex
         flex-flow column
-        justify-content space-evenly
-        .el-button{
-          margin-left: 20px;
+        overflow scroll
+        .el-button{   
+            
           font-size: 16px;
         }
       }
@@ -2529,6 +2514,7 @@ a {
         float: right;
         margin-top: 10px;
         margin-right: 30px;
+      
       }
     }
   }
@@ -3004,8 +2990,7 @@ a {
               }
           }
           .BDW{
-              margin 5px 30px
-             
+              margin 5px 30px            
               font-size:14px;
               font-family:Microsoft YaHei;
               font-weight:400;
@@ -3062,14 +3047,13 @@ a {
                   width 130px
               }
               span{
-                  display inline-block
-                  
-                  margin-left 10px
-                  margin-top 15px
-                  font-size:14px;
-                  font-family:Microsoft YaHei;
-                  font-weight:400;
-                  color:rgba(153,153,153,1);
+                display inline-block 
+                // margin-left 10px                               
+                margin-top 15px
+                font-size:14px;
+                font-family:Microsoft YaHei;
+                font-weight:400;
+                color:rgba(153,153,153,1);
               }
           }
       }

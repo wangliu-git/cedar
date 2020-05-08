@@ -48,7 +48,7 @@
           </div>
         </div>
         <div class="down">
-          <el-table ref="multipleTable" :data="tablelist" tooltip-effect="dark" style="width: 100%" border stripe >
+          <el-table ref="multipleTable" :data="tablelist" tooltip-effect="dark" style="width: 100%" border stripe :header-cell-style="{color:'#333333'}">
             <el-table-column type="selection" width="40"></el-table-column>
             <el-table-column prop="patient_id" label="病人ID" width="200" sortable></el-table-column>
             <el-table-column prop="test_id" label="病理号" width="200" sortable></el-table-column>
@@ -547,7 +547,7 @@
     },
     // 获取病理号
     async getTableList(it){
-      alert(1)
+      // alert(1)
       // console.log(it)
       let group_id = ''
       const {data : res} = await this.axios.get('diagnosis_origin/list.php',{params:{page:this.queryInfo.page,group_id:1}})

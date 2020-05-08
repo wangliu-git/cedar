@@ -1,12 +1,12 @@
 <template>
   <div style="width=100%" >
     <!--数据存储 -->
-    <div class="storage"> 
+    <div class="storage" v-if="wenjian">  
       <div class="storageR" >
         <div class="eContainer">
           <div>
-            <el-input placeholder="请选择文件上传" size="mini" style="width:250px"></el-input>   
-            <el-button type="primary" size="mini" @click="uploadFile">导入</el-button>
+             <!-- <el-input placeholder="请选择文件上传" size="mini" style="width:250px"></el-input>   -->
+            <el-button type="primary" size="mini" @click="uploadFile">导入文件</el-button>
             <!--上传-->
             <el-dialog title="上传" width="40%" :visible.sync="uploadTemplateDialog">
               <el-row>
@@ -39,7 +39,7 @@
     <!--数据集列表  slot-scope="scope"  @click="jiexi"-->
     <div class="storageList" v-if="ji">
       <div class="list" style="width:96%">
-        <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe >
+        <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe :header-cell-style="{color:'#333333'}">
           <el-table-column prop="file_name" label="文件名称" width="300"></el-table-column>
           <el-table-column prop="upload_time" label="上传时间" width="300"></el-table-column>
           <el-table-column  label="已校验：未检验" width="300">
@@ -48,11 +48,11 @@
           <el-table-column prop="location" label="研究项目" width="300"></el-table-column>
           <el-table-column fixed="right" label="操作" width="300">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="bianji(scope.row)">编辑</el-button>
-              <el-button type="text" size="small" @click="dele(scope.row)">删除</el-button>
-              <el-button type="text" size="small" @click="chakanj(scope.row)">查看</el-button>
+              <el-button type="text" size="small" @click="bianji(scope.row)"><span>编辑</span></el-button>
+              <el-button type="text" size="small" @click="dele(scope.row)"><span>删除</span></el-button>
+              <el-button type="text" size="small" @click="chakanj(scope.row)"><span>查看</span></el-button>
               <el-button class="jiexi" size="small">
-                <span class="iconfont iconxiazai" @click="jiexi(scope.row)">开始解析</span>
+                <span class="iconfont iconxiazai" @click="jiexi(scope.row)"><span>开始解析</span></span>
               </el-button>
             </template>
           </el-table-column>
@@ -99,7 +99,7 @@
             tooltip-effect="dark"
             style="width: 100%"           
             border           
-            stripe          
+            stripe :header-cell-style="{color:'#333333'}"         
           >
             <el-table-column type="selection" width="40"></el-table-column>           
             <el-table-column prop="test_id" label="病理号" width="170"></el-table-column>
@@ -112,9 +112,9 @@
             <el-table-column prop="complete_degree" label="完整度" show-overflow-tooltip width="170" sortable></el-table-column>
             <el-table-column fixed="right" label="操作" width="170">             
               <template  slot-scope="scope">                 
-                <el-button type="text" size="small" @click="jiaoyan(scope.row)">查看</el-button>
-                <el-button type="text" size="small" @click="look(scope.row) ">校验</el-button>                  
-                <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>            
+                <el-button type="text" size="small" @click="jiaoyan(scope.row)"><span>查看</span></el-button>
+                <el-button type="text" size="small" @click="look(scope.row) "><span>校验</span></el-button>                  
+                <el-button type="text" size="small" @click="del(scope.row)"><span>删除</span></el-button>            
               </template>            
             </el-table-column>
           </el-table>
@@ -203,11 +203,11 @@
         <div class="mian">
           <div class="ming">
             <span>文件名称：</span>
-            <el-input style="width:400px" size="small" v-model="data.file_name"></el-input>
+            <el-input style="width:420px" size="small" v-model="data.file_name"></el-input>
           </div>
           <div class="cun">
             <span>项目名称：</span>
-            <el-input style="width:400px" size="small" v-model="data.location"></el-input>
+            <el-input style="width:420px" size="small" v-model="data.location"></el-input>
           </div>
           <div class="sousuo">
             <el-input placeholder="请输入分组关键词..." style="width:500px">
@@ -215,7 +215,7 @@
             </el-input>
           </div>
            <div class="groupList">
-            <el-button style="width:300px"  v-for="(it, index) in this.groupList" :key="index" :value="it.group_name">{{it.group_name}}</el-button>
+            <el-button   v-for="(it, index) in this.groupList" :key="index" :value="it.group_name">{{it.group_name}}</el-button>
           </div>
           <div class="name">
             <span>新建分组名称 ：</span>
@@ -265,7 +265,7 @@
                     maxlength="10"
                     show-word-limit
                     v-model="editForm.patient_id"
-                    name="patient_id"
+                    name="patient_id" style="width:200px"
                     size="mini"
                     placeholder="请输入住院号/门诊号"
                   ></el-input>
@@ -276,7 +276,7 @@
                   <el-input
                     type="text"                   
                     size="mini"
-                    v-model="editForm.name"
+                    v-model="editForm.name" style="width:200px"
                     name="name"
                     placeholder="请输入姓名"
                   ></el-input>                 
@@ -284,7 +284,7 @@
                 <!--性別 -->
                 <div class="sickItem">
                   <span>{{showInfo.sex.field_title}}:</span>
-                  <el-select placeholder="请选择" name="sex" v-model="editForm.sex" size="mini">
+                  <el-select placeholder="请选择" name="sex" v-model="editForm.sex" size="mini" style="width:200px">
                     <el-option v-for="item in showInfo.sex.field_values" :key="item" :value="item">
                       <span>{{item}}</span>
                     </el-option>
@@ -311,13 +311,13 @@
                     size="mini"
                     v-model="editForm.phone"
                     name="phone"
-                    placeholder="请输入电话"
+                    placeholder="请输入电话"  style="width:200px"
                   ></el-input>
                 </div>
                 <!--民族-->
                 <div class="sickItem">
                   <span>{{showInfo.nation.field_title}}:</span>
-                  <el-select placeholder="请选择" name="nation" v-model="editForm.nation" size="mini">
+                  <el-select placeholder="请选择" name="nation" v-model="editForm.nation" size="mini" style="width:200px">
                     <el-option
                       v-for="(item) in showInfo.nation.field_values"
                       :key="item"
@@ -334,7 +334,7 @@
                     placeholder="请选择"
                     name="birthplace"
                     v-model="editForm.birthplace"
-                    size="mini"
+                    size="mini" style="width:200px"
                   >
                     <el-option
                       v-for="(provinces) in showInfo.birthplace.field_values"
@@ -352,7 +352,7 @@
                     placeholder="请选择"
                     name="birthplace"
                     v-model="editForm.address_prov"
-                    size="mini"
+                    size="mini" style="width:200px"
                   >
                     <el-option
                       v-for="(provinces) in showInfo.birthplace.field_values"
@@ -391,12 +391,12 @@
                       type="text"
                       v-model="editForm.organization"
                       placeholder="请输入机构名称"
-                      size="mini"
+                      size="mini" style="width:200px"
                     ></el-input>
                   </div>
                   <div class="sickItem">
                     <span>{{fMInstitution.test_id.field_title}}:</span>
-                    <el-input type="text" v-model="editForm.test_id" placeholder="请输入病理号" size="mini"></el-input>
+                    <el-input type="text" v-model="editForm.test_id" placeholder="请输入病理号" size="mini" style="width:200px"></el-input>
                   </div>
                   <div class="sickItem">
                     <span>{{fMInstitution.application_date.field_title}}:</span>
@@ -405,7 +405,7 @@
                       v-model="editForm.application_date"
                       type="date"
                       size="mini"
-                      placeholder="选择日期"
+                      placeholder="选择日期" style="width:200px"
                     ></el-date-picker>
                   </div>
                   <div class="sickItem">
@@ -415,7 +415,7 @@
                       v-model="editForm.report_date"
                       type="date"
                       size="mini"
-                      placeholder="选择日期"
+                      placeholder="选择日期" style="width:200px"
                     ></el-date-picker>
                   </div>
                 </div>
@@ -427,7 +427,7 @@
                   </div>
                   <div class="sickItem">
                     <span>病理类型:</span>
-                    <el-cascader v-model="editForm.jilian" size="mini" :options="options" :props="{ checkStrictly: true }" clearable></el-cascader>                   
+                    <el-cascader v-model="editForm.jilian" size="mini" :options="options" :props="{ checkStrictly: true }" clearable style="width:200px"></el-cascader>                   
                   </div>
                 </div>
                 <!--报告质量  可折叠-->
@@ -442,7 +442,7 @@
                       placeholder="请选择"
                       name="report_quality"
                       v-model="editForm.report_quality"
-                      size="mini"
+                      size="mini" style="width:200px"
                     >
                       <el-option
                         v-for="(item,index) in fMInstitution.report_quality.field_values"
@@ -491,7 +491,7 @@
                       </div>
                       <div class="sickItems">
                         <span class="four">{{fMInstitution.ihc_quality.field_title}}:</span>
-                        <el-select name="ihc_quality" v-model="editForm.ihc_quality" size="mini">
+                        <el-select name="ihc_quality" v-model="editForm.ihc_quality" size="mini" >
                           <el-option
                             v-for="(item,index) in fMInstitution.ihc_quality.field_values"
                             :key="index"
@@ -503,7 +503,7 @@
                       </div>
                       <div class="sickItems">
                         <span class="five">{{fMInstitution.problem_slice.field_title}}</span>
-                        <el-select name="problem_slice" v-model="editForm.problem_slice" size="mini">
+                        <el-select name="problem_slice" v-model="editForm.problem_slice" size="mini" >
                           <el-option
                             v-for="(item,index) in fMInstitution.problem_slice.field_values"
                             :key="index"
@@ -518,7 +518,7 @@
                       <span class="titles">病理会诊申请单质量：</span>
                       <div class="sickItems">
                         <span class="h">{{fMInstitution.patient_info.field_title}}:</span>
-                        <el-select name="patient_info" v-model="editForm.patient_info" size="mini">
+                        <el-select name="patient_info" v-model="editForm.patient_info" size="mini" style="width:200px">
                           <el-option
                             v-for="(item,index) in fMInstitution.patient_info.field_values"
                             :key="index"
@@ -530,7 +530,7 @@
                       </div>
                       <div class="sickItems">
                         <span class="h">{{fMInstitution.history_info.field_title}}:</span>
-                        <el-select name="history_info" v-model="editForm.history_info" size="mini">
+                        <el-select name="history_info" v-model="editForm.history_info" size="mini" style="width:200px">
                           <el-option
                             v-for="(item,index) in fMInstitution.history_info.field_values"
                             :key="index"
@@ -542,7 +542,7 @@
                       </div>
                       <div class="sickItems">
                         <span class="h">{{fMInstitution.sample_info.field_title}}:</span>
-                        <el-select name="sample_info" v-model="editForm.sample_info" size="mini">
+                        <el-select name="sample_info" v-model="editForm.sample_info" size="mini" style="width:200px">
                           <el-option
                             v-for="(item,index) in fMInstitution.sample_info.field_values"
                             :key="index"
@@ -557,7 +557,7 @@
                       <span class="titles">其他临床资料提交情况：</span>
                       <div class="sickItems">
                         <span>{{fMInstitution.record.field_title}}:</span>
-                        <el-select name="record" v-model="editForm.record" size="mini">
+                        <el-select name="record" v-model="editForm.record" size="mini" style="width:200px">
                           <el-option
                             v-for="(item,index) in fMInstitution.record.field_values"
                             :key="index"
@@ -569,7 +569,7 @@
                       </div>
                       <div class="sickItems">
                         <span>{{fMInstitution.helper_report.field_title}}:</span>
-                        <el-select name="helper_report" v-model="editForm.helper_report" size="mini">
+                        <el-select name="helper_report" v-model="editForm.helper_report" size="mini" style="width:200px">
                           <el-option
                             v-for="(item,index) in fMInstitution.helper_report.field_values"
                             :key="index"
@@ -600,7 +600,7 @@
                   </div>
                   <div class="sickItem">
                     <span>{{tMInstitution.test_id.field_title}}:</span>
-                    <el-input type="text" v-model="editForm.test_id" placeholder="请输入病理号" size="mini"></el-input>
+                    <el-input type="text" v-model="editForm.test_id" placeholder="请输入病理号" size="mini" style="width:200px"></el-input>
                   </div>
 
                   <div class="sickItem">
@@ -609,7 +609,7 @@
                       type="text"
                       v-model="editForm.department"
                       placeholder="请输入机构名称"
-                      size="mini"
+                      size="mini"  style="width:200px"
                     ></el-input>
                   </div>
 
@@ -620,7 +620,7 @@
                       v-model="editForm.application_date"
                       type="date"
                       size="mini"
-                      placeholder="选择日期"
+                      placeholder="选择日期" style="width:200px"
                     ></el-date-picker>
                   </div>
 
@@ -631,12 +631,12 @@
                       v-model="editForm.report_date"
                       type="date"
                       size="mini"
-                      placeholder="选择日期"
+                      placeholder="选择日期" style="width:200px"
                     ></el-date-picker>
                   </div>
                   <div class="sickItem">
                     <span>{{tMInstitution.diagnosis_type.field_title}}：</span>
-                    <el-select name="diagnosis_type" v-model="editForm.diagnosis_type" size="mini">
+                    <el-select name="diagnosis_type" v-model="editForm.diagnosis_type" size="mini" style="width:200px">
                       <el-option
                         v-for="(item,index) in  tMInstitution.diagnosis_type.field_values"
                         :key="index"
@@ -667,7 +667,7 @@
                   </div>
                   <div class="sickItem">
                     <span>{{tMInstitution.sample_type.field_title}}:</span>
-                    <el-select name="sample_type" v-model="editForm.sample_type" size="mini">
+                    <el-select name="sample_type" v-model="editForm.sample_type" size="mini" style="width:200px">
                       <el-option
                         v-for="(item,index) in  tMInstitution.sample_type.field_values"
                         :key="index"
@@ -686,7 +686,7 @@
                       type="text"
                       v-model="editForm.sample_morphology"
                       placeholder="请输入形态学描述"
-                      size="mini"
+                      size="mini" style="width:200px"
                     ></el-input>
                   </div>
                 </div>
@@ -699,7 +699,7 @@
                   </div>
                   <div class="sickItem">
                     <span>病理类型:</span>
-                    <el-cascader v-model="editForm.jilian" size="mini" :options="options" :props="{ checkStrictly: true }" clearable></el-cascader>                   
+                    <el-cascader v-model="editForm.jilian" size="mini" :options="options" :props="{ checkStrictly: true }" clearable style="width:200px"></el-cascader>                   
                   </div>
 
                 </div>
@@ -812,7 +812,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -844,9 +843,14 @@ export default {
       const {data :res} = await  this.axios.get("excel_data/list.php",{params:{id:row.id}})      
       console.log(res)
       this.tablelist = res.data
+      this.queryInfo.page = parseInt(res.page);     
+      this.queryInfo.count = parseInt(res.count)  //总条数
+      this.queryInfo.pagerows = res.pagerows  //每页显示多少条 
+       this.id = row.id  
     },
     // 点击返回列表
     xianshi(){
+      this.wenjian = true
       this.chakan =true     
       this.ji =true     
       this.luru =false    
@@ -913,7 +917,8 @@ export default {
       console.log(res)
     },
     // 点击病理号校验
-    async look(row){         
+    async look(row){  
+      this.wenjian = false       
       this.luru = true
       this.ji = false 
       this.chakan = false
@@ -949,12 +954,12 @@ export default {
               },
             });           
         }else{
-            this.$alert("校验失败", '提交结果', {
-              confirmButtonText: '确定',
-              type: 'warning',
-              callback: action => {
-              },
-            });
+          this.$alert("校验失败", '提交结果', {
+            confirmButtonText: '确定',
+            type: 'warning',
+            callback: action => {
+            },
+          });
         }        
       })
     },
@@ -1018,8 +1023,7 @@ export default {
       // this.editForm = Object.assign(res.data[0],res.data[1],res.data[2])
     },
     // 获取数据集列表
-    async getDataList() {
-      alert(1)
+    async getDataList() {   
       let type = ''
         const { data : res } = await this.axios.get(
           "dataset/list.php",{params:{type:2,page:this.shuInfo.page}}
@@ -1071,19 +1075,19 @@ export default {
         type: "warning",
         center: true
       })
-        .then(() => {
-          this.getTableList2()
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
+      .then(() => {
+        this.getTableList2()
+        this.$message({
+          type: "success",
+          message: "删除成功!"
         });
+      })
+      .catch(() => {
+        this.$message({
+          type: "info",
+          message: "已取消删除"
+        });
+      });
     },   
     // 搜索
     async getTable() {      
@@ -1268,7 +1272,8 @@ export default {
           if(that.$refs.upload.$children[0].fileList.length==1){
             that.$refs.upload.submit();
             that.$alert('上传成功')   
-                     
+            that.datalist = []
+            that.getDataList()  
           }else{
             that.uploadLoading=false;
             that.$message({
@@ -1278,8 +1283,7 @@ export default {
               message:'请选择文件!'
             });
           };
-           that.datalist = []
-            that.getDataList();  
+           
         },10);
     },
     handleRemove(file,fileList){
@@ -1365,6 +1369,7 @@ export default {
   },
   data() { 
     return {  
+      wenjian:true,
       row:{},//缓存的row
       // 数据集分页器
       shuInfo:{
@@ -2331,9 +2336,9 @@ a {
         margin-right: 5px;
       }
       .el-button {
-        margin-left: -2px;
+       
         background-color: rgba(41, 184, 252, 1);
-        border-radius: 0px 4px 4px 0px;
+       
         border: none;
 
         &:hover {
@@ -2355,6 +2360,9 @@ a {
     margin-top: 20px;
     .el-table {
       border-top: 1px solid rgba(0, 160, 233, 1);
+    }
+    span{
+      margin-left 10px
     }
   }
 }
@@ -2398,7 +2406,11 @@ a {
         margin: 10px;
       }
     }
-
+    .down{
+      span{
+        margin-left 10px
+      }
+    }
     .el-pagination {
       float: right;
       margin: 10px 10px 0 0;
@@ -2611,8 +2623,12 @@ a {
 
       .groupList {
         width: 500px;
+        height 280px
         border: 1px solid #DCDFE6;
         margin: 20px 20px;
+        display flex
+        flex-flow column
+        overflow scroll
       }
 
       .name {

@@ -23,7 +23,7 @@
           <!-- <el-button type="text" size="small" @click="chakan(scope.row)">查看</el-button>-->
           <div class="storageList">
             <div class="list" style="width:96%">
-              <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe>
+              <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe :header-cell-style="{color:'#333333'}">
                 <el-table-column prop="id" label="项目编号" width="250"></el-table-column>
                 <el-table-column prop="group_name" label="项目名称" width="250"></el-table-column>
                 <el-table-column prop="group_logic" label="筛选逻辑" width="300"></el-table-column>

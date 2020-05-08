@@ -35,6 +35,7 @@ import './assets/css/global.css'
 import axios from 'axios'
 // 挂载axios
 Vue.prototype.axios= axios
+// Vue.prototype.$http= axios
 
 // axios.defaults.headers.post['content-Type'] = 'application/x-www-form-urlencoded'
 axios.defaults.baseURL = 'http://106.13.49.232/cedar/api/'

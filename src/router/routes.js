@@ -27,7 +27,7 @@ export default [
     {
         path:'/home',
         component:Home,
-        redirect:'/homepage',
+        
         children:[
             // 首页
             {
@@ -40,6 +40,7 @@ export default [
                     }
                 ]  
             },
+            
             // 数据录入
             {
                 path:'/dataentry',

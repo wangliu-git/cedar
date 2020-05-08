@@ -10,7 +10,7 @@
         </div>
 
         <div class="down" style="width:96%">
-          <el-table ref="multipleTable" :data="userlist" tooltip-effect="dark" style="width: 100%" border stripe >
+          <el-table ref="multipleTable" :data="userlist" tooltip-effect="dark" style="width: 100%" border stripe :header-cell-style="{color:'#333333'}">
             <el-table-column type="selection" width="80"></el-table-column>
             <el-table-column prop="username" label="用户名" width="280"></el-table-column>
             <el-table-column prop="role_id" label="权限" width="280"></el-table-column>

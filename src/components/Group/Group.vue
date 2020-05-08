@@ -26,7 +26,7 @@
 
           <div class="storageList">
             <div class="list" style="width:96%">
-              <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe>
+              <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe :header-cell-style="{color:'#333333'}">
                 <el-table-column prop="id" label="项目编号" width="250"></el-table-column>
                 <el-table-column prop="group_name" label="项目名称" width="250"></el-table-column>
                 <el-table-column prop="group_logic" label="筛选逻辑" width="300"></el-table-column>
@@ -34,10 +34,10 @@
                 <el-table-column prop="group_username" label="创建人" width="250"></el-table-column>
                 <el-table-column fixed="right" label="操作" width="250">
                   <template slot-scope="scope">
-                    <el-button type="text" size="small"  @click="daoChu(scope.row)">脱敏导出</el-button>
-                    <el-button type="text" size="small" @click="jieshi = !jieshi"><i class="iconfont iconwenhao"></i></el-button>
-                    <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>        
-                    <el-button type="text" size="small" @click="chakan(scope.row)">查看</el-button>        
+                    <el-button type="text" size="small"  @click="daoChu(scope.row)"><span>脱敏导出</span></el-button>
+                    <el-button type="text" size="small" @click="jieshi = true"><i class="iconfont iconwenhao"></i></el-button>
+                    <el-button type="text" size="small" @click="del(scope.row)"> <span>删除</span></el-button>        
+                    <el-button type="text" size="small" @click="chakan(scope.row)"><span>查看</span></el-button>        
                   </template>
                 </el-table-column>
               </el-table>
@@ -107,7 +107,7 @@
           <span style="color:rgba(153,153,153,1);">使用Hash函数对敏感数据进行脱敏，不支持逆运算。</span>
         </div>
         <div class="DFoot">
-          <span @click="jieshi = !jieshi">我知道了</span>
+          <span @click="jieshi = false">我知道了</span>
         </div>
       </div>
     </div>
@@ -116,7 +116,7 @@
       <div class="DC">
           <div class="DCTitle">
               <span>脱敏导出</span>
-              <span @click="daochu =! daochu"><i class="iconfont iconx"></i></span>
+              <span @click="daochu = false"><i class="iconfont iconx"></i></span>
           </div>
           <div class="DCMain">
             <div class="storageList">            
@@ -130,8 +130,8 @@
               </el-table>
             </div>
             <div class="btns">
-              <el-button @click="daochu =! daochu">取消</el-button>
-              <el-button  @click="daochu =! daochu"> 确认导出</el-button>
+              <el-button @click="daochu =false">取消</el-button>
+              <el-button  @click="sure()"> 确认导出</el-button>
             </div>
           </div>        
       </div>
@@ -141,7 +141,7 @@
       <div class="look">
         <div class="header">
             <span>查看病理信息</span>
-            <span @click="zhezhao = !zhezhao"><i class="iconfont iconx"></i></span>
+            <span @click="zhezhao = false"><i class="iconfont iconx"></i></span>
         </div>
 
         <div class="content">
@@ -188,7 +188,7 @@
 
         <div class="footer">
             <div class="btn">
-                <el-button plain @click="zhezhao = !zhezhao">返回</el-button>
+                <el-button plain @click="zhezhao = false">返回</el-button>
                 <el-button plain @click="addFormList(editForm)">确认校验通过</el-button> 
             </div>  
         </div>
@@ -201,6 +201,7 @@
 export default {
   data() {
     return {
+      group_id:'',
       chuangjian:false,
       minList:[],  //脱敏列表
       // 脱敏导出解释
@@ -264,19 +265,27 @@ export default {
     this.getDataList();  
   },
   methods: {
+    // 确认导出
+    async sure(){
+      console.log(this.id)
+      let z = ''
+        const res = await this.axios.get('group_report/list.php',{params:{group_id:this.id,z:1}})
+        console.log(res)
+    },
+    // 点击导出
     async daoChu(row){
       console.log(row.id)
-     this.daochu =! this.daochu
-      let group_id = ''   
+      this.daochu =true    
       const { data: res } = await this.axios.get(
         "group_report/list.php",{params:{group_id:row.id}}    
       )
-      console.log(res)
+      this.id = row.id
+      console.log(this.id)
       this.minList = res.data
     },
     // 点击病理号查看
     async look(row){
-      this.zhezhao =! this.zhezhao  //不能没     
+      this.zhezhao = true  //不能没     
       const { data :res} = await this.axios.get(
         "report/onedata.php " ,{params:{id:row.id}}
       );
@@ -287,7 +296,7 @@ export default {
       console.log(this.editForm);   
     },
     // 分组删除
-     del(row) {   
+    del(row) {   
       this.$confirm("确定删除该数据？, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -451,6 +460,9 @@ export default {
       .el-table {
         border-top: 1px solid rgba(0, 160, 233, 1);
         margin: 10px 0;
+      }
+      span{
+        margin-left 10px
       }
     }
   }

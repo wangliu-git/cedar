@@ -72,8 +72,7 @@ export default {
               // 登录成功跳转到首页
               window.sessionStorage.setItem('token',res.token)
               window.sessionStorage.setItem('uid',res.uid)
-              window.sessionStorage.setItem('username',res.post.username)
-      
+              window.sessionStorage.setItem('username',res.post.username)    
               this.$router.push('/homepage')
             }else{
               this.$message({
