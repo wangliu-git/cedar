@@ -173,7 +173,7 @@
           <div class="ZD">
             <button>本单位诊断信息</button>
             <div>诊断结论<span> 病理类型：</span>{{editForm.diagnosis}}</div>
-            <div><span>淋巴细胞来源：</span>{{editForm.type}}</div>
+            <!-- <div><span>淋巴细胞来源：</span>{{editForm.type}}</div> -->
             <div style="float:left">辅助诊断<span> 免疫组化：</span>
               <th  v-for="(item,index) in editForm.helper_diagnosis.ihc" :key="index" :value="item">
                 <td>{{item.mark}}</td>
@@ -218,7 +218,7 @@
             <el-button   v-for="(it, index) in this.groupList" :key="index" :value="it.group_name">{{it.group_name}}</el-button>
           </div>
           <div class="name">
-            <span>新建分组名称 ：</span>
+            <span>新建项目名称 ：</span>
             <el-input placeholder="请输入分组名称..." style="width:380px" v-model="groupName">
               <el-button slot="append" @click="addGroup(groupName)">保存</el-button>
             </el-input>
@@ -427,7 +427,7 @@
                   </div>
                   <div class="sickItem">
                     <span>病理类型:</span>
-                    <el-cascader v-model="editForm.jilian" size="mini" :options="options" :props="{ checkStrictly: true }" clearable style="width:200px"></el-cascader>                   
+                    <el-cascader v-model="editForm.jilian" size="mini" :options="options" :props="{ checkStrictly: true }" clearable style="width:500px"></el-cascader>                   
                   </div>
                 </div>
                 <!--报告质量  可折叠-->
@@ -699,7 +699,7 @@
                   </div>
                   <div class="sickItem">
                     <span>病理类型:</span>
-                    <el-cascader v-model="editForm.jilian" size="mini" :options="options" :props="{ checkStrictly: true }" clearable style="width:200px"></el-cascader>                   
+                    <el-cascader v-model="editForm.jilian" size="mini" :options="options" :props="{ checkStrictly: true }" clearable style="width:500px"></el-cascader>                   
                   </div>
 
                 </div>
@@ -823,11 +823,10 @@
 
         <div class="main">
           <span ><i class="iconfont iconjinggaocopy" @click="xiayige = false"></i></span>
-          <span>直接进入下一个?</span>
-          <span style="color:#716F6F">（本条病例不会保存）</span>
+          <span>是否保存本条病例？</span>
           <div class="button">
             <el-button size="mini" style="width:60px" @click="shi()">是</el-button>
-            <el-button size="mini" style="width:60px" @click="xiayige = false">否</el-button>
+            <el-button size="mini" style="width:60px" @click="fou()">否</el-button>
           </div>
         </div>
       </div>      
@@ -841,8 +840,7 @@ import allMessage from "../../staic/allMessage.json";
 import axios from 'axios'
 export default {
   created() {
-    this.getDataList();       
-    
+    this.getDataList();          
   },
   methods:{
     // 选择分组
@@ -902,7 +900,8 @@ export default {
       this.wenjian = true
       this.chakan =true     
       this.ji =true     
-      this.luru =false    
+      this.luru =false   
+      this.zhezhao = false 
     },
     // 点击确定
     async sure(id){    
@@ -986,6 +985,7 @@ export default {
       console.log(row.id)
       this.zhezhao = true    
       this.id  = row.id
+      this.row = row  //缓存的row
       // this.editForm.help_diagnosis = this.help_diagnosis;
     },
     // 校验通过
@@ -999,8 +999,7 @@ export default {
             this.$alert("校验成功", '提交结果', {
               confirmButtonText: '确定',
               type: 'success',
-              callback: action => {
-                
+              callback: action => {               
                 this.axios.get("dataset/list.php?id=",{params:{id:this.id}})
               },
             });           
@@ -1054,10 +1053,10 @@ export default {
           }
         })
       }else {
-          console.log('error submit!!');
-          return false;
-        }    
-        this.next()
+        console.log('error submit!!');
+        return false;
+      }    
+      this.next()
     },   
     // 点击下一个
     // 点击下一个
@@ -1066,7 +1065,23 @@ export default {
       this.xiayige = true     
       console.log(this.id)   
     },
-    async shi(){
+    // 是
+    shi(){
+      // const { data :res} = await this.axios.get(
+      // "excel_data/nextonedata.php?id=" + this.id);      
+      // if(res.ok ==0){
+      //   return this.$message.error('已经是最后一个了')
+      // }
+      // // console.log("getTableList",res);
+      // this.editForm = res.data;
+      // // 将ID赋值下一个ID
+      // this.id= res.id
+      // this.xiayige = false
+      // // this.editForm = Object.assign(res.data[0],res.data[1],res.data[2])
+      this.addFormList()
+      this.xiayige = false
+    },
+    async fou(id){
       const { data :res} = await this.axios.get(
       "excel_data/nextonedata.php?id=" + this.id);      
       if(res.ok ==0){
@@ -1096,7 +1111,7 @@ export default {
       // console.log(row.id)
       console.log(this.queryInfo.page)
       const { data: res } = await this.axios.get(     
-      "excel_data/list.php?id=" + row.id, {params:{page:this.queryInfo.page}});
+      "excel_data/list.php?" + row.id, {params:{id:row.id,page:this.queryInfo.page}});
       //console.log(row.id)
       this.tablelist = res.data
       //console.log(res.data)
@@ -1125,15 +1140,17 @@ export default {
     // 病理号删除
     async del(row) {     
       const { data: res } = await this.axios.get(
-      "excel_data/del.php" , {params:{id:row.id}});
-      this.$confirm("确定删除该数据？, 是否继续?", "提示", {
+      "excel_data/del.php" , {params:{id:row.id}}).then( res =>{
+        this.$confirm("确定删除该数据？, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
         center: true
       })
       .then(() => {
-        this.getTableList2()
+
+        this.tablelist = []
+        this.getTableList2(row)
         this.$message({
           type: "success",
           message: "删除成功!"
@@ -1145,6 +1162,8 @@ export default {
           message: "已取消删除"
         });
       });
+      })
+      
     },   
     // 搜索
     async getTable() {      
@@ -1198,16 +1217,18 @@ export default {
           "data":editForm
         }
         // 判断提交
-        if(editForm){
+        if(data){
             await this.axios.post('report/add.php',data).then(res =>{
             // console.log('res:',res);
             var result = res.data;//JSON.parse(res.body);
             if(result.result=="done"){
-              this.getTableList()
+              
                 this.$alert("提交成功", '提交结果', {
                   confirmButtonText: '确定',
                   type: 'success',
                   callback: action => {
+                    this.tablelist = []
+                this.getTableList2(this.row);  
                   },
                 });
             }
@@ -1223,7 +1244,8 @@ export default {
         }else {
         console.log('error submit!!');
         return false;
-        }    
+        } 
+        this.fou()   
     },   
     // 多选框
     func1: function(value) {
@@ -1426,6 +1448,7 @@ export default {
   },
   data() { 
     return { 
+      row:'',
       xiayige:false, 
       groupList:[],
       wenjian:true,

@@ -1,19 +1,12 @@
 <template>
   <div class="mainContainer" ref="form">
     <!--数据存储 -->
-    <div class="storage">
-      <div class="storageL">
-        <!--  <div class="sContainer">
-          <span>数据存储 :</span>
-          <el-input placeholder="请选择数据存储分组..." size="small" style="width:250px"></el-input>
-          <el-button type="primary" size="small" >选择分组</el-button>
-        </div>-->
-      </div>
+    <div class="storage" v-if="wenjian">
       <div class="storageR" >
         <div class="eContainer">
           <div id="myUpload">
-            <el-input placeholder="请选择文件上传" size="mini" style="width:250px"></el-input>   
-            <el-button type="primary" size="mini" @click="uploadFile">导入</el-button>
+            <!-- <el-input placeholder="请选择文件上传" size="mini" style="width:250px"></el-input>   -->
+            <el-button type="primary" size="mini" @click="uploadFile">导入文件</el-button>
             <!--上传-->
             <el-dialog title="上传" width="40%" :visible.sync="uploadTemplateDialog">
                 <el-row>
@@ -36,31 +29,32 @@
                     </el-col>
                 </el-row>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="submitUpload" type="primary" size="mini" :loading="uploadLoading" > 确定上传</el-button>
-                    <el-button @click="uploadTemplateDialog=false" size="mini">取消</el-button>
+                  <el-button @click="submitUpload" type="primary" size="mini" :loading="uploadLoading" > 确定上传</el-button>
+                  <el-button @click="uploadTemplateDialog=false" size="mini">取消</el-button>
                 </span>
             </el-dialog>
-        </div>
-                     
+        </div>                
         </div>
       </div>
     </div>
 
     <!--数据集列表 @click="jiexi"   <el-button class="xiazai" size="small">
-          <span class="iconfont iconxiazai">下载excel模板</span>
+    <span class="iconfont iconxiazai">下载excel模板</span>    <span>{{this.L_W}}</span>
     </el-button>  -->
     <div class="storageList" v-if="ji">
       <div class="list" style="width:96%">
-        <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe  max-height="350">
+        <el-table :data="datalist" highlight-current-row style="width: 100%" border stripe  :row-click="chakan"  :header-cell-style="{color:'#333333'}">
           <el-table-column  prop="file_name" label="文件名称" width="300" > </el-table-column>
-          <el-table-column prop="upload_time" label="上传时间" width="300"></el-table-column>
-          <el-table-column prop="percent" label="已录入：未录入" width="300"></el-table-column>
-          <el-table-column prop="location" label="研究项目" width="300"></el-table-column>
+          <el-table-column  prop="upload_time" label="上传时间" width="300"></el-table-column>
+          <el-table-column  label="已录入:未录入" width="300" >
+            <template slot-scope="scope">{{ scope.row.exec_line}} : {{ scope.row.total_line }}</template>
+          </el-table-column>
+            <el-table-column prop="location" label="研究项目" width="300"></el-table-column>
           <el-table-column fixed="right" label="操作" width="300">
             <template slot-scope="scope">
-              <el-button type="text" size="small"  @click="bianji(scope.row)">编辑</el-button>
-              <el-button type="text" size="small"  @click="chakan(scope.row)">查看</el-button>
-              <el-button type="text" size="small" @click="dele(scope.row)">删除</el-button>
+              <el-button type="text" size="small"  @click="bianji(scope.row)"><span>编辑</span></el-button>
+              <el-button type="text" size="small" @click="chakan(scope.row,scope.$index)"><span>查看</span></el-button>
+              <el-button type="text" size="small" @click="dele(scope.row)"><span>删除</span></el-button>
               <el-button class="jiexi" size="small" >
                 <span class="iconfont iconxiazai" @click="jiexi(scope.row)">开始解析</span>
               </el-button>
@@ -68,11 +62,21 @@
           </el-table-column>
         </el-table>
       </div>
+
+      <el-pagination style="margin:10px 35%"
+            @size-change="handleSizeChange1"
+            @current-change="handleCurrentChange1"
+            :current-page="shuInfo.page"
+            :page-sizes="[5]"
+            :page-size="shuInfo.pagerows" 
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="shuInfo.count"
+          ></el-pagination>
     </div>
 
     <!--搜索 -->
-    <div class="s" v-if="!sousuo">   
-      <div class="search" v-if="search">
+    <div class="s" v-if="sousuo">   
+      <div class="search" >
         <div class="up">
           <span>精准搜索 :</span>
           <el-input
@@ -88,8 +92,7 @@
             prefix-icon="el-icon-search"
             style="width:180px"
             v-model="name"
-          ></el-input>
-          
+          ></el-input>         
           <el-button type="primary" size="mini" @click="getTable">确定</el-button>
           <el-button type="primary" size="mini" class="pass">
             <i class="iconfont iconpiliangtongguo"></i> 批量通过
@@ -100,7 +103,7 @@
             :data="tablelist"
             tooltip-effect="dark"
             style="width: 100%"           
-            border           
+            border        :header-cell-style="{color:'#333333'}"    
             stripe>
             <el-table-column type="selection" width="40"></el-table-column>            
             <el-table-column prop="test_id" label="病理号" width="170"  sortable></el-table-column>
@@ -113,8 +116,8 @@
             <el-table-column prop="complete_degree" label="完整度" show-overflow-tooltip width="170" sortable></el-table-column>
             <el-table-column fixed="right" label="操作" width="170">             
                 <template  slot-scope="scope">                 
-                  <el-button type="text" size="small" @click="look(scope.row)">录入</el-button>                  
-                  <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>            
+                  <el-button type="text" size="small" @click="look(scope.row)"><span>录入</span></el-button>                  
+                  <el-button type="text" size="small" @click="del(scope.row)"><span>删除</span></el-button>            
                 </template>            
             </el-table-column>
           </el-table>
@@ -151,7 +154,6 @@
             </el-button>
           </el-button-group>
         </div>
-
         <!-- 表单-->
         <div class="formList"  :v-model="editForm">
           <!-- 折叠面板-->
@@ -174,7 +176,7 @@
                     v-model="editForm.patient_id"
                     name="patient_id"
                     size="mini"
-                    placeholder="请输入住院号/门诊号"
+                    placeholder="请输入住院号/门诊号" style="width:200px"
                   ></el-input>
                 </div>
                 <!--姓名 <span v-show="editForm.name.length >= maxL">{{textShow}}</span> -->
@@ -185,13 +187,24 @@
                     size="mini"
                     v-model="editForm.name"
                     name="name"
-                    placeholder="请输入姓名"
+                    placeholder="请输入姓名" style="width:200px"
+                  ></el-input>                 
+                </div>
+
+                <div class="sickItem">
+                  <span>年龄:</span>
+                  <el-input
+                    type="text"                   
+                    size="mini"
+                    v-model="editForm.age"
+                    name="age"
+                    placeholder="请输入年龄" style="width:200px"
                   ></el-input>                 
                 </div>
                 <!--性別 -->
                 <div class="sickItem">
                   <span>{{showInfo.sex.field_title}}:</span>
-                  <el-select placeholder="请选择" name="sex" v-model="editForm.sex" size="mini">
+                  <el-select placeholder="请选择" name="sex" v-model="editForm.sex" size="mini" style="width:200px">
                     <el-option v-for="item in showInfo.sex.field_values" :key="item" :value="item">
                       <span>{{item}}</span>
                     </el-option>
@@ -217,14 +230,14 @@
                     maxlength="11"
                     size="mini"
                     v-model="editForm.phone"
-                    name="phone"
-                    placeholder="请输入电话"
+                    name="phone" 
+                    placeholder="请输入电话" style="width:200px"
                   ></el-input>
                 </div>
                 <!--民族-->
                 <div class="sickItem">
                   <span>{{showInfo.nation.field_title}}:</span>
-                  <el-select placeholder="请选择" name="nation" v-model="editForm.nation" size="mini">
+                  <el-select placeholder="请选择" name="nation" v-model="editForm.nation" size="mini" style="width:200px">
                     <el-option
                       v-for="(item) in showInfo.nation.field_values"
                       :key="item"
@@ -241,7 +254,7 @@
                     placeholder="请选择"
                     name="birthplace"
                     v-model="editForm.birthplace"
-                    size="mini"
+                    size="mini" style="width:200px"
                   >
                     <el-option
                       v-for="(provinces) in showInfo.birthplace.field_values"
@@ -259,7 +272,7 @@
                     placeholder="请选择"
                     name="birthplace"
                     v-model="editForm.address_prov"
-                    size="mini"
+                    size="mini" style="width:200px"
                   >
                     <el-option
                       v-for="(provinces) in showInfo.birthplace.field_values"
@@ -298,17 +311,17 @@
                       type="text"
                       v-model="editForm.organization"
                       placeholder="请输入机构名称"
-                      size="mini"
+                      size="mini" style="width:200px"
                     ></el-input>
                   </div>
                   <div class="sickItem">
                     <span>{{fMInstitution.test_id.field_title}}:</span>
-                    <el-input type="text" v-model="editForm.test_id" placeholder="请输入病理号" size="mini"></el-input>
+                    <el-input type="text" v-model="editForm.test_id" placeholder="请输入病理号" size="mini" style="width:200px"></el-input>
                   </div>
                   <div class="sickItem">
                     <span>{{fMInstitution.application_date.field_title}}:</span>
                     <el-date-picker
-                      name="application_date"
+                      name="application_date" style="width:200px"
                       v-model="editForm.application_date"
                       type="date"
                       size="mini"
@@ -318,7 +331,7 @@
                   <div class="sickItem">
                     <span>{{fMInstitution.report_date.field_title}}:</span>
                     <el-date-picker
-                      name="report_date"
+                      name="report_date" style="width:200px"
                       v-model="editForm.report_date"
                       type="date"
                       size="mini"
@@ -334,139 +347,8 @@
                   </div>
                   <div class="sickItem">
                     <span>病理类型:</span>
-                    <el-select name="diagnosis"  placeholder="请选择病理类型" size="mini">
-                      <el-option>前驱淋巴性肿瘤</el-option>
-                      <el-option>成熟B细胞淋巴瘤</el-option>
-                      <el-option>成熟T和NK细胞淋巴瘤</el-option>
-                      <el-option>霍奇金淋巴瘤（类型无法确定）</el-option>
-                      <el-option>淋巴组织非典型增生</el-option>
-                    </el-select>
-                  </div>
-
-                  <div class="sickItem">
-                    <span>详细类型:</span>
-                    <el-select name="diagnosis" v-model="value1"  placeholder="请选择详细类型" size="mini">               
-                      <el-option>B淋巴母细胞白血病/淋巴瘤，非特殊类型</el-option>
-                      <el-option>B淋巴母细胞白血病/淋巴瘤伴t（9；22）（q34.1；q11.2）；BCR-ABL1</el-option>
-                      <el-option>B淋巴母细胞白血病/淋巴瘤伴t（v；11q23.3）；KMT2A重排</el-option>
-                      <el-option>B淋巴母细胞白血病/淋巴瘤伴t（12；21）（p13.2；q22.1）；ETV6-RUNX1</el-option>
-                      <el-option>B淋巴母细胞白血病/淋巴瘤伴超二倍体</el-option>
-                      <el-option>B淋巴母细胞白血病/淋巴瘤伴低二倍体</el-option>
-                      <el-option>B淋巴母细胞白血病/淋巴瘤伴t（5；14）（q31.1；q32.3）；IL3-IGH</el-option>
-                      <el-option>B淋巴母细胞白血病/淋巴瘤伴t（1；19）（q23；p13.3）；TCF3-PBX1</el-option>
-                      <el-option>B淋巴母细胞白血病/淋巴瘤，BCR-ABL1样</el-option>
-                      <el-option>B淋巴母细胞白血病/淋巴瘤伴iAMP21</el-option>
-                      <el-option>T淋巴母细胞白血病/淋巴瘤</el-option>
-                      <el-option>早期T前驱淋巴母细胞白血病</el-option>
-                      <el-option>自然杀伤（NK）淋巴母细胞白血病/淋巴瘤</el-option>
-                      <el-option>B细胞淋巴瘤（亚型无法确定）</el-option>
-                      <el-option>慢性淋巴细胞白血病（CLL）/小淋巴细胞淋巴瘤（SLL）</el-option>
-                      <el-option>单克隆B淋巴细胞增多症（MBL）</el-option>
-                      <el-option>B幼淋巴细胞白血病</el-option>
-                      <el-option>脾边缘区细胞淋巴瘤</el-option>
-                      <el-option>毛细胞白血病</el-option>
-                      <el-option>脾B细胞淋巴瘤/白血病，不能分类</el-option>
-                      <el-option>脾弥漫性红髓小B细胞淋巴瘤</el-option>
-                      <el-option>毛细胞白血病变异型</el-option>
-                      <el-option>淋巴浆细胞淋巴瘤</el-option>
-                      <el-option>意义不明的单克隆丙种球蛋白病（MGUS），IgM型</el-option>
-                      <el-option>Mu重链病</el-option>
-                      <el-option>Gamma重链病</el-option>
-                      <el-option>Alpha重链病</el-option>
-                      <el-option>意义不明的单克隆丙种球蛋白病（MGUS），非IgM型</el-option>
-                      <el-option>浆细胞骨髓瘤</el-option>
-                      <el-option>骨孤立性浆细胞瘤</el-option>
-                      <el-option>骨外浆细胞瘤</el-option>
-                      <el-option>单克隆免疫球蛋白沉积病</el-option>
-                      <el-option>结外黏膜相关淋巴组织边缘区淋巴瘤（MALT淋巴瘤）</el-option>
-                      <el-option>结内边缘区淋巴瘤</el-option>
-                      <el-option>滤泡性淋巴瘤</el-option>
-                      <el-option>儿童型滤泡性淋巴瘤</el-option>
-                      <el-option>伴IRF4重排大B细胞淋巴瘤</el-option>
-                      <el-option>原发皮肤滤泡中心细胞淋巴瘤</el-option>
-                      <el-option>套细胞淋巴瘤</el-option>
-                      <el-option>弥漫性大B细胞淋巴瘤（DLBCL），非特指型</el-option>
-                      <el-option>富于T细胞/组织细胞大B细胞淋巴瘤</el-option>
-                      <el-option>原发中枢神经系统弥漫性大B细胞淋巴瘤</el-option>
-                      <el-option>原发皮肤弥漫性大B细胞淋巴瘤，腿型</el-option>
-                      <el-option>EBV+弥漫性大B细胞淋巴瘤，非特指型</el-option>
-                      <el-option>EBV+黏膜皮肤溃疡</el-option>
-                      <el-option>慢性炎症相关弥漫性大B细胞淋巴瘤</el-option>
-                      <el-option>淋巴瘤样肉芽肿</el-option>
-                      <el-option>原发性纵隔（胸腺）大B细胞淋巴瘤</el-option>
-                      <el-option>血管内大B细胞淋巴瘤</el-option>
-                      <el-option>ALK阳性大B细胞淋巴瘤</el-option>
-                      <el-option>浆母细胞性淋巴瘤</el-option>
-                      <el-option>原发渗出性淋巴瘤</el-option>
-                      <el-option>多中心Castleman病</el-option>
-                      <el-option>HHV8阳性弥漫性大B细胞淋巴瘤，非特指型</el-option>
-                      <el-option>HHV8阳性亲生发中心淋巴组织增殖性疾病</el-option>
-                      <el-option>Burkitt淋巴瘤</el-option>
-                      <el-option>伴11q异常的Burkitt样淋巴瘤</el-option>
-                      <el-option>高级别B细胞淋巴瘤，伴MYC和BCL2和（或）BCL6重排</el-option>
-                      <el-option>高级别B细胞淋巴瘤，非特指型</el-option>
-                      <el-option>介于DLBCL和经典霍奇金淋巴瘤之间的不能分类的B细胞淋巴瘤</el-option>
-                      <el-option>其他B细胞淋巴瘤</el-option>
-                      <el-option>T细胞淋巴瘤（亚型无法确定）</el-option>
-                      <el-option>T幼淋巴细胞白血病</el-option>
-                      <el-option>T大颗粒淋巴细胞白血病</el-option>
-                      <el-option>NK细胞慢性淋巴增殖性疾病</el-option>
-                      <el-option>侵袭性NK细胞白血病</el-option>
-                      <el-option>儿童系统性EBV阳性T细胞淋巴瘤</el-option>
-                      <el-option>慢性活动性EBV感染（T细胞和NK细胞型），系统性</el-option>
-                      <el-option>种痘水疱病样淋巴组织增殖性疾病</el-option>
-                      <el-option>严重蚊虫叮咬过敏症</el-option>
-                      <el-option>成人T细胞白血病/淋巴瘤</el-option>
-                      <el-option>结外NK/T细胞淋巴瘤，鼻型</el-option>
-                      <el-option>肠病相关T细胞淋巴瘤</el-option>
-                      <el-option>单形性嗜上皮性肠道T细胞淋巴瘤</el-option>
-                      <el-option>肠道T细胞淋巴瘤，非特指型</el-option>
-                      <el-option>胃肠道惰性T细胞增殖性疾病</el-option>
-                      <el-option>肝脾T细胞淋巴瘤</el-option>
-                      <el-option>皮下脂膜炎样T细胞淋巴瘤</el-option>
-                      <el-option>蕈样肉芽肿</el-option>
-                      <el-option>Sezary综合征</el-option>
-                      <el-option>淋巴瘤样丘疹病</el-option>
-                      <el-option>原发性皮肤间变性大细胞淋巴瘤</el-option>
-                      <el-option>原发性皮肤γδT细胞淋巴瘤</el-option>
-                      <el-option>原发性皮肤CD8阳性侵袭性嗜表皮性细胞毒性T细胞淋巴瘤</el-option>
-                      <el-option>原发性皮肤肢端CD8阳性T细胞淋巴瘤</el-option>
-                      <el-option>原发性皮肤CD4阳性小/中等大小T细胞增殖性疾病</el-option>
-                      <el-option>外周T细胞淋巴瘤，非特指型</el-option>
-                      <el-option>血管免疫母细胞T细胞淋巴瘤</el-option>
-                      <el-option>滤泡T细胞淋巴瘤</el-option>
-                      <el-option>伴滤泡辅助T细胞表型的结内外周T细胞淋巴瘤</el-option>
-                      <el-option>间变性大细胞淋巴瘤，ALK阳性</el-option>
-                      <el-option>间变性大细胞淋巴瘤，ALK阴性</el-option>
-                      <el-option>乳房植入物相关的间变性大细胞淋巴瘤</el-option>
-                      <el-option>其他T细胞淋巴瘤</el-option>
-                      <el-option>霍奇金淋巴瘤（亚型无法确定）</el-option>
-                      <el-option>结节性淋巴细胞为主型霍奇金淋巴瘤</el-option>
-                      <el-option>经典型霍奇金淋巴瘤</el-option>
-                    </el-select>
-                  </div>
-
-                  <div class="sickItem">
-                    <span>病理亚型:</span>
-                    <el-select name="diagnosis" v-model="editForm.diagnosis2"  placeholder="请选择病理亚型" size="mini">
-                      <el-option>生发中心亚型</el-option>
-                      <el-option>活化B细胞亚型</el-option>
-                      <el-option>结节硬化型（NS）</el-option>
-                      <el-option>富于淋巴细胞型（LP）</el-option>
-                      <el-option>混合细胞型（MC）</el-option>
-                      <el-option>淋巴细胞消减型（LD）</el-option>
-                    </el-select>
-                  </div>
-
-                  <div class="sickItem">
-                    <span>级别:</span>
-                    <el-select name="diagnosis"  placeholder="请选择级别" size="mini">
-                      <el-option>1</el-option>
-                      <el-option>2</el-option>
-                      <el-option>3a</el-option>
-                      <el-option>淋巴细胞消减型（LD）</el-option>
-                    </el-select>
-                  </div>
+                    <el-cascader v-model="editForm.jilian" size="mini" :options="options" :props="{ checkStrictly: true }" clearable style="width:500px"></el-cascader>                   
+                  </div>                 
                 </div>
                 <!--报告质量  可折叠-->
                 <div class="sickIH">
@@ -480,7 +362,7 @@
                       placeholder="请选择"
                       name="report_quality"
                       v-model="editForm.report_quality"
-                      size="mini"
+                      size="mini" style="width:200px"
                     >
                       <el-option
                         v-for="(item,index) in fMInstitution.report_quality.field_values"
@@ -715,9 +597,7 @@
                       </el-option>
                     </el-select>
                   </div>
-
-                  
-
+                 
                   <!-- <div class="sickItem">
                     <span>{{tMInstitution.sample_morphology.field_title}}:</span>
                     <el-input
@@ -731,7 +611,7 @@
                     <span>取材部位</span>
                     <el-input
                       type="text"
-                      v-model="editForm.sample_morphology"
+                      v-model="editForm.sample_location"
                       placeholder="请输入取材部位"
                       size="mini"
                     ></el-input>
@@ -746,48 +626,8 @@
                   </div>
                   <div class="sickItem">
                     <span>病理类型:</span>
-                    <el-select name="diagnosis"  placeholder="请选择病理类型" size="mini">
-                      <el-option><span>前驱淋巴性肿瘤</span></el-option>
-                      <el-option>成熟B细胞淋巴瘤</el-option>
-                      <el-option>成熟T和NK细胞淋巴瘤</el-option>
-                      <el-option>淋巴瘤（类型无法确定）</el-option>
-                      <el-option>霍奇金淋巴瘤（类型无法确定）</el-option>
-                      <el-option>非霍奇金淋巴瘤（类型无法确定）</el-option>
-                      <el-option>淋巴组织非典型增生</el-option>
-                    </el-select>
-                  </div>
-
-                  <div class="sickItem">
-                    <span>详细类型:</span>
-                    <el-select name="diagnosis"  placeholder="请选择详细类型" size="mini">
-                      <el-option>B淋巴母细胞白血病/淋巴瘤，非特殊类型</el-option>
-                      <el-option>B淋巴母细胞白血病/淋巴瘤伴t（9；22）（q34.1；q11.2）；BCR-ABL1</el-option>
-                      <el-option>B淋巴母细胞白血病/淋巴瘤伴t（v；11q23.3）；KMT2A重排</el-option>
-                      <el-option>B淋巴母细胞白血病/淋巴瘤伴t（12；21）（p13.2；q22.1）；ETV6-RUNX1</el-option>
-                      <el-option>B细胞淋巴瘤（亚型无法确定）</el-option>
-                      <el-option>B幼淋巴细胞白血病</el-option>
-                      <el-option>毛细胞白血病变异型</el-option>
-                    </el-select>
-                  </div>
-
-                  <div class="sickItem">
-                    <span>病理亚型:</span>
-                    <el-select name="diagnosis" v-model="editForm.diagnosis2"  placeholder="请选择病理亚型" size="mini">
-                      <el-option>弥漫性大B细胞淋巴瘤（DLBCL），非特指型</el-option>
-                      <el-option>经典型霍奇金淋巴瘤</el-option>
-                    </el-select>
-                  </div>
-
-                  <div class="sickItem">
-                    <span>级别:</span>
-                    <el-select name="diagnosis"  placeholder="请选择级别" size="mini">
-                      <el-option>结节硬化型（NS）</el-option>
-                      <el-option>富于淋巴细胞型（LP）</el-option>
-                      <el-option>混合细胞型（MC）</el-option>
-                      <el-option>淋巴细胞消减型（LD）</el-option>
-                    </el-select>
-                  </div>
-
+                    <el-cascader size="mini"   v-model="editForm.jilian" :options="options" :props="{ checkStrictly: true }" clearable style="width:500px"></el-cascader>              
+                  </div>             
                 </div>
 
                 <!--辅助诊断 -->
@@ -819,7 +659,7 @@
                       <i class="iconfont icontubiaozhizuo-"></i>
                       {{ihc.name}}
                     </span>
-                    <div id="one"  v-for="(ihc,idx) in editForm.helper_diagnosis.ihc" :key="idx">
+                    <div id="one"  v-for="(ihc,idx) in help_diagnosis.ihc" :key="idx">
                       <!-- 循环myzh这个数组，来动态 + - 操作 -->
                       <div class="sickI">
                         <div class="sickIt">
@@ -847,23 +687,38 @@
                     </div>
                   </div>
 
-                  <div v-show="seen1" v-for="(item,idx) in editForm.helper_diagnosis.fish"
-                              :key="idx">
+                  <div v-show="seen1">
                     <span class="titl">
                       <i class="iconfont icontubiaozhizuo-"></i>
                       {{fish.name}}
                     </span>
-                    <div id="two">
+                    <div id="two" v-for="(fish,idx) in help_diagnosis.fish" :key="idx">
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.key_fish.field_title}}：</span>
-                          <el-input v-model="fish.mark" style="width:100px"></el-input>                       
+                          <el-select size="mini" style="width:100px" v-model="fish.mark">
+                            <el-option
+                              v-for="(item,index) in FZ.key_fish.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
                         </div>
                       </div>
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.value_fish.field_title}}：</span>
-                          <el-input v-model="fish.value" style="width:100px"></el-input>
+                          <el-select size="mini" style="width:100px" v-model="fish.value">
+                            <el-option
+                              v-for="(item,index) in  FZ.value_fish.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
                         </div>
                       </div>
                       <!-- 不同的地方可以调用一个方法，不需要额外写-->
@@ -880,6 +735,193 @@
                     </div>
                   </div>
 
+                  <div v-show="seen2">
+                    <span class="titl">
+                      <i class="iconfont icontubiaozhizuo-"></i>
+                      {{rearrangement.name}}
+                    </span>
+                    <div id="three" v-for="(rearrangement, idx) in help_diagnosis.rearrangement" :key="idx">
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.key_dna.field_title}}：</span>
+                          <el-select size="mini" style="width:100px" v-model="rearrangement.mark">
+                            <el-option
+                              v-for="(item,index) in  FZ.key_dna.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.value_dna.field_title}}：</span>
+                          <el-select size="mini" style="width:100px" v-model="rearrangement.value">
+                            <el-option
+                              v-for="(item,index) in  FZ.value_dna.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                      <div class="handleBtnBox">
+                        <el-button
+                          @click="ihcAddData(help_diagnosis.rearrangement,help_diagnosis.rearrangement[idx])"
+                        >
+                          <i class="iconfont iconaddTodo-nav"></i>
+                        </el-button>
+                        <el-button @click="ihcDeleteData(help_diagnosis.rearrangement)">
+                          <i class="iconfont iconjianhao1"></i>
+                        </el-button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div v-show="seen3">
+                    <span class="titl">
+                      <i class="iconfont icontubiaozhizuo-"></i>
+                      {{ish.name}}
+                    </span>
+                    <div id="four" v-for="(ish, idx) in help_diagnosis.ish" :key="idx">
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.key_ish.field_title}}：</span>
+                          <el-select size="mini" style="width:100px" v-model="ish.mark">
+                            <el-option
+                              v-for="(item,index) in  FZ.key_ish.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.value_ish.field_title}}：</span>
+                          <el-select size="mini" style="width:100px" v-model="ish.value">
+                            <el-option
+                              v-for="(item,index) in FZ.value_ish.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                      <div class="handleBtnBox">
+                        <el-button
+                          @click="ihcAddData(help_diagnosis.ish,help_diagnosis.ish[idx])"
+                        >
+                          <i class="iconfont iconaddTodo-nav"></i>
+                        </el-button>
+                        <el-button @click="ihcDeleteData(help_diagnosis.ish)">
+                          <i class="iconfont iconjianhao1"></i>
+                        </el-button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div v-show="seen4">
+                    <span class="titl">
+                      <i class="iconfont icontubiaozhizuo-"></i>
+                      {{fcm.name}}
+                    </span>
+                    <div id="five" v-for="(fcm, idx) in help_diagnosis.fcm" :key="idx">
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.type_fcm.field_title}}：</span>
+                          <el-select size="mini" style="width:100px" v-model="fcm.mark">
+                            <el-option
+                              v-for="(item,index) in  FZ.type_fcm.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.value_fcm.field_title}}：</span>
+                          <el-select size="mini" style="width:100px" v-model="fcm.value">
+                            <el-option
+                              v-for="(item,index) in FZ.value_fcm.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                      <div class="handleBtnBox">
+                        <el-button
+                          @click="ihcAddData(help_diagnosis.fcm,help_diagnosis.fcm[idx])"
+                        >
+                          <i class="iconfont iconaddTodo-nav"></i>
+                        </el-button>
+                        <el-button @click="ihcAddData(help_diagnosis.fcm)">
+                          <i class="iconfont iconjianhao1"></i>
+                        </el-button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div v-show="seen5">
+                    <span class="titl">
+                      <i class="iconfont icontubiaozhizuo-"></i>
+                      {{ngs.name}}
+                    </span>
+                    <div id="six" v-for="(ngs, idx) in help_diagnosis.ngs" :key="idx">
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.type_ngs.field_title}}：</span>
+                          <el-select size="mini" style="width:100px" v-model="ngs.mark">
+                            <el-option
+                              v-for="(item,index) in FZ.type_ngs.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.value_ngs.field_title}}：</span>
+                          <el-select size="mini" style="width:100px" v-model="ngs.value">
+                            <el-option
+                              v-for="(item,index) in FZ.value_ngs.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                      <div class="handleBtnBox">
+                        <el-button
+                          @click="ihcAddData(help_diagnosis.ngs,help_diagnosis.ngs[idx])"
+                        >
+                          <i class="iconfont iconaddTodo-nav"></i>
+                        </el-button>
+                        <el-button @click="ihcAddData(help_diagnosis.ngs)">
+                          <i class="iconfont iconjianhao1"></i>
+                        </el-button>
+                      </div>
+                    </div>
+                  </div>
 
                 </div>
               </div>
@@ -889,8 +931,7 @@
               <div class="text">
                 <span>原始文本</span>
                 <div class="content" >
-                 <span>{{editForm.diagnosis_txt}}</span>
-                 
+                 <span >{{editForm.diagnosis_txt}}</span>               
                 </div>
               </div>
             </div>
@@ -904,18 +945,18 @@
       <div class="nei">
         <div class="title">
           <span>请选择分组</span>
-          <span  @click="group =! group">
+          <span  @click="group =true">
             <i class="iconfont iconx"></i>
           </span>
         </div>
         <div class="mian">
           <div class="ming">
             <span>文件名称：</span>
-            <el-input style="width:400px" size="small" v-model="data.file_name"></el-input>
+            <el-input style="width:420px" size="small" v-model="data.file_name"></el-input>
           </div>
           <div class="cun">
             <span>项目名称：</span>
-            <el-input style="width:400px" size="small" v-model="item"></el-input>
+            <el-input style="width:420px" size="small" v-model="data.location"></el-input>
           </div>
           <div class="sousuo">
             <el-input placeholder="请输入分组关键词..." style="width:500px">
@@ -923,22 +964,23 @@
             </el-input>
           </div>
           <div class="groupList">
-            <el-button style="width:300px" @click="addGroup(item)" v-model="data.location" v-for="(item, index) in groupLists" :key="index" :value="item" >{{item}}</el-button>
+            <el-button   v-for="(it, index) in this.groupList" :key="index" :value="it.group_name">{{it.group_name}}</el-button>
           </div>
           <div class="name">
-            <span>新建分组名称 ：</span>
-            <el-input placeholder="请输入分组名称..." style="width:380px">
-              <el-button slot="append" >保存</el-button>
+            <span>新建项目名称 ：</span>
+            <el-input placeholder="请输入分组名称..." style="width:380px" v-model="groupName">
+              <el-button slot="append" @click="addGroup(groupName)">保存</el-button>
             </el-input>
           </div>
           <div class="button">
-            <el-button plain size="small"  @click="group =! group">取消</el-button>
+            <el-button plain size="small"  @click="group =true">取消</el-button>
             <el-button plain size="small" @click="sure(id)">确定</el-button>
           </div>
         </div>
       </div>
     </div>
 
+    <!--病人信息 -->
     <div class="zhezhao" v-if="zhezhao" :model="editForm">
       <div class="look">
         <div class="header">
@@ -988,6 +1030,25 @@
       </div>
     </div>
 
+    <!--点击下一个 -->
+    <div class="nextone" v-if="xiayige">
+      <div class="warn">
+        <div class="title">
+          <span>编辑</span>
+          <span><i class="iconfont iconfork"></i></span>
+        </div>
+
+        <div class="main">
+          <span ><i class="iconfont iconjinggaocopy" @click="xiayige = false"></i></span>
+          <span>直接进入下一个?</span>
+          <span style="color:#716F6F">（本条病例不会保存）</span>
+          <div class="button">
+            <el-button size="mini" style="width:60px" @click="shi()">是</el-button>
+            <el-button size="mini" style="width:60px" @click="xiayige = false">否</el-button>
+          </div>
+        </div>
+      </div>      
+    </div>
   </div>
 </template>
 
@@ -999,35 +1060,55 @@ import axios from 'axios'
 export default { 
   created() {
     this.getDataList();
-    this.getTableList(); 
+    // this.getTableList();   
     
     // console.log(window.sessionStorage.uid) 
   },
   methods: {
+    // 获取选择分组
+    groupLists(){
+      // alert(1)
+      const {data :res} = this.axios.get('group/list.php').then( res =>{
+        console.log(res)
+        this.groupList = res.data.data
+        console.log(this.groupList)
+      })     
+    },
     // 点击查看
     async chakan(row){
-      this.search = !this.search
+      this.sousuo = true
+      console.log(row.id)
+      console.log(row)
+      this.row=row;
       const {data :res} = await  this.axios.get("excel_data/list.php",{params:{id:row.id}})      
       console.log(res)
+      this.id = row.id
       this.tablelist = res.data
+      this.queryInfo.page = parseInt(res.page);     
+      this.queryInfo.count = parseInt(res.count)  //总条数
+      this.queryInfo.pagerows = res.pagerows  //每页显示多少条 
     },
-    // 点击添加分组
+    // 点击添加分组保存
     async addGroup(item,id){
-      console.log(item,this.id)
-      console.log(window.sessionStorage.uid)
+      // console.log(item,this.id)
+      // console.log(window.sessionStorage.uid)
       var group_name = ''    
-      const {data} = await this.axios.post('group/add.php',{params:{group_name:item,id:this.id,userid:window.sessionStorage.uid}}).then( res =>{
+      const res = await this.axios.post('group/add.php',{params:{group_name:item,id:this.id,userid:window.sessionStorage.uid}}).then( res =>{
+        // console.log(res)
+        this.groupList.push(res.data.data.params)
+        console.log(this.groupList)
          var result = res.data;//JSON.parse(res.body);
-        if(result.result == 1){
-          this.$alert("添加成功", '提交结果', {
+        if(result.result == 1){       
+          this.$alert("添加成功", '提交结果', {           
             confirmButtonText: '确定',
             type: 'success',
             callback: action => {
-              this.search = !this.search
-              this.axios.get("dataset/list.php?id=", + row.id)
+              // this.search = !this.search    
+              this.groupList = [] 
+              this.groupLists() 
+              this.groupName = ''       
             },
-          });
-            
+          });         
         }else{
           this.$alert("添加失败", '提交结果', {
             confirmButtonText: '确定',
@@ -1035,9 +1116,9 @@ export default {
             callback: action => {
             },
           });
-          }
+        }
       })
-      console.log(data)
+      // console.log(data)
     },
     // 点击确定
     async sure(id){    
@@ -1048,6 +1129,7 @@ export default {
       console.log(res)
       console.log(this.id)
       this.group = !this.group
+      this.getDataList()
     },
     // 点击数据集编辑
     async bianji(row){
@@ -1058,152 +1140,175 @@ export default {
       );
       console.log(res)
       this.data = res
+      this.groupLists()
     },
     //点击数据集解析  将数据插入到列表中
-    async jiexi(row){
-       const loading = this.$loading({
-          lock: true,
-          text: '正在解析中，请耐心等待呦',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)'
-        });
-      
+    async jiexi(row){   
+      const loading = this.$loading({
+        lock: true,
+        text: '正在解析中，请耐心等待呦',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });     
       // 插入数据  excel_data/readjson.php
       await this.axios.get("excel_data/readjson.php", {params:{id :row.id}}).then(res => {
-        console.log(res)
-        console.log(res.data)
-         var result = res.data;//JSON.parse(res.body);
-        
-          if(result.result == 1){
-            
-          this.$alert("解析成功", '提交结果', {
-           
+        // console.log(res)
+        // console.log(res.data)
+        // console.log(row.index)
+        var result = res.data;//JSON.parse(res.body);     
+          if(result.result == 1){           
+          this.$alert("解析成功", '提交结果', {          
             confirmButtonText: '确定',
             type: 'success',
             callback: action => {
-              this.search = !this.search
+              this.sousuo = true
               this.axios.get("dataset/list.php?id=", + row.id)
-               loading.close();
+              loading.close();
             },
-          });
-            
+          });          
         }else{
-          this.$alert("解析失败", '提交结果', {
+          this.$alert("解析失败,请检查", '提交结果', {
             confirmButtonText: '确定',
             type: 'warning',
             callback: action => {
               loading.close();
             },
           });
-          }
-       
+        }     
       })
       console.log(row.id)
       this.id = row.id 
       console.log(this.id)
-      this.getTableList(row);        
+      this.getTableList2(row);        
     },
     // 点击数据集删除
     async dele(row){
       console.log(row.id)
-      const { data :res} = await this.axios.get(
-        "dataset/del.php" ,{params:{id:row.id}}
-      );
+      const res = await this.axios.get(
+        "dataset/del.php" ,{params:{id:row.id}}).then( res =>{
+        this.$alert("删除成功！")
+        this.datalist = []
+        this.getDataList()
+      })    
+      
       // console.log(res)
     },
     // 点击病理号录入
-    async look(row){         
+    async look(row){        
+      this.wenjian = false 
         this.luru = !this.luru
         this.id = row.id      
-        this.ji = !this.ji
-        this.sousuo = !this.sousuo
+        this.ji = false
+        this.sousuo = false
         const { data :res} = await this.axios.get(
           "excel_data/onedata.php?id=" + row.id
         );
         this.editForm = res.data;
         console.log(this.editForm)
+        
         // // 处理数据
         //  this.editForm.diagnosis_txt = this.editForm.diagnosis_txt.split("。")
         // console.log(this.editForm.diagnosis_txt)
     },
     // 获取数据集列表
-    async getDataList() {
-        const { data : res } = await this.axios.get(
-            "dataset/list.php"
-        );
-        this.datalist = res.data;   
+    async getDataList() {   
+      // console.log(1)  
+      let type = ''     
+      const { data : res } = await this.axios.get(
+        "dataset/list.php",{params:{type:1,page:this.shuInfo.page}}
+      )
+      console.log(res)
+      this.datalist = res.data; 
+      this.shuInfo.page = parseInt(res.page);     
+      this.shuInfo.count = parseInt(res.count)  //总条数
+      this.shuInfo.pagerows = res.pagerows  //每页显示多少条 
+      // this.datalist.map( (item,index) => {
+      // 拼接已录入和未录入
+      // this.L_W = item.exec_line + ':' + item.total_line
+      //  console.log(this.L_W)  
+      // this.total_line = item.total_line
+      // this.exec_line = item.exec_line
+      // console.log(item.total_line)
+      // }) 
+      console.log(this.datalist)      
     },
     // 获取病理号
-    async getTableList(row) {  
-      this.search =! this.search
+    async getTableList2(row) {  
+      // alert(1)
+      // this.search =! this.search
+      // alert("gt2"+this.sousuo);
       // console.log(row.id)
       // console.log(this.queryInfo.page)
       const { data: res } = await this.axios.get(     
-      "excel_data/list.php?id=" + row.id, {params:{page:this.queryInfo.page}});
+      "excel_data/list.php" , {params:{id:row.id,page:this.queryInfo.page}});
       //console.log(row.id)
       this.tablelist = res.data
-      //console.log(res.data)
+      console.log(res.data)
       // console.log("getTableList",res);   
       this.queryInfo.page = parseInt(res.page);     
       this.queryInfo.count = parseInt(res.count)  //总条数
       this.queryInfo.pagerows = res.pagerows  //每页显示多少条 
-      this.id = row.id  
+      this.id = row.id 
       // console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);             
     },
-    async getTableList() {  
+    // 点击切换页码
+    async getTableList() {     
       // console.log(row.id)
       // console.log(this.queryInfo.page)
       const { data: res } = await this.axios.get(     
       "excel_data/list.php?id=" + this.id, {params:{page:this.queryInfo.page}});
       //console.log(row.id)
       this.tablelist = res.data
-      //console.log(res.data)
+      // console.log("getTableList2",res)
       // console.log("getTableList",res);   
       this.queryInfo.page = parseInt(res.page);     
       this.queryInfo.count = parseInt(res.count)  //总条数
-      this.queryInfo.pagerows = res.pagerows  //每页显示多少条 
-    
+      this.queryInfo.pagerows = res.pagerows  //每页显示多少条     
       // console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);             
     },
     // 搜索
-    async getTable() {      
-      // console.log(row.id)
-      const { data: res } = await this.axios.get(
-      "excel_data/list.php?id=" + this.id, {params:{name:this.name,test_id:this.test_id}});
-      console.log(this.test_id)
+    async getTable(id) {      
       console.log(this.id)
-      console.log(this.name)
+      const { data: res } = await this.axios.get(
+      "excel_data/list.php", {params:{id:this.id,name:this.name,test_id:this.test_id}});
+      // console.log(this.test_id)
+      // console.log(this.id)
+      // console.log(this.name)
       this.tablelist = res.data
-       this.queryInfo.page = parseInt(res.page);     
+      this.queryInfo.page = parseInt(res.page);     
       this.queryInfo.count = parseInt(res.count)  //总条数
-      console.log(res.data)
-      console.log("getTableList",res);   
+      // console.log(res.data)
+      // console.log("getTableList",res);   
       // this.queryInfo.page = res.page     
       // this.count = res.count  //总条数
       // this.queryInfo.pagerows = res.pagerows  //每页显示多少条        
       // console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);        
     },
     // 点击下一个
-    async next(){
-      this.id = this.id         
-      console.log(this.id)
+    next(){
+      this.id = this.id    
+      this.xiayige = true     
+      console.log(this.id)   
+    },
+    async shi(){
       const { data :res} = await this.axios.get(
       "excel_data/nextonedata.php?id=" + this.id);      
       if(res.ok ==0){
         return this.$message.error('已经是最后一个了')
       }
-      console.log("getTableList",res);
+      // console.log("getTableList",res);
       this.editForm = res.data;
       // 将ID赋值下一个ID
       this.id= res.id
+      this.xiayige = false
       // this.editForm = Object.assign(res.data[0],res.data[1],res.data[2])
-
     },
     // 显示
     xianshi(){
+      this.wenjian  =true
       this.luru =! this.luru     
-      this.ji =! this.ji 
-      this.sousuo = !this.sousuo    
+      this.ji =true
+      this.sousuo = true  
     },
     // 多选框
     func1: function(value) {
@@ -1268,6 +1373,8 @@ export default {
     submit() {
       this.zhezhao = !this.zhezhao    
       this.report.help_diagnosis = this.help_diagnosis;
+      this.jilian = this.editForm.jilian          
+      console.log(this.editForm)
     },    
     // 免疫租化增删
     ihcAddData(array, value) {
@@ -1291,43 +1398,56 @@ export default {
       } else {
         alert("最少保留一个");
       }
-    },
-    
-    // 切换每页显示多少条
+    },   
+    // 病理号切换每页显示多少条
     handleSizeChange(newSize) {
       this.queryInfo.pagerows = newSize;
       this.getTableList();
     },
-    // 点击页数
+    // 病理号点击页数
     handleCurrentChange(newPage) {
       this.queryInfo.page = newPage;
       this.getTableList();
     },
+    // 数据集切换每页显示多少条
+    handleSizeChange1(newSize) {
+      this.shuInfo.pagerows = newSize;
+      this.getDataList();
+    },
+    // 数据集点击页数
+    handleCurrentChange1(newPage) {
+      this.shuInfo.page = newPage;
+      this.getDataList();
+    },
     // 列表删除
-    async del(row) {   
-      const { data: res } = await this.axios.get(
-      "excel_data/del.php" , {params:{id:row.id}});
+    del(row) {         
       this.$confirm("确定删除该数据？, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
         center: true
       })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
+      .then(() => {
+        const { data: res } =   this.axios.get(
+        "excel_data/del.php" , {params:{id:row.id}});
+        this.tablelist = []
+        this.getTableList2(row)
+        this.$message({ 
+                   
+          type: "success",
+          message: "删除成功!",  
+
         });
+      })
+      .catch(() => {
+        this.$message({
+          type: "info",
+          message: "已取消删除"
+        });
+      });
     },       
     // 新增患者信息
-    addFormList(editForm){
+    addFormList(editForm){   
       this.zhezhao = !this.zhezhao
       this.id = this.id
       // console.log(this.id)   
@@ -1343,14 +1463,15 @@ export default {
       if(data){
       // console.log(data)
         this.axios.post('report/add.php',data).then(res => {
-          console.log('res:',res); 
+          // console.log('res:',res); 
           var result = res.data;//JSON.parse(res.body);
           if(result.result=='done'){
             this.$alert("提交成功", '提交结果', {
               confirmButtonText: '确定',
               type: 'success',
               callback: action => {
-                this.getTableList(row); 
+                this.tablelist = []
+                this.getTableList2(this.row); 
               },
             });
           }
@@ -1362,6 +1483,7 @@ export default {
               },
             });
           }
+           this.$set(this.groupList)
         })
       }else {
           console.log('error submit!!');
@@ -1384,21 +1506,22 @@ export default {
     },
     submitUpload(){
         this.uploadLoading=true;
-        var that=this;
-        setTimeout(function () {
-            if(that.$refs.upload.$children[0].fileList.length==1){
-              that.$refs.upload.submit();   
-              that.$alert('上传成功')   
-              that.getDataList();
-            }else{
-              that.uploadLoading=false;
-              that.$message({
-                  type:'error',
-                  showClose:true,
-                  duration:3000,
-                  message:'请选择文件!'
-              });
-            };
+        var that=this;       
+        setTimeout(function () {               
+          if(that.$refs.upload.$children[0].fileList.length==1){
+            that.$refs.upload.submit();   
+            that.$alert('上传成功')   
+            that.datalist = []
+            that.getDataList()            
+          }else{
+            that.uploadLoading=false;
+            that.$message({
+              type:'error',
+              showClose:true,
+              duration:3000,
+              message:'请选择文件!'
+            });
+          };
         },100);
         
     },
@@ -1447,7 +1570,7 @@ export default {
       axios({
           method:'post',
           url:"upload_file/add.php",
-          data:fd,
+          data:fd,        
           headers:{"Content-Type":"multipart/form-data;boundary="+new Date().getTime()}
       }).then(rsp=>{
           that.downloadLoading.close();
@@ -1483,13 +1606,23 @@ export default {
     } ,
   },
   data() { 
-    return {   
+    return {      
+      xiayige:false, 
+      wenjian:true,  //上传文件
+      item:'',
+      // 拼接录入和未录入
+      exec_line:'',
+      total_line:'',
+      L_W:'',
+      groupName:'',
+      sousuo:false,
       ji:true,  
       value:{
         mark:'',
         value:''
       },
-      groupLists:['肝癌多中心项目-复旦肿瘤医院','肺癌多中心项目','淋巴瘤的流行病学研究','左半肝胆管腺癌病理分析','未分组'],   //分组列表
+      jilian:'',
+      groupList:[],   //分组列表
       // 数据集列表
       data:[ ],
       // 列表参数
@@ -1500,12 +1633,18 @@ export default {
       // 搜索参数
       test_id:'',
       name:'',
-      // 分页器
+      // 病理号分页器
       queryInfo:{
         page:1,         //页数
         pagerows:10,    //每页显示的条数
         count:0,        //数据总数
-      },     
+      },  
+      // 数据集分页器
+      shuInfo:{
+        page:1,         //页数
+        pagerows:5,    //每页显示的条数
+        count:0,        //数据总数
+      },    
       // 上传
       uploadTemplateDialog:false,
       fileList:[],
@@ -1513,11 +1652,12 @@ export default {
       acceptFileType:'.csv',
       downLoadLoading:'', 
       tablelist: [], //病理号数组
+      row:{},//缓存的row
       datalist: [], //数据集数组
       id:'',
       formdata:{},
       group: true,
-      search: false,
+      // search: false,
       luru: false,
       zhezhao: false,  
       count:0,   
@@ -1530,6 +1670,356 @@ export default {
       seen3: true,
       seen4: true,
       seen5: true,
+      // 级联选择器
+      options: [
+        {
+          value: '成熟T和NK细胞淋巴瘤',
+          label: '成熟T和NK细胞淋巴瘤',
+          children: 
+            [{
+            value: 'T细胞淋巴瘤（亚型无法确定）',
+            label: 'T细胞淋巴瘤（亚型无法确定）'
+            },{
+            value: 'T幼淋巴细胞白血病',
+            label: 'T幼淋巴细胞白血病'
+            },{
+            value: 'T大颗粒淋巴细胞白血病',
+            label: 'T大颗粒淋巴细胞白血病'
+            },{
+            value: 'NK细胞慢性淋巴增殖性疾病',
+            label: 'NK细胞慢性淋巴增殖性疾病'
+            },{
+            value: '侵袭性NK细胞白血病',
+            label: '侵袭性NK细胞白血病'
+            },{
+            value: '儿童系统性EBV阳性T细胞淋巴瘤',
+            label: '儿童系统性EBV阳性T细胞淋巴瘤'
+            },{
+            value: '慢性活动性EBV感染（T细胞和NK细胞型），系统性',
+            label: '慢性活动性EBV感染（T细胞和NK细胞型），系统性'
+            },{
+            value: '种痘水疱病样淋巴组织增殖性疾病',
+            label: '种痘水疱病样淋巴组织增殖性疾病'
+            },{
+            value: '严重蚊虫叮咬过敏症',
+            label: '严重蚊虫叮咬过敏症'
+            },{
+            value: '成人T细胞白血病/淋巴瘤',
+            label: '成人T细胞白血病/淋巴瘤'
+            },{
+            value: '结外NK/T细胞淋巴瘤，鼻型',
+            label: '结外NK/T细胞淋巴瘤，鼻型'
+            },{
+            value: '肠病相关T细胞淋巴瘤',
+            label: '肠病相关T细胞淋巴瘤'
+            },{
+            value: '单形性嗜上皮性肠道T细胞淋巴瘤',
+            label: '单形性嗜上皮性肠道T细胞淋巴瘤'
+            },{
+            value: '肠道T细胞淋巴瘤，非特指型',
+            label: '肠道T细胞淋巴瘤，非特指型'
+            },{
+            value: '胃肠道惰性T细胞增殖性疾病',
+            label: '胃肠道惰性T细胞增殖性疾病'
+            },{
+            value: '肝脾T细胞淋巴瘤',
+            label: '肝脾T细胞淋巴瘤'
+            },{
+            value: '皮下脂膜炎样T细胞淋巴瘤',
+            label: '皮下脂膜炎样T细胞淋巴瘤'
+            },{
+            value: '蕈样肉芽肿',
+            label: '蕈样肉芽肿'
+            },{
+            value: 'Sezary综合征',
+            label: 'Sezary综合征'
+            },{
+            value: '淋巴瘤样丘疹病',
+            label: '淋巴瘤样丘疹病'
+            },{
+            value: '原发性皮肤间变性大细胞淋巴瘤',
+            label: '原发性皮肤间变性大细胞淋巴瘤'
+            },{
+            value: '原发性皮肤γδT细胞淋巴瘤',
+            label: '原发性皮肤γδT细胞淋巴瘤'
+            },{
+            value: '原发性皮肤CD8阳性侵袭性嗜表皮性细胞毒性T细胞淋巴瘤',
+            label: '原发性皮肤CD8阳性侵袭性嗜表皮性细胞毒性T细胞淋巴瘤'
+            },{
+            value: '原发性皮肤肢端CD8阳性T细胞淋巴瘤',
+            label: '原发性皮肤肢端CD8阳性T细胞淋巴瘤'
+            },{
+            value: '原发性皮肤CD4阳性小/中等大小T细胞增殖性疾病',
+            label: '原发性皮肤CD4阳性小/中等大小T细胞增殖性疾病'
+            },{
+            value: '外周T细胞淋巴瘤，非特指型',
+            label: '外周T细胞淋巴瘤，非特指型'
+            },{
+            value: '血管免疫母细胞T细胞淋巴瘤',
+            label: '血管免疫母细胞T细胞淋巴瘤'
+            },{
+            value: '滤泡T细胞淋巴瘤',
+            label: '滤泡T细胞淋巴瘤'
+            },{
+            value: '伴滤泡辅助T细胞表型的结内外周T细胞淋巴瘤',
+            label: '伴滤泡辅助T细胞表型的结内外周T细胞淋巴瘤'
+            },{
+            value: '间变性大细胞淋巴瘤，ALK阳性',
+            label: '间变性大细胞淋巴瘤，ALK阳性'
+            },{
+            value: '间变性大细胞淋巴瘤，ALK阴性',
+            label: '间变性大细胞淋巴瘤，ALK阴性'
+            },{
+            value: '乳房植入物相关的间变性大细胞淋巴瘤',
+            label: '乳房植入物相关的间变性大细胞淋巴瘤'
+            },{
+            value: '其他T细胞淋巴瘤',
+            label: '其他T细胞淋巴瘤'
+            }]
+        },     
+        {
+          value: '前驱淋巴性肿瘤',
+          label: '前驱淋巴性肿瘤',
+          children: 
+            [{
+            value: 'B淋巴母细胞白血病/淋巴瘤，非特殊类型',
+            label: 'B淋巴母细胞白血病/淋巴瘤，非特殊类型'
+            },{
+            value: 'B淋巴母细胞白血病/淋巴瘤伴t（9；22）（q34.1；q11.2）；BCR-ABL1',
+            label: 'B淋巴母细胞白血病/淋巴瘤伴t（9；22）（q34.1；q11.2）；BCR-ABL1'
+            },{
+            value: 'B淋巴母细胞白血病/淋巴瘤伴t（v；11q23.3）；KMT2A重排',
+            label: 'B淋巴母细胞白血病/淋巴瘤伴t（v；11q23.3）；KMT2A重排'
+            },{
+            value: 'B淋巴母细胞白血病/淋巴瘤伴t（12；21）（p13.2；q22.1）；ETV6-RUNX1',
+            label: 'B淋巴母细胞白血病/淋巴瘤伴t（12；21）（p13.2；q22.1）；ETV6-RUNX1'
+            },{
+            value: 'B淋巴母细胞白血病/淋巴瘤伴超二倍体',
+            label: 'B淋巴母细胞白血病/淋巴瘤伴超二倍体'
+            },{
+            value: 'B淋巴母细胞白血病/淋巴瘤伴低二倍体',
+            label: 'B淋巴母细胞白血病/淋巴瘤伴低二倍体'
+            },{
+            value: 'B淋巴母细胞白血病/淋巴瘤伴t（5；14）（q31.1；q32.3）；IL3-IGH',
+            label: 'B淋巴母细胞白血病/淋巴瘤伴t（5；14）（q31.1；q32.3）；IL3-IGH'
+            },{
+            value: 'B淋巴母细胞白血病/淋巴瘤伴t（1；19）（q23；p13.3）；TCF3-PBX1',
+            label: 'B淋巴母细胞白血病/淋巴瘤伴t（1；19）（q23；p13.3）；TCF3-PBX1'
+            },{
+            value: 'B淋巴母细胞白血病/淋巴瘤，BCR-ABL1样',
+            label: 'B淋巴母细胞白血病/淋巴瘤，BCR-ABL1样'
+            },{
+            value: 'B淋巴母细胞白血病/淋巴瘤伴iAMP21',
+            label: 'B淋巴母细胞白血病/淋巴瘤伴iAMP21'
+            },{
+            value: 'T淋巴母细胞白血病/淋巴瘤',
+            label: 'T淋巴母细胞白血病/淋巴瘤'
+            },{
+            value: '早期T前驱淋巴母细胞白血病',
+            label: '早期T前驱淋巴母细胞白血病'
+            },{
+            value: '自然杀伤（NK）淋巴母细胞白血病/淋巴瘤',
+            label: '自然杀伤（NK）淋巴母细胞白血病/淋巴瘤'
+            }]
+        },
+        {
+          value: '成熟B细胞淋巴瘤',
+          label: '成熟B细胞淋巴瘤',
+          children: 
+          [{
+          value: 'B细胞淋巴瘤（亚型无法确定）',
+          label: 'B细胞淋巴瘤（亚型无法确定）'
+          },{
+          value: '慢性淋巴细胞白血病（CLL）/小淋巴细胞淋巴瘤（SLL）',
+          label: '慢性淋巴细胞白血病（CLL）/小淋巴细胞淋巴瘤（SLL）'
+          },{
+          value: '单克隆B淋巴细胞增多症（MBL）',
+          label: '单克隆B淋巴细胞增多症（MBL）'
+          },{
+          value: 'B幼淋巴细胞白血病',
+          label: 'B幼淋巴细胞白血病'
+          },{
+          value: '脾边缘区细胞淋巴瘤',
+          label: '脾边缘区细胞淋巴瘤'
+          },{
+          value: '毛细胞白血病',
+          label: '毛细胞白血病'
+          },{
+          value: '脾B细胞淋巴瘤/白血病，不能分类',
+          label: '脾B细胞淋巴瘤/白血病，不能分类'
+          },{
+          value: '脾弥漫性红髓小B细胞淋巴瘤',
+          label: '脾弥漫性红髓小B细胞淋巴瘤'
+          },{
+          value: '毛细胞白血病变异型',
+          label: '毛细胞白血病变异型'
+          },{
+          value: '淋巴浆细胞淋巴瘤',
+          label: '淋巴浆细胞淋巴瘤'
+          },{
+          value: '意义不明的单克隆丙种球蛋白病（MGUS），IgM型',
+          label: '意义不明的单克隆丙种球蛋白病（MGUS），IgM型'
+          },{
+          value: 'Mu重链病',
+          label: 'Mu重链病'
+          },{
+          value: 'Gamma重链病',
+          label: 'Gamma重链病'
+          },{
+          value: 'Alpha重链病',
+          label: 'Alpha重链病'
+          },{
+          value: '意义不明的单克隆丙种球蛋白病（MGUS），非IgM型',
+          label: '意义不明的单克隆丙种球蛋白病（MGUS），非IgM型'
+          },{
+          value: '浆细胞骨髓瘤',
+          label: '浆细胞骨髓瘤'
+          },{
+          value: '骨孤立性浆细胞瘤',
+          label: '骨孤立性浆细胞瘤'
+          },{
+          value: '骨外浆细胞瘤',
+          label: '骨外浆细胞瘤'
+          },{
+          value: '单克隆免疫球蛋白沉积病',
+          label: '单克隆免疫球蛋白沉积病'
+          },{
+          value: '结外黏膜相关淋巴组织边缘区淋巴瘤（MALT淋巴瘤）',
+          label: '结外黏膜相关淋巴组织边缘区淋巴瘤（MALT淋巴瘤）'
+          },{
+          value: '结内边缘区淋巴瘤',
+          label: '结内边缘区淋巴瘤'
+          },{
+          value: '滤泡性淋巴瘤',
+          label: '滤泡性淋巴瘤',
+          children: [{
+          value: '1',
+          label: '1'
+          },{
+          value: '2',
+          label: '2'
+          },{
+          value: '3a',
+          label: '3a'
+          },{
+          value: '3b',
+          label: '3b'
+          }]
+          },{
+          value: '儿童型滤泡性淋巴瘤',
+          label: '儿童型滤泡性淋巴瘤'
+          },{
+          value: '伴IRF4重排大B细胞淋巴瘤',
+          label: '伴IRF4重排大B细胞淋巴瘤'
+          },{
+          value: '原发皮肤滤泡中心细胞淋巴瘤',
+          label: '原发皮肤滤泡中心细胞淋巴瘤'
+          },{
+          value: '套细胞淋巴瘤',
+          label: '套细胞淋巴瘤'
+          },{
+          value: '弥漫性大B细胞淋巴瘤（DLBCL），非特指型',
+          label: '弥漫性大B细胞淋巴瘤（DLBCL），非特指型',
+          children: [{
+          value: '生发中心亚型',
+          label: '生发中心亚型'
+          },{
+          value: '活化B细胞亚型',
+          label: '活化B细胞亚型'
+          }]
+          },{
+          value: '富于T细胞/组织细胞大B细胞淋巴瘤',
+          label: '富于T细胞/组织细胞大B细胞淋巴瘤'
+          },{
+          value: '原发中枢神经系统弥漫性大B细胞淋巴瘤',
+          label: '原发中枢神经系统弥漫性大B细胞淋巴瘤'
+          },{
+          value: '原发皮肤弥漫性大B细胞淋巴瘤，腿型',
+          label: '原发皮肤弥漫性大B细胞淋巴瘤，腿型'
+          },{
+          value: 'EBV+弥漫性大B细胞淋巴瘤，非特指型',
+          label: 'EBV+弥漫性大B细胞淋巴瘤，非特指型'
+          },{
+          value: 'EBV+黏膜皮肤溃疡',
+          label: 'EBV+黏膜皮肤溃疡'
+          },{
+          value: '慢性炎症相关弥漫性大B细胞淋巴瘤',
+          label: '慢性炎症相关弥漫性大B细胞淋巴瘤'
+          },{
+          value: '淋巴瘤样肉芽肿',
+          label: '淋巴瘤样肉芽肿'
+          },{
+          value: '原发性纵隔（胸腺）大B细胞淋巴瘤',
+          label: '原发性纵隔（胸腺）大B细胞淋巴瘤'
+          },{
+          value: '血管内大B细胞淋巴瘤',
+          label: '血管内大B细胞淋巴瘤'
+          },{
+          value: 'ALK阳性大B细胞淋巴瘤',
+          label: 'ALK阳性大B细胞淋巴瘤'
+          },{
+          value: '浆母细胞性淋巴瘤',
+          label: '浆母细胞性淋巴瘤'
+          },{
+          value: '原发渗出性淋巴瘤',
+          label: '原发渗出性淋巴瘤'
+          },{
+          value: '多中心Castleman病',
+          label: '多中心Castleman病'
+          },{
+          value: 'HHV8阳性弥漫性大B细胞淋巴瘤，非特指型',
+          label: 'HHV8阳性弥漫性大B细胞淋巴瘤，非特指型'
+          },{
+          value: 'HHV8阳性亲生发中心淋巴组织增殖性疾病',
+          label: 'HHV8阳性亲生发中心淋巴组织增殖性疾病'
+          },{
+          value: 'Burkitt淋巴瘤',
+          label: 'Burkitt淋巴瘤'
+          },{
+          value: '伴11q异常的Burkitt样淋巴瘤',
+          label: '伴11q异常的Burkitt样淋巴瘤'
+          },{
+          value: '高级别B细胞淋巴瘤，伴MYC和BCL2和（或）BCL6重排',
+          label: '高级别B细胞淋巴瘤，伴MYC和BCL2和（或）BCL6重排'
+          },{
+          value: '高级别B细胞淋巴瘤，非特指型',
+          label: '高级别B细胞淋巴瘤，非特指型'
+          },{
+          value: '介于DLBCL和经典霍奇金淋巴瘤之间的不能分类的B细胞淋巴瘤',
+          label: '介于DLBCL和经典霍奇金淋巴瘤之间的不能分类的B细胞淋巴瘤'
+          },{
+          value: '其他B细胞淋巴瘤',
+          label: '其他B细胞淋巴瘤'
+          }]
+        },
+        {
+          value: '霍奇金淋巴瘤',
+          label: '霍奇金淋巴瘤',
+          children: [{
+          value: '霍奇金淋巴瘤（亚型无法确定）',
+          label: '霍奇金淋巴瘤（亚型无法确定）'
+          },{
+          value: '结节性淋巴细胞为主型霍奇金淋巴瘤',
+          label: '结节性淋巴细胞为主型霍奇金淋巴瘤'
+          },{
+          value: '经典型霍奇金淋巴瘤',
+          label: '经典型霍奇金淋巴瘤',
+          children: [{
+          value: '结节硬化型（NS）',
+          label: '结节硬化型（NS）'
+          },{
+          value: '富于淋巴细胞型（LP）',
+          label: '富于淋巴细胞型（LP）'
+          },{
+          value: '混合细胞型（MC）',
+          label: '混合细胞型（MC）'
+          },{
+          value: '淋巴细胞消减型（LD）',
+          label: '淋巴细胞消减型（LD）'
+          }]
+          }]
+        }
+      ],
       checkList: ["免疫组化","荧光原位杂交","淋巴瘤克隆性基因重排检测","原位杂交","流式细胞检测","ngs检测"],
       // 折叠面板默认打开
       activeNames: ["3","1"],
@@ -1641,7 +2131,6 @@ export default {
         record: {}, //"病历资料"
         helper_report: {} //"重要辅助检查报告"
       },
-
       // 以下是本医疗机构信息
       tMInstitution: {
         test_id: {}, //"病理号"
@@ -1690,7 +2179,7 @@ export default {
       reportMessage: {}, //报告信息
       materMessage: {}, //取材信息
       reportResult: {}, //诊断结论
-      helper_diagnosis: [], //辅助诊断
+      // helper_diagnosis: [], //辅助诊断
       helper_diagnosisAll: {}, //辅助诊断信息对象
       ihc: {}, //免疫组化信息对象
       fish: {}, //荧光杂交信息对象
@@ -1736,8 +2225,7 @@ export default {
             value: ""
           }
         ] //ngs数组
-      },
-     
+      },    
     };
   },
   mounted() {
@@ -2069,7 +2557,11 @@ export default {
 };
 </script>
 
+
 <style>
+.el-button+.el-button {
+  margin-left: 0
+}
 #dataImport .el-collapse-item__header {
   background-color: #fafafc !important;
   height: 35px;
@@ -2101,6 +2593,7 @@ export default {
 }
 </style>
 <style scoped lang="stylus" rel="stylesheet/stylus" >
+
 .jiexi {
   background-color #409EFF
   &:hover{
@@ -2137,9 +2630,9 @@ a {
         margin-right: 5px;
       }
       .el-button {
-        margin-left: -2px;
+        
         background-color: rgba(41, 184, 252, 1);
-        border-radius: 0px 4px 4px 0px;
+        
         border: none;
         &:hover {
           background-color: rgba(38, 188, 153, 1);
@@ -2165,10 +2658,12 @@ a {
   .list {
     padding-top: 15px;
     margin-left: 30px;
-    margin-top: 20px;
-    padding-bottom: 20px;
+    margin-top: 20px;   
     .el-table {
       border-top: 1px solid rgba(0, 160, 233, 1);
+    }
+    span{
+      margin-left 10px
     }
   }
 }
@@ -2204,12 +2699,18 @@ a {
         margin: 10px;
       }
     }
+    .down{
+      span{
+        margin-left 10px
+      }
+    }
     .el-pagination {
       float: right;
       margin: 10px 10px 0 0;
     }
   }
 }
+
 // 分组弹窗
 .out{
   position:fixed;
@@ -2217,7 +2718,7 @@ a {
 	top:0px;
   width 100%
   height 100%  
-	background-color :rgba(245,247,251,0.7);
+	background-color :rgba(200,200,200,0.7);
   z-index 9
   .nei {
     border-radius: 5px;
@@ -2250,8 +2751,8 @@ a {
         }
       }
       .cun{
-        margin-left: 30px;
-        margin-top 10px
+        margin-left: 20px;
+        margin-top 5px
         span{
           width 100px
         }
@@ -2262,14 +2763,13 @@ a {
       }
       .groupList {
         width: 500px;
-        height: 300px;
+        height 280px
         border: 1px solid #DCDFE6;
         margin: 20px 20px;
         display flex
         flex-flow column
-        justify-content space-evenly
-        .el-button{
-          margin-left: 20px;
+        overflow scroll
+        .el-button{            
           font-size: 16px;
         }
       }
@@ -2280,6 +2780,7 @@ a {
         float: right;
         margin-top: 10px;
         margin-right: 30px;
+      
       }
     }
   }
@@ -2682,7 +3183,7 @@ a {
   }
 }
 .zhezhao{
-    background #CCCBCE   
+    background-color :rgba(200,200,200,0.7); 
     position relative
     bottom 200px
     z-index 9999
@@ -2755,8 +3256,7 @@ a {
               }
           }
           .BDW{
-              margin 5px 30px
-             
+              margin 5px 30px            
               font-size:14px;
               font-family:Microsoft YaHei;
               font-weight:400;
@@ -2813,14 +3313,13 @@ a {
                   width 130px
               }
               span{
-                  display inline-block
-                  
-                  margin-left 10px
-                  margin-top 15px
-                  font-size:14px;
-                  font-family:Microsoft YaHei;
-                  font-weight:400;
-                  color:rgba(153,153,153,1);
+                display inline-block 
+                // margin-left 10px                               
+                margin-top 15px
+                font-size:14px;
+                font-family:Microsoft YaHei;
+                font-weight:400;
+                color:rgba(153,153,153,1);
               }
           }
       }
@@ -2836,4 +3335,60 @@ a {
       }
     }
 }
+
+.nextone{
+  position:fixed;
+	left:0px;
+	top:0px;
+  width 100%
+  height 100%  
+	background-color :rgba(200,200,200,0.7);
+  z-index 9
+  .warn{
+    border-radius: 5px;
+    width: 334px;
+    height: 200px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    top: 0;
+    margin: auto;
+    background-color: #FAFAFA;
+		z-index 10;
+    .title{
+      width: 334px;
+      height: 40px;
+      background:rgba(28,177,255,1);
+      border-radius:6px 6px 0px 0px;
+      line-height 40px
+      display flex
+      justify-content: space-between;
+      span{
+        margin-left 10px
+        margin-right 10px
+        color #FFFFFF
+      }
+    }
+    .main{
+      margin-top 10px
+      display flex
+      flex-flow column
+      align-items center
+      justify-content space-around
+      height 140px
+      .iconjinggaocopy{
+        color red
+        font-size 20px
+      }
+      .button{
+        .el-button{
+          margin-left 10px
+          margin-right 10px
+        }
+      }
+    }
+  }
+}
+
 </style>
