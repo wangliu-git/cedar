@@ -85,7 +85,6 @@
 </template>
 <script type="text/ecmascript-6">
 import "./js/util.js";
-
 import echarts from "echarts";
 
 export default {

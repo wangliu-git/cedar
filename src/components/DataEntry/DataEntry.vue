@@ -1509,7 +1509,7 @@ export default {
             value: '其他T细胞淋巴瘤',
             label: '其他T细胞淋巴瘤'
             }]
-        },
+        },     
         {
           value: '前驱淋巴性肿瘤',
           label: '前驱淋巴性肿瘤',
@@ -1864,7 +1864,6 @@ export default {
         record: {}, //"病历资料"
         helper_report: {} //"重要辅助检查报告"
       },
-
       // 以下是本医疗机构信息
       tMInstitution: {
         test_id: {}, //"病理号"

@@ -1969,10 +1969,11 @@ export default {
           report_quality:this.editForm.report_quality,
           diagnosis_type:this.editForm.diagnosis_type,
           sample_location:this.editForm.sample_location,
-          // test_id:this.editForm.test_id,
-          // test_id:this.editForm.test_id,
-          // test_id:this.editForm.test_id,
-          // test_id:this.editForm.test_id,
+          birthday:this.editForm.birthday,
+          application_date:this.editForm.application_date,
+          report_date:this.editForm.report_date,
+          application_Ydate:this.editForm.application_Ydate,
+          report_Ydate:this.editForm.report_Ydate,
         }
       });
       console.log(res);
