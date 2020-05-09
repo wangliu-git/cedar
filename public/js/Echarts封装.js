@@ -450,8 +450,10 @@ function setEChart_bar(myChart, data) {
  * @param {object} data 待分析的源数据
  */
 function setEChart_line(myChart, data) {
-    let nameArray = [];
-    let valueArray = [];
+    let nameArray = [];   //X轴的数据
+    let valueArray = [];    //Y轴的数据
+
+    // 遍历拿到数据
     for (var i = 0; i < data.length; i++) {
         nameArray.push(data[i].name);
         valueArray.push(data[i].value);
@@ -475,9 +477,7 @@ function setEChart_line(myChart, data) {
             type: 'line'
         }]
     };
-
-
-    if (showLog) console.log('option:', option);
+    // if (showLog) console.log('option:', option);
     // 使用刚指定的配置项和数据显示图表。
     myChart.setOption(option, true);
 }
@@ -496,10 +496,7 @@ function setEChart_map(myChart, data) {
     }
     //防止NaN的显示
     // data.push({ name: '南海诸岛', value: 0 });
-
-    if (showLog) console.log('data:', nameArray);
-
-
+    // if (showLog) console.log('data:', nameArray);
     var optionMap = {
         backgroundColor: '#FFFFFF',
         tooltip: {
@@ -854,11 +851,13 @@ function setEChart_pieWithTool(param) {
 
 
 
-    if (showLog) console.log('option:', option);
+    // if (showLog) console.log('option:', option);
     // 使用刚指定的配置项和数据显示图表。
     myChart.clear();
     myChart.setOption(option, { notMerge:true});
+    }
 }
+
 
 /**
  * @description EChart -带有工具栏的地图，操作echarts对象更换图形

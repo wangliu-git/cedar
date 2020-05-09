@@ -743,6 +743,7 @@
       </div>
     </div>
 
+      <!--病人信息 -->
     <div class="zhezhao" v-if="zhezhao" :model="editForm">
       <div class="look">
         <div class="header">
@@ -792,6 +793,25 @@
       </div>
     </div>
 
+    <!--点击下一个 -->
+    <div class="nextone" v-if="xiayige">
+      <div class="warn">
+        <div class="title">
+          <span>编辑</span>
+          <span><i class="iconfont iconfork"></i></span>
+        </div>
+
+        <div class="main">
+          <span ><i class="iconfont iconjinggaocopy" @click="xiayige = false"></i></span>
+          <span>直接进入下一个?</span>
+          <span style="color:#716F6F">（本条病例不会保存）</span>
+          <div class="button">
+            <el-button size="mini" style="width:60px" @click="shi()">是</el-button>
+            <el-button size="mini" style="width:60px" @click="xiayige = false">否</el-button>
+          </div>
+        </div>
+      </div>      
+    </div>
   </div>
 </template>
 
@@ -872,6 +892,7 @@ export default {
       console.log(res)
       console.log(this.id)
       this.group = !this.group
+      this.getDataList()
     },
     // 点击数据集编辑
     async bianji(row){
@@ -1027,9 +1048,12 @@ export default {
       // console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);        
     },
     // 点击下一个
-    async next(){
-      this.id = this.id         
-      console.log(this.id)
+    next(){
+      this.id = this.id    
+      this.xiayige = true     
+      console.log(this.id)   
+    },
+    async shi(){
       const { data :res} = await this.axios.get(
       "excel_data/nextonedata.php?id=" + this.id);      
       if(res.ok ==0){
@@ -1039,7 +1063,8 @@ export default {
       this.editForm = res.data;
       // 将ID赋值下一个ID
       this.id= res.id
-      // this.editForm = Object.assign(res.data[0],res.data[1],res.data[2]
+      this.xiayige = false
+      // this.editForm = Object.assign(res.data[0],res.data[1],res.data[2])
     },
     // 显示
     xianshi(){
@@ -1340,7 +1365,8 @@ export default {
     } ,
   },
   data() { 
-    return {       
+    return {      
+      xiayige:false, 
       wenjian:true,  //上传文件
       item:'',
       // 拼接录入和未录入
@@ -2443,6 +2469,7 @@ a {
     }
   }
 }
+
 // 分组弹窗
 .out{
   position:fixed;
@@ -2450,7 +2477,7 @@ a {
 	top:0px;
   width 100%
   height 100%  
-	background-color :rgba(245,247,251,0.7);
+	background-color :rgba(200,200,200,0.7);
   z-index 9
   .nei {
     border-radius: 5px;
@@ -2915,7 +2942,7 @@ a {
   }
 }
 .zhezhao{
-    background #CCCBCE   
+    background-color :rgba(200,200,200,0.7); 
     position relative
     bottom 200px
     z-index 9999
@@ -3067,4 +3094,60 @@ a {
       }
     }
 }
+
+.nextone{
+  position:fixed;
+	left:0px;
+	top:0px;
+  width 100%
+  height 100%  
+	background-color :rgba(200,200,200,0.7);
+  z-index 9
+  .warn{
+    border-radius: 5px;
+    width: 334px;
+    height: 200px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    top: 0;
+    margin: auto;
+    background-color: #FAFAFA;
+		z-index 10;
+    .title{
+      width: 334px;
+      height: 40px;
+      background:rgba(28,177,255,1);
+      border-radius:6px 6px 0px 0px;
+      line-height 40px
+      display flex
+      justify-content: space-between;
+      span{
+        margin-left 10px
+        margin-right 10px
+        color #FFFFFF
+      }
+    }
+    .main{
+      margin-top 10px
+      display flex
+      flex-flow column
+      align-items center
+      justify-content space-around
+      height 140px
+      .iconjinggaocopy{
+        color red
+        font-size 20px
+      }
+      .button{
+        .el-button{
+          margin-left 10px
+          margin-right 10px
+        }
+      }
+    }
+  }
+}
+
 </style>
