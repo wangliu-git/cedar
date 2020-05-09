@@ -818,7 +818,7 @@
       <div class="warn">
         <div class="title">
           <span>编辑</span>
-          <span><i class="iconfont iconfork"></i></span>
+          <span><i class="iconfont iconfork" @click="xiayige = false"></i></span>
         </div>
 
         <div class="main">
@@ -978,7 +978,7 @@ export default {
       // console.log("getTableList",res);
       this.editForm = res.data;
       this.id = row.id
-      // console.log(this.editForm);   
+      console.log(this.editForm);   
     },
     //点击病理号查看
     jiaoyan(row){
@@ -3138,7 +3138,7 @@ a {
   .warn{
     border-radius: 5px;
     width: 334px;
-    height: 200px;
+    height: 180px;
     position: absolute;
     left: 0;
     bottom: 0;
@@ -3162,12 +3162,11 @@ a {
       }
     }
     .main{
-      margin-top 10px
       display flex
       flex-flow column
       align-items center
       justify-content space-around
-      height 140px
+      height 120px
       .iconjinggaocopy{
         color red
         font-size 20px

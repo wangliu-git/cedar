@@ -1183,7 +1183,7 @@
       <div class="warn">
         <div class="title">
           <span>编辑</span>
-          <span>
+          <span @click="xiayige = false">
             <i class="iconfont iconfork"></i>
           </span>
         </div>
@@ -1370,8 +1370,9 @@ export default {
       this.ji = false;
       this.sousuo = false;
       const { data: res } = await this.axios.get(
-        "excel_data/onedata.php?id=" + row.id
+        "excel_data/onedata.php" ,{params:{id:row.id}}
       );
+      console.log(res)
       this.editForm = res.data;
       console.log(this.editForm);
 
@@ -1496,7 +1497,7 @@ export default {
     // 显示
     xianshi() {
       this.wenjian = true;
-      this.luru = !this.luru;
+      this.luru = false;
       this.ji = true;
       this.sousuo = true;
     },
@@ -1638,7 +1639,7 @@ export default {
       this.zhezhao = false;
       this.id = this.id;
       // console.log(this.id)
-      this.editFrm = this.editForm;
+      // this.editForm = this.editForm;
       this.editForm.help_diagnosis = this.help_diagnosis;
       // const sicksList = JSON.stringify(sicksArr)
       let data = {
@@ -1668,7 +1669,7 @@ export default {
               callback: action => {}
             });
           }
-          this.$set(this.groupList);
+          
         });
       } else {
         console.log("error submit!!");
@@ -3773,7 +3774,7 @@ a {
   .warn {
     border-radius: 5px;
     width: 334px;
-    height: 200px;
+    height: 180px;
     position: absolute;
     left: 0;
     bottom: 0;
@@ -3800,12 +3801,11 @@ a {
     }
 
     .main {
-      margin-top: 10px;
       display: flex;
       flex-flow: column;
       align-items: center;
       justify-content: space-around;
-      height: 140px;
+      height: 120px;
 
       .iconjinggaocopy {
         color: red;
