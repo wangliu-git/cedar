@@ -115,22 +115,19 @@ function setEChart_mapWithTool(param) {
     myChart.setOption(optionMap, { notMerge: true });
 }
 
-
-
 /**
  * @description 根据data数据计算出当前地图的分组数据,返回最大值
  * @param {Array} data 对象数组，对象格式为：{name:'省份名',value:'number'}
  * @returns {number} 省份数据中的最大值
  */
 function getMapSplitData(data){
+    console.log(data[0])
     let maxVal = parseInt(data[0].value);
     for(let i=0;i<data.length;i++){
         maxVal = parseInt(data[i].value) > maxVal ? parseInt(data[i].value):maxVal;
     }
     return maxVal;
 }
-
-
 
 
 /**

@@ -1557,12 +1557,13 @@ export default {
     submitUpload(){
         this.uploadLoading=true;
         var that=this;
-        setTimeout(function () {        
+           
           if(that.$refs.upload.$children[0].fileList.length==1){
             that.$refs.upload.submit();
-            that.$alert('上传成功')   
-            that.datalist = []
-            that.getDataList()  
+            that.$alert("上传成功").then( () =>{
+            that.datalist = [];
+            that.getDataList();    
+        }) 
           }else{
             that.uploadLoading=false;
             that.$message({
@@ -1573,7 +1574,7 @@ export default {
             });
           };
            
-        },10);
+        
     },
     handleRemove(file,fileList){
         // console.log(file,fileList);

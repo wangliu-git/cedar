@@ -2,14 +2,13 @@
   <div class="outest">
     <div class="sContainer">
       <span>选择分组 :</span>
-      <el-select size="mini" style="width:250px" placeholder="请选择分组" v-model="item">
+      <el-select size="mini" style="width:250px" placeholder="请选择分组" v-model="item" @change="group_id">
         <el-option
           v-for="(it, index) in this.groupList"
           :key="index"
-          :value="it.group_name"
-          @click="group_id(it)"
+          :label="it.group_name" :value="it" selected="selected"  
         >
-          <span>{{it.group_name}}</span>
+          {{it.group_name}}
         </el-option>
       </el-select>
     </div>
@@ -69,7 +68,7 @@
             <el-table-column prop="sex" label="性别" width="160" sortable></el-table-column>
             <el-table-column prop="age" label="年龄" width="160" sortable></el-table-column>
             <el-table-column
-              prop="diagnosis2"
+              prop="diagnosis_origin"
               label="原单位诊断"
               show-overflow-tooltip
               width="200"
@@ -492,8 +491,8 @@ import uuid from "uuid";
 import allMessage from "../../staic/allMessage.json";
 
 export default {
-  created() {
-    this.getTableList();
+  created() {  
+    // this.getTableList();
     this.groupList();
   },
   methods: {
@@ -513,6 +512,13 @@ export default {
         // })
         console.log(res.data.data);
       });
+    },
+    // 点击选择分组
+    group_id(it) {
+      
+      this.it = it
+      console.log(this.it)
+      this.getTableList(this.it)
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
@@ -577,6 +583,7 @@ export default {
           center: true
         })
           .then(() => {
+            this.getTableList()
             this.$message({
               type: "success",
               message: "删除成功!"
@@ -648,20 +655,18 @@ export default {
         return false;
       }
     },
-    group_id(it) {
-      console.log(this.it);
-    },
+  
     // 获取病理号
-    async getTableList() {
+    async getTableList(it) {
       // alert(1)
-      // console.log(it)
+      console.log(it)
       let group_id = "";
       const { data: res } = await this.axios.get("diagnosis_origin/list.php", {
-        params: { page: this.queryInfo.page, group_id: 1 }
+        params: { page: this.queryInfo.page, group_id:this.it.id}
       });
       console.log("getTableList",res);
       this.tablelist = res.data;
-      // console.log(res.data);
+      console.log(res.data);
       this.queryInfo.page = parseInt(res.page);
       this.queryInfo.count = parseInt(res.count); //总条数
       this.queryInfo.pagerows = res.pagerows; //每页显示多少条
@@ -709,6 +714,8 @@ export default {
   },
   data() {
     return {
+      it:'',
+      item:'',
       photo: "",
       upLoadUrl: "http://106.13.49.232/cedar/api/diagnosis_origin/add.php",
       // 级联选择器
@@ -1734,7 +1741,7 @@ export default {
   },
 
   mounted() {
-    this.getTableList();
+    // this.getTableList();
     // 原医疗机构诊断
     allMessage.formdata.map((sickItems, index) => {
       if (sickItems.field_index == 1) {

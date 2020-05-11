@@ -259,7 +259,7 @@
               <span>{{tMInstitution.test_id.field_title}}:</span>
               <el-input
                 v-model="editForm.test_id"
-                placeholder="请填写肿瘤数量"
+                placeholder="请填写病理号"
                 size="mini"
                 style="width:200px"
               ></el-input>
@@ -561,10 +561,7 @@
               <span>病理类型：</span>
               {{editForm.diagnosis}}
             </div>
-            <div>
-              <span>淋巴细胞来源：</span>
-              {{editForm.type}}
-            </div>
+
             <div style="float:left">
               辅助诊断
               <span>免疫组化：</span>

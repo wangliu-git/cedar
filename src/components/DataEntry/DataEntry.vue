@@ -1216,7 +1216,6 @@ export default {
   created() {
     this.getDataList();
     // this.getTableList();
-
     // console.log(window.sessionStorage.uid)
   },
   methods: {
@@ -1272,7 +1271,7 @@ export default {
                 // this.search = !this.search
                 this.groupList = [];
                 this.groupLists();
-                this.groupName = "";
+                // this.groupName = "";
               }
             });
           } else {
@@ -1395,7 +1394,7 @@ export default {
     },
     // 获取数据集列表
     async getDataList() {
-      // console.log(1)
+      console.log(1)
       let type = "";
       const { data: res } = await this.axios.get("dataset/list.php", {
         params: { type: 1, page: this.shuInfo.page }
@@ -1422,6 +1421,7 @@ export default {
       // alert("gt2"+this.sousuo);
       // console.log(row.id)
       // console.log(this.queryInfo.page)
+     
       const { data: res } = await this.axios.get("excel_data/list.php", {
         params: { id: row.id, page: this.queryInfo.page }
       });
@@ -1433,6 +1433,7 @@ export default {
       this.queryInfo.count = parseInt(res.count); //总条数
       this.queryInfo.pagerows = res.pagerows; //每页显示多少条
       this.id = row.id;
+      this.row = row  //缓存的row
      
       // console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);
     },
@@ -1709,22 +1710,23 @@ export default {
     submitUpload() {
       this.uploadLoading = true;
       var that = this;
-      setTimeout(function() {
-        if (that.$refs.upload.$children[0].fileList.length == 1) {
-          that.$refs.upload.submit();
-          that.$alert("上传成功");
+      if (that.$refs.upload.$children[0].fileList.length == 1) {
+        that.$refs.upload.submit();
+        that.$alert("上传成功").then( () =>{
           that.datalist = [];
-          that.getDataList();
-        } else {
-          that.uploadLoading = false;
-          that.$message({
-            type: "error",
-            showClose: true,
-            duration: 3000,
-            message: "请选择文件!"
-          });
-        }
-      }, 100);
+          that.getDataList();    
+        })
+             
+      } else {
+        that.uploadLoading = false;
+        that.$message({
+          type: "error",
+          showClose: true,
+          duration: 3000,
+          message: "请选择文件!"
+        });
+      }
+    
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
