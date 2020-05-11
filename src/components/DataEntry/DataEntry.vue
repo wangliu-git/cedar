@@ -1060,7 +1060,7 @@
           -->
           <div class="sousuo">
             <el-input placeholder="请输入分组关键词..." style="width:500px">
-              <el-button slot="append">搜索</el-button>
+              <el-button   plain slot="append">搜索</el-button>
             </el-input>
           </div>
           <div class="groupList">
@@ -1073,7 +1073,7 @@
           <div class="name">
             <span>新建项目名称 ：</span>
             <el-input placeholder="请输入分组名称..." style="width:380px" v-model="groupName">
-              <el-button slot="append" @click="addGroup(groupName)">保存</el-button>
+              <el-button plain slot="append" @click="addGroup(groupName)">保存</el-button>
             </el-input>
           </div>
           <div class="button">
@@ -1337,7 +1337,7 @@ export default {
               }
             });
           } else {
-            this.$alert("解析失败,请检查", "提交结果", {
+            this.$alert('解析失败，请检查文件格式和列名', "提交结果", {
               confirmButtonText: "确定",
               type: "warning",
               callback: action => {
