@@ -2061,11 +2061,11 @@ export default {
       });
     },
     // 添加分组名
-    addGroup(groupName) {
-      checkList.push(groupName);
-      this.checkList = this.checkList;
-      console.log(this.checkList);
-    },
+    // addGroup(groupName) {
+    //   checkList.push(groupName);
+    //   this.checkList = this.checkList;
+    //   console.log(this.checkList);
+    // },
     // 保存
     baocun(editForm) {
       this.id = this.id;
@@ -2219,7 +2219,7 @@ export default {
     },
     inGroup(ids) {
       //console.log(this.ids)
-      this.group = false;
+      this.group = true;
     },
     // 点击拿到分组的ID
     group_id(it) {

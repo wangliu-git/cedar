@@ -759,7 +759,7 @@
                       <i class="iconfont icontubiaozhizuo-"></i>
                       {{ihc.name}}
                     </span>
-                    <div id="one" v-for="(ihc,idx) in help_diagnosis.ihc" :key="idx">
+                    <div id="one" v-for="(ihc,idx) in editForm.helper_diagnosis.ihc" :key="idx">
                       <!-- 循环myzh这个数组，来动态 + - 操作 -->
                       <div class="sickI">
                         <div class="sickIt">
@@ -2493,7 +2493,7 @@ export default {
       reportMessage: {}, //报告信息
       materMessage: {}, //取材信息
       reportResult: {}, //诊断结论
-      // helper_diagnosis: [], //辅助诊断
+      helper_diagnosis: [], //辅助诊断
       helper_diagnosisAll: {}, //辅助诊断信息对象
       ihc: {}, //免疫组化信息对象
       fish: {}, //荧光杂交信息对象

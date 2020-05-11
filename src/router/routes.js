@@ -14,6 +14,10 @@ import Shaix from '@/components/Shaix/Shaix.vue'
 import Group from '@/components/Group/Group.vue'
 import DataAnalysis from '@/components/DataAnalysis/DataAnalysis.vue'
 import Medical from '@/components/Medical/Medical.vue'
+import Sex from '@/components/Medical/Sex/Sex.vue'
+
+
+
 // import Try from '@/components/Try/Try.vue'
 import UserManagement from '@/components/UserManagement/UserManagement.vue'
 
@@ -103,7 +107,7 @@ export default [
                 children:[
                     {
                         path:'/medical',
-                        component:Medical
+                        component:Medical,
                     }
                 ]
         
