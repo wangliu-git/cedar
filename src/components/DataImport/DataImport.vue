@@ -201,6 +201,7 @@
           </span>
         </div>
         <div class="mian">
+          <!--
           <div class="ming">
             <span>文件名称：</span>
             <el-input style="width:420px" size="small" v-model="data.file_name"></el-input>
@@ -209,6 +210,7 @@
             <span>项目名称：</span>
             <el-input style="width:420px" size="small" v-model="data.location"></el-input>
           </div>
+          -->
           <div class="sousuo">
             <el-input placeholder="请输入分组关键词..." style="width:500px">
               <el-button slot="append">搜索</el-button>
@@ -259,7 +261,8 @@
               <div class="HZdown">
                 <!--病人ID -->
                 <div class="sickItem">
-                  <span>{{showInfo.patient_id.field_title}}:</span>
+                  <!-- <span>{{showInfo.patient_id.field_title}}:</span> -->
+                  <span>住院号:</span>
                   <el-input
                     type="text"
                     maxlength="10"
@@ -733,7 +736,7 @@
                       <i class="iconfont icontubiaozhizuo-"></i>
                       {{ihc.name}}
                     </span>
-                    <div id="one"  v-for="(ihc,idx) in editForm.helper_diagnosis.ihc" :key="idx">
+                    <div id="one"  v-for="(ihc,idx) in this.helper_diagnosis.ihc" :key="idx">
                       <!-- 循环myzh这个数组，来动态 + - 操作 -->
                       <div class="sickI">
                         <div class="sickIt">
@@ -761,23 +764,38 @@
                     </div>
                   </div>
 
-                  <div v-show="seen1" v-for="(item,idx) in editForm.helper_diagnosis.fish"
-                              :key="idx">
+                  <div v-show="seen1">
                     <span class="titl">
                       <i class="iconfont icontubiaozhizuo-"></i>
                       {{fish.name}}
                     </span>
-                    <div id="two">
+                    <div id="two" v-for="(fish,idx) in help_diagnosis.fish" :key="idx">
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.key_fish.field_title}}：</span>
-                          <el-input v-model="fish.mark" style="width:100px"></el-input>                       
+                          <el-select size="mini" style="width:100px" v-model="fish.mark">
+                            <el-option
+                              v-for="(item,index) in FZ.key_fish.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
                         </div>
                       </div>
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.value_fish.field_title}}：</span>
-                          <el-input v-model="fish.value" style="width:100px"></el-input>
+                          <el-select size="mini" style="width:100px" v-model="fish.value">
+                            <el-option
+                              v-for="(item,index) in  FZ.value_fish.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
                         </div>
                       </div>
                       <!-- 不同的地方可以调用一个方法，不需要额外写-->
@@ -788,6 +806,192 @@
                           <i class="iconfont iconaddTodo-nav"></i>
                         </el-button>
                         <el-button @click="ihcDeleteData(help_diagnosis.fish)">
+                          <i class="iconfont iconjianhao1"></i>
+                        </el-button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div v-show="seen2">
+                    <span class="titl">
+                      <i class="iconfont icontubiaozhizuo-"></i>
+                      {{rearrangement.name}}
+                    </span>
+                    <div
+                      id="three"
+                      v-for="(rearrangement, idx) in help_diagnosis.rearrangement"
+                      :key="idx"
+                    >
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.key_dna.field_title}}：</span>
+                          <el-select size="mini" style="width:100px" v-model="rearrangement.mark">
+                            <el-option
+                              v-for="(item,index) in  FZ.key_dna.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.value_dna.field_title}}：</span>
+                          <el-select size="mini" style="width:100px" v-model="rearrangement.value">
+                            <el-option
+                              v-for="(item,index) in  FZ.value_dna.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                      <div class="handleBtnBox">
+                        <el-button
+                          @click="ihcAddData(help_diagnosis.rearrangement,help_diagnosis.rearrangement[idx])"
+                        >
+                          <i class="iconfont iconaddTodo-nav"></i>
+                        </el-button>
+                        <el-button @click="ihcDeleteData(help_diagnosis.rearrangement)">
+                          <i class="iconfont iconjianhao1"></i>
+                        </el-button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div v-show="seen3">
+                    <span class="titl">
+                      <i class="iconfont icontubiaozhizuo-"></i>
+                      {{ish.name}}
+                    </span>
+                    <div id="four" v-for="(ish, idx) in help_diagnosis.ish" :key="idx">
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.key_ish.field_title}}：</span>
+                          <el-select size="mini" style="width:100px" v-model="ish.mark">
+                            <el-option
+                              v-for="(item,index) in  FZ.key_ish.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.value_ish.field_title}}：</span>
+                          <el-select size="mini" style="width:100px" v-model="ish.value">
+                            <el-option
+                              v-for="(item,index) in FZ.value_ish.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                      <div class="handleBtnBox">
+                        <el-button @click="ihcAddData(help_diagnosis.ish,help_diagnosis.ish[idx])">
+                          <i class="iconfont iconaddTodo-nav"></i>
+                        </el-button>
+                        <el-button @click="ihcDeleteData(help_diagnosis.ish)">
+                          <i class="iconfont iconjianhao1"></i>
+                        </el-button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div v-show="seen4">
+                    <span class="titl">
+                      <i class="iconfont icontubiaozhizuo-"></i>
+                      {{fcm.name}}
+                    </span>
+                    <div id="five" v-for="(fcm, idx) in help_diagnosis.fcm" :key="idx">
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.type_fcm.field_title}}：</span>
+                          <el-select size="mini" style="width:100px" v-model="fcm.mark">
+                            <el-option
+                              v-for="(item,index) in  FZ.type_fcm.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.value_fcm.field_title}}：</span>
+                          <el-select size="mini" style="width:100px" v-model="fcm.value">
+                            <el-option
+                              v-for="(item,index) in FZ.value_fcm.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                      <div class="handleBtnBox">
+                        <el-button @click="ihcAddData(help_diagnosis.fcm,help_diagnosis.fcm[idx])">
+                          <i class="iconfont iconaddTodo-nav"></i>
+                        </el-button>
+                        <el-button @click="ihcAddData(help_diagnosis.fcm)">
+                          <i class="iconfont iconjianhao1"></i>
+                        </el-button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div v-show="seen5">
+                    <span class="titl">
+                      <i class="iconfont icontubiaozhizuo-"></i>
+                      {{ngs.name}}
+                    </span>
+                    <div id="six" v-for="(ngs, idx) in help_diagnosis.ngs" :key="idx">
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.type_ngs.field_title}}：</span>
+                          <el-select size="mini" style="width:100px" v-model="ngs.mark">
+                            <el-option
+                              v-for="(item,index) in FZ.type_ngs.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.value_ngs.field_title}}：</span>
+                          <el-select size="mini" style="width:100px" v-model="ngs.value">
+                            <el-option
+                              v-for="(item,index) in FZ.value_ngs.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
+                        </div>
+                      </div>
+                      <div class="handleBtnBox">
+                        <el-button @click="ihcAddData(help_diagnosis.ngs,help_diagnosis.ngs[idx])">
+                          <i class="iconfont iconaddTodo-nav"></i>
+                        </el-button>
+                        <el-button @click="ihcAddData(help_diagnosis.ngs)">
                           <i class="iconfont iconjianhao1"></i>
                         </el-button>
                       </div>
@@ -978,6 +1182,12 @@ export default {
       // console.log("getTableList",res);
       this.editForm = res.data;
       this.id = row.id
+       this.jilian = []
+      this.helper_diagnosis = this.editForm.helper_diagnosis
+      console.log(this.helper_diagnosis);
+      this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2,this.editForm.diagnosis3)
+      console.log(this.jilian)
+      this.editForm.jilian = this.jilian
       console.log(this.editForm);   
     },
     //点击病理号查看
@@ -1150,7 +1360,7 @@ export default {
       .then(() => {
 
         this.tablelist = []
-        this.getTableList2(row)
+        this.getTableList2(this.row)
         this.$message({
           type: "success",
           message: "删除成功!"
@@ -2658,12 +2868,12 @@ a {
 	top:0px;
   width 100%
   height 100%
-	background-color :rgba(245,247,251,0.7);
+	background-color: rgba(200,200,200,0.7);
   z-index 9
   .nei {
     border-radius: 5px;
     width: 550px;
-    height: 600px;
+    height: 520px;
     position: absolute;
     left: 0;
     bottom: 0;

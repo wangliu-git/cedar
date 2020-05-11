@@ -79,7 +79,7 @@
           slot="title"
           style="background-color:rgba(232, 232, 232, 1) ,border:1px solid,margin-left:10px"
         >
-          <i class="iconfont icontubiaozhizuo-"></i>全部创建者的全部数据
+          <i class="iconfont icontubiaozhizuo-"></i>
         </template>
 
         <!--全部创建者的数据 -->
@@ -371,7 +371,7 @@ export default {
     async daoChu(row) {
       console.log(row.id);
       this.daochu = true;
-      const { data: res } = await this.axios.get("group_report/list.php", {
+      const  res  = await this.axios.get("group_report/list.php", {
         params: { group_id: row.id }
       });
       this.id = row.id;

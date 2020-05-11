@@ -652,7 +652,7 @@
                       v-model="editForm.patient_id"
                       name="patient_id"
                       size="mini"
-                      placeholder="请输入住院号/门诊号"
+                      placeholder="请输入住院号/门诊号" style="width:200px"
                     ></el-input>
                   </div>
                   <!--姓名 <span v-show="editForm.name.length >= maxL">{{textShow}}</span> -->
@@ -663,7 +663,7 @@
                       size="mini"
                       v-model="editForm.name"
                       name="name"
-                      placeholder="请输入姓名"
+                      placeholder="请输入姓名" style="width:200px"
                     ></el-input>
                   </div>
                   <!--性別 -->
@@ -673,7 +673,7 @@
                       <el-option
                         v-for="item in showInfo.sex.field_values"
                         :key="item"
-                        :value="item"
+                        :value="item" style="width:200px"
                       >
                         <span>{{item}}</span>
                       </el-option>
@@ -700,7 +700,7 @@
                       size="mini"
                       v-model="editForm.phone"
                       name="phone"
-                      placeholder="请输入电话"
+                      placeholder="请输入电话" style="width:200px"
                     ></el-input>
                   </div>
                   <!--民族-->
@@ -709,7 +709,7 @@
                     <el-select
                       placeholder="请选择"
                       name="nation"
-                      v-model="editForm.nation"
+                      v-model="editForm.nation" style="width:200px"
                       size="mini"
                     >
                       <el-option
@@ -727,7 +727,7 @@
                     <el-select
                       placeholder="请选择"
                       name="birthplace"
-                      v-model="editForm.birthplace"
+                      v-model="editForm.birthplace"  style="width:200px"
                       size="mini"
                     >
                       <el-option
@@ -745,7 +745,7 @@
                     <el-select
                       placeholder="请选择"
                       name="birthplace"
-                      v-model="editForm.address_prov"
+                      v-model="editForm.address_prov" style="width:200px"
                       size="mini"
                     >
                       <el-option
@@ -785,7 +785,7 @@
                         type="text"
                         v-model="editForm.organization"
                         placeholder="请输入机构名称"
-                        size="mini"
+                        size="mini" style="width:200px"
                       ></el-input>
                     </div>
                     <div class="sickItem">
@@ -793,7 +793,7 @@
                       <el-input
                         type="text"
                         v-model="editForm.test_id"
-                        placeholder="请输入病理号"
+                        placeholder="请输入病理号" style="width:200px"
                         size="mini"
                       ></el-input>
                     </div>
@@ -804,7 +804,7 @@
                         v-model="editForm.application_date"
                         type="date"
                         size="mini"
-                        placeholder="选择日期"
+                        placeholder="选择日期" style="width:200px"
                       ></el-date-picker>
                     </div>
                     <div class="sickItem">
@@ -814,7 +814,7 @@
                         v-model="editForm.report_date"
                         type="date"
                         size="mini"
-                        placeholder="选择日期"
+                        placeholder="选择日期" style="width:200px"
                       ></el-date-picker>
                     </div>
                   </div>
@@ -831,7 +831,7 @@
                         v-model="editForm.jilian"
                         :options="options"
                         :props="{ checkStrictly: true }"
-                        clearable
+                        clearable style="width:500px"
                       ></el-cascader>
                     </div>
                   </div>
@@ -846,7 +846,7 @@
                       <el-select
                         placeholder="请选择"
                         name="report_quality"
-                        v-model="editForm.report_quality"
+                        v-model="editForm.report_quality" style="width:200px"
                         size="mini"
                       >
                         <el-option
@@ -1049,7 +1049,7 @@
                         type="text"
                         v-model="editForm.test_id"
                         placeholder="请输入病理号"
-                        size="mini"
+                        size="mini" style="width:200px"
                       ></el-input>
                     </div>
 
@@ -1059,7 +1059,7 @@
                         type="text"
                         v-model="editForm.department"
                         placeholder="请输入机构名称"
-                        size="mini"
+                        size="mini" style="width:200px"
                       ></el-input>
                     </div>
 
@@ -1070,7 +1070,7 @@
                         v-model="editForm.application_date"
                         type="date"
                         size="mini"
-                        placeholder="选择日期"
+                        placeholder="选择日期" style="width:200px"
                       ></el-date-picker>
                     </div>
 
@@ -1081,14 +1081,14 @@
                         v-model="editForm.report_date"
                         type="date"
                         size="mini"
-                        placeholder="选择日期"
+                        placeholder="选择日期" style="width:200px"
                       ></el-date-picker>
                     </div>
                     <div class="sickItem">
                       <span>{{tMInstitution.diagnosis_type.field_title}}：</span>
                       <el-select
                         name="diagnosis_type"
-                        v-model="editForm.diagnosis_type"
+                        v-model="editForm.diagnosis_type" style="width:200px"
                         size="mini"
                       >
                         <el-option
@@ -1125,7 +1125,7 @@
                         <el-option
                           v-for="(item,index) in  tMInstitution.sample_type.field_values"
                           :key="index"
-                          :value="item"
+                          :value="item" style="width:200px"
                         >
                           <span>{{item}}</span>
                         </el-option>
@@ -1147,7 +1147,7 @@
                         type="text"
                         v-model="editForm.sample_morphology"
                         placeholder="请输入取材部位"
-                        size="mini"
+                        size="mini" style="width:200px"
                       ></el-input>
                     </div>
                   </div>
@@ -1165,7 +1165,7 @@
                         v-model="editForm.jilian"
                         :options="options"
                         :props="{ checkStrictly: true }"
-                        clearable
+                        clearable style="width:500px"
                       ></el-cascader>
                     </div>
                   </div>
@@ -1198,7 +1198,7 @@
                         <i class="iconfont icontubiaozhizuo-"></i>
                         {{ihc.name}}
                       </span>
-                      <div id="one" v-for="(ihc,idx) in editForm.helper_diagnosis.ihc" :key="idx">
+                      <div id="one" v-for="(ihc,idx) in this.helper_diagnosis.ihc" :key="idx">
                         <!-- 循环myzh这个数组，来动态 + - 操作 -->
                         <div class="sickI">
                           <div class="sickIt">
@@ -1990,7 +1990,7 @@ export default {
       reportMessage: {}, //报告信息
       materMessage: {}, //取材信息
       reportResult: {}, //诊断结论
-      helper_diagnosis: [], //辅助诊断
+      helper_diagnosis: {}, //辅助诊断
       helper_diagnosisAll: {}, //辅助诊断信息对象
       ihc: {}, //免疫组化信息对象
       fish: {}, //荧光杂交信息对象
@@ -2051,7 +2051,7 @@ export default {
     },
     // 获取选择分组
     groupList() {
-      const { data: res } = this.axios.get("group/list.php").then(res => {
+      const res  = this.axios.get("group/list.php").then(res => {
         console.log(res);
         this.groupList = res.data.data;
         // this.groupList.map( ( items ,index ) => {
@@ -2178,7 +2178,14 @@ export default {
         params: { id: row.id }
       });
       this.editForm = res.data;
+      // console.log(this.editForm)
       this.id = row.id;
+      this.jilian = []
+      this.helper_diagnosis = this.editForm.helper_diagnosis
+      // console.log(this.helper_diagnosis);
+      this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2,this.editForm.diagnosis3)
+      // console.log(this.jilian)
+      this.editForm.jilian = this.jilian
     },
     // 筛选重置按钮
     reset(editForm) {

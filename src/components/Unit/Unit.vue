@@ -69,7 +69,7 @@
             <el-table-column prop="sex" label="性别" width="160" sortable></el-table-column>
             <el-table-column prop="age" label="年龄" width="160" sortable></el-table-column>
             <el-table-column
-              prop="entry_status"
+              prop="diagnosis2"
               label="原单位诊断"
               show-overflow-tooltip
               width="200"
@@ -597,6 +597,7 @@ export default {
       this.zhezhao = !this.zhezhao;
       this.id = row.id;
       this.attached = row.attached;
+      this.getTableList()
     },
     // 清空
     qingkong() {
@@ -651,14 +652,14 @@ export default {
       console.log(this.it);
     },
     // 获取病理号
-    async getTableList(it) {
+    async getTableList() {
       // alert(1)
       // console.log(it)
       let group_id = "";
       const { data: res } = await this.axios.get("diagnosis_origin/list.php", {
         params: { page: this.queryInfo.page, group_id: 1 }
       });
-      // console.log("getTableList",res);
+      console.log("getTableList",res);
       this.tablelist = res.data;
       // console.log(res.data);
       this.queryInfo.page = parseInt(res.page);
@@ -669,7 +670,7 @@ export default {
     async getTable() {
       // console.log(row.id)
       const { data: res } = await this.axios.get("diagnosis_origin/list.php", {
-        params: { name: this.name, test_id: this.test_id }
+        params:{name: this.name, test_id: this.test_id }
       });
       // console.log(this.test_id)
       // console.log(this.name)
@@ -692,6 +693,18 @@ export default {
     handleCurrentChange(newPage) {
       this.queryInfo.page = newPage;
       this.getTableList();
+    },
+    // 点击原单位编辑
+    async bianji(row){
+      this.zhezhao = true;
+      console.log(row);
+      const { data: res } = await this.axios.get("diagnosis_origin/one.php", {
+        params: { id: row.id }
+      });
+      console.log(row.id);
+      console.log(res);
+      this.editForm = res;
+      console.log(this.editForm);
     }
   },
   data() {

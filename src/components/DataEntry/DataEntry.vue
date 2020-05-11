@@ -213,7 +213,8 @@
               <div class="HZdown">
                 <!--病人ID -->
                 <div class="sickItem">
-                  <span>{{showInfo.patient_id.field_title}}:</span>
+                  <!-- <span>{{showInfo.patient_id.field_title}}:</span> -->
+                  <span>住院号:</span>
                   <el-input
                     type="text"
                     maxlength="10"
@@ -426,7 +427,7 @@
                       :props="{ checkStrictly: true }"
                       clearable
                       style="width:500px"
-                    ></el-cascader>
+                    >{{jilian[0]}}{{jilian[1]}}{{jilian[2]}}</el-cascader>
                   </div>
                 </div>
                 <!--报告质量  可折叠-->
@@ -759,7 +760,7 @@
                       <i class="iconfont icontubiaozhizuo-"></i>
                       {{ihc.name}}
                     </span>
-                    <div id="one" v-for="(ihc,idx) in editForm.helper_diagnosis.ihc" :key="idx">
+                    <div id="one" v-for="(ihc,idx) in this.helper_diagnosis.ihc" :key="idx">
                       <!-- 循环myzh这个数组，来动态 + - 操作 -->
                       <div class="sickI">
                         <div class="sickIt">
@@ -1047,6 +1048,7 @@
           </span>
         </div>
         <div class="mian">
+        <!--
           <div class="ming">
             <span>文件名称：</span>
             <el-input style="width:420px" size="small" v-model="data.file_name"></el-input>
@@ -1055,6 +1057,7 @@
             <span>项目名称：</span>
             <el-input style="width:420px" size="small" v-model="data.location"></el-input>
           </div>
+          -->
           <div class="sousuo">
             <el-input placeholder="请输入分组关键词..." style="width:500px">
               <el-button slot="append">搜索</el-button>
@@ -1371,9 +1374,19 @@ export default {
       this.sousuo = false;
       const { data: res } = await this.axios.get(
         "excel_data/onedata.php" ,{params:{id:row.id}}
-      );
-      console.log(res)
+      );      
+      console.log(res)   
       this.editForm = res.data;
+      // this.jilian = this.editForm.jilian
+      this.jilian = []
+      this.helper_diagnosis = this.editForm.helper_diagnosis
+      console.log(this.helper_diagnosis);
+      this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2,this.editForm.diagnosis3)
+      console.log(this.jilian)
+      this.editForm.jilian = this.jilian
+      this.editForm.jilian.toString(',')
+      
+      console.log(this.editForm.jilian)
       console.log(this.editForm);
 
       // // 处理数据
@@ -1420,6 +1433,7 @@ export default {
       this.queryInfo.count = parseInt(res.count); //总条数
       this.queryInfo.pagerows = res.pagerows; //每页显示多少条
       this.id = row.id;
+     
       // console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);
     },
     // 点击切换页码
@@ -1480,6 +1494,7 @@ export default {
       this.addFormList();
       this.xiayige = false;
     },
+    // 否
     async fou(id) {
       const { data: res } = await this.axios.get(
         "excel_data/nextonedata.php?id=" + this.id
@@ -1618,21 +1633,22 @@ export default {
         type: "warning",
         center: true
       })
-        .then(() => {
-          const { data: res } = this.axios.get("excel_data/del.php", {
-            params: { id: row.id }
-          });
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
+      .then(() => {
+        const { data: res } = this.axios.get("excel_data/del.php", {
+          params: { id: row.id }
         });
+        this.$message({
+          type: "success",
+          message: "删除成功!"
+        });
+        this.getTableList2(this.row)
+      })
+      .catch(() => {
+        this.$message({
+          type: "info",
+          message: "已取消删除"
+        });
+      });
     },
     // 新增患者信息
     addFormList(editForm) {
@@ -1805,6 +1821,7 @@ export default {
       groupName: "",
       sousuo: false,
       ji: true,
+      jilian:[],
       value: {
         mark: "",
         value: ""
@@ -2423,7 +2440,7 @@ export default {
         sample_morphology: "", //形态学描述
         diagnosis: "", //诊断结论
         type: "", //淋细胞瘤来源
-        helper_diagnosis: "" //辅助诊断
+        helper_diagnosis: [] //辅助诊断
       },
       // 以下是原诊断机构信息
       fMInstitution: {
@@ -2493,14 +2510,15 @@ export default {
       reportMessage: {}, //报告信息
       materMessage: {}, //取材信息
       reportResult: {}, //诊断结论
-      helper_diagnosis: [], //辅助诊断
+      // helper_diagnosis: [], //辅助诊断
+      helper_diagnosis:{},
       helper_diagnosisAll: {}, //辅助诊断信息对象
-      ihc: {}, //免疫组化信息对象
-      fish: {}, //荧光杂交信息对象
-      rearrangement: {}, //基因重排
-      ish: {}, //原位杂交
-      fcm: {}, //流式细胞检测
-      ngs: {}, //ngs检测
+      ihc: [] ,//免疫组化信息对象
+      fish: [], //荧光杂交信息对象
+      rearrangement: [], //基因重排
+      ish: [], //原位杂交
+      fcm: [], //流式细胞检测
+      ngs: [], //ngs检测
       //测试数据
       help_diagnosis: {
         ihc: [
@@ -3049,13 +3067,13 @@ a {
   top: 0px;
   width: 100%;
   height: 100%;
-  background-color: rgba(200, 200, 200, 0.7);
+  background-color: rgba(200,200,200,0.7);
   z-index: 9;
 
   .nei {
     border-radius: 5px;
     width: 550px;
-    height: 588px;
+    height: 520px;
     position: absolute;
     left: 0;
     bottom: 0;

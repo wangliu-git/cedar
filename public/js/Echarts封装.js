@@ -868,7 +868,7 @@ function setEChart_pieWithTool(param) {
  * @param {string} param.title 表格title名称
  */
 function setEChart_mapWithTool(param) {
-    let myChart = param.myChart, data = param.data.stat, title = param.title;
+    let myChart = param.myChar  , data = param.data.stat, title = param.title;
     console.log('setEChart_barWithTool-param:', param);
 
     //处理后的数据
