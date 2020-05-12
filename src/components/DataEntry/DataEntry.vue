@@ -731,14 +731,12 @@
                   </div>
                   <div class="sickItem">
                     <span>病理类型原文:</span>
-                    <el-cascader
+                    <el-input
                       size="mini"
-                      v-model="editForm.diagnosis2"
-                      :options="options"
-                      :props="{ checkStrictly: true }"
+                      v-model="editForm.diagnosis2"                    
                       clearable
-                      style="width:500px"
-                    ></el-cascader>
+                      style="width:300px"
+                    ></el-input>
                   </div>
                 </div>
 
@@ -1317,7 +1315,7 @@ export default {
       console.log(this.id);
     },
     // 是
-    shi() {
+    shi(){
       // const { data :res} = await this.axios.get(
       // "excel_data/nextonedata.php?id=" + this.id);
       // if(res.ok ==0){

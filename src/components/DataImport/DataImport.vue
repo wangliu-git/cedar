@@ -432,6 +432,15 @@
                     <span>病理类型:</span>
                     <el-cascader v-model="editForm.jilian" size="mini" :options="options" :props="{ checkStrictly: true }" clearable style="width:500px"></el-cascader>                   
                   </div>
+                  <div class="sickItem">
+                    <span>病理类型原文:</span>
+                    <el-input
+                      size="mini"
+                      v-model="editForm.diagnosis2"                    
+                      clearable
+                      style="width:300px"
+                    ></el-input>
+                  </div>
                 </div>
                 <!--报告质量  可折叠-->
                 <div class="sickIH">
@@ -704,6 +713,15 @@
                     <span>病理类型:</span>
                     <el-cascader v-model="editForm.jilian" size="mini" :options="options" :props="{ checkStrictly: true }" clearable style="width:500px"></el-cascader>                   
                   </div>
+                  <div class="sickItem">
+                    <span>病理类型原文:</span>
+                    <el-input
+                      size="mini"
+                      v-model="editForm.diagnosis2"                    
+                      clearable
+                      style="width:300px"
+                    ></el-input>
+                  </div>
 
                 </div>
 
@@ -730,35 +748,35 @@
                   </div>
                 </div>
 
-                <div class="ihc">  
+                <div class="ihc">
                   <!-- 遍历患者已有的免疫组化v-for="(item,idx) in editForm.helper_diagnosis.ihc" :key="idx" -->
-                  <div v-show="seen" >
+                  <div v-show="seen">
                     <span class="titl">
                       <i class="iconfont icontubiaozhizuo-"></i>
                       {{ihc.name}}
                     </span>
-                    <div id="one"  v-for="(ihc,idx) in this.helper_diagnosis.ihc" :key="idx">
+                    <div id="one" v-for="(ihcItem,idx) in this.helper_diagnosis.ihc" :key="idx">
                       <!-- 循环myzh这个数组，来动态 + - 操作 -->
                       <div class="sickI">
                         <div class="sickIt">
-                          <span class="name">{{FZ.key_ihc.field_title}}：</span>                       
-                           <el-input v-model="ihc.mark" style="width:100px"></el-input>
+                          <span class="name">{{FZ.key_ihc.field_title}}：</span>
+                          <el-input v-model="ihcItem.mark" style="width:80px"></el-input>
                         </div>
                       </div>
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.value_ihc.field_title}}：</span>
-                           <el-input v-model="ihc.value" style="width:100px"></el-input>
+                          <el-input v-model="ihcItem.value" style="width:120px"></el-input>
                         </div>
                       </div>
                       <!-- + - 操作只需要传入当前循环的数组 -->
                       <!-- 判断 必须是最后一条，才可以显示操作按钮 -->
                       <div class="handleBtnBox">
                         <!-- el-button: v-if="idx==testFZ.ihc.length-1" -->
-                        <el-button @click="ihcAddData(help_diagnosis.ihc,help_diagnosis.ihc[idx])">
+                        <el-button @click="ihcAddData(helper_diagnosis.ihc)">
                           <i class="iconfont iconaddTodo-nav"></i>
                         </el-button>
-                        <el-button @click="ihcDeleteData(help_diagnosis.ihc)">
+                        <el-button @click="ihcDeleteData(helper_diagnosis.ihc)">
                           <i class="iconfont iconjianhao1"></i>
                         </el-button>
                       </div>
@@ -768,7 +786,7 @@
                   <div v-show="seen1">
                     <span class="titl">
                       <i class="iconfont icontubiaozhizuo-"></i>
-                     <!-- {{fish.name}} -->分子检测
+                      分子检测:
                     </span>
                     <div id="two" v-for="(fish,idx) in help_diagnosis.fish" :key="idx">
                       <div class="sickI">
@@ -811,7 +829,7 @@
                         </el-button>
                       </div>
                     </div>
-                  </div>     
+                  </div>
 
                 </div>
               </div>
@@ -1355,6 +1373,31 @@ export default {
         });
         });
     }, 
+     // 免疫租化增删
+    ihcAddData( ihcItem) {
+      //判断当前数组的对象是否有数据
+      console.log(ihcItem);
+      ihcItem.map( (item,index) =>{
+        if (item.trim()) {
+          //验证通过 添加新的一条
+          // var value = {
+          //   mark: "",
+          //   value: ""
+          // };
+          array.push(item);
+        } else {
+          alert("请检查输入是否正确");
+        }
+      })
+    },
+    // 免疫组化删除
+    ihcDeleteData(ihcItem) {
+      if (ihcItem.length > 1) {
+        ihcItem.splice(ihcItem.length - 1, 1);
+      } else {
+        alert("最少保留一个");
+      }
+    },
     //上传文件方法
     uploadFile(){
       this.uploadLoading=false;
