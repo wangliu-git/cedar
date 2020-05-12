@@ -221,7 +221,7 @@
           </div>
           <div class="name">
             <span>新建项目名称 ：</span>
-            <el-input placeholder="请输入分组名称..." style="width:380px" v-model="groupName">
+            <el-input placeholder="请输入项目名称..." style="width:380px" v-model="groupName">
               <el-button slot="append" @click="addGroup(groupName)">保存</el-button>
             </el-input>
           </div>
@@ -711,8 +711,8 @@
                 <div class="sickIH">
                   <div class="title">
                     <span>
-                      <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
-                      {{helper_diagnosis.name}}:
+                      <!-- <i class="iconfont icontubiaozhizuo-"></i>{{helper_diagnosis.name}} -->
+                      辅助诊断:
                     </span>
                     <el-checkbox-group
                       v-model="checkList"
@@ -720,17 +720,18 @@
                       style="display: initial;"
                     >
                       <el-checkbox  style="margin-left=10px" label="免疫组化"></el-checkbox>
-                      <el-checkbox label="荧光原位杂交"></el-checkbox>
+                      <el-checkbox  style="margin-left=10px" label="分子检测"></el-checkbox>
+                     <!--  <el-checkbox label="荧光原位杂交"></el-checkbox>
                       <el-checkbox label="淋巴瘤克隆性基因重排检测"></el-checkbox>
                       <el-checkbox label="原位杂交"></el-checkbox>
                       <el-checkbox label="流式细胞检测"></el-checkbox>
-                      <el-checkbox label="ngs检测"></el-checkbox>
+                      <el-checkbox label="ngs检测"></el-checkbox> -->
                     </el-checkbox-group>
                   </div>
                 </div>
 
                 <div class="ihc">  
-                      <!-- 遍历患者已有的免疫组化v-for="(item,idx) in editForm.helper_diagnosis.ihc" :key="idx" -->
+                  <!-- 遍历患者已有的免疫组化v-for="(item,idx) in editForm.helper_diagnosis.ihc" :key="idx" -->
                   <div v-show="seen" >
                     <span class="titl">
                       <i class="iconfont icontubiaozhizuo-"></i>
@@ -767,7 +768,7 @@
                   <div v-show="seen1">
                     <span class="titl">
                       <i class="iconfont icontubiaozhizuo-"></i>
-                      {{fish.name}}
+                     <!-- {{fish.name}} -->分子检测
                     </span>
                     <div id="two" v-for="(fish,idx) in help_diagnosis.fish" :key="idx">
                       <div class="sickI">
@@ -810,194 +811,7 @@
                         </el-button>
                       </div>
                     </div>
-                  </div>
-
-                  <div v-show="seen2">
-                    <span class="titl">
-                      <i class="iconfont icontubiaozhizuo-"></i>
-                      {{rearrangement.name}}
-                    </span>
-                    <div
-                      id="three"
-                      v-for="(rearrangement, idx) in help_diagnosis.rearrangement"
-                      :key="idx"
-                    >
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.key_dna.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="rearrangement.mark">
-                            <el-option
-                              v-for="(item,index) in  FZ.key_dna.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.value_dna.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="rearrangement.value">
-                            <el-option
-                              v-for="(item,index) in  FZ.value_dna.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="handleBtnBox">
-                        <el-button
-                          @click="ihcAddData(help_diagnosis.rearrangement,help_diagnosis.rearrangement[idx])"
-                        >
-                          <i class="iconfont iconaddTodo-nav"></i>
-                        </el-button>
-                        <el-button @click="ihcDeleteData(help_diagnosis.rearrangement)">
-                          <i class="iconfont iconjianhao1"></i>
-                        </el-button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div v-show="seen3">
-                    <span class="titl">
-                      <i class="iconfont icontubiaozhizuo-"></i>
-                      {{ish.name}}
-                    </span>
-                    <div id="four" v-for="(ish, idx) in help_diagnosis.ish" :key="idx">
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.key_ish.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="ish.mark">
-                            <el-option
-                              v-for="(item,index) in  FZ.key_ish.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.value_ish.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="ish.value">
-                            <el-option
-                              v-for="(item,index) in FZ.value_ish.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="handleBtnBox">
-                        <el-button @click="ihcAddData(help_diagnosis.ish,help_diagnosis.ish[idx])">
-                          <i class="iconfont iconaddTodo-nav"></i>
-                        </el-button>
-                        <el-button @click="ihcDeleteData(help_diagnosis.ish)">
-                          <i class="iconfont iconjianhao1"></i>
-                        </el-button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div v-show="seen4">
-                    <span class="titl">
-                      <i class="iconfont icontubiaozhizuo-"></i>
-                      {{fcm.name}}
-                    </span>
-                    <div id="five" v-for="(fcm, idx) in help_diagnosis.fcm" :key="idx">
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.type_fcm.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="fcm.mark">
-                            <el-option
-                              v-for="(item,index) in  FZ.type_fcm.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.value_fcm.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="fcm.value">
-                            <el-option
-                              v-for="(item,index) in FZ.value_fcm.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="handleBtnBox">
-                        <el-button @click="ihcAddData(help_diagnosis.fcm,help_diagnosis.fcm[idx])">
-                          <i class="iconfont iconaddTodo-nav"></i>
-                        </el-button>
-                        <el-button @click="ihcAddData(help_diagnosis.fcm)">
-                          <i class="iconfont iconjianhao1"></i>
-                        </el-button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div v-show="seen5">
-                    <span class="titl">
-                      <i class="iconfont icontubiaozhizuo-"></i>
-                      {{ngs.name}}
-                    </span>
-                    <div id="six" v-for="(ngs, idx) in help_diagnosis.ngs" :key="idx">
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.type_ngs.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="ngs.mark">
-                            <el-option
-                              v-for="(item,index) in FZ.type_ngs.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.value_ngs.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="ngs.value">
-                            <el-option
-                              v-for="(item,index) in FZ.value_ngs.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="handleBtnBox">
-                        <el-button @click="ihcAddData(help_diagnosis.ngs,help_diagnosis.ngs[idx])">
-                          <i class="iconfont iconaddTodo-nav"></i>
-                        </el-button>
-                        <el-button @click="ihcAddData(help_diagnosis.ngs)">
-                          <i class="iconfont iconjianhao1"></i>
-                        </el-button>
-                      </div>
-                    </div>
-                  </div>
-
+                  </div>     
 
                 </div>
               </div>
@@ -2053,7 +1867,7 @@ export default {
       seen3: true,
       seen4: true,
       seen5: true,
-      checkList: ["免疫组化","荧光原位杂交","淋巴瘤克隆性基因重排检测","原位杂交","流式细胞检测","ngs检测"],
+      checkList: ["免疫组化","分子检测"],
       // 大数组
       sicksArr: [],
       // 表单提交信息      

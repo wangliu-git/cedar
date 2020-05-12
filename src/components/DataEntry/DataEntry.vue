@@ -427,7 +427,7 @@
                       :props="{ checkStrictly: true }"
                       clearable
                       style="width:500px"
-                    >{{jilian[0]}}{{jilian[1]}}{{jilian[2]}}</el-cascader>
+                    ></el-cascader>
                   </div>
                 </div>
                 <!--报告质量  可折叠-->
@@ -729,14 +729,25 @@
                       style="width:500px"
                     ></el-cascader>
                   </div>
+                  <div class="sickItem">
+                    <span>病理类型原文:</span>
+                    <el-cascader
+                      size="mini"
+                      v-model="editForm.diagnosis2"
+                      :options="options"
+                      :props="{ checkStrictly: true }"
+                      clearable
+                      style="width:500px"
+                    ></el-cascader>
+                  </div>
                 </div>
 
                 <!--辅助诊断 -->
                 <div class="sickIH">
                   <div class="title">
                     <span>
-                      <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
-                      {{helper_diagnosis.name}}:
+                      <!-- <i class="iconfont icontubiaozhizuo-"></i> {{helper_diagnosis.name}}-->
+                      辅助诊断:
                     </span>
                     <el-checkbox-group
                       v-model="checkList"
@@ -744,11 +755,12 @@
                       style="display: initial;"
                     >
                       <el-checkbox style="margin-left=10px" label="免疫组化"></el-checkbox>
-                      <el-checkbox label="荧光原位杂交"></el-checkbox>
+                       <el-checkbox  style="margin-left=10px" label="分子检测"></el-checkbox>
+                     <!--  <el-checkbox label="荧光原位杂交"></el-checkbox>
                       <el-checkbox label="淋巴瘤克隆性基因重排检测"></el-checkbox>
                       <el-checkbox label="原位杂交"></el-checkbox>
                       <el-checkbox label="流式细胞检测"></el-checkbox>
-                      <el-checkbox label="ngs检测"></el-checkbox>
+                      <el-checkbox label="ngs检测"></el-checkbox> -->
                     </el-checkbox-group>
                   </div>
                 </div>
@@ -760,28 +772,28 @@
                       <i class="iconfont icontubiaozhizuo-"></i>
                       {{ihc.name}}
                     </span>
-                    <div id="one" v-for="(ihc,idx) in this.helper_diagnosis.ihc" :key="idx">
+                    <div id="one" v-for="(ihcItem,idx) in this.helper_diagnosis.ihc" :key="idx">
                       <!-- 循环myzh这个数组，来动态 + - 操作 -->
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.key_ihc.field_title}}：</span>
-                          <el-input v-model="ihc.mark" style="width:100px"></el-input>
+                          <el-input v-model="ihcItem.mark" style="width:80px"></el-input>
                         </div>
                       </div>
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.value_ihc.field_title}}：</span>
-                          <el-input v-model="ihc.value" style="width:100px"></el-input>
+                          <el-input v-model="ihcItem.value" style="width:120px"></el-input>
                         </div>
                       </div>
                       <!-- + - 操作只需要传入当前循环的数组 -->
                       <!-- 判断 必须是最后一条，才可以显示操作按钮 -->
                       <div class="handleBtnBox">
                         <!-- el-button: v-if="idx==testFZ.ihc.length-1" -->
-                        <el-button @click="ihcAddData(help_diagnosis.ihc,help_diagnosis.ihc[idx])">
+                        <el-button @click="ihcAddData(helper_diagnosis.ihc)">
                           <i class="iconfont iconaddTodo-nav"></i>
                         </el-button>
-                        <el-button @click="ihcDeleteData(help_diagnosis.ihc)">
+                        <el-button @click="ihcDeleteData(helper_diagnosis.ihc)">
                           <i class="iconfont iconjianhao1"></i>
                         </el-button>
                       </div>
@@ -791,7 +803,7 @@
                   <div v-show="seen1">
                     <span class="titl">
                       <i class="iconfont icontubiaozhizuo-"></i>
-                      {{fish.name}}
+                      分子检测:
                     </span>
                     <div id="two" v-for="(fish,idx) in help_diagnosis.fish" :key="idx">
                       <div class="sickI">
@@ -836,191 +848,6 @@
                     </div>
                   </div>
 
-                  <div v-show="seen2">
-                    <span class="titl">
-                      <i class="iconfont icontubiaozhizuo-"></i>
-                      {{rearrangement.name}}
-                    </span>
-                    <div
-                      id="three"
-                      v-for="(rearrangement, idx) in help_diagnosis.rearrangement"
-                      :key="idx"
-                    >
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.key_dna.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="rearrangement.mark">
-                            <el-option
-                              v-for="(item,index) in  FZ.key_dna.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.value_dna.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="rearrangement.value">
-                            <el-option
-                              v-for="(item,index) in  FZ.value_dna.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="handleBtnBox">
-                        <el-button
-                          @click="ihcAddData(help_diagnosis.rearrangement,help_diagnosis.rearrangement[idx])"
-                        >
-                          <i class="iconfont iconaddTodo-nav"></i>
-                        </el-button>
-                        <el-button @click="ihcDeleteData(help_diagnosis.rearrangement)">
-                          <i class="iconfont iconjianhao1"></i>
-                        </el-button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div v-show="seen3">
-                    <span class="titl">
-                      <i class="iconfont icontubiaozhizuo-"></i>
-                      {{ish.name}}
-                    </span>
-                    <div id="four" v-for="(ish, idx) in help_diagnosis.ish" :key="idx">
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.key_ish.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="ish.mark">
-                            <el-option
-                              v-for="(item,index) in  FZ.key_ish.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.value_ish.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="ish.value">
-                            <el-option
-                              v-for="(item,index) in FZ.value_ish.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="handleBtnBox">
-                        <el-button @click="ihcAddData(help_diagnosis.ish,help_diagnosis.ish[idx])">
-                          <i class="iconfont iconaddTodo-nav"></i>
-                        </el-button>
-                        <el-button @click="ihcDeleteData(help_diagnosis.ish)">
-                          <i class="iconfont iconjianhao1"></i>
-                        </el-button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div v-show="seen4">
-                    <span class="titl">
-                      <i class="iconfont icontubiaozhizuo-"></i>
-                      {{fcm.name}}
-                    </span>
-                    <div id="five" v-for="(fcm, idx) in help_diagnosis.fcm" :key="idx">
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.type_fcm.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="fcm.mark">
-                            <el-option
-                              v-for="(item,index) in  FZ.type_fcm.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.value_fcm.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="fcm.value">
-                            <el-option
-                              v-for="(item,index) in FZ.value_fcm.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="handleBtnBox">
-                        <el-button @click="ihcAddData(help_diagnosis.fcm,help_diagnosis.fcm[idx])">
-                          <i class="iconfont iconaddTodo-nav"></i>
-                        </el-button>
-                        <el-button @click="ihcAddData(help_diagnosis.fcm)">
-                          <i class="iconfont iconjianhao1"></i>
-                        </el-button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div v-show="seen5">
-                    <span class="titl">
-                      <i class="iconfont icontubiaozhizuo-"></i>
-                      {{ngs.name}}
-                    </span>
-                    <div id="six" v-for="(ngs, idx) in help_diagnosis.ngs" :key="idx">
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.type_ngs.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="ngs.mark">
-                            <el-option
-                              v-for="(item,index) in FZ.type_ngs.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="sickI">
-                        <div class="sickIt">
-                          <span class="name">{{FZ.value_ngs.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="ngs.value">
-                            <el-option
-                              v-for="(item,index) in FZ.value_ngs.field_values"
-                              :key="index"
-                              :value="item"
-                            >
-                              <span>{{item}}</span>
-                            </el-option>
-                          </el-select>
-                        </div>
-                      </div>
-                      <div class="handleBtnBox">
-                        <el-button @click="ihcAddData(help_diagnosis.ngs,help_diagnosis.ngs[idx])">
-                          <i class="iconfont iconaddTodo-nav"></i>
-                        </el-button>
-                        <el-button @click="ihcAddData(help_diagnosis.ngs)">
-                          <i class="iconfont iconjianhao1"></i>
-                        </el-button>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </el-collapse-item>
@@ -1072,7 +899,7 @@
           </div>
           <div class="name">
             <span>新建项目名称 ：</span>
-            <el-input placeholder="请输入分组名称..." style="width:380px" v-model="groupName">
+            <el-input placeholder="请输入项目名称..." style="width:380px" v-model="groupName">
               <el-button plain slot="append" @click="addGroup(groupName)">保存</el-button>
             </el-input>
           </div>
@@ -1246,16 +1073,16 @@ export default {
     },
     // 点击添加分组保存
     async addGroup(item, id) {
-      // console.log(item,this.id)
+      console.log(item)
       // console.log(window.sessionStorage.uid)
-      var group_name = "";
+      var group_name = ""; 
       const res = await this.axios
         .post("group/add.php", {
           params: {
             group_name: item,
             id: this.id,
             userid: window.sessionStorage.uid,
-            username: window.sessionStorage.username
+            username: window.sessionStorage.username,           
           }
         })
         .then(res => {
@@ -1374,8 +1201,18 @@ export default {
       const { data: res } = await this.axios.get(
         "excel_data/onedata.php" ,{params:{id:row.id}}
       );      
-      console.log(res)   
+      console.log(row.id)
+      console.log(res) 
+      
       this.editForm = res.data;
+      if( this.editForm.application_date === '0000-00-00'){
+        console.log(44)
+        this.editForm.application_date = ''
+      } 
+      if( this.editForm.birthday === '0000-00-00'){
+        console.log(4)
+        this.editForm.birthday = ''
+      }
       // this.jilian = this.editForm.jilian
       this.jilian = []
       this.helper_diagnosis = this.editForm.helper_diagnosis
@@ -1502,6 +1339,7 @@ export default {
       );
       if (res.ok == 0) {
         return this.$message.error("已经是最后一个了");
+        return
       }
       // console.log("getTableList",res);
       this.editForm = res.data;
@@ -1578,30 +1416,32 @@ export default {
     },
     // 表单提交
     submit() {
-      this.zhezhao = !this.zhezhao;
+      this.zhezhao = true;
       this.report.help_diagnosis = this.help_diagnosis;
-      this.jilian = this.editForm.jilian;
+      // this.jilian = this.editForm.jilian;
       console.log(this.editForm);
     },
     // 免疫租化增删
-    ihcAddData(array, value) {
+    ihcAddData( ihcItem) {
       //判断当前数组的对象是否有数据
-      console.log(array, value);
-      if (value.mark.trim() || value.value.trim()) {
-        //验证通过 添加新的一条
-        // var value = {
-        //   mark: "",
-        //   value: ""
-        // };
-        array.push(value);
-      } else {
-        alert("请检查输入是否正确");
-      }
+      console.log(ihcItem);
+      ihcItem.map( (item,index) =>{
+        if (item.trim()) {
+          //验证通过 添加新的一条
+          // var value = {
+          //   mark: "",
+          //   value: ""
+          // };
+          array.push(item);
+        } else {
+          alert("请检查输入是否正确");
+        }
+      })
     },
     // 免疫组化删除
-    ihcDeleteData(array) {
-      if (array.length > 1) {
-        array.splice(array.length - 1, 1);
+    ihcDeleteData(ihcItem) {
+      if (ihcItem.length > 1) {
+        ihcItem.splice(ihcItem.length - 1, 1);
       } else {
         alert("最少保留一个");
       }
@@ -1654,8 +1494,8 @@ export default {
     // 新增患者信息
     addFormList(editForm) {
       this.zhezhao = false;
-      this.id = this.id;
-      // console.log(this.id)
+      // this.id = this.id;
+      console.log(this.id)
       // this.editForm = this.editForm;
       this.editForm.help_diagnosis = this.help_diagnosis;
       // const sicksList = JSON.stringify(sicksArr)
@@ -1677,6 +1517,7 @@ export default {
               callback: action => {
                 this.tablelist = [];
                 this.getTableList2(this.row);
+                this.fou()
               }
             });
           } else {
@@ -1813,6 +1654,7 @@ export default {
   },
   data() {
     return {
+     
       xiayige: false,
       wenjian: true, //上传文件
       item: "",
@@ -2348,11 +2190,8 @@ export default {
       ],
       checkList: [
         "免疫组化",
-        "荧光原位杂交",
-        "淋巴瘤克隆性基因重排检测",
-        "原位杂交",
-        "流式细胞检测",
-        "ngs检测"
+        "分子检测",
+      
       ],
       // 折叠面板默认打开
       activeNames: ["3", "1"],
@@ -3731,11 +3570,13 @@ a {
         height: 100px;
         border-top: 1px solid rgba(185, 222, 255, 1);
         margin: 20px 30px;
+      
 
         th {
           display: inline-block;
           line-height: 11px;
-          margin-left: 20px;
+          margin-left 30px
+          margin-top: 10px;
         }
 
         div {
@@ -3758,7 +3599,7 @@ a {
 
         span {
           display: inline-block;
-          // margin-left 10px
+          margin-left 10px
           margin-top: 15px;
           font-size: 14px;
           font-family: Microsoft YaHei;

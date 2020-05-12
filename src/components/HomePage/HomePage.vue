@@ -75,10 +75,6 @@
           <span>详情</span>
         </div>
         <div class="select">
-          <el-select placeholder="请选择" style="margin-right:10px">
-            <el-option></el-option>
-          </el-select>
-
           <el-date-picker
             type="daterange"
             align="right"
@@ -186,9 +182,9 @@ export default {
             }
           }
         }
-        // console.log("dataEcharts:", dataEcharts);
-        // console.log("nameArray:", nameArray);
-        // console.log("valueArray:", valueArray);
+        console.log("dataEcharts:", dataEcharts);
+        console.log("nameArray:", nameArray);
+        console.log("valueArray:", valueArray);
 
         let option = {
           title: {

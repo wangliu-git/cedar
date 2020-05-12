@@ -39,7 +39,7 @@ Vue.prototype.axios= axios
 
 // axios.defaults.headers.post['content-Type'] = 'application/x-www-form-urlencoded'
 axios.defaults.baseURL = 'http://106.13.49.232/cedar/api/'
-// axios.defaults.baseURL = 'http://localhost/cedar/api/'
+// axios.defaults.baseURL = 'http://106.13.49.232/cedar/api/'
 // axios.defaults.baseURL = 'http://192.168.75.58/cedar/api/'
 
 // 数据筛选点击选中

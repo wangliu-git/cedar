@@ -2,7 +2,7 @@
   <div class="outest">
     <div class="sContainer">
       <span>选择分组 :</span>
-      <el-select size="mini" style="width:250px" placeholder="请选择分组" v-model="item" @change="group_id">
+      <el-select size="mini" style="width:250px" placeholder="请选择分组" v-model="it" @change="group_id">
         <el-option
           v-for="(it, index) in this.groupList"
           :key="index"
@@ -18,9 +18,9 @@
         <div class="up">
           <div class="left">
             <span>原单位诊断信息 :</span>
-            <el-select size="mini" style="width:150px" placeholder="全部">
-              <el-option>
-                <span></span>
+            <el-select size="mini" style="width:100px;margin-left:10px" placeholder="全部" v-model="yuanlist">
+              <el-option v-for="(item,index) in yuanList" :key="index" :value="item">
+                {{item}}
               </el-option>
             </el-select>
           </div>
@@ -493,7 +493,7 @@ import allMessage from "../../staic/allMessage.json";
 export default {
   created() {  
     // this.getTableList();
-    this.groupList();
+    this.getgroupList();
   },
   methods: {
     // 上传图片成功
@@ -503,7 +503,7 @@ export default {
       console.log(fileList); // 这里可以获得上传成功的相关信息
     },
     // 选择分组
-    groupList() {
+    getgroupList() {
       const { data: res } = this.axios.get("group/list.php").then(res => {
         console.log(res);
         this.groupList = res.data.data;
@@ -561,7 +561,7 @@ export default {
     },
     // 点击查看--显示某个信息
     async look(row) {
-      this.zhezhao = !this.zhezhao;
+      this.zhezhao = true;
       console.log(row);
       const { data: res } = await this.axios.get("diagnosis_origin/one.php", {
         params: { id: row.id }
@@ -571,6 +571,7 @@ export default {
       this.editForm = res;
       console.log(this.editForm);
     },
+
     // 点击删除
     async del(row) {
       const { data: res } = await this.axios("diagnosis_origin/del.php", {
@@ -583,11 +584,13 @@ export default {
           center: true
         })
           .then(() => {
-            this.getTableList()
+            
+            
             this.$message({
               type: "success",
               message: "删除成功!"
             });
+            this.getTableList(this.it)
           })
           .catch(() => {
             this.$message({
@@ -714,8 +717,10 @@ export default {
   },
   data() {
     return {
+      yuanlist:'',
+      yuanList:['有','无','全部'],   //原单位下拉
       it:'',
-      item:'',
+     groupList:[],
       photo: "",
       upLoadUrl: "http://106.13.49.232/cedar/api/diagnosis_origin/add.php",
       // 级联选择器

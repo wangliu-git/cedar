@@ -32,7 +32,7 @@
                 style="width: 100%"
                 border
                 stripe
-                :header-cell-style="{color:'#333333'}"
+                :header-cell-style="{color:'#333333'}"  @current-change="handleSelectionChange"
               >
                 <el-table-column prop="id" label="项目编号" width="250"></el-table-column>
                 <el-table-column prop="group_name" label="项目名称" width="250"></el-table-column>
@@ -49,9 +49,6 @@
                     </el-button>
                     <el-button type="text" size="small" @click="del(scope.row)">
                       <span>删除</span>
-                    </el-button>
-                    <el-button type="text" size="small" @click="chakan(scope.row)">
-                      <span>查看</span>
                     </el-button>
                   </template>
                 </el-table-column>
@@ -288,6 +285,7 @@
 export default {
   data() {
     return {
+      row:'',    //缓存的row
       group_id: "",
       chuangjian: false,
       minList: [], //脱敏列表
@@ -358,6 +356,25 @@ export default {
     this.getDataList();
   },
   methods: {
+    // 点击；列表行
+    handleSelectionChange(row) {
+      this.chuangjian = true;
+      this.row = row
+      console.log(row);
+      let group_id = "";
+      const { data: res } = this.axios
+        .get("report/list.php", { params: { group_id: row.id } })
+        .then(res => {
+          console.log(res);
+          this.tablelist = res.data.data;
+          this.queryInfo.page = parseInt(res.data.page);
+          this.queryInfo.count = parseInt(res.data.count); //总条数
+          console.log(this.queryInfo.page);
+          console.log(this.queryInfo.count);
+          console.log(this.queryInfo.pagerows);
+        });
+      
+    },
     // 确认导出
     async sure() {
       console.log(this.id);
@@ -429,12 +446,12 @@ export default {
     // 切换每页显示多少条
     handleSizeChange(newSize) {
       this.queryInfo.pagerows = newSize;
-      this.chakana();
+      this.handleSelectionChange(this.row);
     },
     // 点击页数
     handleCurrentChange(newPage) {
       this.queryInfo.page = newPage;
-      this.chakana();
+      this.handleSelectionChange(this.row);
     },
     // 数据集切换每页显示多少条
     handleSizeChange1(newSize) {
@@ -455,28 +472,12 @@ export default {
       console.log("getTableList", res);
       this.tablelist = res.data;
       console.log(res.data);
-      // this.queryInfo.page = parseInt(res.page);
-      // this.queryInfo.count = parseInt(res.count)  //总条数
-      // this.queryInfo.pagerows = res.pagerows  //每页显示多少条
+      this.queryInfo.page = parseInt(res.page);
+      this.queryInfo.count = parseInt(res.count)  //总条数
+      this.queryInfo.pagerows = res.pagerows  //每页显示多少条
+      this.handleSelectionChange(this.row)
     },
-    // 点击分组查看
-    chakan(row) {
-      this.chuangjian = true;
-      console.log(row);
-      let group_id = "";
-      const { data: res } = this.axios
-        .get("report/list.php", { params: { group_id: row.id } })
-        .then(res => {
-          console.log(res);
-          this.tablelist = res.data.data;
-          this.queryInfo.page = parseInt(res.data.page);
-          this.queryInfo.count = parseInt(res.data.count); //总条数
-          console.log(this.queryInfo.page);
-          console.log(this.queryInfo.count);
-          console.log(this.queryInfo.pagerows);
-        });
-    },
-    // 点击分组查看
+    // 点击数据查看
     chakana() {
       const { data: res } = this.axios
         .get("report/list.php", { params: { page: this.queryInfo.page } })

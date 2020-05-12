@@ -10,7 +10,7 @@
         </el-input>
       </div>
 
-      <el-collapse v-model="activeNames" :v-model="editForm">
+      <el-collapse v-model="activeNames" :v-model="edit">
         <el-collapse-item name="1">
           <template slot="title" style="background-color:rgba(232, 232, 232, 1)">
             <i class="iconfont icontubiaozhizuo-"></i>
@@ -20,7 +20,7 @@
             <!--姓名  -->
             <div class="ji">
               <span>{{showInfo.name.field_title}}:</span>
-              <el-input placeholder="请输入姓名" size="mini" style="width:200px" v-model="editForm.name"></el-input>
+              <el-input placeholder="请输入姓名" size="mini" style="width:200px" v-model="edit.name"></el-input>
             </div>
             <!--性別 -->
             <div class="ji">
@@ -28,7 +28,7 @@
               <el-select
                 placeholder="请选择性别"
                 name="sex"
-                v-model="editForm.sex"
+                v-model="edit.sex"
                 size="mini"
                 multiple
                 style="width:200px"
@@ -42,7 +42,7 @@
             <div class="ji">
               <span>{{showInfo.birthday.field_title}}:</span>
               <el-date-picker
-                v-model="editForm.birthday"
+                v-model="edit.birthday"
                 type="daterange"
                 align="right"
                 unlink-panels
@@ -61,7 +61,7 @@
                 size="mini"
                 style="width:200px"
                 placeholder="请输入电话"
-                v-model="editForm.phone"
+                v-model="edit.phone"
               ></el-input>
             </div>
             <!--籍贯-->
@@ -71,7 +71,7 @@
               <el-select
                 placeholder="请选择"
                 name="birthplace"
-                v-model="editForm.birthplace"
+                v-model="edit.birthplace"
                 size="mini"
                 multiple
                 style="width:200px"
@@ -92,7 +92,7 @@
               <el-select
                 placeholder="请选择"
                 name="nation"
-                v-model="editForm.nation"
+                v-model="edit.nation"
                 size="mini"
                 multiple
                 style="width:200px"
@@ -110,7 +110,7 @@
                 placeholder="请选择"
                 size="mini"
                 style="width:100px"
-                v-model="editForm.address_prov"
+                v-model="edit.address_prov"
                 multiple
               >
                 <el-option
@@ -125,7 +125,7 @@
                 placeholder="请选择"
                 size="mini"
                 style="width:100px"
-                v-model="editForm.address_city"
+                v-model="edit.address_city"
                 multiple
               >
                 <el-option
@@ -143,7 +143,7 @@
 
               <el-select
                 name="diagnosis_type"
-                v-model="editForm.diagnosis_type"
+                v-model="edit.diagnosis_type"
                 size="mini"
                 multiple
                 style="width:200px"
@@ -169,7 +169,7 @@
             <div class="bao">
               <span>{{fMInstitution.organization.field_title}}:</span>
               <el-input
-                v-model="editForm.organization"
+                v-model="edit.organization"
                 placeholder="请输入机构名称"
                 size="mini"
                 style="width:200px"
@@ -179,7 +179,7 @@
             <div class="bao">
               <span>{{fMInstitution.test_id.field_title}}:</span>
               <el-input
-                v-model="editForm.test_id"
+                v-model="edit.test_id"
                 placeholder="请输入病理号"
                 size="mini"
                 style="width:200px"
@@ -189,7 +189,7 @@
             <div class="bao">
               <span>{{fMInstitution.application_date.field_title}}:</span>
               <el-date-picker
-                v-model="editForm.application_Ydate"
+                v-model="edit.application_Ydate"
                 type="daterange"
                 align="right"
                 unlink-panels
@@ -204,7 +204,7 @@
             <div class="bao">
               <span>{{fMInstitution.report_date.field_title}}:</span>
               <el-date-picker
-                v-model="editForm.report_Ydate"
+                v-model="edit.report_Ydate"
                 type="daterange"
                 align="right"
                 unlink-panels
@@ -223,7 +223,7 @@
                 size="mini"
                 :options="options"
                 :props="{ checkStrictly: true }"
-                clearable
+                clearable v-model="edit.jilian"
               ></el-cascader>
             </div>
 
@@ -232,7 +232,7 @@
               <el-select
                 placeholder="请选择报告质量"
                 name="report_quality"
-                v-model="editForm.report_quality"
+                v-model="edit.report_quality"
                 size="mini"
                 multiple
                 style="width:200px"
@@ -258,20 +258,20 @@
             <div class="zhen">
               <span>{{tMInstitution.test_id.field_title}}:</span>
               <el-input
-                v-model="editForm.test_id"
-                placeholder="请填写病理号"
+                v-model="edit.test_id"
+                placeholder="请输入病理号"
                 size="mini"
                 style="width:200px"
               ></el-input>
             </div>
             <div class="zhen">
               <span>{{tMInstitution.department.field_title}}:</span>
-              <el-input type="text" v-model="editForm.department" placeholder="请输入机构名称" size="mini"></el-input>
+              <el-input type="text" v-model="edit.department" placeholder="请输入机构名称" size="mini"></el-input>
             </div>
             <div class="zhen">
               <span>{{tMInstitution.application_date.field_title}}:</span>
               <el-date-picker
-                v-model="editForm.application_date"
+                v-model="edit.application_date"
                 type="daterange"
                 align="right"
                 unlink-panels
@@ -286,7 +286,7 @@
             <div class="zhen">
               <span>{{tMInstitution.report_date.field_title}}:</span>
               <el-date-picker
-                v-model="editForm.report_date"
+                v-model="edit.report_date"
                 type="daterange"
                 align="right"
                 unlink-panels
@@ -303,7 +303,7 @@
 
               <el-select
                 name="diagnosis_type"
-                v-model="editForm.diagnosis_type"
+                v-model="edit.diagnosis_type"
                 size="mini"
                 multiple
                 style="width:200px"
@@ -322,7 +322,7 @@
               <span>{{tMInstitution.sample_location.field_title}}:</span>
               <el-select
                 name="sample_location"
-                v-model="editForm.sample_location"
+                v-model="edit.sample_location"
                 size="mini"
                 placeholder="请选择取材部位"
                 multiple
@@ -345,14 +345,14 @@
                 :options="options"
                 :props="{ checkStrictly: true }"
                 clearable
-                style="width:200px"
+                style="width:200px" v-model="edit.jilian"
               ></el-cascader>
             </div>
 
             <div class="zhen">
               <span>辅助诊断 ：标志物</span>
               <el-select
-                v-model="editForm.mark"
+                v-model="edit.mark"
                 placeholder="请选择"
                 size="mini"
                 style="width:200px"
@@ -365,7 +365,7 @@
             <div class="zhen">
               <span>检测结果 ：</span>
               <el-select
-                v-model="editForm.diagnosis"
+                v-model="edit.diagnosis"
                 placeholder="请选择"
                 size="mini"
                 style="width:200px"
@@ -386,26 +386,27 @@
             <div class="lai" style="width:300px">
               <span>数据来源 ：</span>
               <el-select
-                v-model="editForm"
+                v-model="edit.sjly"
                 placeholder="请选择"
                 size="mini"
                 style="width:200px"
                 multiple
+                
               >
-                <el-option></el-option>
+                <el-option v-for="(item,index) in SJLY" :key="index" :value="item"></el-option>
               </el-select>
             </div>
 
             <div class="lai" style="width:300px">
               <span>整合信息 ：</span>
               <el-select
-                v-model="editForm"
+                v-model="edit.ZHXX"
                 placeholder="请选择"
                 size="mini"
                 style="width:200px"
                 multiple
               >
-                <el-option></el-option>
+                <el-option v-for="(item,index) in ZHXX" :key="index" :value="item"></el-option>
               </el-select>
             </div>
           </div>
@@ -415,7 +416,7 @@
       <div class="footer">
         <el-button @click="inGroup(ids)">加入分组</el-button>
         <el-button @click="reset()">重置</el-button>
-        <el-button @click="shaixuan(editForm)">筛选</el-button>
+        <el-button @click="shaixuan(edit)">筛选</el-button>
       </div>
     </div>
     <!--  列表-->
@@ -602,8 +603,8 @@
             >{{it.group_name}}</el-button>
           </div>
           <div class="name">
-            <span>新建分组名称 ：</span>
-            <el-input placeholder="请输入分组名称..." style="width:380px" v-model="groupName">
+            <span>新建项目名称 ：</span>
+            <el-input placeholder="请输入项目名称..." style="width:380px" v-model="groupName">
               <el-button slot="append" @click="addGroup(groupName)">保存</el-button>
             </el-input>
           </div>
@@ -1170,8 +1171,8 @@
                   <div class="sickIH">
                     <div class="title">
                       <span>
-                        <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
-                        {{helper_diagnosis.name}}:
+                        <!-- <i class="iconfont icontubiaozhizuo-"></i> {{helper_diagnosis.name}} -->
+                        辅助诊断:
                       </span>
                       <el-checkbox-group
                         v-model="checkList"
@@ -1227,7 +1228,7 @@
 
                     <div
                       v-show="seen1"
-                      v-for="(item,idx) in editForm.helper_diagnosis.fish"
+                      v-for="(item,idx) in this.helper_diagnosis.fish"
                       :key="idx"
                     >
                       <span class="titl">
@@ -1281,7 +1282,9 @@ import allMessage from "../../staic/allMessage.json";
 export default {
   data() {
     return {
-      jilian: "",
+      SJLY:['数据录入','数据导入'],
+      ZHXX:['有原单位报告','无原单位报告'],
+      jilian: [],
       ids: [], //ID 们
       multipleSelection: [], //复选框
       // 新建分组名
@@ -1778,6 +1781,7 @@ export default {
       groupLists: [], //分组列表
       // 数据集列表
       data: [],
+      edit:{},
       // 筛选条件名
       // ## 患者信息
       name: "", //姓名
@@ -1791,8 +1795,8 @@ export default {
       // ## 原医疗
       organization: "", //机构名称
       test_id: "", //病理号
-      application_date: "", //申请日期
-      report_date: "", //报告日期
+      application_Ydate: "", //申请日期
+      report_Ydate: "", //报告日期
       //筛选大对象
       //病理类型
       //详细类型
@@ -2108,6 +2112,7 @@ export default {
     // 清空按钮
     clear(editForm) {
       this.editForm = {};
+      console.log(this.editForm)
     },
     // 多选框
     func1: function(value) {
@@ -2175,7 +2180,15 @@ export default {
         params: { id: row.id }
       });
       this.editForm = res.data;
-      // console.log(this.editForm)
+      if( this.editForm.application_date === '0000-00-00'){
+        console.log(44)
+        this.editForm.application_date = ''
+      } 
+      if( this.editForm.birthday === '0000-00-00'){
+        console.log(4)
+        this.editForm.birthday = ''
+      }
+      console.log(this.editForm)
       this.id = row.id;
       this.jilian = []
       this.helper_diagnosis = this.editForm.helper_diagnosis
@@ -2185,8 +2198,8 @@ export default {
       this.editForm.jilian = this.jilian
     },
     // 筛选重置按钮
-    reset(editForm) {
-      this.editForm = {};
+    reset(edit) {
+      this.edit = {};
     },
     // 点击添加分组
     async addGroup(item, ids) {
@@ -2236,27 +2249,27 @@ export default {
       this.group = false;
     },
     // 点击筛选
-    async shaixuan(editForm) {
-      console.log(this.editForm);
+    async shaixuan(edit) {
+      console.log(this.edit);
       let group_id = "";
       const { data: res } = await this.axios.get("report/list.php", {
         params: {
           group_id: 1,
-          test_id: this.editForm.test_id,
-          name: this.editForm.name,
-          sex: this.editForm.sex,
-          nation: this.editForm.nation,
-          birthplace: this.editForm.birthplace,
-          address_prov: this.editForm.address_prov,
-          address_city: this.editForm.address_city,
-          report_quality: this.editForm.report_quality,
-          diagnosis_type: this.editForm.diagnosis_type,
-          sample_location: this.editForm.sample_location,
-          birthday: this.editForm.birthday,
-          application_date: this.editForm.application_date,
-          report_date: this.editForm.report_date,
-          application_Ydate: this.editForm.application_Ydate,
-          report_Ydate: this.editForm.report_Ydate
+          test_id: this.edit.test_id,
+          name: this.edit.name,
+          sex: this.edit.sex,
+          nation: this.edit.nation,
+          birthplace: this.edit.birthplace,
+          address_prov: this.edit.address_prov,
+          address_city: this.edit.address_city,
+          report_quality: this.edit.report_quality,
+          diagnosis_type: this.edit.diagnosis_type,
+          sample_location: this.edit.sample_location,
+          birthday: this.edit.birthday,
+          application_date: this.edit.application_date,
+          report_date: this.edit.report_date,
+          application_Ydate: this.edit.application_Ydate,
+          report_Ydate: this.edit.report_Ydate
         }
       });
       console.log(res);
@@ -2266,7 +2279,7 @@ export default {
       this.queryInfo.count = parseInt(res.count); //总条数
       this.queryInfo.pagerows = res.pagerows; //每页显示多少条
     },
-    // 删除
+    // 数据删除
     del(row) {
       this.$confirm("确定删除该数据？, 是否继续?", "提示", {
         confirmButtonText: "确定",
@@ -2274,7 +2287,11 @@ export default {
         type: "warning",
         center: true
       })
-        .then(() => {
+        .then(async () => {
+          const { data: res } = await this.axios.get("report/del.php ", {
+            params: { id: row.id }
+          });
+          console.log(res);
           this.getTableList();
           this.$message({
             type: "success",
@@ -2337,6 +2354,14 @@ export default {
       });
       this.editForm = res.data;
       this.id = row.id;
+      if( this.editForm.application_date === '0000-00-00'){
+        console.log(44)
+        this.editForm.application_date = ''
+      } 
+      if( this.editForm.birthday === '0000-00-00'){
+        console.log(4)
+        this.editForm.birthday = ''
+      }
       // this.editForm = Object.assign(res.data[0],res.data[1],res.data[2])
       // 表单对象
       console.log(this.editForm);
@@ -2997,7 +3022,7 @@ export default {
   .nei {
     border-radius: 5px;
     width: 550px;
-    height: 588px;
+    height: 300px;
     position: absolute;
     left: 0;
     bottom: 0;

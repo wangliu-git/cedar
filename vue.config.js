@@ -28,9 +28,9 @@ module.exports = {
     open: true, // 自动打开浏览器
     proxy: {
       // 处理以/api开头路径的请求
-      // '/api': 'http://localhost:4000'
+      // '/api': 'http://106.13.49.232:4000'
       '/api': {
-        target: 'http://localhost:8080', // 转发的目标地址
+        target: 'http://106.13.49.232:8080', // 转发的目标地址
         pathRewrite: {
           '^/api' : ''  // 转发请求时去除路径前面的/api
         },
