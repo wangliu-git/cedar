@@ -212,7 +212,7 @@
           </div>
           -->
           <div class="sousuo">
-            <el-input placeholder="请输入分组关键词..." style="width:500px">
+            <el-input placeholder="请输入关键词..." style="width:500px">
               <el-button slot="append">搜索</el-button>
             </el-input>
           </div>

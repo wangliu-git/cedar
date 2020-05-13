@@ -121,6 +121,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+
 import echarts from "echarts";
 
 export default {
@@ -185,7 +186,6 @@ export default {
         console.log("dataEcharts:", dataEcharts);
         console.log("nameArray:", nameArray);
         console.log("valueArray:", valueArray);
-
         let option = {
           title: {
             //标题
@@ -208,7 +208,6 @@ export default {
               }
             }
           },
-
           legend: {
             //图例组件
             // data: ['人数']
@@ -236,7 +235,6 @@ export default {
             name: "",
             type: "value"
           },
-
           series: [
             //系列列表。每个系列通过 type 决定自己的图表类型
             {

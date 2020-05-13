@@ -1,52 +1,78 @@
-<template >
-  <div >
-    <el-container style="height:100vh"  >
+<template>
+  <div>
+    <el-container style="height:100vh" >
       <!-- 左侧边栏 -->
       <el-aside width="240px">
         <!-- 侧边栏菜单区域 -->
-        <el-menu  background-color="#3195FA" text-color="#FFFFFF" active-text-color="#FFFFFF" unique-opened :router="true">
+        <el-menu  text-color="#FFFFFF" active-text-color="#1E7DFE" unique-opened :router="true">
           <el-menu-item  :class="{on: $route.path === '/homepage'}" @click="goto('/homepage')">
             <i class="iconfont iconshouye"></i>
             <span slot="title">首页</span>
           </el-menu-item>
-          <el-menu-item  :class="{on: $route.path === '/dataentry'}" @click="goto('/dataentry')">
-            <i class="iconfont iconshujuluru"></i>
-            <span slot="title">数据录入</span>
-          </el-menu-item>
-          <el-menu-item  :class="{on: $route.path === '/dataimport'}" @click="goto('/dataimport')">
-            <i class="iconfont iconshujudaoru"></i>
-            <span slot="title">数据导入</span>
-          </el-menu-item>
-          <el-submenu  :class="{on: $route.path === '/dataintegration'}" @click="goto('/dataintegration')" index="1">
+
+
+          <el-submenu   @click="goto('/dataentry')" index="4">
+            <template slot="title">
+              <i class="iconfont iconshujuluru"></i>
+              <span>数据录入</span>
+            </template>           
+              <el-menu-item index="dataentry" :class="{on: $route.path === '/dataentry'}"><i class="iconfont icondian" ></i> 数据录入</el-menu-item>           
+          </el-submenu>
+
+
+          <el-submenu   @click="goto('/dataimport')" index="5">
+            <template slot="title">
+              <i class="iconfont iconshujudaoru"></i>
+              <span>数据导入</span>
+            </template>           
+              <el-menu-item index="dataimport" :class="{on: $route.path === '/dataimport'}"><i class="iconfont icondian"></i> 数据导入</el-menu-item>           
+          </el-submenu>
+
+          <el-submenu   @click="goto('/dataintegration')" index="1">
             <template slot="title">
               <i class="iconfont icondashujuzhenghe"></i>
               <span>数据整合</span>
             </template>           
-              <el-menu-item index="unit">. 原单位报告</el-menu-item>           
+              <el-menu-item index="unit" :class="{on: $route.path === '/dataintegration'}"><i class="iconfont icondian"></i> 原单位报告</el-menu-item>           
           </el-submenu>
-          <el-submenu :class="{on: $route.path === '/datamanage'}" @click="goto('/datamanage')" index="2">
+
+          <el-submenu : @click="goto('/datamanage')" index="2">
             <template slot="title">
               <i class="iconfont iconshujuguanli"></i>
               <span>数据管理</span>
             </template>  
-              <el-menu-item index="/shaix">. 数据筛选</el-menu-item>
-              <el-menu-item index="/group">. 分组管理</el-menu-item>       
+              <el-menu-item index="shaix" :class="{on: $route.path === '/shaix'}"><i class="iconfont icondian"></i>  数据筛选</el-menu-item>
+              <el-menu-item index="group" :class="{on: $route.path === '/group'}"><i class="iconfont icondian"></i>  分组管理</el-menu-item>       
           </el-submenu>
-          <el-submenu :class="{on: $route.path === '/dataanalysis'}" @click="goto('/dataanalysis')"  index="3">
+
+          <el-submenu  @click="goto('/dataanalysis')"  index="3">
             <template slot="title">
               <i class="iconfont icondataAnalysis"></i>
               <span >数据分析</span>
             </template>     
-              <el-menu-item index="medical">. 医学统计</el-menu-item>         
+              <el-menu-item index="medical" ><i class="iconfont icondian"></i>  医学统计</el-menu-item>         
           </el-submenu>
-          <el-menu-item :class="{on: $route.path === '/try'}" @click="goto('/try')">
-            <i class="iconfont icondashujuzhenghe"></i>
-            <span slot="title">模拟试用</span>
-          </el-menu-item>
-          <el-menu-item  :class="{on: $route.path === '/usermanagement;'}" @click="goto('/usermanagement')">
-            <i class="iconfont iconyonghuguanli"></i>
-            <span slot="title">用户管理</span>
-          </el-menu-item>
+          <!--
+          <el-submenu :class="{on: $route.path === '/try'}" @click="goto('/try')"  index="8">
+            <template slot="title">
+              <i class="iconfont iconyonghuguanli"></i>
+              <span >模拟试用</span>
+            </template>     
+              <el-menu-item index="try"><i class="iconfont icondian"></i>模拟试用</el-menu-item>         
+          </el-submenu>
+            -->
+
+          
+          
+          <el-submenu  @click="goto('/usermanagement')"  index="7">
+            <template slot="title">
+              <i class="iconfont iconyonghuguanli"></i>
+              <span >用户管理</span>
+            </template>     
+              <el-menu-item index="usermanagement" :class="{on: $route.path === '/usermanagement'}"><i class="iconfont icondian"></i>用户管理</el-menu-item>         
+          </el-submenu>
+          
+    
         </el-menu>
       </el-aside>
       <el-container class="mian">
@@ -77,7 +103,9 @@
   export default {
     methods: {
       // 退出登录
-      loginout(){
+      async loginout(){
+        const {data :res} = await this.axios.get('user/logout.php')
+        console.log(res)
         this.$router.push('/login')
         window.sessionStorage.clear()
       },
@@ -111,6 +139,13 @@
   }
 </script>
 
+<style lang="stylus" scoped>
+.el-aside .el-menu[data-v-15737ea2] {
+  height: 100%;
+  background:linear-gradient(180deg,rgba(30,118,254,1),rgba(27,196,255,1)); 
+}
+
+</style>
 <style scoped lang="stylus" rel="stylesheet/stylus" >
 
 el-button el-button--default{
@@ -125,8 +160,10 @@ el-button el-button--default{
   width 1920px
 }
   .el-aside {    
-    width:240px;    
-    background:linear-gradient(180deg,rgba(30,118,254,1),rgba(27,196,255,1)); 
+    width:240px;  
+    height 937px
+   
+
     .el-menu{
       height: 100%
     }
@@ -196,7 +233,7 @@ el-button el-button--default{
     border-right none
 
     .on{
-      background #bbffcc
+      background-color  white
     }
   }
  

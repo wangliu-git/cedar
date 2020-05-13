@@ -111,18 +111,18 @@ export default [
                 ]
         
             },
-            // 模拟试用
-            {
-                path:'/try',
-                component:Try,
-                children:[
-                    {
-                        path:'/try',
-                        component:Try
-                    }
-                ]
+            // // 模拟试用
+            // {
+            //     path:'/try',
+            //     component:Try,
+            //     children:[
+            //         {
+            //             path:'/try',
+            //             component:Try
+            //         }
+            //     ]
         
-            },
+            // },
             // 用户管理
             {
                 path:'/usermanagement',

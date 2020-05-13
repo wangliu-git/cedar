@@ -75,7 +75,7 @@
               <el-button type="text" size="small" @click="dele(scope.row)">
                 <span>删除</span>
               </el-button>
-              <el-button class="jiexi" size="small" v-if="scope.row.status == 1">
+              <el-button class="jiexi" size="small" v-if="scope.row.status == 1" >
                 <span class="iconfont iconxiazai"  @click="jiexi(scope.row)">开始解析</span>
               </el-button>
               <el-button class="jiexi" size="small" v-else>
@@ -118,7 +118,7 @@
             v-model="name"
           ></el-input>
           <el-button type="primary" size="mini" @click="getTable">确定</el-button>
-          <el-button type="primary" size="mini" class="pass">
+          <el-button type="primary" size="mini" class="pass" @click="passsList(idss)">
             <i class="iconfont iconpiliangtongguo"></i> 批量通过
           </el-button>
         </div>
@@ -130,8 +130,13 @@
             border
             :header-cell-style="{color:'#333333'}"
             stripe
+            @current-change="handleSelectionChange"
           >
-            <el-table-column type="selection" width="40"></el-table-column>
+            <el-table-column  width="40">
+              <template slot-scope="scope">
+                <el-checkbox v-model="scope.row.checked"></el-checkbox>
+              </template>
+            </el-table-column>
             <el-table-column prop="test_id" label="病理号" width="170" sortable></el-table-column>
             <el-table-column prop="name" label="姓名" width="170" sortable></el-table-column>
             <el-table-column prop="diagnosis2" label="病理类型" width="200" sortable></el-table-column>
@@ -896,7 +901,7 @@
           </div>
           -->
           <div class="sousuo">
-            <el-input placeholder="请输入分组关键词..." style="width:500px">
+            <el-input placeholder="请输入关键词..." style="width:500px">
               <el-button   plain slot="append">搜索</el-button>
             </el-input>
           </div>
@@ -1080,6 +1085,13 @@ export default {
       this.queryInfo.page = parseInt(res.page);
       this.queryInfo.count = parseInt(res.count); //总条数
       this.queryInfo.pagerows = res.pagerows; //每页显示多少条
+      this.tablelist.forEach(item => {
+        item.checked = false; //默认选中
+        console.log(item)
+        this.multipleSelection.push(item.id);
+        this.idss = this.multipleSelection;
+        console.log(this.idss)
+      });
     },
     // 点击添加分组保存
     async addGroup(item, id) {
@@ -1159,6 +1171,7 @@ export default {
         spinner: "el-icon-loading",
         background: "rgba(0, 0, 0, 0.7)"
       });
+      // this.loading = true
       // 插入数据  excel_data/readjson.php
       await this.axios
         .get("excel_data/readjson.php", { params: { id: row.id } })
@@ -1288,6 +1301,13 @@ export default {
       this.id = row.id;
       this.row = row  //缓存的row
      
+      this.tablelist.forEach(item => {
+        item.checked = false; //默认选中
+        console.log(item)
+        this.multipleSelection.push(item.id);
+        this.idss = this.multipleSelection;
+        console.log(this.idss)
+      });
       // console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);
     },
     // 点击切换页码
@@ -1305,6 +1325,13 @@ export default {
       this.queryInfo.page = parseInt(res.page);
       this.queryInfo.count = parseInt(res.count); //总条数
       this.queryInfo.pagerows = res.pagerows; //每页显示多少条
+      this.tablelist.forEach(item => {
+        item.checked = false; //默认选中
+        console.log(item)
+        this.multipleSelection.push(item.id);
+        this.idss = this.multipleSelection;
+        console.log(this.idss)
+      });
       // console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);
     },
     // 搜索
@@ -1325,6 +1352,31 @@ export default {
       // this.count = res.count  //总条数
       // this.queryInfo.pagerows = res.pagerows  //每页显示多少条
       // console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);
+    },
+    // 点击复选框获取ID们
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+      console.log(this.multipleSelection);
+    },
+    // 点击框
+    // handleSelectionChange(row) {
+    //   this.tablelist.forEach(item => {
+    //     // 排他,点击
+    //     if (item.id == row.id) {
+    //       item.checked = true;
+    //       console.log(item.id)
+    //     }
+    //   });
+    //   console.log(row)
+    // },
+    // 批量通过
+    async passsList(idss){
+      console.log(this.idss)
+      let ids = ''
+      const res = await this.axios.get('excel_data/checkall.php',{params:{ids:this.idss}}).then( res=>{
+        console.log(res)
+        this.getTableList2(this.row)
+      })
     },
     // 点击下一个
     next(id) {
@@ -1442,13 +1494,13 @@ export default {
       //判断当前数组的对象是否有数据
       console.log(ihcItem);
       ihcItem.map( (item,index) =>{
-        if (item.trim()) {
+        if (item.mark || item.value){
           //验证通过 添加新的一条
-          // var value = {
-          //   mark: "",
-          //   value: ""
-          // };
-          array.push(item);
+          var value = {
+            mark: "",
+            value: ""
+          };
+         item.push(value.mark,value.value);
         } else {
           alert("请检查输入是否正确");
         }
@@ -1670,6 +1722,8 @@ export default {
   },
   data() {
     return {
+      idss: [], //ID 们
+      multipleSelection: [], //复选框
       location:'',   //研究项目
       xiayige: false,
       wenjian: true, //上传文件

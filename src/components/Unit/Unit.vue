@@ -517,8 +517,7 @@ export default {
       });
     },
     // 点击选择分组
-    group_id(it) {
-      
+    group_id(it) {      
       this.it = it
       console.log(this.it)
       this.getTableList(this.it)
@@ -623,7 +622,7 @@ export default {
       this.editForm = this.editForm;
       this.jilian = this.editForm.jilian;
       this.photo = this.editForm.photo;
-      console.log(this.jilian);
+      // console.log(this.jilian);
       this.editForm.detail_type = "淋巴瘤";
       // console.log(this.atstached)
       let data = {
@@ -665,8 +664,8 @@ export default {
     // 获取病理号
     async getTableList(it) {
       // alert(1)
-      console.log(it)
-      console.log(it.group_name)
+      // console.log(it)
+      // console.log(it.group_name)
       let group_id = "";
       const { data: res } = await this.axios.get("diagnosis_origin/list.php", {
         params: { page: this.queryInfo.page, group_id:this.it.id}

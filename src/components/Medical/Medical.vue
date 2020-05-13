@@ -73,15 +73,15 @@
         </div>
         <div class="echarts">
           <div class="btns">
-            <el-button type="primary" value="sex" plain @click="drawLineSex()">性别</el-button>
-            <el-button type="primary" plain @click="drawLineAge()">年龄</el-button>
-            <el-button type="primary" plain @click="drawLineBirthPlace()">籍贯</el-button>
-            <el-button type="primary" plain @click="drawLineAddress_prov()">居住地</el-button>
-            <el-button type="primary" plain @click="drawLineSample_type()">标本类型</el-button>
-            <el-button type="primary" plain @click="drawLineSample_location()">取材部位</el-button>
+            <el-button type="primary" plain @click="drawLineSex(sex)">性别</el-button>
+            <el-button type="primary" plain @click="drawLineAge(age)">年龄</el-button>
+            <el-button type="primary" plain @click="drawLineBirthPlace(birthplace)">籍贯</el-button>
+            <el-button type="primary" plain @click="drawLineAddress_prov(address_prov)">居住地</el-button>
+            <el-button type="primary" plain @click="drawLineSample_type(sample_type)">标本类型</el-button>
+            <el-button type="primary" plain @click="drawLineSample_location(sample_location)">取材部位</el-button>
             <el-button type="primary" plain >生物标记物检测率</el-button>
             <el-button type="primary" plain >生物标记物阳性率</el-button>
-            <el-button type="primary" plain @click="drawLineDiff_day()">诊断时长</el-button>
+            <el-button type="primary" plain @click="drawLineDiff_day(diff_day)">诊断时长</el-button>
             <el-button type="primary" plain >各个病理类型分布</el-button>
             <!--@click="drawLineDia()" -->
           </div>
@@ -100,6 +100,14 @@ import './js/china.js'
 export default {
   data() {
     return {
+      row:'',
+      sex:'sex',
+      age:'age',
+      birthplace:'birthplace',
+      address_prov:'address_prov',
+      sample_type:'sample_type',
+      sample_location:'sample_location',
+      diff_day:'diff_day',
       group_id: "", //分组id
       id: "", //分组ID
       dignosis1: "",
@@ -628,6 +636,7 @@ export default {
       this.id = row.id;
       console.log(row);
       return this.id;
+      this.row = row
     },
     // 点击编辑获取ID
     chakan(row) {
@@ -651,9 +660,9 @@ export default {
       // console.log(this.datalist);
     },
     // 性别--饼图
-    async drawLineSex() {
-      console.log(this.value)
-      console.log(this.id);  
+    async drawLineSex(sex,id) {  
+      console.log(this.sex)
+      console.log(this.id)
       // myChart.showLoading(); myChart.hideLoading();  //等待效果
       // 基于准备好的dom，初始化echarts实例
       // console.log(document.getElementById('tu'))   样式
@@ -663,9 +672,11 @@ export default {
       );
       let field = "";
       const { data: res } = await this.axios.get(
-        "group/stat.php?group_id=1&field=sex"
+        // "group/stat.php?group_id=1&field=sex"
+        "group/stat.php",{params:{group_id:this.id,field:this.sex}}
       );
       let datas = res.stat;
+      console.log(datas)
       setEChart_pieWithTool({
         myChart: myChart,
         dataEcharts: datas,
@@ -775,7 +786,7 @@ export default {
 
     },
     // 年龄--柱状图
-    async drawLineAge() {
+    async drawLineAge(age,id) {
       // myChart.showLoading(); myChart.hideLoading();  //等待效果
       // 基于准备好的dom，初始化echarts实例
       // console.log(document.sgetElementById('tu'))   样式
@@ -784,7 +795,8 @@ export default {
         "macarons"
       );
       const { data: res } = await this.axios.get(
-        "group/stat.php?group_id=1&field=age"
+        // "group/stat.php?group_id=1&field=age"
+        "group/stat.php",{params:{group_id:this.id,field:this.age}}
       );
       let datas = res.stat;
       setEChart_barWithTool({
@@ -1005,13 +1017,14 @@ export default {
       }
     },
     // 籍贯--地图
-    async drawLineBirthPlace() {
+    async drawLineBirthPlace(birthplace,id) {
       let myChart = this.$echarts.init(
         document.getElementById("tu"),
         "macarons"
       );
       const { data: res } = await this.axios.get(
-        "group/stat.php?group_id=1&field=birthplace"
+        // "group/stat.php?group_id=1&field=birthplace"
+        "group/stat.php",{params:{group_id:this.id,field:this.birthplace}}
       );
       console.log(res);
       let datas = res.stat;
@@ -1238,7 +1251,7 @@ export default {
       }
     },
     // 居住地--地图
-    async drawLineAddress_prov() {
+    async drawLineAddress_prov(address_prov,id) {
       // myChart.showLoading(); myChart.hideLoading();  //等待效果
       // 基于准备好的dom，初始化echarts实例
       // console.log(document.getElementById('tu'))   样式
@@ -1247,7 +1260,8 @@ export default {
         "macarons"
       );
       const { data: res } = await this.axios.get(
-        "group/stat.php?group_id=1&field=address_prov"
+        // "group/stat.php?group_id=1&field=address_prov"
+        "group/stat.php",{params:{group_id:this.id,field:this.address_prov}}
       );
       let datas = res.stat;
       setEChart_mapWithTool({
@@ -1473,7 +1487,7 @@ export default {
       }
     },
     // 标本类型--饼图
-    async drawLineSample_type() {
+    async drawLineSample_type(sample_type,id) {
       // myChart.showLoading(); myChart.hideLoading();  //等待效果
       // 基于准备好的dom，初始化echarts实例
       // console.log(document.getElementById('tu'))   样式
@@ -1482,7 +1496,8 @@ export default {
         "macarons"
       );
       const { data: res } = await this.axios.get(
-        "group/stat.php?group_id=1&field=sample_type"
+        // "group/stat.php?group_id=1&field=sample_type"
+        "group/stat.php",{params:{group_id:this.id,field:this.sample_type}}
       );
       let datas = res.stat;
       setEChart_pieWithTool({
@@ -1592,7 +1607,7 @@ export default {
       }
     },
     // 取材部位--饼图
-    async drawLineSample_location() {
+    async drawLineSample_location(sample_location,id) {
       // myChart.showLoading(); myChart.hideLoading();  //等待效果
       // 基于准备好的dom，初始化echarts实例
       // console.log(document.getElementById('tu'))   样式
@@ -1601,7 +1616,8 @@ export default {
         "macarons"
       );
       const { data: res } = await this.axios.get(
-        "group/stat.php?group_id=1&field=sample_location"
+        // "group/stat.php?group_id=1&field=sample_location"
+        "group/stat.php",{params:{group_id:this.id,field:this.sample_location}}
       );
       let datas = res.stat;
       setEChart_pieWithTool({
@@ -1711,7 +1727,7 @@ export default {
       }
     },
     // 诊断时长--柱状图
-    async drawLineDiff_day() {
+    async drawLineDiff_day(diff_day,id) {
       // myChart.showLoading(); myChart.hideLoading();  //等待效果
       // 基于准备好的dom，初始化echarts实例
       // console.log(document.getElementById('tu'))   样式
@@ -1720,7 +1736,9 @@ export default {
         "macarons"
       );
       const { data: res } = await this.axios.get(
-        "group/stat.php?group_id=1&field=diff_day"
+        // "group/stat.php?group_id=1&field=diff_day"
+        "group/stat.php",{params:{group_id:this.id,field:this.diff_day}}
+ 
       );
       let datas = res.stat;
       setEChart_barWithTool({

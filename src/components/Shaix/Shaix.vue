@@ -10,7 +10,7 @@
         </el-input>
       </div>
 
-      <el-collapse v-model="activeNames" :v-model="edit">
+      <el-collapse v-model="activeNames" :v-model="edit" @change="gaibian">
         <el-collapse-item name="1">
           <template slot="title" style="background-color:rgba(232, 232, 232, 1)">
             <i class="iconfont icontubiaozhizuo-"></i>
@@ -223,7 +223,7 @@
                 size="mini"
                 :options="options"
                 :props="{ checkStrictly: true }"
-                clearable v-model="edit.jilian"
+                clearable v-model="edit.jilian" multiple
               ></el-cascader>
             </div>
 
@@ -343,10 +343,11 @@
               <el-cascader
                 size="mini"
                 :options="options"
-                :props="{ checkStrictly: true }"
-                clearable
-                style="width:200px" v-model="edit.jilian"
+                :props="{  multiple: true }"
+                clearable  collapse-tags
+                style="width:200px" v-model="edit.jilian" 
               ></el-cascader>
+            
             </div>
 
             <div class="zhen">
@@ -356,9 +357,9 @@
                 placeholder="请选择"
                 size="mini"
                 style="width:200px"
-                multiple
+                multiple 
               >
-                <el-option v-for="(item,index) in this.mark" :key="index"  :value="item">{{item}}</el-option>
+                <el-option v-for="(item,index) in this.mark" :key="index"  :value="item">{{item}} </el-option>              
               </el-select>
             </div>
 
@@ -2049,6 +2050,10 @@ export default {
     this.getresult()
   },
   methods: {
+    // 变动筛选
+    gaibian(){
+      this.shaixuan()
+    },
     // 获取标志物,结果
     async getmark(){
       let name = ''
@@ -2221,6 +2226,8 @@ export default {
     // 筛选重置按钮
     reset(edit) {
       this.edit = {};
+      this.getTableList()
+
     },
     // 点击添加分组
     async addGroup(item, ids) {
@@ -2275,7 +2282,7 @@ export default {
       let group_id = "";
       const { data: res } = await this.axios.get("report/list.php", {
         params: {
-          group_id: 1,
+          // group_id: 1,
           test_id: this.edit.test_id,
           name: this.edit.name,
           sex: this.edit.sex,
@@ -2350,7 +2357,7 @@ export default {
       this.queryInfo.pagerows = res.pagerows; //每页显示多少条
       this.tablelist.forEach(item => {
         item.checked = true; //默认选中
-        // console.log(item)
+        console.log(item)
         this.multipleSelection.push(item.id);
         this.ids = this.multipleSelection;
         // console.log(this.ids)
