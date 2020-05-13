@@ -438,7 +438,7 @@
                       size="mini"
                       v-model="editForm.diagnosis2"                    
                       clearable
-                      style="width:300px"
+                      style="width:350px"
                     ></el-input>
                   </div>
                 </div>
@@ -719,7 +719,7 @@
                       size="mini"
                       v-model="editForm.diagnosis2"                    
                       clearable
-                      style="width:300px"
+                      style="width:350px"
                     ></el-input>
                   </div>
 

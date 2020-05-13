@@ -75,27 +75,30 @@
               sortable
             ></el-table-column>
             <el-table-column fixed="right" label="操作" width="180">
-              <template slot-scope="scope">
-                <el-button
-                  type="text"
-                  size="small"
-                  @click="look(scope.row)"
-                  v-if="attached == !0"
-                >查看</el-button>
+              <template slot-scope="scope" >
                 <el-button
                   type="text"
                   size="small"
                   @click="tianjia(scope.row)"
-                  v-if="attached == 0"
+                  v-if="scope.row.attached == !0"
                 >添加</el-button>
+                <div v-else>
+                  <el-button
+                  type="text"
+                  size="small"
+                  @click="look(scope.row)"
+            
+                ><span style="margin-left:5px">查看</span></el-button>
                 <el-button
                   type="text"
                   size="small"
                   @click="bianji(scope.row)"
-                  v-if="attached == !0"
-                >编辑</el-button>
-                <el-button type="text" size="small" @click="del(scope.row)" v-if="attached == !0">删除</el-button>
+               
+                ><span style="margin-left:5px">编辑</span></el-button>
+                <el-button type="text" size="small" @click="del(scope.row)"><span style="margin-left:5px">删除</span></el-button>
+                </div>
               </template>
+
             </el-table-column>
           </el-table>
           <!--    :current-page="count"                      当前显示的页数
@@ -571,9 +574,9 @@ export default {
       this.editForm = res;
       console.log(this.editForm);
     },
-
     // 点击删除
     async del(row) {
+      console.log(row.id)
       const { data: res } = await this.axios("diagnosis_origin/del.php", {
         params: { id: row.id }
       }).then(res => {
@@ -1902,6 +1905,8 @@ export default {
           .pass {
             margin: 10px;
           }
+ 
+          }
         }
       }
 
@@ -2133,5 +2138,5 @@ export default {
       }
     }
   }
-}
+
 </style>

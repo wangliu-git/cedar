@@ -93,7 +93,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import "./js/util.js";
+import "./js/echarts.js";
 import echarts from "echarts";
 import './js/china.js'
 
@@ -734,6 +734,7 @@ export default {
                 //   setEChart_bar('barWithTool');
                 // }
               },
+             
               saveAsImage: {
                 //工具项-保存为图片
                 show: true,
@@ -874,16 +875,16 @@ export default {
                 title: "切换为饼图",
                 icon:
                   "path://M522.8 64.1V64h-22v0.1C258.6 69.9 64 268.1 64 511.8c0 247.3 200.5 447.8 447.8 447.8s447.8-200.5 447.8-447.8c0-243.7-194.5-441.9-436.8-447.7z m154.8 55.3c50.7 21.4 96.2 52.2 135.4 91.3 39.1 39.1 69.8 84.7 91.3 135.4 20.8 49.1 32 101.1 33.3 154.7H522.8V86.1c53.6 1.3 105.6 12.5 154.8 33.3z m135.3 693.4c-39.1 39.1-84.7 69.8-135.4 91.3-52.5 22.2-108.2 33.5-165.7 33.5s-113.3-11.3-165.7-33.5c-50.7-21.4-96.2-52.2-135.4-91.3-39.1-39.1-69.8-84.7-91.3-135.4C97.3 625 86 569.2 86 511.8S97.3 398.5 119.5 346c21.4-50.7 52.2-96.2 91.3-135.4 39.1-39.1 84.7-69.8 135.4-91.3 49.1-20.8 101.1-32 154.7-33.3v436.7h436.7c-1.3 53.6-12.5 105.6-33.3 154.7-21.6 50.8-52.3 96.3-91.4 135.4z",
-                onclick: function() {
-                  // alert('myToolHandler1');
-                  // setEChart_line(myChart, data);
-                  // setEChart('pieWithTool');
-                }
+                // onclick: function() {
+                //   alert('myToolHandler1');
+                //   setEChart_line(myChart, dataEcharts);
+                //   setEChart('pieWithTool');
+                // }
               },
               magicType: {
                 //多个工具项-动态视图类型切换的选项
                 show: true,
-                type: ["line", "bar"]
+                type: ["line", "bar",'pie']
               },
               dataView: {
                 //工具项-原始数据展示
@@ -896,7 +897,7 @@ export default {
                   var axisData = opt.xAxis[0].data;
                   var series = opt.series;
                   var table =
-                    '<table border  style="width:50%;text-align:center"><thead><tr>' +
+                    '<table scroll style="width:50%;text-align:center"><thead><tr>' +
                     "<th>" +
                     xAxisText +
                     "</th>" +

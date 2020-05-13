@@ -429,6 +429,15 @@
                       style="width:500px"
                     ></el-cascader>
                   </div>
+                  <div class="sickItem">
+                    <span>病理类型原文:</span>
+                    <el-input
+                      size="mini"
+                      v-model="editForm.diagnosis2"                    
+                      clearable
+                      style="width:350px"
+                    ></el-input>
+                  </div>
                 </div>
                 <!--报告质量  可折叠-->
                 <div class="sickIH">
@@ -735,7 +744,7 @@
                       size="mini"
                       v-model="editForm.diagnosis2"                    
                       clearable
-                      style="width:300px"
+                      style="width:350px"
                     ></el-input>
                   </div>
                 </div>
