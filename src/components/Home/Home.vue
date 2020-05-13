@@ -89,6 +89,15 @@
               <el-menu-item index="try"><i class="iconfont icondian"></i>模拟试用</el-menu-item>         
           </el-submenu>
           -->
+        
+          <el-submenu :class="{on: $route.path === '/try'}" @click="goto('/try')"  index="8">
+            <template slot="title">
+              <i class="iconfont iconyonghuguanli"></i>
+              <span >模拟试用</span>
+            </template>     
+              <el-menu-item index="try"><i class="iconfont icondian"></i>模拟试用</el-menu-item>         
+          </el-submenu>
+          
 
           <el-submenu
             :class="{on: $route.path === '/usermanagement'}"

@@ -666,6 +666,7 @@ export default {
     async getTableList(it) {
       // alert(1)
       console.log(it)
+      console.log(it.group_name)
       let group_id = "";
       const { data: res } = await this.axios.get("diagnosis_origin/list.php", {
         params: { page: this.queryInfo.page, group_id:this.it.id}

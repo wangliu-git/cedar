@@ -14,11 +14,10 @@ import Shaix from '@/components/Shaix/Shaix.vue'
 import Group from '@/components/Group/Group.vue'
 import DataAnalysis from '@/components/DataAnalysis/DataAnalysis.vue'
 import Medical from '@/components/Medical/Medical.vue'
-import Sex from '@/components/Medical/Sex/Sex.vue'
 
 
 
-// import Try from '@/components/Try/Try.vue'
+import Try from '@/components/Try/Try.vue'
 import UserManagement from '@/components/UserManagement/UserManagement.vue'
 
 
@@ -113,17 +112,17 @@ export default [
         
             },
             // 模拟试用
-            // {
-            //     path:'/try',
-            //     component:Try,
-            //     children:[
-            //         {
-            //             path:'/try',
-            //             component:Try
-            //         }
-            //     ]
+            {
+                path:'/try',
+                component:Try,
+                children:[
+                    {
+                        path:'/try',
+                        component:Try
+                    }
+                ]
         
-            // },
+            },
             // 用户管理
             {
                 path:'/usermanagement',

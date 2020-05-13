@@ -358,20 +358,20 @@
                 style="width:200px"
                 multiple
               >
-                <el-option></el-option>
+                <el-option v-for="(item,index) in this.mark" :key="index"  :value="item">{{item}}</el-option>
               </el-select>
             </div>
 
             <div class="zhen">
               <span>检测结果 ：</span>
               <el-select
-                v-model="edit.diagnosis"
+                v-model="edit.result"
                 placeholder="请选择"
                 size="mini"
                 style="width:200px"
                 multiple
               >
-                <el-option></el-option>
+                <el-option v-for="(item,index) in this.result" :key="index"  :value="item">{{item}}</el-option>
               </el-select>
               <button size="mini">
                 <i class="iconfont iconic_join_dialing_norm"></i>
@@ -1282,6 +1282,8 @@ import allMessage from "../../staic/allMessage.json";
 export default {
   data() {
     return {
+      mark:[],   //标志物
+      result:[],   //结果
       SJLY:['数据录入','数据导入'],
       ZHXX:['有原单位报告','无原单位报告'],
       jilian: [],
@@ -2043,8 +2045,27 @@ export default {
   created() {
     this.getTableList();
     this.groupList();
+    this.getmark()
+    this.getresult()
   },
   methods: {
+    // 获取标志物,结果
+    async getmark(){
+      let name = ''
+      const res= await this.axios.get('report/option.php?table=ly_helper_diagnosis&name=mark').then( res =>{
+        console.log(res)
+        this.mark = res.data.option
+        // console.log(this.mark)
+      })
+    },
+    async getresult(){
+      let name = ''
+      const res= await this.axios.get('report/option.php?table=ly_helper_diagnosis&name=value').then( res =>{
+        console.log(res)
+        this.result = res.data.option
+        // console.log(this.result)
+      })
+    },
     // 点击复选框获取ID们
     handleSelectionChange(val) {
       this.multipleSelection = val;

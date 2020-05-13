@@ -75,8 +75,11 @@
               <el-button type="text" size="small" @click="dele(scope.row)">
                 <span>删除</span>
               </el-button>
-              <el-button class="jiexi" size="small">
-                <span class="iconfont iconxiazai" @click="jiexi(scope.row)">开始解析</span>
+              <el-button class="jiexi" size="small" v-if="scope.row.status == 1">
+                <span class="iconfont iconxiazai"  @click="jiexi(scope.row)">开始解析</span>
+              </el-button>
+              <el-button class="jiexi" size="small" v-else>
+                <span class="iconfont iconxiazai">解析成功</span>
               </el-button>
             </template>
           </el-table-column>
@@ -790,7 +793,7 @@
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.value_ihc.field_title}}：</span>
-                          <el-input v-model="ihcItem.value" style="width:120px"></el-input>
+                          <el-input v-model="ihcItem.value" style="width:130px"></el-input>
                         </div>
                       </div>
                       <!-- + - 操作只需要传入当前循环的数组 -->
@@ -898,7 +901,7 @@
             </el-input>
           </div>
           <div class="groupList">
-            <el-button
+            <el-button v-model="location"
               v-for="(it, index) in this.groupList"
               :key="index"
               :value="it.group_name"
@@ -1120,14 +1123,17 @@ export default {
     },
     // 点击确定
     async sure(id) {
+      // it.group_name = this.location
+      // console.log(it)
       const { data: res } = await this.axios.post("dataset/edit.php", {
         params: {
           id: this.id,
           file_name: this.data.file_name,
-          location: this.data.location
+          // location: this.location
         }
       });
       console.log(this.data.file_name);
+      // console.log(this.data.location);
       console.log(res);
       console.log(this.id);
       this.group = !this.group;
@@ -1146,6 +1152,7 @@ export default {
     },
     //点击数据集解析  将数据插入到列表中
     async jiexi(row) {
+      console.log(row)
       const loading = this.$loading({
         lock: true,
         text: "正在解析中，请耐心等待呦",
@@ -1165,7 +1172,9 @@ export default {
               confirmButtonText: "确定",
               type: "success",
               callback: action => {
+                row.status = 0
                 this.sousuo = true;
+                console.log(row)
                 this.axios.get("dataset/list.php?id=", +row.id);
                 loading.close();
               }
@@ -1661,7 +1670,7 @@ export default {
   },
   data() {
     return {
-     
+      location:'',   //研究项目
       xiayige: false,
       wenjian: true, //上传文件
       item: "",

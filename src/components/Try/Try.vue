@@ -1,10 +1,26 @@
 <template>
-  <div class="container">
-    <div>
-      <el-input v-model="editForm.name" @focus="highlight(name)" placeholder="请输入内容"></el-input>
-    </div>
-    <div class="home_box">{{editForm.diagnosis_txt}}</div>
-  </div>
+  <el-dropdown class="avatar-container" trigger="click">
+                                        <div class="avatar-wrapper">
+                                            <el-button type="primary" size="medium">
+                                                支付
+                                                <i class="el-icon-caret-bottom" />
+                                            </el-button>
+                                        </div>
+                                        <el-dropdown-menu slot="dropdown" class="user-dropdown">
+                                            <a v-if="isPC &&(item.status==1||item.status==3)&&(payMethod==0||payMethod==1)" 
+                                                target="_blank" 
+                                                :href="openPayPageUrl">
+                                                <el-dropdown-item>银行卡支付</el-dropdown-item>
+                                            </a>
+                                            <el-dropdown-item v-if="(item.status==1||item.status==3)&&(isPC||isWX)&&(payMethod==0||payMethod==2)">
+                                                <span style="display:block;" 
+                                                    @click="wxPayPc(item.id)">微信支付</span>
+                                            </el-dropdown-item>
+                                            <el-dropdown-item divided>
+                                                <span style="display:block;">线下支付</span>
+                                            </el-dropdown-item>
+                                        </el-dropdown-menu>
+                                    </el-dropdown>
 </template>
 <script>
 export default {
