@@ -95,6 +95,7 @@
 <script type="text/ecmascript-6">
 import "./js/util.js";
 import echarts from "echarts";
+import './js/china.js'
 
 export default {
   data() {
