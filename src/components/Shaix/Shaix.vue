@@ -20,7 +20,7 @@
             <!--姓名  -->
             <div class="ji">
               <span>{{showInfo.name.field_title}}:</span>
-              <el-input placeholder="请输入姓名" size="mini" style="width:200px" v-model="edit.name"></el-input>
+              <el-input placeholder="请输入姓名" size="mini" @keyup.enter.native="shaixuan()" style="width:200px" v-model="edit.name"></el-input>
             </div>
             <!--性別 -->
             <div class="ji">
@@ -31,7 +31,7 @@
                 v-model="edit.sex"
                 size="mini"
                 multiple
-                style="width:200px"
+                style="width:200px"  @change="shaixuan()"
               >
                 <el-option v-for="item in showInfo.sex.field_values" :key="item" :value="item">
                   <span>{{item}}</span>
@@ -50,10 +50,10 @@
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
                 size="mini"
-                style="width:200px"
+                style="width:200px" @change="shaixuan()"
               ></el-date-picker>
             </div>
-            <!-- 联系电话-->
+            <!-- 联系电话 -->
 
             <div class="ji">
               <span>{{showInfo.phone.field_title}}:</span>
@@ -61,7 +61,7 @@
                 size="mini"
                 style="width:200px"
                 placeholder="请输入电话"
-                v-model="edit.phone"
+                v-model="edit.phone" @keyup.enter.native="shaixuan()"
               ></el-input>
             </div>
             <!--籍贯-->
@@ -74,7 +74,7 @@
                 v-model="edit.birthplace"
                 size="mini"
                 multiple
-                style="width:200px"
+                style="width:200px" @change="shaixuan()"
               >
                 <el-option
                   v-for="(provinces) in showInfo.birthplace.field_values"
@@ -95,7 +95,7 @@
                 v-model="edit.nation"
                 size="mini"
                 multiple
-                style="width:200px"
+                style="width:200px" @change="shaixuan()"
               >
                 <el-option v-for="(item) in showInfo.nation.field_values" :key="item" :value="item">
                   <span>{{item}}</span>
@@ -111,12 +111,12 @@
                 size="mini"
                 style="width:100px"
                 v-model="edit.address_prov"
-                multiple
+                multiple @change="shaixuan()"
               >
                 <el-option
                   v-for="(provinces) in showInfo.birthplace.field_values"
                   :key="provinces"
-                  :value="provinces"
+                  :value="provinces" 
                 >
                   <span>{{provinces}}</span>
                 </el-option>
@@ -126,7 +126,7 @@
                 size="mini"
                 style="width:100px"
                 v-model="edit.address_city"
-                multiple
+                multiple @change="shaixuan()"
               >
                 <el-option
                   v-for="(provinces) in showInfo.birthplace.field_values"
@@ -134,26 +134,6 @@
                   :value="provinces"
                 >
                   <span>{{provinces}}</span>
-                </el-option>
-              </el-select>
-            </div>
-
-            <div class="ji">
-              <span>{{tMInstitution.diagnosis_type.field_title}}：</span>
-
-              <el-select
-                name="diagnosis_type"
-                v-model="edit.diagnosis_type"
-                size="mini"
-                multiple
-                style="width:200px"
-              >
-                <el-option
-                  v-for="(item,index) in  tMInstitution.diagnosis_type.field_values"
-                  :key="index"
-                  :value="item"
-                >
-                  <span>{{item}}</span>
                 </el-option>
               </el-select>
             </div>
@@ -172,17 +152,17 @@
                 v-model="edit.organization"
                 placeholder="请输入机构名称"
                 size="mini"
-                style="width:200px"
+                style="width:200px"  @keyup.enter.native="shaixuan()"
               ></el-input>
             </div>
 
             <div class="bao">
               <span>{{fMInstitution.test_id.field_title}}:</span>
               <el-input
-                v-model="edit.test_id"
+                v-model="edit.test_Yid"
                 placeholder="请输入病理号"
                 size="mini"
-                style="width:200px"
+                style="width:200px"  @keyup.enter.native="shaixuan()"
               ></el-input>
             </div>
 
@@ -197,7 +177,7 @@
                 start-placeholder="申请开始日期"
                 end-placeholder="结束日期"
                 size="mini"
-                style="width:200px"
+                style="width:200px" @change="shaixuan()"
               ></el-date-picker>
             </div>
 
@@ -212,7 +192,7 @@
                 start-placeholder="报告开始日期"
                 end-placeholder="结束日期"
                 size="mini"
-                style="width:200px"
+                style="width:200px" @change="shaixuan()"
               ></el-date-picker>
             </div>
 
@@ -223,7 +203,7 @@
                 size="mini"
                 :options="options"
                 :props="{ checkStrictly: true }"
-                clearable v-model="edit.jilian" multiple
+                clearable v-model="edit.Yjilian" multiple @change="shaixuan()"
               ></el-cascader>
             </div>
 
@@ -235,7 +215,7 @@
                 v-model="edit.report_quality"
                 size="mini"
                 multiple
-                style="width:200px"
+                style="width:200px" @change="shaixuan()"
               >
                 <el-option
                   v-for="(item,index) in fMInstitution.report_quality.field_values"
@@ -261,12 +241,12 @@
                 v-model="edit.test_id"
                 placeholder="请输入病理号"
                 size="mini"
-                style="width:200px"
+                style="width:200px" @keyup.enter.native="shaixuan()"
               ></el-input>
             </div>
             <div class="zhen">
               <span>{{tMInstitution.department.field_title}}:</span>
-              <el-input type="text" v-model="edit.department" placeholder="请输入机构名称" size="mini"></el-input>
+              <el-input type="text" v-model="edit.department" @keyup.enter.native="shaixuan()" placeholder="请输入机构名称" size="mini"></el-input>
             </div>
             <div class="zhen">
               <span>{{tMInstitution.application_date.field_title}}:</span>
@@ -279,7 +259,7 @@
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
                 size="mini"
-                style="width:200px"
+                style="width:200px" @change="shaixuan()"
               ></el-date-picker>
             </div>
 
@@ -294,7 +274,7 @@
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
                 size="mini"
-                style="width:200px"
+                style="width:200px" @change="shaixuan()"
               ></el-date-picker>
             </div>
 
@@ -306,7 +286,7 @@
                 v-model="edit.diagnosis_type"
                 size="mini"
                 multiple
-                style="width:200px"
+                style="width:200px" @change="shaixuan()"
               >
                 <el-option
                   v-for="(item,index) in  tMInstitution.diagnosis_type.field_values"
@@ -326,7 +306,7 @@
                 size="mini"
                 placeholder="请选择取材部位"
                 multiple
-                style="width:200px"
+                style="width:200px" @change="shaixuan()"
               >
                 <el-option
                   v-for="(item,index) in  tMInstitution.sample_location.field_values"
@@ -345,7 +325,7 @@
                 :options="options"
                 :props="{  multiple: true }"
                 clearable  collapse-tags
-                style="width:200px" v-model="edit.jilian" 
+                style="width:200px" v-model="edit.jilian"  @change="shaixuan()"
               ></el-cascader>
             
             </div>
@@ -357,8 +337,8 @@
                 placeholder="请选择"
                 size="mini"
                 style="width:200px"
-                multiple 
-              >
+                multiple @change="shaixuan()"
+              > 
                 <el-option v-for="(item,index) in this.mark" :key="index"  :value="item">{{item}} </el-option>              
               </el-select>
             </div>
@@ -366,13 +346,13 @@
             <div class="zhen">
               <span>检测结果 ：</span>
               <el-select
-                v-model="edit.result"
+                v-model="edit.value"
                 placeholder="请选择"
                 size="mini"
                 style="width:200px"
-                multiple
+                multiple @change="shaixuan()"
               >
-                <el-option v-for="(item,index) in this.result" :key="index"  :value="item">{{item}}</el-option>
+                <el-option v-for="(item,index) in this.value" :key="index"  :value="item">{{item}}</el-option>
               </el-select>
               <button size="mini">
                 <i class="iconfont iconic_join_dialing_norm"></i>
@@ -387,27 +367,27 @@
             <div class="lai" style="width:300px">
               <span>数据来源 ：</span>
               <el-select
-                v-model="edit.sjly"
+                v-model="edit.dataForm"
                 placeholder="请选择"
                 size="mini"
                 style="width:200px"
                 multiple
-                
+                @change="shaixuan()"
               >
-                <el-option v-for="(item,index) in SJLY" :key="index" :value="item"></el-option>
+                <el-option v-for="(item,index) in dataForm" :key="index" :value="item"></el-option>
               </el-select>
             </div>
 
             <div class="lai" style="width:300px">
               <span>整合信息 ：</span>
               <el-select
-                v-model="edit.ZHXX"
+                v-model="edit.Integrate"
                 placeholder="请选择"
                 size="mini"
                 style="width:200px"
-                multiple
+                multiple @change="shaixuan()"
               >
-                <el-option v-for="(item,index) in ZHXX" :key="index" :value="item"></el-option>
+                <el-option v-for="(item,index) in Integrate" :key="index" :value="item"></el-option>
               </el-select>
             </div>
           </div>
@@ -435,10 +415,10 @@
           @current-change="handleSelectionChange"
           :header-cell-style="{color:'#333333'}"
         >
-          <el-table-column width="50">
-            <template slot-scope="scope">
+          <el-table-column width="50" >
+           <template slot-scope="scope">
               <el-checkbox v-model="scope.row.checked"></el-checkbox>
-            </template>
+            </template> 
           </el-table-column>
           <el-table-column prop="test_id" label="病理号" width="200" sortable></el-table-column>
           <el-table-column prop="name" label="姓名" width="200" sortable></el-table-column>
@@ -561,13 +541,13 @@
             <div>
               诊断结论
               <span>病理类型：</span>
-              {{editForm.diagnosis}}
+              {{editForm.diagnosis2}}
             </div>
 
             <div style="float:left">
               辅助诊断
               <span>免疫组化：</span>
-              <th  v-for="(item,index) in editForm.helper_diagnosis.ihc" :key="index" :value="item">
+              <th  v-for="(item,index) in this.helper_diagnosis.ihc" :key="index" :value="item">
                 <td>{{item.mark}}</td>
                 <td>{{item.value}}</td>
               </th>
@@ -1283,11 +1263,7 @@ import allMessage from "../../staic/allMessage.json";
 export default {
   data() {
     return {
-      mark:[],   //标志物
-      result:[],   //结果
-      SJLY:['数据录入','数据导入'],
-      ZHXX:['有原单位报告','无原单位报告'],
-      jilian: [],
+    
       ids: [], //ID 们
       multipleSelection: [], //复选框
       // 新建分组名
@@ -1786,7 +1762,6 @@ export default {
       data: [],
       edit:{},
       // 筛选条件名
-      // ## 患者信息
       name: "", //姓名
       sex: [], //性别
       birthday: "", //出生日期
@@ -1794,34 +1769,30 @@ export default {
       birthplace: "", //籍贯
       nation: "", //民族
       address_prov: "", //居住地址
+      address_city: "", //居住地址
       sample_type: "", //就诊类型
       // ## 原医疗
       organization: "", //机构名称
       test_id: "", //病理号
+      test_Yid: "", //病理号
       application_Ydate: "", //申请日期
       report_Ydate: "", //报告日期
-      //筛选大对象
-      //病理类型
-      //详细类型
-      //病理亚型
-      //级别
       report_quality: "", //病理报告质量
       // ## 本医疗
-      test_id: "", //病理号
       department: "", //送检科室
       application_date: "", //申请日期
       report_date: "", //报告日期
       sample_type: "", //标本类型
       sample_location: "", //取材部位
-      //病理类型
-      //详细类型
-      //病理亚型
-      //级别
-      diagnosis: "", //检测结果（诊断结论）
-      mark: "", //标志物
-      //切缘
-      //数据来源
-      //整合信息
+     
+      mark:[],   //标志物
+      value:[],   //结果
+      dataForm:['数据录入','数据导入'],
+      Integrate:['有原单位报告','无原单位报告'],
+      jilian: [],
+      Yjilian: [],
+      // dataForm: '',            //数据来源
+      // Integrate: '',           //整合信息
       tablelist: [], //病理号数组
       zhezhao: false,
       id: "", //列表参数
@@ -2067,15 +2038,11 @@ export default {
       let name = ''
       const res= await this.axios.get('report/option.php?table=ly_helper_diagnosis&name=value').then( res =>{
         console.log(res)
-        this.result = res.data.option
+        this.value = res.data.option
         // console.log(this.result)
       })
     },
-    // 点击复选框获取ID们
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-      console.log(this.multipleSelection);
-    },
+    
     // 获取选择分组
     groupList() {
       const res  = this.axios.get("group/list.php").then(res => {
@@ -2282,22 +2249,37 @@ export default {
       let group_id = "";
       const { data: res } = await this.axios.get("report/list.php", {
         params: {
-          // group_id: 1,
-          test_id: this.edit.test_id,
-          name: this.edit.name,
-          sex: this.edit.sex,
-          nation: this.edit.nation,
-          birthplace: this.edit.birthplace,
-          address_prov: this.edit.address_prov,
-          address_city: this.edit.address_city,
-          report_quality: this.edit.report_quality,
-          diagnosis_type: this.edit.diagnosis_type,
-          sample_location: this.edit.sample_location,
-          birthday: this.edit.birthday,
-          application_date: this.edit.application_date,
-          report_date: this.edit.report_date,
-          application_Ydate: this.edit.application_Ydate,
-          report_Ydate: this.edit.report_Ydate
+          // group_id: 1,      
+          // 患者信息
+          name: this.edit.name,          //姓名   
+          sex: this.edit.sex,            //性别
+          nation: this.edit.nation,      //民族
+          birthday: this.edit.birthday,  //出生日期
+          phone: this.edit.phone,         //联系电话
+          birthplace: this.edit.birthplace,           //籍贯
+          address_prov: this.edit.address_prov,       //居住地省
+          address_city: this.edit.address_city,       //居住地市
+
+          //原医疗  ******
+          application_Ydate: this.edit.application_Ydate,     //申请日期  **
+          report_Ydate: this.edit.report_Ydate,           //报告日期  ***
+          organization: this.edit.organization,           //机构名称
+          test_Yid: this.edit.test_Yid,                   //病理号  **
+          Yjilian: this.edit.Yjilian,                     //病理类型  **
+          report_quality: this.edit.report_quality,           //报告质量
+        
+          //本医疗          
+          test_id: this.edit.test_id,             //病理号
+          department: this.edit.department,        //送检科室
+          application_date: this.edit.application_date,   //申请日期
+          report_date: this.edit.report_date,             //报告日期
+          diagnosis_type: this.edit.diagnosis_type,       //就诊类型
+          sample_location: this.edit.sample_location,     //取材部位 
+          jilian: this.edit.jilian,               //病理类型 
+          mark: this.edit.mark,                   //标志物
+          value: this.edit.value,                  //检测结果
+          dataForm: this.edit.dataForm,            //数据来源
+          Integrate: this.edit.Integrate,           //整合信息                                                              
         }
       });
       console.log(res);
@@ -2357,10 +2339,10 @@ export default {
       this.queryInfo.pagerows = res.pagerows; //每页显示多少条
       this.tablelist.forEach(item => {
         item.checked = true; //默认选中
-        console.log(item)
+        // console.log(item)
         this.multipleSelection.push(item.id);
         this.ids = this.multipleSelection;
-        // console.log(this.ids)
+        console.log(this.ids)
       });
     },
     // 点击框
@@ -2372,7 +2354,12 @@ export default {
           // console.log(item.id)
         }
       });
-      // console.log(row)
+      console.log(row)
+    },
+    // 点击复选框获取ID们
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+      console.log(this.multipleSelection);
     },
     // 点击查看
     async look(row) {

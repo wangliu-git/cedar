@@ -13,8 +13,8 @@
         <div class="search">
           <div class="left">
             <span>创建人 ：</span>
-            <el-select placeholder="请选择" size="small">
-              <el-option></el-option>
+            <el-select placeholder="请选择" size="small" v-model="groupname" @change="creator">
+              <el-option v-for="(item,index) in this.datalist" :key="index" :value="item.group_name" ></el-option> 
             </el-select>
           </div>
 
@@ -285,6 +285,7 @@
 export default {
   data() {
     return {
+      groupname:'',   //创建人
       row:'',    //缓存的row
       group_id: "",
       chuangjian: false,
@@ -433,6 +434,13 @@ export default {
           });
         });
     },
+    // 点击创建人搜索列表
+    // async creator(){
+    //   const { data: res } = await this.axios.get("group/list.php",{params:{groupname:item.group_name}}).then( res =>{
+    //     console.log(res);
+        
+    //   })
+    // },  
     // 获取分组列表
     async getDataList() {
       const { data: res } = await this.axios.get("group/list.php");

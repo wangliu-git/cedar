@@ -78,7 +78,7 @@
               <el-button class="jiexi" size="small" v-if="scope.row.status == 1" >
                 <span class="iconfont iconxiazai"  @click="jiexi(scope.row)">开始解析</span>
               </el-button>
-              <el-button class="jiexi" size="small" v-else>
+              <el-button class="jiexi" size="small" v-else style="backgroundcolor:green">
                 <span class="iconfont iconxiazai">解析成功</span>
               </el-button>
             </template>
@@ -109,6 +109,7 @@
             prefix-icon="el-icon-search"
             style="width:180px"
             v-model="test_id"
+            @keyup.enter.native="getTable()"
           ></el-input>
           <el-input
             size="mini"
@@ -116,6 +117,7 @@
             prefix-icon="el-icon-search"
             style="width:180px"
             v-model="name"
+            @keyup.enter.native="getTable()"
           ></el-input>
           <el-button type="primary" size="mini" @click="getTable">确定</el-button>
           <el-button type="primary" size="mini" class="pass" @click="passsList(idss)">
@@ -740,6 +742,7 @@
                     <el-cascader
                       size="mini"
                       v-model="editForm.jilian"
+                      
                       :options="options"
                       :props="{ checkStrictly: true }"
                       clearable
@@ -805,7 +808,7 @@
                       <!-- 判断 必须是最后一条，才可以显示操作按钮 -->
                       <div class="handleBtnBox">
                         <!-- el-button: v-if="idx==testFZ.ihc.length-1" -->
-                        <el-button @click="ihcAddData(helper_diagnosis.ihc)">
+                        <el-button @click="ihcAddData(helper_diagnosis.ihc,helper_diagnosis.ihc[idx])">
                           <i class="iconfont iconaddTodo-nav"></i>
                         </el-button>
                         <el-button @click="ihcDeleteData(helper_diagnosis.ihc)">
@@ -910,7 +913,7 @@
               v-for="(it, index) in this.groupList"
               :key="index"
               :value="it.group_name"
-            >{{it.group_name}}</el-button>
+             @click="location_name(it)">{{it.group_name}}</el-button>
           </div>
           <div class="name">
             <span>新建项目名称 ：</span>
@@ -1141,10 +1144,10 @@ export default {
         params: {
           id: this.id,
           file_name: this.data.file_name,
-          // location: this.location
+          location: this.it.group_name
         }
       });
-      console.log(this.data.file_name);
+      console.log(this.data);
       // console.log(this.data.location);
       console.log(res);
       console.log(this.id);
@@ -1161,6 +1164,11 @@ export default {
       console.log(res);
       this.data = res;
       this.groupLists();
+    },
+    // 点击分组名
+    location_name(it){
+      this.it = it
+      console.log(it)
     },
     //点击数据集解析  将数据插入到列表中
     async jiexi(row) {
@@ -1490,21 +1498,20 @@ export default {
       console.log(this.editForm);
     },
     // 免疫租化增删
-    ihcAddData( ihcItem) {
+    ihcAddData( ihcItem,value) {
       //判断当前数组的对象是否有数据
       console.log(ihcItem);
-      ihcItem.map( (item,index) =>{
-        if (item.mark || item.value){
+        if (value.mark || value.value){
           //验证通过 添加新的一条
-          var value = {
-            mark: "",
-            value: ""
-          };
-         item.push(value.mark,value.value);
+          // var value = {
+          //   mark: "",
+          //   value: ""
+          // };
+         ihcItem.push(value);
         } else {
           alert("请检查输入是否正确");
         }
-      })
+      
     },
     // 免疫组化删除
     ihcDeleteData(ihcItem) {
@@ -1723,6 +1730,7 @@ export default {
   data() {
     return {
       idss: [], //ID 们
+      it:'',   //分组名
       multipleSelection: [], //复选框
       location:'',   //研究项目
       xiayige: false,

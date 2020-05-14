@@ -2,11 +2,12 @@
   <div class="outest">
     <div class="sContainer">
       <span>选择分组 :</span>
-      <el-select size="mini" style="width:250px" placeholder="请选择分组" v-model="it" @change="group_id">
+      <el-select size="mini" style="width:250px" placeholder="请选择分组" v-model="it" @change="group_id(it)">
         <el-option
           v-for="(it, index) in this.groupList"
           :key="index"
-          :label="it.group_name" :value="it" selected="selected"  
+          :value="it"
+          :label="it.group_name"  
         >
           {{it.group_name}}
         </el-option>
@@ -31,21 +32,21 @@
               placeholder="请输入病理号"
               prefix-icon="el-icon-search"
               style="width:180px"
-              v-model="test_id"
+              v-model="test_id" @keyup.enter.native="getTable()"
             ></el-input>
             <el-input
               size="mini"
               placeholder="请输入住院号"
               prefix-icon="el-icon-search"
               style="width:180px"
-              v-model="patient_id"
+              v-model="patient_id" @keyup.enter.native="getTable()"
             ></el-input>
             <el-input
               size="mini"
               placeholder="请输入姓名"
               prefix-icon="el-icon-search"
               style="width:180px"
-              v-model="name"
+              v-model="name" @keyup.enter.native="getTable()"
             ></el-input>
             <el-button type="primary" size="mini" @click="getTable">确定</el-button>
           </div>

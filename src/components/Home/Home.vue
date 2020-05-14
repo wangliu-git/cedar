@@ -1,13 +1,11 @@
 <template >
-  <div>
+  <div id="dataImport">
     <el-container style="height:100vh">
       <!-- 左侧边栏 -->
       <el-aside width="240px">
         <!-- 侧边栏菜单区域 -->
         <el-menu
-          background-color="#3195FA"
-          text-color="#FFFFFF"
-          active-text-color="#FFFFFF"
+          text-color="#FFFFFF" active-text-color="#1E7DFE" background-color="#00000000"
           unique-opened
           :router="true"
         >
@@ -174,6 +172,18 @@ export default {
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus" >
+
+.el-menu-item:hover{
+  outline: 0 !important;
+  color: #409EFF !important;
+  background: #FAFAFA !important;
+}
+
+.el-menu-item.is-active {
+  color: #1D9DFF !important;
+  background: #F5F7FA !important;
+}
+
 el-button el-button--default {
   border: none;
 }
@@ -186,15 +196,14 @@ el-button el-button--default {
 .el-container {
   width: 1920px;
 }
-
-.el-aside {
-  width: 240px;
-  background: linear-gradient(180deg, rgba(30, 118, 254, 1), rgba(27, 196, 255, 1));
-
+.el-aside .el-menu[data-v-15737ea2] {
+  height: 100%;
+  background:linear-gradient(180deg,rgba(30,118,254,1),rgba(27,196,255,1)); 
   .el-menu {
     height: 100%;
   }
 }
+
 
 .mian {
   width: 1680px;
@@ -267,7 +276,7 @@ el-button el-button--default {
 .el-menu {
   border-right: none;
 
-  .on {
+  .on:focus{
     background-color: white;
   }
 }
