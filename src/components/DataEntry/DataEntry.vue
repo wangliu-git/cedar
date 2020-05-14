@@ -78,7 +78,7 @@
               <el-button class="jiexi" size="small" v-if="scope.row.status == 1" >
                 <span class="iconfont iconxiazai"  @click="jiexi(scope.row)">开始解析</span>
               </el-button>
-              <el-button class="jiexi" size="small" v-else style="backgroundcolor:green">
+              <el-button class="jiexi" size="small" v-else style="background:#26bc99">
                 <span class="iconfont iconxiazai">解析成功</span>
               </el-button>
             </template>
@@ -2818,6 +2818,7 @@ export default {
   height: 35px;
   border-radius: 5px 5px 0px 0px;
 }
+
 #dataImport .el-collapse-item {
   border: 1px solid #efeef1;
   border-radius: 5px;

@@ -173,15 +173,15 @@ export default {
 
 <style scoped lang="stylus" rel="stylesheet/stylus" >
 
-.el-menu-item:hover{
-  outline: 0 !important;
-  color: #409EFF !important;
-  background: #FAFAFA !important;
-}
+// .el-menu-item:hover{
+//   outline: 0 !important;
+//   color: #409EFF !important;
+//   background: #FAFAFA !important;
+// }
 
 .el-menu-item.is-active {
-  color: #1D9DFF !important;
-  background: #F5F7FA !important;
+  color: white !important;
+  background: #0850C1 !important;
 }
 
 el-button el-button--default {
