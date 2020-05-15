@@ -753,7 +753,7 @@
                     <span>病理类型原文:</span>
                     <el-input
                       size="mini"
-                      v-model="editForm.diagnosis2"                    
+                      v-model="editForm.diagnosis_txt2"                    
                       clearable
                       style="width:350px"
                     ></el-input>
@@ -1004,7 +1004,7 @@
             <div>
               诊断结论
               <span>病理类型：</span>
-              {{editForm.diagnosis}}
+              {{editForm.diagnosis2}}
             </div>
             <!-- div><span>淋巴细胞来源：</span>{{editForm.type}}</div>-->
             <div style="float:left">
@@ -1014,6 +1014,14 @@
                 <td>{{item.mark}}</td>
                 <td>{{item.value}}</td>
               </th> 
+            </div>
+            <div style="float:left">
+              <span>标本类型：</span>
+              {{editForm.sample_type}}
+            </div>
+            <div style="float:left">
+              <span>取材部位：</span>
+              {{editForm.sample_location}}
             </div>
           </div>
         </div>
@@ -1025,7 +1033,6 @@
         </div>
       </div>
     </div>
-
     <!--点击下一个 -->
     <div class="nextone" v-if="xiayige">
       <div class="warn">
@@ -1060,8 +1067,6 @@ import axios from "axios";
 export default {
   created() {
     this.getDataList();
-    // this.getTableList();
-    // console.log(window.sessionStorage.uid)
   },
   methods: {
     // 获取选择分组
@@ -1294,8 +1299,7 @@ export default {
       // this.search =! this.search
       // alert("gt2"+this.sousuo);
       // console.log(row.id)
-      // console.log(this.queryInfo.page)
-     
+      // console.log(this.queryInfo.page)     
       const { data: res } = await this.axios.get("excel_data/list.php", {
         params: { id: row.id, page: this.queryInfo.page }
       });
@@ -1307,8 +1311,7 @@ export default {
       this.queryInfo.count = parseInt(res.count); //总条数
       this.queryInfo.pagerows = res.pagerows; //每页显示多少条
       this.id = row.id;
-      this.row = row  //缓存的row
-     
+      this.row = row  //缓存的row     
       this.tablelist.forEach(item => {
         item.checked = false; //默认选中
         console.log(item)
@@ -1414,8 +1417,13 @@ export default {
         "excel_data/nextonedata.php?id=" + this.id
       );
       if (res.ok == 0) {
-        return this.$message.error("已经是最后一个了");
-        return
+        // return this.$message.error("已经是最后一个了");
+        this.$alert("已经是最后一个了", "提交结果", {
+          confirmButtonText: "确定",
+          type: "success",
+         
+        });
+        // return      
       }
       // console.log("getTableList",res);
       this.editForm = res.data;
@@ -1503,10 +1511,10 @@ export default {
       console.log(ihcItem);
         if (value.mark || value.value){
           //验证通过 添加新的一条
-          // var value = {
-          //   mark: "",
-          //   value: ""
-          // };
+          var value = {
+            mark: "",
+            value: ""
+          };
          ihcItem.push(value);
         } else {
           alert("请检查输入是否正确");
@@ -1605,10 +1613,10 @@ export default {
           
         });
       } else {
-        console.log("error submit!!");
+        // console.log("error submit!!");
         return false;
       }
-      this.fou();
+      // this.fou();
     },
     //上传文件方法
     uploadFile() {
@@ -3646,7 +3654,6 @@ a {
 
       .ZD {
         position: relative;
-        height: 100px;
         border-top: 1px solid rgba(185, 222, 255, 1);
         margin: 20px 30px;
       

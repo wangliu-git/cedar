@@ -726,7 +726,7 @@ export default {
       let field = "";
       const { data: res } = await this.axios.get(
         // "group/stat.php?group_id=1&field=sex"
-        "group/stat.php",{params:{group_id:this.id,field:this.sex}}
+        "group/stat.php",{params:{group_id:this.id,field:this.sex,type:this.type+1}}
       );
       let datas = res.stat;
       console.log(datas)

@@ -9,30 +9,22 @@
           unique-opened
           :router="true"
         >
-          <el-menu-item :class="{on: $route.path === '/homepage'}" @click="goto('/homepage')">
+          <el-menu-item :class="{on: $route.path === '/homepage'}" index="homepage">
             <i class="iconfont iconshouye"></i>
             <span slot="title">首页</span>
           </el-menu-item>
 
-          <el-submenu @click="goto('/dataentry')" index="4">
+          <el-menu-item @click="goto('/dataentry')" index="dataentry">
             <template slot="title">
               <i class="iconfont iconshujuluru"></i>
               <span>数据录入</span>
-            </template>
-            <el-menu-item index="dataentry" :class="{on: $route.path === '/dataentry'}">
-              <i class="iconfont icondian"></i> 数据录入
-            </el-menu-item>
-          </el-submenu>
+            </template>       
+          </el-menu-item>
 
-          <el-submenu @click="goto('/dataimport')" index="5">
-            <template slot="title">
-              <i class="iconfont iconshujudaoru"></i>
-              <span>数据导入</span>
-            </template>
             <el-menu-item index="dataimport" :class="{on: $route.path === '/dataimport'}">
-              <i class="iconfont icondian"></i> 数据导入
+             <i class="iconfont iconshujudaoru"></i>数据导入
             </el-menu-item>
-          </el-submenu>
+
 
           <el-submenu
             :class="{on: $route.path === '/dataintegration'}"
@@ -146,7 +138,7 @@ export default {
         // 编程式路由跳转
         this.$router.push(path);
       } else {
-        window.location = path; // 发送一般的http请求 ==> 整个界面会刷新显示
+        // window.location = path; // 发送一般的http请求 ==> 整个界面会刷新显示
       }
     },
     handleOpen(key, keyPath) {
@@ -173,11 +165,13 @@ export default {
 
 <style scoped lang="stylus" rel="stylesheet/stylus" >
 
-// .el-menu-item:hover{
-//   outline: 0 !important;
-//   color: #409EFF !important;
-//   background: #FAFAFA !important;
-// }
+
+
+.el-menu-item.is-hover{
+  outline: 0 !important;
+  color: #0850C1 !important;
+  background: #FAFAFA !important;
+}
 
 .el-menu-item.is-active {
   color: white !important;
@@ -196,7 +190,7 @@ el-button el-button--default {
 .el-container {
   width: 1920px;
 }
-.el-aside .el-menu[data-v-15737ea2] {
+.el-aside  {
   height: 100%;
   background:linear-gradient(180deg,rgba(30,118,254,1),rgba(27,196,255,1)); 
   .el-menu {

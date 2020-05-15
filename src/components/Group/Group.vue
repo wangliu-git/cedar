@@ -14,7 +14,7 @@
           <div class="left">
             <span>创建人 ：</span>
             <el-select placeholder="请选择" size="small" v-model="groupname" @change="creator">
-              <el-option v-for="(item,index) in this.datalist" :key="index" :value="item.group_name" ></el-option> 
+              <el-option v-for="(item,index) in this.peopleList" :key="index" :value="item.group_name" ></el-option> 
             </el-select>
           </div>
 
@@ -285,6 +285,7 @@
 export default {
   data() {
     return {
+      peopleList:[],   //创建人数组
       groupname:'',   //创建人
       row:'',    //缓存的row
       group_id: "",
@@ -435,16 +436,22 @@ export default {
         });
     },
     // 点击创建人搜索列表
-    // async creator(){
-    //   const { data: res } = await this.axios.get("group/list.php",{params:{groupname:item.group_name}}).then( res =>{
-    //     console.log(res);
-        
-    //   })
-    // },  
+     creator(){
+      console.log(this.groupname)
+      const res = this.axios.get('group/list.php',{params:{group_name:this.groupname}}).then( res => {
+        console.log(res.data)
+        this.datalist = res.data.data;
+        this.queryInfo.page = parseInt(res.data.page);
+        this.queryInfo.count = parseInt(res.data.count); //总条数
+        this.queryInfo.pagerows = res.data.pagerows; //每页显示多少条
+        console.log(this.queryInfo.count)
+      })
+    },  
     // 获取分组列表
     async getDataList() {
       const { data: res } = await this.axios.get("group/list.php");
       this.datalist = res.data;
+      this.peopleList = this.datalist 
       console.log(this.datalist);
       this.shuInfo.page = parseInt(res.page);
       this.shuInfo.count = parseInt(res.count); //总条数

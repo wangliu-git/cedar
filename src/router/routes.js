@@ -17,7 +17,7 @@ import Medical from '@/components/Medical/Medical.vue'
 
 
 
-import Try from '@/components/Try/Try.vue'
+// import Try from '@/components/Try/Try.vue'
 import UserManagement from '@/components/UserManagement/UserManagement.vue'
 
 
@@ -29,19 +29,18 @@ export default [
     },
     {
         path:'/home',
-        component:Home,
-        
+        component:Home,     
         children:[
             // 首页
             {
                 path:'/homepage',
                 component:HomePage,
-                children:[
-                    {
-                        path:'/homepage',
-                        component:HomePage,
-                    }
-                ]  
+                // children:[
+                //     {
+                //         path:'/homepage',
+                //         component:HomePage,
+                //     }
+                // ]  
             },
             
             // 数据录入
@@ -49,12 +48,12 @@ export default [
                 path:'/dataentry',
                 component:DataEntry,
                 // 原单位报告
-                children:[
-                    {
-                        path:'/dataentry',
-                        component:DataEntry,
-                    }
-                ] 
+                // children:[
+                //     {
+                //         path:'/dataentry',
+                //         component:DataEntry,
+                //     }
+                // ] 
         
             },
             // 数据导入
@@ -62,12 +61,12 @@ export default [
                 path:'/dataimport',
                 component:DataImport,
                 // 原单位报告
-                children:[
-                    {
-                        path:'/dataimport',
-                        component:DataImport,
-                    }
-                ] 
+                // children:[
+                //     {
+                //         path:'/dataimport',
+                //         component:DataImport,
+                //     }
+                // ] 
         
             },
             // 数据整合

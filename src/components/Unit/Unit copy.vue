@@ -4,7 +4,7 @@
       <span>选择分组 :</span>
       <el-select size="mini" style="width:250px" placeholder="请选择分组" v-model="it" @change="group_id(it)">
         <el-option
-          v-for="(it,index) in this.groupList"
+          v-for="(it, index) in this.groupList"
           :key="index"
           :value="it"
           :label="it.group_name"  
@@ -619,7 +619,8 @@ export default {
     },
     // 保存
     baocun(row, editForm) {
-      this.zhezhao = !this.zhezhao;      
+      this.zhezhao = !this.zhezhao;
+      
       console.log(this.row)
       this.editForm = this.editForm;
       this.jilian = this.editForm.jilian;
@@ -627,6 +628,7 @@ export default {
       // console.log(this.jilian);
       this.editForm.detail_type = "淋巴瘤";
       // console.log(this.atstached)
+
       console.log(this.editForm);
         this.axios.post("diagnosis_origin/add.php",{params:{id:this.row.id,data:this.editForm}}).then(res => {
           console.log("res:", res);
@@ -649,7 +651,8 @@ export default {
           }
         });
 
-    }, 
+    },
+  
     // 获取病理号
     async getTableList(it) {
       // alert(1)
