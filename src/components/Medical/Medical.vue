@@ -69,7 +69,7 @@
           <div>
             <i class="iconfont iconbuzhou-icon"></i>
             <span>选择分析 ：</span>
-            <el-select placeholder="请选择" size="small" v-model="type" style="width:300px" @change="getindex()">
+            <el-select placeholder="请选择" size="small" v-model="type" style="width:300px" @change="drawLineSex()">
               <el-option v-for="(item,index)  in choose" :key="index" :value="index" :label="item">{{item}}</el-option>
             </el-select>
           </div>
@@ -107,10 +107,13 @@ import "./js/echarts.js";
 import echarts from "echarts";
 import './js/china.js'
 import './js/check'
+import './js/util'
 
 export default {
   data() {
     return {
+      diagnosis2:'diagnosis2',
+      ly_helper_diagnosis:'ly_helper_diagnosis',
       type:'',    //选择分析
       group_name:'',    //创建人
       row:'',   //缓存的row
@@ -625,8 +628,7 @@ export default {
       this.get();
     });
   },
-  methods: {
-    
+  methods: {   
     // 点击获取创建人姓名
     getName(){
       console.log(this.group_name)
@@ -639,10 +641,7 @@ export default {
         console.log(this.queryInfo.count)
       })
     },
-    // 获取index
-    getindex(){    
-      console.log(this.type)  
-    },    
+   
     // 分组删除
     del(row) {
       this.$confirm("确定删除该数据？, 是否继续?", "提示", {
@@ -941,9 +940,10 @@ export default {
                 icon:
                   "path://M522.8 64.1V64h-22v0.1C258.6 69.9 64 268.1 64 511.8c0 247.3 200.5 447.8 447.8 447.8s447.8-200.5 447.8-447.8c0-243.7-194.5-441.9-436.8-447.7z m154.8 55.3c50.7 21.4 96.2 52.2 135.4 91.3 39.1 39.1 69.8 84.7 91.3 135.4 20.8 49.1 32 101.1 33.3 154.7H522.8V86.1c53.6 1.3 105.6 12.5 154.8 33.3z m135.3 693.4c-39.1 39.1-84.7 69.8-135.4 91.3-52.5 22.2-108.2 33.5-165.7 33.5s-113.3-11.3-165.7-33.5c-50.7-21.4-96.2-52.2-135.4-91.3-39.1-39.1-69.8-84.7-91.3-135.4C97.3 625 86 569.2 86 511.8S97.3 398.5 119.5 346c21.4-50.7 52.2-96.2 91.3-135.4 39.1-39.1 84.7-69.8 135.4-91.3 49.1-20.8 101.1-32 154.7-33.3v436.7h436.7c-1.3 53.6-12.5 105.6-33.3 154.7-21.6 50.8-52.3 96.3-91.4 135.4z",
                 // onclick: function() {
-                //   alert('myToolHandler1');
-                //   setEChart_line(myChart, dataEcharts);
-                //   setEChart('pieWithTool');
+                //   // alert('myToolHandler1');
+                //   // setEChart_line(myChart, dataEcharts);
+                //   // setEChart('pieWithTool')
+                  
                 // }
               },
               magicType: {
@@ -2020,10 +2020,12 @@ export default {
         document.getElementById("tu"),
         "macarons"
       );
+      let table = ''
       const { data: res } = await this.axios.get(
         // "group/stat.php?group_id=1&field=diff_day"
-        "group/stat.php?group_id=1&field=mark&type=1&table=ly_helper_diagnosis"
-        // "group/stat.php",{params:{group_id:this.id,field:this.diff_day}}
+        
+        "group/stat.php",
+        {params:{group_id:this.id,field:this.mark,type:this.type+1,table:this.ly_helper_diagnosis}}
  
       );
       console.log(res)
@@ -2489,7 +2491,10 @@ export default {
         "macarons"
       );
       const { data: res } = await this.axios.get(
-        "group/stat.php?group_id=1&field=sex&type=1&field2=diagnosis2"
+        "group/stat.php",
+         {params:{group_id:this.id,field:this.sex,type:this.type+1,field2:this.diagnosis2}}
+        //  {params:{group_id:this.id,field:this.mark,type:this.type+1,table:this.ly_helper_diagnosis}}
+ 
       );
       let datas = res.stat;
       setEChart_barWithTool({
@@ -2813,7 +2818,7 @@ export default {
           color: rgba(51, 51, 51, 1);
         
         }
-       .el-button:focus {
+       .el-button:active {
             background: rgba(28, 178, 255, 1);
             border-radius: 4px;
             font-size: 14px;

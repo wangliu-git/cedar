@@ -163,6 +163,18 @@ export default {
 };
 </script>
 
+
+<style>
+	.el-submenu__title:hover{ 
+		background-color: #0850C1 !important;
+	}
+	.el-menu-item:hover{
+		background-color: #0850C1 !important;
+	}
+	.el-submenu__title i{
+		color: #FFFFFF !important;
+	}
+</style>
 <style scoped lang="stylus" rel="stylesheet/stylus" >
 
 

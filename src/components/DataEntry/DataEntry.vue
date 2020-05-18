@@ -14,7 +14,7 @@
                   <el-upload
                     class="upload-demo"
                     ref="upload"
-                    action="http://106.13.49.232/cedar/api/upload_file/add.php"
+                    action="http://192.168.75.58/cedar/api/upload_file/add.php"
                     :accept="acceptFileType"
                     :limit="1"
                     :on-exceed="handleExceed"
@@ -120,7 +120,7 @@
             @keyup.enter.native="getTable()"
           ></el-input>
           <el-button type="primary" size="mini" @click="getTable">确定</el-button>
-          <el-button type="primary" size="mini" class="pass" @click="passsList(idss)">
+          <el-button type="primary" size="mini" class="pass" @click="passList(idss)">
             <i class="iconfont iconpiliangtongguo"></i> 批量通过
           </el-button>
         </div>
@@ -132,12 +132,9 @@
             border
             :header-cell-style="{color:'#333333'}"
             stripe
-            @current-change="handleSelectionChange"
+            @selection-change="checkTable"
           >
-            <el-table-column  width="40">
-              <template slot-scope="scope">
-                <el-checkbox v-model="scope.row.checked"></el-checkbox>
-              </template>
+            <el-table-column  width="40" type="selection">            
             </el-table-column>
             <el-table-column prop="test_id" label="病理号" width="170" sortable></el-table-column>
             <el-table-column prop="name" label="姓名" width="170" sortable></el-table-column>
@@ -808,10 +805,10 @@
                       <!-- 判断 必须是最后一条，才可以显示操作按钮 -->
                       <div class="handleBtnBox">
                         <!-- el-button: v-if="idx==testFZ.ihc.length-1" -->
-                        <el-button @click="ihcAddData(helper_diagnosis.ihc,helper_diagnosis.ihc[idx])">
+                        <el-button style="margin-right: 5px;" v-if="idx==helper_diagnosis.ihc.length-1" @click="ihcAddData(helper_diagnosis.ihc,helper_diagnosis.ihc[idx])">
                           <i class="iconfont iconaddTodo-nav"></i>
                         </el-button>
-                        <el-button @click="ihcDeleteData(helper_diagnosis.ihc)">
+                        <el-button @click="ihcDeleteData(helper_diagnosis.ihc,idx)">
                           <i class="iconfont iconjianhao1"></i>
                         </el-button>
                       </div>
@@ -1093,13 +1090,6 @@ export default {
       this.queryInfo.page = parseInt(res.page);
       this.queryInfo.count = parseInt(res.count); //总条数
       this.queryInfo.pagerows = res.pagerows; //每页显示多少条
-      this.tablelist.forEach(item => {
-        item.checked = false; //默认选中
-        console.log(item)
-        this.multipleSelection.push(item.id);
-        this.idss = this.multipleSelection;
-        console.log(this.idss)
-      });
     },
     // 点击添加分组保存
     async addGroup(item, id) {
@@ -1223,13 +1213,34 @@ export default {
     // 点击数据集删除
     async dele(row) {
       console.log(row.id);
-      const res = await this.axios
-        .get("dataset/del.php", { params: { id: row.id } })
-        .then(res => {
-          this.$alert("删除成功！");
-          this.datalist = [];
-          this.getDataList();
+      this.$confirm("确定删除该数据？, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true
+      })
+      .then(() => {
+        const { data: res } = this.axios .get("dataset/del.php", { params: { id: row.id } });
+        this.$message({
+          type: "success",
+          message: "删除成功!"
         });
+        this.datalist = [];
+          this.getDataList();
+      })
+      .catch(() => {
+        this.$message({
+          type: "info",
+          message: "已取消删除"
+        });
+      });
+      // const res = await this.axios
+      //   .get("dataset/del.php", { params: { id: row.id } })
+      //   .then(res => {
+      //     this.$alert("删除成功！");
+      //     this.datalist = [];
+      //     this.getDataList();
+      //   });
 
       // console.log(res)
     },
@@ -1244,32 +1255,23 @@ export default {
         "excel_data/onedata.php" ,{params:{id:row.id}}
       );      
       console.log(row.id)
-      console.log(res) 
-      
+      console.log(res)       
       this.editForm = res.data;
       if( this.editForm.application_date === '0000-00-00'){
-        console.log(44)
+        // console.log(44)
         this.editForm.application_date = ''
       } 
       if( this.editForm.birthday === '0000-00-00'){
-        console.log(4)
+        // console.log(4)
         this.editForm.birthday = ''
       }
-      // this.jilian = this.editForm.jilian
       this.jilian = []
       this.helper_diagnosis = this.editForm.helper_diagnosis
-      console.log(this.helper_diagnosis);
+      console.log(this.helper_diagnosis);    
       this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2,this.editForm.diagnosis3)
+      this.editForm.jilian = this.jilian     
       console.log(this.jilian)
-      this.editForm.jilian = this.jilian
-      this.editForm.jilian.toString(',')
-      
-      console.log(this.editForm.jilian)
       console.log(this.editForm);
-
-      // // 处理数据
-      //  this.editForm.diagnosis_txt = this.editForm.diagnosis_txt.split("。")
-      // console.log(this.editForm.diagnosis_txt)
     },
     // 获取数据集列表
     async getDataList() {
@@ -1364,30 +1366,26 @@ export default {
       // this.queryInfo.pagerows = res.pagerows  //每页显示多少条
       // console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);
     },
-    // 点击复选框获取ID们
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-      console.log(this.multipleSelection);
-    },
-    // 点击框
-    // handleSelectionChange(row) {
-    //   this.tablelist.forEach(item => {
-    //     // 排他,点击
-    //     if (item.id == row.id) {
-    //       item.checked = true;
-    //       console.log(item.id)
-    //     }
-    //   });
-    //   console.log(row)
-    // },
+    // 获取选中数据
+    checkTable(rows){
+			console.log("rows",rows);	     
+      rows.map( (item,index) =>{
+        console.log(item.id)               
+        this.idss.push(item.id)  
+         alert(1) 
+      })
+      this.idss = [...new Set(this.idss)];       
+      console.log(this.idss)    
+		},
     // 批量通过
-    async passsList(idss){
+    async passList(idss){
       console.log(this.idss)
       let ids = ''
       const res = await this.axios.get('excel_data/checkall.php',{params:{ids:this.idss}}).then( res=>{
         console.log(res)
         this.getTableList2(this.row)
       })
+      this.idss = []
     },
     // 点击下一个
     next(id) {
@@ -1505,26 +1503,49 @@ export default {
       // this.jilian = this.editForm.jilian;
       console.log(this.editForm);
     },
+    // // 免疫租化增删
+    // ihcAddData( ihcItem,value) {
+    //   //判断当前数组的对象是否有数据
+    //   console.log(ihcItem);
+    //     if (value.mark || value.value){
+    //       //验证通过 添加新的一条
+    //       var value = {
+    //         mark: "",
+    //         value: ""
+    //       };
+    //      ihcItem.push(value);
+    //     } else {
+    //       alert("请检查输入是否正确");
+    //     }
+      
+    // },
+    // // 免疫组化删除
+    // ihcDeleteData(ihcItem) {
+    //   if (ihcItem.length > 1) {
+    //     ihcItem.splice(ihcItem.length - 1, 1);
+    //   } else {
+    //     alert("最少保留一个");
+    //   }
+    // },
     // 免疫租化增删
     ihcAddData( ihcItem,value) {
       //判断当前数组的对象是否有数据
       console.log(ihcItem);
         if (value.mark || value.value){
           //验证通过 添加新的一条
-          var value = {
-            mark: "",
-            value: ""
-          };
-         ihcItem.push(value);
+          var newValue = {
+             mark: "",
+             value: ""
+           };
+         ihcItem.push(newValue);
         } else {
           alert("请检查输入是否正确");
-        }
-      
+        }     
     },
     // 免疫组化删除
-    ihcDeleteData(ihcItem) {
+    ihcDeleteData(ihcItem,idx) {
       if (ihcItem.length > 1) {
-        ihcItem.splice(ihcItem.length - 1, 1);
+        ihcItem.splice(idx, 1);
       } else {
         alert("最少保留一个");
       }

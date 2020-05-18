@@ -35,7 +35,7 @@
       // 获取病理号
       async getTableList() {
           const { data: res } = await this.axios.get(
-              "http://106.13.49.232/cedar/api/excel_data/list.php",
+              "http://192.168.75.58/cedar/api/excel_data/list.php",
               this.tableinfo
           );
           console.log("getTableList",res);
@@ -50,6 +50,26 @@
     }
 
   }
+
+
+  // <div class="zhen">
+  //             <span>检测结果 ：</span>
+  //             <el-select
+  //               v-model="edit.value"
+  //               placeholder="请选择"
+  //               size="mini"
+  //               style="width:200px"
+  //               multiple @change="shaixuan()"
+  //             >
+  //               <el-option v-for="(item,index) in this.value" :key="index"  :value="item">{{item}}</el-option>
+  //             </el-select>
+  //             <button size="mini">
+  //               <i class="iconfont iconic_join_dialing_norm"></i>
+  //             </button>
+  //             <button size="mini">
+  //               <i class="iconfont iconjianhao1"></i>
+  //             </button>
+  //           </div>
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus" >

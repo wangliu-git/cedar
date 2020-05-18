@@ -2,14 +2,14 @@
   <div class="outest">
     <div class="sContainer">
       <span>选择分组 :</span>
-      <el-select size="mini" style="width:250px" placeholder="请选择分组" v-model="it" @change="group_id(it)">
+      <el-select size="mini" style="width:250px" placeholder="请选择分组" v-model="it" @change="group_id()">
         <el-option
-          v-for="(it,index) in this.groupList"
+          v-for="(gl,index) in this.groupList"
           :key="index"
-          :value="it"
-          :label="it.group_name"  
+          :value="gl.id"
+          :label="gl.group_name"  
         >
-          {{it.group_name}}
+          {{gl.group_name}}
         </el-option>
       </el-select>
     </div>
@@ -518,8 +518,7 @@ export default {
       });
     },
     // 点击选择分组
-    group_id(it) {      
-      this.it = it
+    group_id() {       
       console.log(this.it)
       this.getTableList(this.it)
     },
@@ -568,10 +567,11 @@ export default {
       console.log(row);
       const { data: res } = await this.axios.get("diagnosis_origin/one.php", {
         params: { id: row.id }
-      });
+      })
+      this.editForm = res;
       console.log(row.id);
       console.log(res);
-      this.editForm = res;
+      
       this.row = row
       console.log(this.editForm);
     },
@@ -587,9 +587,7 @@ export default {
           type: "warning",
           center: true
         })
-          .then(() => {
-            
-            
+          .then(() => {       
             this.$message({
               type: "success",
               message: "删除成功!"
@@ -657,7 +655,7 @@ export default {
       // console.log(it.group_name)
       let group_id = "";
       const { data: res } = await this.axios.get("diagnosis_origin/list.php", {
-        params: { page: this.queryInfo.page, group_id:this.it.id}
+        params: { page: this.queryInfo.page, group_id:this.it}
       });
       console.log("getTableList",res);
       this.tablelist = res.data;
@@ -715,7 +713,7 @@ export default {
       it:'',
      groupList:[],
       photo: "",
-      upLoadUrl: "http://106.13.49.232/cedar/api/diagnosis_origin/add.php",
+      upLoadUrl: "http://192.168.75.58/cedar/api/diagnosis_origin/add.php",
       // 级联选择器
       options: [
         {

@@ -441,10 +441,10 @@ export default {
       const res = this.axios.get('group/list.php',{params:{group_name:this.groupname}}).then( res => {
         console.log(res.data)
         this.datalist = res.data.data;
-        this.queryInfo.page = parseInt(res.data.page);
-        this.queryInfo.count = parseInt(res.data.count); //总条数
-        this.queryInfo.pagerows = res.data.pagerows; //每页显示多少条
-        console.log(this.queryInfo.count)
+        this.shuInfo.page = parseInt(res.data.page);
+        this.shuInfo.count = parseInt(res.data.count); //总条数
+        this.shuInfo.pagerows = res.data.pagerows; //每页显示多少条
+        console.log(this.shuInfo.count)
       })
     },  
     // 获取分组列表

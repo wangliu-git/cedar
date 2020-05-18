@@ -246,7 +246,7 @@
             </div>
             <div class="zhen">
               <span>{{tMInstitution.department.field_title}}:</span>
-              <el-input type="text" v-model="edit.department" @keyup.enter.native="shaixuan()" placeholder="请输入机构名称" size="mini"></el-input>
+              <el-input type="text" v-model="edit.department" style="width:200px" @keyup.enter.native="shaixuan()" placeholder="请输入机构名称" size="mini"></el-input>
             </div>
             <div class="zhen">
               <span>{{tMInstitution.application_date.field_title}}:</span>
@@ -328,39 +328,45 @@
                 style="width:200px" v-model="edit.jilian"  @change="shaixuan()"
               ></el-cascader>
             
-            </div>
+            </div>     
 
-            <div class="zhen">
-              <span>辅助诊断 ：标志物</span>
-              <el-select
-                v-model="edit.mark"
-                placeholder="请选择"
-                size="mini"
-                style="width:200px"
-                multiple @change="shaixuan()"
-              > 
-                <el-option v-for="(item,index) in this.mark" :key="index"  :value="item">{{item}} </el-option>              
-              </el-select>
-            </div>
+            <div class="zhenD">           
+              <div class="duan">
+                <span>标志物:</span>
+                <el-select
+                  v-model="edit.mark"
+                  placeholder="请选择"
+                  size="mini"
+                  style="width:200px"
+                  multiple @change="shaixuan()"
+                > 
+                  <el-option v-for="(item,index) in this.mark" :key="index"  :value="item">{{item}} </el-option>              
+                </el-select>
+              </div>
 
-            <div class="zhen">
-              <span>检测结果 ：</span>
-              <el-select
-                v-model="edit.value"
-                placeholder="请选择"
-                size="mini"
-                style="width:200px"
-                multiple @change="shaixuan()"
-              >
-                <el-option v-for="(item,index) in this.value" :key="index"  :value="item">{{item}}</el-option>
-              </el-select>
-              <button size="mini">
+              <div class="duan">
+                <span>检测结果 ：</span>
+                <el-select
+                  v-model="edit.value"
+                  placeholder="请选择"
+                  size="mini"
+                  style="width:200px"
+                  multiple @change="shaixuan()"
+                >
+                  <el-option v-for="(item,index) in this.value" :key="index"  :value="item">{{item}}</el-option>
+                </el-select>
+            </div> 
+
+            <div> 
+              <button style="margin-right: 5px;margin-left: 5px;"  @click="ihcAddData(mark,value)">
                 <i class="iconfont iconic_join_dialing_norm"></i>
               </button>
-              <button size="mini">
+              <button style="margin-right: 5px;" @click="ihcDeleteData(mark,value)">
                 <i class="iconfont iconjianhao1"></i>
-              </button>
+              </button>  
             </div>
+            
+          </div>                 
           </div>
 
           <div class="yuan">
@@ -391,6 +397,9 @@
               </el-select>
             </div>
           </div>
+
+          
+
         </el-collapse-item>
       </el-collapse>
 
@@ -412,13 +421,11 @@
           border
           stripe
           ref="table"
-          @current-change="handleSelectionChange"
+          
+          @selection-change="checkTable"
           :header-cell-style="{color:'#333333'}"
         >
-          <el-table-column width="50" >
-           <template slot-scope="scope">
-              <el-checkbox v-model="scope.row.checked"></el-checkbox>
-            </template> 
+          <el-table-column width="50" type="selection">          
           </el-table-column>
           <el-table-column prop="test_id" label="病理号" width="200" sortable></el-table-column>
           <el-table-column prop="name" label="姓名" width="200" sortable></el-table-column>
@@ -1262,10 +1269,8 @@ import uuid from "uuid";
 import allMessage from "../../staic/allMessage.json";
 export default {
   data() {
-    return {
-    
+    return { 
       ids: [], //ID 们
-      multipleSelection: [], //复选框
       // 新建分组名
       groupName: "",
       multiple: true,
@@ -2041,8 +2046,7 @@ export default {
         this.value = res.data.option
         // console.log(this.result)
       })
-    },
-    
+    }, 
     // 获取选择分组
     groupList() {
       const res  = this.axios.get("group/list.php").then(res => {
@@ -2054,12 +2058,6 @@ export default {
         console.log(res.data.data);
       });
     },
-    // 添加分组名
-    // addGroup(groupName) {
-    //   checkList.push(groupName);
-    //   this.checkList = this.checkList;
-    //   console.log(this.checkList);
-    // },
     // 保存
     baocun(editForm) {
       this.id = this.id;
@@ -2337,30 +2335,24 @@ export default {
       this.queryInfo.page = parseInt(res.page);
       this.queryInfo.count = parseInt(res.count); //总条数
       this.queryInfo.pagerows = res.pagerows; //每页显示多少条
-      this.tablelist.forEach(item => {
-        item.checked = true; //默认选中
-        // console.log(item)
-        this.multipleSelection.push(item.id);
-        this.ids = this.multipleSelection;
-        console.log(this.ids)
-      });
+      // this.tablelist.forEach(item => {
+      //   item.checked = true; //默认选中
+      //   // console.log(item)
+      //   this.multipleSelection.push(item.id);
+      //   this.ids = this.multipleSelection;
+      //   console.log(this.ids)
+      // });
     },
-    // 点击框
-    handleSelectionChange(row) {
-      this.tablelist.forEach(item => {
-        // 排他,点击
-        if (item.id == row.id) {
-          item.checked = true;
-          // console.log(item.id)
-        }
-      });
-      console.log(row)
-    },
-    // 点击复选框获取ID们
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-      console.log(this.multipleSelection);
-    },
+    // 获取选中数据
+    checkTable(rows){
+			console.log("rows",rows);	     
+      rows.map( (item,index) =>{
+        console.log(item.id)               
+        this.ids.push(item.id)       
+      })
+      this.ids = [...new Set(this.ids)];       
+      console.log(this.ids)      
+		},
     // 点击查看
     async look(row) {
       this.zhezhao = true; //不能没
@@ -2380,7 +2372,30 @@ export default {
       // this.editForm = Object.assign(res.data[0],res.data[1],res.data[2])
       // 表单对象
       console.log(this.editForm);
-    }
+    },
+    // 免疫租化增删
+    ihcAddData( mark,value) {
+      //判断当前数组的对象是否有数据
+      console.log(ihcItem);
+        if (mark || value){
+          //验证通过 添加新的一条
+          var newValue = {
+             mark: "",
+             value: ""
+           };
+         ihcItem.push(newValue);
+        } else {
+          alert("请检查输入是否正确");
+        }     
+    },
+    // 免疫组化删除
+    ihcDeleteData(mark,idx) {
+      if (ihcItem.length > 1) {
+        ihcItem.splice(idx, 1);
+      } else {
+        alert("最少保留一个");
+      }
+    },
   },
   mounted() {
     // 患者信息
@@ -2752,7 +2767,6 @@ export default {
   .jiben {
     display: flex;
     flex-wrap: wrap;
-
     .ji {
       width: 300px;
       display: flex;
@@ -2760,7 +2774,6 @@ export default {
       margin-left: 20px;
       margin-top: 20px;
       justify-content: space-around;
-
       span {
         display: inline-block;
         width: 69px;
@@ -2771,7 +2784,6 @@ export default {
   .baogao {
     display: flex;
     flex-wrap: wrap;
-
     .bao {
       width: 300px;
       display: flex;
@@ -2780,7 +2792,6 @@ export default {
       margin-left: 20px;
       margin-top: 20px;
       justify-content: space-around;
-
       span {
         display: inline-block;
         width: 100px;
@@ -2791,7 +2802,6 @@ export default {
   .zhenduan {
     display: flex;
     flex-wrap: wrap;
-
     .zhen {
       width: 300px;
       display: flex;
@@ -2800,25 +2810,33 @@ export default {
       margin-left: 20px;
       margin-top: 20px;
       justify-content: space-around;
-
       span {
         display: inline-block;
-        width: 130px;
+        width: 80px;
       }
     }
   }
-
   .yuan {
     display: flex;
     flex-wrap: wrap;
-
     .lai {
       margin-top: 20px;
       margin-left: 20px;
-
       span {
         display: inline-block;
-        width: 100px;
+        width: 80px;
+      }
+    }
+  }
+  .zhenD {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top 20px
+    .duan {
+      margin-left: 20px;
+      span {
+        display: inline-block;
+        width: 80px;
       }
     }
   }

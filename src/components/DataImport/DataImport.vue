@@ -13,7 +13,7 @@
                 <el-col :span="22">
                   <el-upload class="upload-demo"
                     ref="upload"
-                    action="http://106.13.49.232/cedar/api/upload_file/add.php"
+                    action="http://192.168.75.58/cedar/api/upload_file/add.php"
                     :accept="acceptFileType"
                     :limit="1"
                     :on-exceed="handleExceed"
@@ -89,7 +89,7 @@
             v-model="name" @keyup.enter.native="getTable()"
           ></el-input>
           <el-button type="primary" size="mini" @click="getTable">确定</el-button>
-          <el-button type="primary" size="mini" class="pass">
+          <el-button type="primary" size="mini" class="pass" @click="passList(idss)">
             <i class="iconfont iconpiliangtongguo"></i> 批量通过
           </el-button>
         </div>
@@ -99,7 +99,8 @@
             tooltip-effect="dark"
             style="width: 100%"           
             border           
-            stripe :header-cell-style="{color:'#333333'}"         
+            stripe :header-cell-style="{color:'#333333'}"    
+            @selection-change="checkTable"     
           >
             <el-table-column type="selection" width="40"></el-table-column>           
             <el-table-column prop="test_id" label="病理号" width="170"></el-table-column>
@@ -216,8 +217,8 @@
               <el-button slot="append">搜索</el-button>
             </el-input>
           </div>
-           <div class="groupList">
-            <el-button   v-for="(it, index) in this.groupList" :key="index" :value="it.group_name">{{it.group_name}}</el-button>
+           <div class="groupList" >
+            <el-button v-model="location"  v-for="(it, index) in this.groupList" :key="index" :value="it.group_name" @click="location_name(it)">{{it.group_name}}</el-button>
           </div>
           <div class="name">
             <span>新建项目名称 ：</span>
@@ -886,12 +887,27 @@ export default {
         this.groupList = res.data.data
       })     
     },
+    // 点击分组名
+    location_name(it){
+      this.it = it
+      console.log(it)
+    },
+    // 批量通过
+    async passList(idss){
+      console.log(this.idss)
+      let ids = ''
+      const res = await this.axios.get('excel_data/checkall.php',{params:{ids:this.idss}}).then( res=>{
+        console.log(res)
+        this.getTableList2(this.row)
+      })
+      this.idss = []
+    },
     // 点击添加分组保存
     async addGroup(item,id){
       // console.log(item,this.id)
       // console.log(window.sessionStorage.uid)
       var group_name = ''    
-      const res = await this.axios.post('group/add.php',{params:{group_name:item,id:this.id,userid:window.sessionStorage.uid}}).then( res =>{
+      const res = await this.axios.post('group/add.php',{params:{group_name:item,id:this.id,userid:window.sessionStorage.uid,}}).then( res =>{
         console.log(res)
         this.groupList.push(res.data.data.params)
         console.log(this.groupList)
@@ -904,7 +920,7 @@ export default {
               // this.search = !this.search    
               this.groupList = [] 
               this.groupLists() 
-              this.groupName = ''       
+              // this.groupName = ''       
             },
           });         
         }else{
@@ -918,6 +934,16 @@ export default {
       })
       // console.log(data)
     },
+    // 获取选中数据
+    checkTable(rows){
+			console.log("rows",rows);	     
+      rows.map( (item,index) =>{
+        console.log(item.id)               
+        this.idss.push(item.id)       
+      })
+      this.idss = [...new Set(this.idss)];       
+      console.log(this.idss)      
+		},
     // 点击查看数据集显示病理数据
     async chakanj(row){
       this.chakan = true
@@ -942,7 +968,7 @@ export default {
     // 点击确定
     async sure(id){    
       const { data : res } = await this.axios.post(
-        "dataset/edit.php",{params:{id:this.id,file_name:this.data.file_name,location:this.data.location}}
+        "dataset/edit.php",{params:{id:this.id,file_name:this.data.file_name,location: this.it.group_name}}
       );    
       console.log(this.data.file_name)
       console.log(res)
@@ -1099,8 +1125,7 @@ export default {
         return false;
       }    
       this.next()
-    },   
-    // 点击下一个
+    }, 
     // 点击下一个
     next(){
       this.id = this.id    
@@ -1516,6 +1541,7 @@ export default {
   },
   data() { 
     return { 
+      idss:[],
       row:'',
       xiayige:false, 
       groupList:[],
