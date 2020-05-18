@@ -590,7 +590,7 @@ export default {
     async tianjia(row) {
       console.log(row);
       this.zhezhao = true;
-      // this.id = row.id;
+      this.id = row.id;
       this.attached = row.attached;
       this.getTableList()
     },
@@ -713,7 +713,7 @@ export default {
       it:'',
       groupList:[],
       photo: "",
-      upLoadUrl: "http://106.13.49.232/cedar/api/diagnosis_origin/add.php",
+      upLoadUrl: "http://192.168.75.58/cedar/api/diagnosis_origin/add.php",
       jilian: "",
       item: "",
       // 折叠面板默认打开

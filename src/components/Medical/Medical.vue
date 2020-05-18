@@ -76,7 +76,7 @@
           <div v-show="this.type == 1">
             <i class="iconfont iconbuzhou-xian1"></i>
             <span>选择淋巴瘤亚型 ：</span>
-            <el-select placeholder="请选择" size="small" v-model="dignosis" style="width:400px">
+            <el-select placeholder="请选择" size="small" v-model="dignosis" style="width:400px"  @change="drawLineSex()">
               <el-option v-for="(item,index) in chooses" :key="index" :value="item">{{item}}</el-option>
             </el-select>
           </div>

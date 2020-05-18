@@ -718,7 +718,7 @@ export default {
       it:'',
      groupList:[],
       photo: "",
-      upLoadUrl: "http://106.13.49.232/cedar/api/diagnosis_origin/add.php",
+      upLoadUrl: "http://192.168.75.58/cedar/api/diagnosis_origin/add.php",
       // 级联选择器
       options: [
         {

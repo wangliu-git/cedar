@@ -343,11 +343,10 @@
                 :props="{  multiple: true }"
                 clearable  collapse-tags
                 style="width:200px" v-model="edit.jilian"  @change="shaixuan()"
-              ></el-cascader>
-            
+              ></el-cascader>           
             </div>     
 
-            <div class="zhenD" v-model="ihc">           
+            <div class="zhenD">           
               <div class="duan">
                 <span>标志物:</span>
                 <el-select
@@ -375,10 +374,10 @@
             </div> 
 
             <div> 
-              <button style="margin-right: 5px;margin-left: 5px;"  @click="ihcAddData(mark,value)">
+              <button style="margin-right: 5px;margin-left: 5px;"  @click="ihcAdd(mark,value)">
                 <i class="iconfont iconic_join_dialing_norm"></i>
               </button>
-              <button style="margin-right: 5px;" @click="ihcDeleteData(mark,value)">
+              <button style="margin-right: 5px;" @click="ihcDelete(mark,value)">
                 <i class="iconfont iconjianhao1"></i>
               </button>  
             </div>
@@ -413,10 +412,7 @@
                 <el-option v-for="(item,index) in Integrate" :key="index" :value="item"></el-option>
               </el-select>
             </div>
-          </div>
-
-          
-
+          </div>      
         </el-collapse-item>
       </el-collapse>
 
@@ -2050,6 +2046,21 @@ export default {
         // console.log(this.result)
       })
     }, 
+    // 添加标志物结果
+    ihcAdd(){
+      let arr = []
+      if (this.mark || this.value){
+        //验证通过 添加新的一条
+        // var newValue = {
+        //     mark: "",
+        //     value: ""
+        // };
+        arr.push(this.mark,this.value);
+        console.log(arr)
+        } else {
+          alert("请检查输入是否正确");
+        } 
+    },
     // 获取选择分组
     groupList() {
       const res  = this.axios.get("group/list.php").then(res => {
