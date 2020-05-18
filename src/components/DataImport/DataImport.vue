@@ -774,10 +774,10 @@
                       <!-- 判断 必须是最后一条，才可以显示操作按钮 -->
                       <div class="handleBtnBox">
                         <!-- el-button: v-if="idx==testFZ.ihc.length-1" -->
-                        <el-button @click="ihcAddData(helper_diagnosis.ihc)">
+                        <el-button style="margin-right: 5px;" v-if="idx==helper_diagnosis.ihc.length-1" @click="ihcAddData(helper_diagnosis.ihc,helper_diagnosis.ihc[idx])">
                           <i class="iconfont iconaddTodo-nav"></i>
                         </el-button>
-                        <el-button @click="ihcDeleteData(helper_diagnosis.ihc)">
+                        <el-button @click="ihcDeleteData(helper_diagnosis.ihc,idx)">
                           <i class="iconfont iconjianhao1"></i>
                         </el-button>
                       </div>
@@ -1039,12 +1039,24 @@ export default {
       );
       // console.log("getTableList",res);
       this.editForm = res.data;
-      this.id = row.id
-       this.jilian = []
+      if( this.editForm.application_date === '0000-00-00'){
+        this.editForm.application_date = ''
+      } 
+      if( this.editForm.birthday === '0000-00-00'){
+        this.editForm.birthday = ''
+      }
+      this.jilian = []
       this.helper_diagnosis = this.editForm.helper_diagnosis
-      console.log(this.helper_diagnosis);
-      this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2,this.editForm.diagnosis3)
-      console.log(this.jilian)
+      // console.log(this.helper_diagnosis);    
+      if(this.editForm.diagnosis1 !=  ''){
+        this.jilian.push(this.editForm.diagnosis1)
+      }
+      if(this.editForm.diagnosis2 != ''){
+        this.jilian.push(this.editForm.diagnosis2)
+      }
+      if(this.editForm.diagnosis3 != ''){
+        this.jilian.push(this.editForm.diagnosis3)
+      }  
       this.editForm.jilian = this.jilian
       console.log(this.editForm);   
     },
@@ -1398,27 +1410,25 @@ export default {
         });
         });
     }, 
-     // 免疫租化增删
-    ihcAddData( ihcItem) {
+    // 免疫租化增删
+    ihcAddData( ihcItem,value) {
       //判断当前数组的对象是否有数据
       console.log(ihcItem);
-      ihcItem.map( (item,index) =>{
-        if (item.trim()) {
+        if (value.mark || value.value){
           //验证通过 添加新的一条
-          // var value = {
-          //   mark: "",
-          //   value: ""
-          // };
-          array.push(item);
+          var newValue = {
+             mark: "",
+             value: ""
+           };
+         ihcItem.push(newValue);
         } else {
           alert("请检查输入是否正确");
-        }
-      })
+        }     
     },
     // 免疫组化删除
-    ihcDeleteData(ihcItem) {
+    ihcDeleteData(ihcItem,idx) {
       if (ihcItem.length > 1) {
-        ihcItem.splice(ihcItem.length - 1, 1);
+        ihcItem.splice(idx, 1);
       } else {
         alert("最少保留一个");
       }

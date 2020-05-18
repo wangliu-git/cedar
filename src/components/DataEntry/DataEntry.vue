@@ -1056,12 +1056,16 @@
   </div>
 </template>
 
+
+
 <script type="text/ecmascript-6">
+
 import uuid from "uuid";
 import allMessage from "../../staic/allMessage.json";
 import qs from "qs"; //ulencode
 import axios from "axios";
 export default {
+
   created() {
     this.getDataList();
   },
@@ -1258,18 +1262,25 @@ export default {
       console.log(res)       
       this.editForm = res.data;
       if( this.editForm.application_date === '0000-00-00'){
-        // console.log(44)
         this.editForm.application_date = ''
       } 
       if( this.editForm.birthday === '0000-00-00'){
-        // console.log(4)
         this.editForm.birthday = ''
       }
       this.jilian = []
       this.helper_diagnosis = this.editForm.helper_diagnosis
-      console.log(this.helper_diagnosis);    
-      this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2,this.editForm.diagnosis3)
-      this.editForm.jilian = this.jilian     
+      // console.log(this.helper_diagnosis);    
+      if(this.editForm.diagnosis1 !=  ''){
+        this.jilian.push(this.editForm.diagnosis1)
+      }
+      if(this.editForm.diagnosis2 != ''){
+        this.jilian.push(this.editForm.diagnosis2)
+      }
+      if(this.editForm.diagnosis3 != ''){
+        this.jilian.push(this.editForm.diagnosis3)
+      }    
+      // this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2)
+      // this.editForm.jilian = this.jilian     
       console.log(this.jilian)
       console.log(this.editForm);
     },
@@ -1381,17 +1392,6 @@ export default {
     },
     // 是
     shi(){
-      // const { data :res} = await this.axios.get(
-      // "excel_data/nextonedata.php?id=" + this.id);
-      // if(res.ok ==0){
-      //   return this.$message.error('已经是最后一个了')
-      // }
-      // // console.log("getTableList",res);
-      // this.editForm = res.data;
-      // // 将ID赋值下一个ID
-      // this.id= res.id
-      // this.xiayige = false
-      // // this.editForm = Object.assign(res.data[0],res.data[1],res.data[2])
       this.addFormList();
       this.xiayige = false;
     },
@@ -1745,8 +1745,7 @@ export default {
   data() {
     return {
       idss: [], //ID 们
-      it:'',   //分组名
-      
+      it:'',   //分组名     
       location:'',   //研究项目
       xiayige: false,
       wenjian: true, //上传文件
@@ -2258,8 +2257,7 @@ export default {
 		  ],
       checkList: [
         "免疫组化",
-        "分子检测",
-      
+        "分子检测",    
       ],
       // 折叠面板默认打开
       activeNames: ["3", "1"],
@@ -2795,6 +2793,7 @@ export default {
       }
     });
   }
+
 };
 </script>
 

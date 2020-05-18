@@ -73,7 +73,8 @@
                   v-for="(item, index) in this.quanxian"
                   :key="index"
                   :value="item.value"
-                >{{item.value}}</el-option>
+									:label="item.label"
+                ></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="新密码" prop="pass">
@@ -113,7 +114,7 @@
     <div class="zhezhao" v-if="Add">
       <div class="message">
         <div class="up">
-          <span>修改</span>
+          <span>添加</span>
           <span @click="Add =false">
             <i class="iconfont iconx"></i>
           </span>
@@ -134,7 +135,8 @@
                   v-for="(item, index) in this.quanxian"
                   :key="index"
                   :value="item.value"
-                >{{item.value}}</el-option>
+									:label="item.label"
+                ></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="新密码" prop="pass">

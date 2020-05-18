@@ -83,16 +83,16 @@
         </div>
         <div class="echarts">
           <div class="btns">
-            <el-button  plain @click="drawLineSex(sex)">性别</el-button >
-            <el-button  plain @click="drawLineAge(age)">年龄</el-button >
-            <el-button  plain @click="drawLineBirthPlace(birthplace)">籍贯</el-button >
-            <el-button  plain @click="drawLineAddress_prov(address_prov)">居住地</el-button >
-            <el-button  plain @click="drawLineSample_type(sample_type)">标本类型</el-button >
-            <el-button  plain @click="drawLineSample_location(sample_location)">取材部位</el-button >
-            <el-button  plain @click="drawLineJ_Check(mark)">生物标记物检测率</el-button >
-            <el-button  plain @click="drawLineY_Check(mark)">生物标记物阳性率</el-button >
-            <el-button  plain @click="drawLineDiff_day(diff_day)">诊断时长</el-button >
-            <el-button  v-show="this.type == 0" plain @click="drawLineDia()" >各个病理类型分布</el-button >
+            <el-button :class="{showBtns:sexShow}" plain @click="drawLineSex(sex)">性别</el-button >
+            <el-button :class="{showBtns:address_provShow}" plain @click="drawLineAddress_prov(address_prov)">居住地</el-button >
+            <el-button :class="{showBtns:ageShow}" plain @click="drawLineAge(age)">年龄</el-button >
+            <el-button :class="{showBtns:birthplaceShow}" plain @click="drawLineBirthPlace(birthplace)">籍贯</el-button >
+            <el-button :class="{showBtns:sample_typeShow}" plain @click="drawLineSample_type(sample_type)">标本类型</el-button >
+            <el-button :class="{showBtns:sample_locationShow}" plain @click="drawLineSample_location(sample_location)">取材部位</el-button >
+            <el-button :class="{showBtns:mark1Show}" plain @click="drawLineJ_Check(mark)">生物标记物检测率</el-button >
+            <el-button :class="{showBtns:mark2Show}" plain @click="drawLineY_Check(mark)">生物标记物阳性率</el-button >
+            <el-button :class="{showBtns:diff_dayShow}" plain @click="drawLineDiff_day(diff_day)">诊断时长</el-button >
+            <el-button v-show="this.type == 0" plain @click="drawLineDia()" >各个病理类型分布</el-button >
             <!--@click="drawLineDia()" -->
           </div>
           <div id="tu"></div>
@@ -102,15 +102,31 @@
   </div>
 </template>
 
+
 <script type="text/ecmascript-6">
+
 import "./js/echarts.js";
 import echarts from "echarts";
 import './js/china.js'
 import './js/check'
 import './js/util'
+
 export default {
   data() {
     return {
+      //控制按钮显示隐藏-----
+			
+			sexShow:false,
+			ageShow:false,
+			birthplaceShow:false,
+			address_provShow:false,
+			sample_typeShow:false,
+			sample_locationShow:false,
+			mark1Show:false,
+			mark2Show:false,
+			diff_dayShow:false,
+			
+      
       dignosis:'',
       diagnosis2:'diagnosis2',
       ly_helper_diagnosis:'ly_helper_diagnosis',
@@ -618,13 +634,6 @@ export default {
   mounted() {
     this.$nextTick(function() {
       this.getDataList();
-      // this.drawLineSex();    //饼图
-      // this.drawLineAge();      //柱状图
-      // // this.drawLineBirthPlace();    //
-      // // this.drawLineAddress_prov();  //
-      // this.drawLineSample_type();     //饼图
-      // this.drawLineSample_location(); //饼图
-      // this.drawLineDiff_day();        //柱状图
       this.get();
     });
   },
@@ -640,8 +649,7 @@ export default {
         this.queryInfo.pagerows = res.data.pagerows; //每页显示多少条
         console.log(this.queryInfo.count)
       })
-    },
-   
+    }, 
     // 分组删除
     del(row) {
       this.$confirm("确定删除该数据？, 是否继续?", "提示", {
@@ -1879,7 +1887,7 @@ export default {
       if(this.type == 0){
         const { data: res } = await this.axios.get(
         // "group/stat.php?group_id=1&field=diff_day"
-        "group/stat.php",{params:{group_id:this.id,field:this.diff_day}}
+        "group/stat.php",{params:{group_id:this.id,field:this.diff_day,type:this.type+1}}
  
         );
         let datas = res.stat;
@@ -1891,7 +1899,7 @@ export default {
       }else{
         const { data: res } = await this.axios.get(
         // "group/stat.php?group_id=1&field=diff_day"
-        "group/stat.php",{params:{group_id:this.id,field:this.diff_day,dignosis:this.dignosis}}
+        "group/stat.php",{params:{group_id:this.id,field:this.diff_day,dignosis:this.dignosis,type:this.type+1}}
  
         );
         let datas = res.stat;
@@ -2129,7 +2137,7 @@ export default {
         // "group/stat.php?group_id=1&field=diff_day"
         
         "group/stat.php",
-        {params:{group_id:this.id,field:this.mark,type:this.type+1,table:this.ly_helper_diagnosis}}
+        {params:{group_id:this.id,field:this.mark,type:this.type+1,table:this.ly_helper_diagnosis,type:this.type+1}}
  
         );
         console.log(res)
@@ -2144,7 +2152,7 @@ export default {
         // "group/stat.php?group_id=1&field=diff_day"
         
         "group/stat.php",
-        {params:{group_id:this.id,field:this.mark,type:this.type+1,table:this.ly_helper_diagnosis,dignosis:this.dignosis}}
+        {params:{group_id:this.id,field:this.mark,type:this.type+1,table:this.ly_helper_diagnosis,dignosis:this.dignosis,type:this.type+1}}
  
         );
         console.log(res)
@@ -2394,7 +2402,7 @@ export default {
       }else{
         const { data: res } = await this.axios.get(
         // "group/stat.php?group_id=1&field=diff_day"
-        "group/stat.php?group_id=1&field=mark&type=1&table=ly_helper_diagnosis&field2=result_normal",{params:{dignosis:this.dignosis}}
+        "group/stat.php?group_id=1&field=mark&table=ly_helper_diagnosis&field2=result_normal",{params:{dignosis:this.dignosis,type:this.type+1}}
         // "group/stat.php",{params:{group_id:this.id,field:this.diff_day}}
  
         );
@@ -2859,7 +2867,14 @@ export default {
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
 
-
+.showBtns{
+  background: rgba(28, 178, 255, 1) !important;
+  border-radius: 4px !important;
+  font-size: 14px !important;
+  font-family: Microsoft YaHei !important;
+  font-weight: 400 !important;
+  color: rgba(255, 255, 255, 1) !important;
+}
 
 .iconbuzhou-icon {
   width: 4px;

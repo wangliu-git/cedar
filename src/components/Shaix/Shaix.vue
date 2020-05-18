@@ -1281,6 +1281,8 @@
   </div>
 </template>
 
+
+
 <script type="text/ecmascript-6">
 import uuid from "uuid";
 import allMessage from "../../staic/allMessage.json";
@@ -2726,6 +2728,7 @@ export default {
   }
 };
 </script>
+
 
 
 <style scoped lang="stylus" rel="stylesheet/stylus" >

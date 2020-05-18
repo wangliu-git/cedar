@@ -83,16 +83,16 @@
         </div>
         <div class="echarts">
           <div class="btns">
-            <el-button  plain @click="drawLineSex(sex)">性别</el-button >
-            <el-button  plain @click="drawLineAge(age)">年龄</el-button >
-            <el-button  plain @click="drawLineBirthPlace(birthplace)">籍贯</el-button >
-            <el-button  plain @click="drawLineAddress_prov(address_prov)">居住地</el-button >
-            <el-button  plain @click="drawLineSample_type(sample_type)">标本类型</el-button >
-            <el-button  plain @click="drawLineSample_location(sample_location)">取材部位</el-button >
-            <el-button  plain @click="drawLineJ_Check(mark)">生物标记物检测率</el-button >
-            <el-button  plain @click="drawLineY_Check(mark)">生物标记物阳性率</el-button >
-            <el-button  plain @click="drawLineDiff_day(diff_day)">诊断时长</el-button >
-            <el-button  v-show="this.type == 0" plain @click="drawLineDia()" >各个病理类型分布</el-button >
+            <el-button :class="{showBtns:sexShow}" plain @click="drawLineSex(sex)">性别</el-button >
+            <el-button :class="{showBtns:address_provShow}" plain @click="drawLineAddress_prov(address_prov)">居住地</el-button >
+            <el-button :class="{showBtns:ageShow}" plain @click="drawLineAge(age)">年龄</el-button >
+            <el-button :class="{showBtns:birthplaceShow}" plain @click="drawLineBirthPlace(birthplace)">籍贯</el-button >
+            <el-button :class="{showBtns:sample_typeShow}" plain @click="drawLineSample_type(sample_type)">标本类型</el-button >
+            <el-button :class="{showBtns:sample_locationShow}" plain @click="drawLineSample_location(sample_location)">取材部位</el-button >
+            <el-button :class="{showBtns:mark1Show}" plain @click="drawLineJ_Check(mark)">生物标记物检测率</el-button >
+            <el-button :class="{showBtns:mark2Show}" plain @click="drawLineY_Check(mark)">生物标记物阳性率</el-button >
+            <el-button :class="{showBtns:diff_dayShow}" plain @click="drawLineDiff_day(diff_day)">诊断时长</el-button >
+            <el-button v-show="this.type == 0" plain @click="drawLineDia()" >各个病理类型分布</el-button >
             <!--@click="drawLineDia()" -->
           </div>
           <div id="tu"></div>
@@ -111,6 +111,20 @@ import './js/util'
 export default {
   data() {
     return {
+			//控制按钮显示隐藏-----
+			
+			sexShow:false,
+			ageShow:false,
+			birthplaceShow:false,
+			address_provShow:false,
+			sample_typeShow:false,
+			sample_locationShow:false,
+			mark1Show:false,
+			mark2Show:false,
+			diff_dayShow:false,
+			
+			//--------------------
+			
       dignosis:'',
       diagnosis2:'diagnosis2',
       ly_helper_diagnosis:'ly_helper_diagnosis',
@@ -628,7 +642,19 @@ export default {
       this.get();
     });
   },
-  methods: {   
+  methods: {
+		//控制显示的公用方法
+		buttonsShowCon(){
+			this.sexShow=false;
+			this.ageShow=false;
+			this.birthplaceShow=false;
+			this.address_provShow=false;
+			this.sample_typeShow=false;
+			this.sample_locationShow=false;
+			this.mark1Show=false;
+			this.mark2Show=false;
+			this.diff_dayShow=false;
+		},
     // 点击获取创建人姓名
     getName(){
       console.log(this.group_name)
@@ -713,6 +739,11 @@ export default {
     },
     // 性别--饼图
     async drawLineSex(sex,id) {  
+			if(sex!=null){
+				//说明是按钮点击的
+				this.buttonsShowCon();
+				this.sexShow=true;
+			}
       console.log(this.sex)
       console.log(this.id)
       // myChart.showLoading(); myChart.hideLoading();  //等待效果
@@ -857,6 +888,9 @@ export default {
     },
     // 年龄--柱状图
     async drawLineAge(age,id) {
+			this.buttonsShowCon();
+			this.ageShow=true;
+			
       // myChart.showLoading(); myChart.hideLoading();  //等待效果
       // 基于准备好的dom，初始化echarts实例
       // console.log(document.sgetElementById('tu'))   样式
@@ -1102,6 +1136,9 @@ export default {
     },
     // 籍贯--地图
     async drawLineBirthPlace(birthplace,id) {
+			this.buttonsShowCon();
+			this.birthplaceShow=true;
+			
       let myChart = this.$echarts.init(
         document.getElementById("tu"),
         "macarons"
@@ -1351,6 +1388,9 @@ export default {
     },
     // 居住地--地图
     async drawLineAddress_prov(address_prov,id) {
+			this.buttonsShowCon();
+			this.address_provShow=true;
+			
       // myChart.showLoading(); myChart.hideLoading();  //等待效果
       // 基于准备好的dom，初始化echarts实例
       // console.log(document.getElementById('tu'))   样式
@@ -1601,6 +1641,9 @@ export default {
     },
     // 标本类型--饼图
     async drawLineSample_type(sample_type,id) {
+			this.buttonsShowCon();
+			this.sample_typeShow=true;
+			
       // myChart.showLoading(); myChart.hideLoading();  //等待效果
       // 基于准备好的dom，初始化echarts实例
       // console.log(document.getElementById('tu'))   样式
@@ -1735,6 +1778,9 @@ export default {
     },
     // 取材部位--饼图
     async drawLineSample_location(sample_location,id) {
+			this.buttonsShowCon();
+			this.sample_locationShow=true;
+			
       // myChart.showLoading(); myChart.hideLoading();  //等待效果
       // 基于准备好的dom，初始化echarts实例
       // console.log(document.getElementById('tu'))   样式
@@ -1869,6 +1915,8 @@ export default {
     },
     // 诊断时长--柱状图
     async drawLineDiff_day(diff_day,id) {
+			this.buttonsShowCon();
+			this.diff_dayShow=true;
       // myChart.showLoading(); myChart.hideLoading();  //等待效果
       // 基于准备好的dom，初始化echarts实例
       // console.log(document.getElementById('tu'))   样式
@@ -2116,6 +2164,8 @@ export default {
     },
     // 生物标记物检测率--柱状图
     async drawLineJ_Check(mark,id) {
+			this.buttonsShowCon()
+			this.mark1Show=true;
       // myChart.showLoading(); myChart.hideLoading();  //等待效果
       // 基于准备好的dom，初始化echarts实例
       // console.log(document.getElementById('tu'))   样式
@@ -2370,6 +2420,8 @@ export default {
     },
     // 生物标记物阳性率--柱状图
     async drawLineY_Check(mark,id) {
+			this.buttonsShowCon();
+			this.mark2Show=true;
       // myChart.showLoading(); myChart.hideLoading();  //等待效果
       // 基于准备好的dom，初始化echarts实例
       // console.log(document.getElementById('tu'))   样式
@@ -2856,11 +2908,18 @@ export default {
 };
 </script>
 
+<style>
+	.showBtns{
+			background: rgba(28, 178, 255, 1) !important;
+			border-radius: 4px !important;
+			font-size: 14px !important;
+			font-family: Microsoft YaHei !important;
+			font-weight: 400 !important;
+			color: rgba(255, 255, 255, 1) !important;
+	}
+</style>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-
-
-
 .iconbuzhou-icon {
   width: 4px;
   height: 9px;
@@ -2959,14 +3018,14 @@ export default {
           color: rgba(51, 51, 51, 1);
         
         }
-       .el-button:focus {
+       /* .el-button:focus {
             background: rgba(28, 178, 255, 1);
             border-radius: 4px;
             font-size: 14px;
             font-family: Microsoft YaHei;
             font-weight: 400;
             color: rgba(255, 255, 255, 1);
-          }
+          } */
       }
 
       #tu {
@@ -2977,4 +3036,5 @@ export default {
     }
   }
 }
+
 </style>
