@@ -347,7 +347,7 @@
             
             </div>     
 
-            <div class="zhenD">           
+            <div class="zhenD" v-model="ihc">           
               <div class="duan">
                 <span>标志物:</span>
                 <el-select
@@ -390,7 +390,7 @@
             <div class="lai" style="width:300px">
               <span>数据来源 ：</span>
               <el-select
-                v-model="edit.dataForm"
+                v-model="edit.dataform"
                 placeholder="请选择"
                 size="mini"
                 style="width:200px"
@@ -1791,7 +1791,7 @@ export default {
       Integrate:['有原单位报告','无原单位报告'],
       jilian: [],
       Yjilian: [],
-      // dataForm: '',            //数据来源
+      dataform: '',            //数据来源
       // Integrate: '',           //整合信息
       tablelist: [], //病理号数组
       zhezhao: false,
@@ -2279,7 +2279,7 @@ export default {
           jilian: this.edit.jilian,               //病理类型 
           mark: this.edit.mark,                   //标志物
           value: this.edit.value,                  //检测结果
-          dataForm: this.edit.dataForm,            //数据来源
+          dataform: this.edit.dataform,            //数据来源
           Integrate: this.edit.Integrate,           //整合信息                                                              
         }
       });

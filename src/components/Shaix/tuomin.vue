@@ -35,7 +35,7 @@
       // 获取病理号
       async getTableList() {
           const { data: res } = await this.axios.get(
-              "http://192.168.75.58/cedar/api/excel_data/list.php",
+              "http://106.13.49.232/cedar/api/excel_data/list.php",
               this.tableinfo
           );
           console.log("getTableList",res);

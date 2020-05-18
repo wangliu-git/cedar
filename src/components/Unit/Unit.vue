@@ -591,8 +591,8 @@ export default {
       console.log(row);
       this.zhezhao = true;
       // this.id = row.id;
-      // this.attached = row.attached;
-      // this.getTableList()
+      this.attached = row.attached;
+      this.getTableList()
     },
     // 点击原单位编辑
     async bianji(row){
@@ -630,7 +630,6 @@ export default {
               confirmButtonText: "确定",
               type: "success",
               callback: action => {   
-                this.attached = 0
                 this.getTableList();                              
               }
             });
@@ -649,7 +648,6 @@ export default {
       // console.log(it)
       // console.log(it.group_name)
       let group_id = "";
-      let attached = "";
       const { data: res } = await this.axios.get("diagnosis_origin/list.php", {
         params: { page: this.queryInfo.page, group_id:this.it}
       });
@@ -715,7 +713,7 @@ export default {
       it:'',
       groupList:[],
       photo: "",
-      upLoadUrl: "http://192.168.75.58/cedar/api/diagnosis_origin/add.php",
+      upLoadUrl: "http://106.13.49.232/cedar/api/diagnosis_origin/add.php",
       jilian: "",
       item: "",
       // 折叠面板默认打开
