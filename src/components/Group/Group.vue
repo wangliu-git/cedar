@@ -395,7 +395,8 @@ export default {
       });
       this.id = row.id;
       console.log(this.id);
-      this.minList = res.data;
+      this.minList = res.data.data;
+      console.log(this.minList)
     },
     // 点击病理号查看
     async look(row) {
@@ -436,7 +437,7 @@ export default {
         });
     },
     // 点击创建人搜索列表
-     creator(){
+    creator(){
       console.log(this.groupname)
       const res = this.axios.get('group/list.php',{params:{group_username:this.groupname}}).then( res => {
         console.log(res.data)

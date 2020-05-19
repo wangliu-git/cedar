@@ -14,7 +14,7 @@
                   <el-upload
                     class="upload-demo"
                     ref="upload"
-                    action="http://192.168.75.58/cedar/api/upload_file/add.php"
+                    action="http://106.13.49.232/cedar/api/upload_file/add.php"
                     :accept="acceptFileType"
                     :limit="1"
                     :on-exceed="handleExceed"
@@ -269,7 +269,7 @@
                   >
                     <el-option v-for="item in showInfo.sex.field_values" :key="item" :value="item">
                       <span>{{item}}</span>
-                    </el-option>
+                    </el-option>  
                   </el-select>
                 </div>
                 <!--出生日期 -->
@@ -1061,7 +1061,6 @@
 
 
 <script type="text/ecmascript-6">
-
 import uuid from "uuid";
 import allMessage from "../../staic/allMessage.json";
 import qs from "qs"; //ulencode

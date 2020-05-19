@@ -13,7 +13,7 @@
                 <el-col :span="22">
                   <el-upload class="upload-demo"
                     ref="upload"
-                    action="http://192.168.75.58/cedar/api/upload_file/add.php"
+                    action="http://106.13.49.232/cedar/api/upload_file/add.php"
                     :accept="acceptFileType"
                     :limit="1"
                     :on-exceed="handleExceed"

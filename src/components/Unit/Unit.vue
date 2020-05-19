@@ -568,7 +568,8 @@ export default {
           this.jilian.push(this.editForm.diagnosis3)
         }    
         // this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2)
-        this.jilian  =  this.editForm.jilian 
+         this.editForm.jilian = this.jilian  
+        
       }  else{
         this.editForm = {};
         return
@@ -647,7 +648,7 @@ export default {
     },
     // 清空
     qingkong() {
-      this.zhezhao = !this.zhezhao;
+      // this.zhezhao = !this.zhezhao;
     },
     // 保存
     baocun(editForm) {
@@ -750,7 +751,7 @@ export default {
       it:'',
       groupList:[],
       photo: "",
-      upLoadUrl: "http://192.168.75.58/cedar/api/diagnosis_origin/add.php",
+      upLoadUrl: "http://106.13.49.232/cedar/api/diagnosis_origin/add.php",
       jilian: "",
       jilian: [],
       item: "",

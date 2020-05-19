@@ -2681,7 +2681,7 @@ export default {
       );
       const { data: res } = await this.axios.get(
         "group/stat.php",
-         {params:{group_id:this.id,field:this.sex,type:this.type+1,field2:this.diagnosis2}}
+         {params:{group_id:this.id,type:this.type+1,field:this.diagnosis2}}
         //  {params:{group_id:this.id,field:this.mark,type:this.type+1,table:this.ly_helper_diagnosis}}
  
       );
