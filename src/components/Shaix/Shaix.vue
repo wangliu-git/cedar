@@ -356,7 +356,7 @@
                   style="width:200px"
                   multiple @change="shaixuan()"
                 > 
-                  <el-option v-for="(item,index) in this.mark" :key="index"  :value="item">{{item}} </el-option>              
+                  <el-option v-for="(item,index) in this.mark" :key="index"  :value="item"></el-option>              
                 </el-select>
               </div>
 
@@ -1334,8 +1334,8 @@ export default {
               value: 'B淋巴母细胞白血病/淋巴瘤伴超二倍体',
               label: 'B淋巴母细胞白血病/淋巴瘤伴超二倍体'
               },{
-              value: 'B淋巴母细胞白血病/淋巴瘤伴低二倍体',
-              label: 'B淋巴母细胞白血病/淋巴瘤伴低二倍体'
+              value: 'B淋巴母细胞白血病/淋巴瘤伴亚二倍体',
+              label: 'B淋巴母细胞白血病/淋巴瘤伴亚二倍体'
               },{
               value: 'B淋巴母细胞白血病/淋巴瘤伴t(5；14)(q31.1；q32.3)；IL3-IGH',
               label: 'B淋巴母细胞白血病/淋巴瘤伴t(5；14)(q31.1；q32.3)；IL3-IGH'
@@ -1354,8 +1354,8 @@ export default {
             label: 'T淋巴母细胞白血病/淋巴瘤',
             children: 
               [{
-              value: '早期T前驱淋巴母细胞白血病',
-              label: '早期T前驱淋巴母细胞白血病'
+              value: '早期T细胞前驱淋巴母细胞白血病',
+              label: '早期T细胞前驱淋巴母细胞白血病'
               }]
             },{
             value: 'NK淋巴母细胞白血病/淋巴瘤',
@@ -2047,16 +2047,15 @@ export default {
       })
     }, 
     // 添加标志物结果
-    ihcAdd(){
-      let arr = []
-      if (this.mark || this.value){
+    ihcAdd(){     
+      if(this.mark|| this.value){
         //验证通过 添加新的一条
-        // var newValue = {
-        //     mark: "",
-        //     value: ""
-        // };
-        arr.push(this.mark,this.value);
-        console.log(arr)
+        var newValue = [{
+          mark: "",
+          value: ""
+        }];
+        newValue.push(this.mark,this.value);
+        console.log(newValue)
         } else {
           alert("请检查输入是否正确");
         } 

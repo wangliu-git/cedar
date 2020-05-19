@@ -59,7 +59,7 @@
             style="width: 100%"
             border
             stripe
-            :header-cell-style="{color:'#333333'}"
+            :header-cell-style="{color:'#333333'}" highlight-current-row="true"
           >
             <el-table-column type="selection" width="40"></el-table-column>
             <el-table-column prop="patient_id" label="病人ID" width="200" sortable></el-table-column>
@@ -81,7 +81,7 @@
                   type="text"
                   size="small"
                   @click="tianjia(scope.row)"
-                  v-if="scope.row.attached == !0"
+                  v-if="scope.row.attached == 1"
                 >添加</el-button>
                 <div v-else>
                   <el-button
@@ -221,7 +221,7 @@
                     size="mini"
                     :options="options"
                     :props="{ checkStrictly: true }"
-                    clearable
+                    clearable style="width:700px"
                   ></el-cascader>
                 </div>
               </div>
@@ -546,22 +546,40 @@ export default {
       });
     },
     // 点击查看--显示某个信息
-    async look(row) {
+    async look(row) { 
       this.zhezhao = true;
       console.log(row);
       const { data: res } = await this.axios.get("diagnosis_origin/one.php", {
         params: { id: row.id }
       })
-      this.editForm = res;
-      console.log(row.id);
-      console.log(res);     
-      this.row = row
-      console.log(this.editForm);
+      console.log(res);   
+      this.rowAdd = row
+      if(res != null){
+        this.editForm = res;
+        console.log(this.editForm);
+        this.jilian = []
+        if(this.editForm.diagnosis1 !=  ''){
+          this.jilian.push(this.editForm.diagnosis1)
+        }
+        if(this.editForm.diagnosis2 != ''){
+          this.jilian.push(this.editForm.diagnosis2)
+        }
+        if(this.editForm.diagnosis3 != ''){
+          this.jilian.push(this.editForm.diagnosis3)
+        }    
+        // this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2)
+        this.jilian  =  this.editForm.jilian 
+      }  else{
+        this.editForm = {};
+        return
+      }     
+           
+      return
     },
     // 点击删除
     async del(row) {
       console.log(row.id)
-      const { data: res } = await this.axios("diagnosis_origin/del.php", {
+      const  res  = await this.axios("diagnosis_origin/del.php", {
         params: { id: row.id }
       }).then(res => {
         this.$confirm("确定删除该数据？, 是否继续?", "提示", {
@@ -575,6 +593,8 @@ export default {
               type: "success",
               message: "删除成功!"
             });
+            console.log(res)
+            this.tablelist = []
             this.getTableList()
           })
           .catch(() => {
@@ -584,20 +604,22 @@ export default {
             });
           });
       });
-      console.log(res);
+      
     },
     // 点击添加
-    async tianjia(row) {
+    async tianjia(row) {   
       console.log(row);
+      this.rowAdd = row
       this.zhezhao = true;
-      this.id = row.id;
-      this.attached = row.attached;
+      this.id = this.rowAdd.id;
+      this.attached = this.rowAdd.attached;
       this.getTableList()
     },
     // 点击原单位编辑
     async bianji(row){
       this.zhezhao = true;
       console.log(row);
+      this.rowAdd = row
       const { data: res } = await this.axios.get("diagnosis_origin/one.php", {
         params: { id: row.id }
       });
@@ -605,23 +627,37 @@ export default {
       console.log(res);
       this.editForm = res;
       console.log(this.editForm);
+      this.jilian = []
+      //  this.editForm.helper_diagnosis =  this.helper_diagnosis 
+      // console.log(this.helper_diagnosis);    
+      if(this.editForm.diagnosis1 !=  ''){
+        this.jilian.push(this.editForm.diagnosis1)
+      }
+      if(this.editForm.diagnosis2 != ''){
+        this.jilian.push(this.editForm.diagnosis2)
+      }
+      if(this.editForm.diagnosis3 != ''){
+        this.jilian.push(this.editForm.diagnosis3)
+      }
+      this.editForm.jilian = this.jilian     
+     
+      // this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2)
+        
+      // this.rowAdd = row  
     },
     // 清空
     qingkong() {
       this.zhezhao = !this.zhezhao;
     },
     // 保存
-    baocun(row, editForm) {
+    baocun(editForm) {
       this.zhezhao = !this.zhezhao;      
-      console.log(row)
-      this.editForm = this.editForm;
+      console.log(this.rowAdd)
+      // console.log(this.rowAdd.attached)
       this.jilian = this.editForm.jilian;
-      // this.photo = this.editForm.photo;
-      // console.log(this.jilian);
       this.editForm.detail_type = "淋巴瘤";
-      // console.log(this.atstached)
       console.log(this.editForm);
-        this.axios.post("diagnosis_origin/add.php",{params:{id:row.id,data:this.editForm}}).then(res => {
+        this.axios.post("diagnosis_origin/add.php",{params:{id:this.rowAdd.id,data:this.editForm}}).then(res => {
           console.log("res:", res);
           // console.log(res.data)
           var result = res.data; //JSON.parse(res.body);
@@ -629,7 +665,8 @@ export default {
             this.$alert("提交成功", "提交结果", {
               confirmButtonText: "确定",
               type: "success",
-              callback: action => {   
+              callback: action => {  
+                this.rowAdd.attached = this.rowAdd.id 
                 this.getTableList();                              
               }
             });
@@ -702,11 +739,11 @@ export default {
     handleCurrentChange(newPage) {
       this.queryInfo.page = newPage;
       this.getTableList();
-    },
-    
+    },   
   },
   data() {
     return {
+      rowAdd:'',   //点击添加获取的row
       row:'',
       yuanlist:'',
       attachedList:['有','无','全部'],   //原单位下拉
@@ -715,6 +752,7 @@ export default {
       photo: "",
       upLoadUrl: "http://192.168.75.58/cedar/api/diagnosis_origin/add.php",
       jilian: "",
+      jilian: [],
       item: "",
       // 折叠面板默认打开
       activeNames: ["1"],
@@ -798,475 +836,450 @@ export default {
       reportMass: {}, //报告质量
       options: [
         {
-          value: "成熟T和NK细胞淋巴瘤",
-          label: "成熟T和NK细胞淋巴瘤",
-          children: [
-            {
-              value: "T细胞淋巴瘤（亚型无法确定）",
-              label: "T细胞淋巴瘤（亚型无法确定）"
-            },
-            {
-              value: "T幼淋巴细胞白血病",
-              label: "T幼淋巴细胞白血病"
-            },
-            {
-              value: "T大颗粒淋巴细胞白血病",
-              label: "T大颗粒淋巴细胞白血病"
-            },
-            {
-              value: "NK细胞慢性淋巴增殖性疾病",
-              label: "NK细胞慢性淋巴增殖性疾病"
-            },
-            {
-              value: "侵袭性NK细胞白血病",
-              label: "侵袭性NK细胞白血病"
-            },
-            {
-              value: "儿童系统性EBV阳性T细胞淋巴瘤",
-              label: "儿童系统性EBV阳性T细胞淋巴瘤"
-            },
-            {
-              value: "慢性活动性EBV感染（T细胞和NK细胞型），系统性",
-              label: "慢性活动性EBV感染（T细胞和NK细胞型），系统性"
-            },
-            {
-              value: "种痘水疱病样淋巴组织增殖性疾病",
-              label: "种痘水疱病样淋巴组织增殖性疾病"
-            },
-            {
-              value: "严重蚊虫叮咬过敏症",
-              label: "严重蚊虫叮咬过敏症"
-            },
-            {
-              value: "成人T细胞白血病/淋巴瘤",
-              label: "成人T细胞白血病/淋巴瘤"
-            },
-            {
-              value: "结外NK/T细胞淋巴瘤，鼻型",
-              label: "结外NK/T细胞淋巴瘤，鼻型"
-            },
-            {
-              value: "肠病相关T细胞淋巴瘤",
-              label: "肠病相关T细胞淋巴瘤"
-            },
-            {
-              value: "单形性嗜上皮性肠道T细胞淋巴瘤",
-              label: "单形性嗜上皮性肠道T细胞淋巴瘤"
-            },
-            {
-              value: "肠道T细胞淋巴瘤，非特指型",
-              label: "肠道T细胞淋巴瘤，非特指型"
-            },
-            {
-              value: "胃肠道惰性T细胞增殖性疾病",
-              label: "胃肠道惰性T细胞增殖性疾病"
-            },
-            {
-              value: "肝脾T细胞淋巴瘤",
-              label: "肝脾T细胞淋巴瘤"
-            },
-            {
-              value: "皮下脂膜炎样T细胞淋巴瘤",
-              label: "皮下脂膜炎样T细胞淋巴瘤"
-            },
-            {
-              value: "蕈样肉芽肿",
-              label: "蕈样肉芽肿"
-            },
-            {
-              value: "Sezary综合征",
-              label: "Sezary综合征"
-            },
-            {
-              value: "淋巴瘤样丘疹病",
-              label: "淋巴瘤样丘疹病"
-            },
-            {
-              value: "原发性皮肤间变性大细胞淋巴瘤",
-              label: "原发性皮肤间变性大细胞淋巴瘤"
-            },
-            {
-              value: "原发性皮肤γδT细胞淋巴瘤",
-              label: "原发性皮肤γδT细胞淋巴瘤"
-            },
-            {
-              value: "原发性皮肤CD8阳性侵袭性嗜表皮性细胞毒性T细胞淋巴瘤",
-              label: "原发性皮肤CD8阳性侵袭性嗜表皮性细胞毒性T细胞淋巴瘤"
-            },
-            {
-              value: "原发性皮肤肢端CD8阳性T细胞淋巴瘤",
-              label: "原发性皮肤肢端CD8阳性T细胞淋巴瘤"
-            },
-            {
-              value: "原发性皮肤CD4阳性小/中等大小T细胞增殖性疾病",
-              label: "原发性皮肤CD4阳性小/中等大小T细胞增殖性疾病"
-            },
-            {
-              value: "外周T细胞淋巴瘤，非特指型",
-              label: "外周T细胞淋巴瘤，非特指型"
-            },
-            {
-              value: "血管免疫母细胞T细胞淋巴瘤",
-              label: "血管免疫母细胞T细胞淋巴瘤"
-            },
-            {
-              value: "滤泡T细胞淋巴瘤",
-              label: "滤泡T细胞淋巴瘤"
-            },
-            {
-              value: "伴滤泡辅助T细胞表型的结内外周T细胞淋巴瘤",
-              label: "伴滤泡辅助T细胞表型的结内外周T细胞淋巴瘤"
-            },
-            {
-              value: "间变性大细胞淋巴瘤，ALK阳性",
-              label: "间变性大细胞淋巴瘤，ALK阳性"
-            },
-            {
-              value: "间变性大细胞淋巴瘤，ALK阴性",
-              label: "间变性大细胞淋巴瘤，ALK阴性"
-            },
-            {
-              value: "乳房植入物相关的间变性大细胞淋巴瘤",
-              label: "乳房植入物相关的间变性大细胞淋巴瘤"
-            },
-            {
-              value: "其他T细胞淋巴瘤",
-              label: "其他T细胞淋巴瘤"
-            }
-          ]
+          value: '前驱淋巴性肿瘤',
+          label: '前驱淋巴性肿瘤',
+          children: 
+            [{
+            value: 'B淋巴母细胞白血病/淋巴瘤，非特殊类型',
+            label: 'B淋巴母细胞白血病/淋巴瘤，非特殊类型'
+            },{
+            value: 'B淋巴母细胞白血病/淋巴瘤伴重现性遗传学异常',
+            label: 'B淋巴母细胞白血病/淋巴瘤伴重现性遗传学异常',
+            children: 
+              [{            
+              value: 'B淋巴母细胞白血病/淋巴瘤伴t(9；22)(q34.1；q11.2)；BCR-ABL1',
+              label: 'B淋巴母细胞白血病/淋巴瘤伴t(9；22)(q34.1；q11.2)；BCR-ABL1'
+              },{
+              value: 'B淋巴母细胞白血病/淋巴瘤伴t(v；11q23.3)；KMT2A重排',
+              label: 'B淋巴母细胞白血病/淋巴瘤伴t(v；11q23.3)；KMT2A重排'
+              },{
+              value: 'B淋巴母细胞白血病/淋巴瘤伴t(12；21)(p13.2；q22.1)；ETV6-RUNX1',
+              label: 'B淋巴母细胞白血病/淋巴瘤伴t(12；21)(p13.2；q22.1)；ETV6-RUNX1'
+              },{
+              value: 'B淋巴母细胞白血病/淋巴瘤伴超二倍体',
+              label: 'B淋巴母细胞白血病/淋巴瘤伴超二倍体'
+              },{
+              value: 'B淋巴母细胞白血病/淋巴瘤伴亚二倍体',
+              label: 'B淋巴母细胞白血病/淋巴瘤伴亚二倍体'
+              },{
+              value: 'B淋巴母细胞白血病/淋巴瘤伴t(5；14)(q31.1；q32.3)；IL3-IGH',
+              label: 'B淋巴母细胞白血病/淋巴瘤伴t(5；14)(q31.1；q32.3)；IL3-IGH'
+              },{
+              value: 'B淋巴母细胞白血病/淋巴瘤伴t(1；19)(q23；p13.3)；TCF3-PBX1',
+              label: 'B淋巴母细胞白血病/淋巴瘤伴t(1；19)(q23；p13.3)；TCF3-PBX1'
+              },{
+              value: 'B淋巴母细胞白血病/淋巴瘤，BCR-ABL1样',
+              label: 'B淋巴母细胞白血病/淋巴瘤，BCR-ABL1样'
+              },{
+              value: 'B淋巴母细胞白血病/淋巴瘤伴iAMP21',
+              label: 'B淋巴母细胞白血病/淋巴瘤伴iAMP21'
+              }]
+            },{
+            value: 'T淋巴母细胞白血病/淋巴瘤',
+            label: 'T淋巴母细胞白血病/淋巴瘤',
+            children: 
+              [{
+              value: '早期T细胞前驱淋巴母细胞白血病',
+              label: '早期T细胞前驱淋巴母细胞白血病'
+              }]
+            },{
+            value: 'NK淋巴母细胞白血病/淋巴瘤',
+            label: 'NK淋巴母细胞白血病/淋巴瘤'
+            }]
         },
         {
-          value: "前驱淋巴性肿瘤",
-          label: "前驱淋巴性肿瘤",
-          children: [
-            {
-              value: "B淋巴母细胞白血病/淋巴瘤，非特殊类型",
-              label: "B淋巴母细胞白血病/淋巴瘤，非特殊类型"
-            },
-            {
-              value:
-                "B淋巴母细胞白血病/淋巴瘤伴t（9；22）（q34.1；q11.2）；BCR-ABL1",
-              label:
-                "B淋巴母细胞白血病/淋巴瘤伴t（9；22）（q34.1；q11.2）；BCR-ABL1"
-            },
-            {
-              value: "B淋巴母细胞白血病/淋巴瘤伴t（v；11q23.3）；KMT2A重排",
-              label: "B淋巴母细胞白血病/淋巴瘤伴t（v；11q23.3）；KMT2A重排"
-            },
-            {
-              value:
-                "B淋巴母细胞白血病/淋巴瘤伴t（12；21）（p13.2；q22.1）；ETV6-RUNX1",
-              label:
-                "B淋巴母细胞白血病/淋巴瘤伴t（12；21）（p13.2；q22.1）；ETV6-RUNX1"
-            },
-            {
-              value: "B淋巴母细胞白血病/淋巴瘤伴超二倍体",
-              label: "B淋巴母细胞白血病/淋巴瘤伴超二倍体"
-            },
-            {
-              value: "B淋巴母细胞白血病/淋巴瘤伴低二倍体",
-              label: "B淋巴母细胞白血病/淋巴瘤伴低二倍体"
-            },
-            {
-              value:
-                "B淋巴母细胞白血病/淋巴瘤伴t（5；14）（q31.1；q32.3）；IL3-IGH",
-              label:
-                "B淋巴母细胞白血病/淋巴瘤伴t（5；14）（q31.1；q32.3）；IL3-IGH"
-            },
-            {
-              value:
-                "B淋巴母细胞白血病/淋巴瘤伴t（1；19）（q23；p13.3）；TCF3-PBX1",
-              label:
-                "B淋巴母细胞白血病/淋巴瘤伴t（1；19）（q23；p13.3）；TCF3-PBX1"
-            },
-            {
-              value: "B淋巴母细胞白血病/淋巴瘤，BCR-ABL1样",
-              label: "B淋巴母细胞白血病/淋巴瘤，BCR-ABL1样"
-            },
-            {
-              value: "B淋巴母细胞白血病/淋巴瘤伴iAMP21",
-              label: "B淋巴母细胞白血病/淋巴瘤伴iAMP21"
-            },
-            {
-              value: "T淋巴母细胞白血病/淋巴瘤",
-              label: "T淋巴母细胞白血病/淋巴瘤"
-            },
-            {
-              value: "早期T前驱淋巴母细胞白血病",
-              label: "早期T前驱淋巴母细胞白血病"
-            },
-            {
-              value: "自然杀伤（NK）淋巴母细胞白血病/淋巴瘤",
-              label: "自然杀伤（NK）淋巴母细胞白血病/淋巴瘤"
-            }
-          ]
+          value: '成熟B细胞淋巴瘤',
+          label: '成熟B细胞淋巴瘤',
+          children: 
+            [{
+            value: '慢性淋巴细胞白血病/小淋巴细胞淋巴瘤',
+            label: '慢性淋巴细胞白血病/小淋巴细胞淋巴瘤',
+            children: 
+              [{
+              value: '单克隆B淋巴细胞增多症',
+              label: '单克隆B淋巴细胞增多症'
+              }]
+            },{
+            value: 'B细胞前淋巴细胞白血病',
+            label: 'B细胞前淋巴细胞白血病'
+            },{
+            value: '脾边缘区细胞淋巴瘤',
+            label: '脾边缘区细胞淋巴瘤'
+            },{
+            value: '毛细胞白血病',
+            label: '毛细胞白血病'
+            },{
+            value: '脾B细胞淋巴瘤/白血病，不能分类',
+            label: '脾B细胞淋巴瘤/白血病，不能分类',
+            children: 
+              [{
+              value: '脾弥漫性红髓小B细胞淋巴瘤',
+              label: '脾弥漫性红髓小B细胞淋巴瘤'
+              },{
+              value: '毛细胞白血病变异型',
+              label: '毛细胞白血病变异型'
+              }]
+            },{
+            value: '淋巴浆细胞淋巴瘤',
+            label: '淋巴浆细胞淋巴瘤'
+            },{
+            value: '意义不明的单克隆丙种球蛋白病，IgM型',
+            label: '意义不明的单克隆丙种球蛋白病，IgM型'
+            },{
+            value: '重链病',
+            label: '重链病',
+            children: 
+            [{
+              value: 'μ重链病',
+              label: 'μ重链病'
+              },{
+              value: 'γ重链病',
+              label: 'γ重链病'
+              },{
+              value: 'α重链病',
+              label: 'α重链病'           
+            }]
+            },{
+            value: '浆细胞肿瘤',
+            label: '浆细胞肿瘤',
+            children: 
+              [{                 
+              value: '意义不明的单克隆丙种球蛋白病，非IgM型',
+              label: '意义不明的单克隆丙种球蛋白病，非IgM型'
+              },{
+              value: '浆细胞骨髓瘤',
+              label: '浆细胞骨髓瘤'
+              },{
+              value: '浆细胞骨髓瘤变异型(无症状型、非分泌型、浆细胞白血病)',
+              label: '浆细胞骨髓瘤变异型(无症状型、非分泌型、浆细胞白血病)'
+              },{
+              value: '浆细胞瘤(骨孤立性浆细胞瘤、骨外浆细胞瘤)',
+              label: '浆细胞瘤(骨孤立性浆细胞瘤、骨外浆细胞瘤)'
+              },{
+              value: '单克隆免疫球蛋白沉积症(原发性淀粉样变、轻链和重链沉积病)',
+              label: '单克隆免疫球蛋白沉积症(原发性淀粉样变、轻链和重链沉积病)'
+              },{
+              value: '浆细胞肿瘤伴副肿瘤综合征(POEMS综合征、TEMPI综合征)',
+              label: '浆细胞肿瘤伴副肿瘤综合征(POEMS综合征、TEMPI综合征)'
+              }]
+            },{
+            value: '黏膜相关淋巴组织结外边缘区淋巴瘤(MALT淋巴瘤)',
+            label: '黏膜相关淋巴组织结外边缘区淋巴瘤(MALT淋巴瘤)'
+            },{
+            value: '淋巴结边缘区淋巴瘤',
+            label: '淋巴结边缘区淋巴瘤',
+            children: 
+              [{   
+              value: '儿童淋巴结边缘区淋巴瘤',
+              label: '儿童淋巴结边缘区淋巴瘤'
+              }]    
+            },{
+            value: '滤泡性淋巴瘤',
+            label: '滤泡性淋巴瘤',
+            children:
+              [{
+              value: '睾丸滤泡性淋巴瘤',
+              label: '睾丸滤泡性淋巴瘤'
+              },{
+              value: '原位滤泡性肿瘤',
+              label: '原位滤泡性肿瘤'
+              },{
+              value: '十二指肠型滤泡性淋巴瘤',
+              label: '十二指肠型滤泡性淋巴瘤'
+              }]
+            },{
+            value: '儿童型滤泡性淋巴瘤',
+            label: '儿童型滤泡性淋巴瘤'
+            },{
+            value: '伴IRF4重排大B细胞淋巴瘤',
+            label: '伴IRF4重排大B细胞淋巴瘤'
+            },{
+            value: '原发皮肤滤泡中心细胞淋巴瘤',
+            label: '原发皮肤滤泡中心细胞淋巴瘤'
+            },{
+            value: '套细胞淋巴瘤',
+            label: '套细胞淋巴瘤',
+            children:
+              [{
+              value: '白血病样非结节性套细胞淋巴瘤',
+              label: '白血病样非结节性套细胞淋巴瘤'
+              },{
+              value: '原位套细胞肿瘤',
+              label: '原位套细胞肿瘤'
+              }]
+            },{
+            value: '弥漫性大B细胞淋巴瘤，非特指型',
+            label: '弥漫性大B细胞淋巴瘤，非特指型',
+            children:
+              [{
+              value: '生发中心亚型',
+              label: '生发中心亚型'
+              },{
+              value: '活化B细胞亚型',
+              label: '活化B细胞亚型'
+              }]
+            },{
+            value: 'T细胞/组织细胞丰富的大B细胞淋巴瘤',
+            label: 'T细胞/组织细胞丰富的大B细胞淋巴瘤'
+            },{
+            value: '原发中枢神经系统弥漫性大B细胞淋巴瘤',
+            label: '原发中枢神经系统弥漫性大B细胞淋巴瘤'
+            },{
+            value: '原发皮肤弥漫性大B细胞淋巴瘤，腿型',
+            label: '原发皮肤弥漫性大B细胞淋巴瘤，腿型'
+            },{
+            value: 'EBV阳性弥漫性大B细胞淋巴瘤，非特指型',
+            label: 'EBV阳性弥漫性大B细胞淋巴瘤，非特指型'
+            },{
+            value: 'EBV阳性黏膜皮肤溃疡',
+            label: 'EBV阳性黏膜皮肤溃疡'
+            },{
+            value: '慢性炎症相关弥漫性大B细胞淋巴瘤',
+            label: '慢性炎症相关弥漫性大B细胞淋巴瘤',
+            children:
+              [{
+              value: '纤维素相关弥漫性大B细胞淋巴瘤',
+              label: '纤维素相关弥漫性大B细胞淋巴瘤' 
+              }]             
+            },{
+            value: '淋巴瘤样肉芽肿',
+            label: '淋巴瘤样肉芽肿'
+            },{
+            value: '原发性纵隔(胸腺)大B细胞淋巴瘤',
+            label: '原发性纵隔(胸腺)大B细胞淋巴瘤'
+            },{
+            value: '血管内大B细胞淋巴瘤',
+            label: '血管内大B细胞淋巴瘤'
+            },{
+            value: 'ALK阳性大B细胞淋巴瘤',
+            label: 'ALK阳性大B细胞淋巴瘤'
+            },{
+            value: '浆母细胞性淋巴瘤',
+            label: '浆母细胞性淋巴瘤'
+            },{
+            value: '原发渗出性淋巴瘤',
+            label: '原发渗出性淋巴瘤'
+            },{
+            value: 'HHV8相关淋巴组织增殖性疾病',
+            label: 'HHV8相关淋巴组织增殖性疾病',
+            children:
+              [{    
+              value: '多中心Castleman病',
+              label: '多中心Castleman病'
+              },{
+              value: 'HHV8阳性弥漫性大B细胞淋巴瘤，非特指型',
+              label: 'HHV8阳性弥漫性大B细胞淋巴瘤，非特指型'
+              },{
+              value: 'HHV8阳性亲生发中心淋巴组织增殖性疾病',
+              label: 'HHV8阳性亲生发中心淋巴组织增殖性疾病'
+              }]
+            },{
+            value: 'Burkitt淋巴瘤',
+            label: 'Burkitt淋巴瘤'
+            },{
+            value: '伴11q异常的Burkitt样淋巴瘤',
+            label: '伴11q异常的Burkitt样淋巴瘤'
+            },{
+            value: '高级别B细胞淋巴瘤',
+            label: '高级别B细胞淋巴瘤',
+            children:
+              [{      
+              value: '高级别B细胞淋巴瘤，伴MYC和BCL2和(或)BCL6重排',
+              label: '高级别B细胞淋巴瘤，伴MYC和BCL2和(或)BCL6重排'
+              },{
+              value: '高级别B细胞淋巴瘤，非特指型',
+              label: '高级别B细胞淋巴瘤，非特指型'
+              }]
+            },{
+            value: '特征介于DLBCL和经典霍奇金淋巴瘤之间的不能分类的B细胞淋巴瘤',
+            label: '特征介于DLBCL和经典霍奇金淋巴瘤之间的不能分类的B细胞淋巴瘤'
+            }]
         },
         {
-          value: "成熟B细胞淋巴瘤",
-          label: "成熟B细胞淋巴瘤",
-          children: [
-            {
-              value: "B细胞淋巴瘤（亚型无法确定）",
-              label: "B细胞淋巴瘤（亚型无法确定）"
-            },
-            {
-              value: "慢性淋巴细胞白血病（CLL）/小淋巴细胞淋巴瘤（SLL）",
-              label: "慢性淋巴细胞白血病（CLL）/小淋巴细胞淋巴瘤（SLL）"
-            },
-            {
-              value: "单克隆B淋巴细胞增多症（MBL）",
-              label: "单克隆B淋巴细胞增多症（MBL）"
-            },
-            {
-              value: "B幼淋巴细胞白血病",
-              label: "B幼淋巴细胞白血病"
-            },
-            {
-              value: "脾边缘区细胞淋巴瘤",
-              label: "脾边缘区细胞淋巴瘤"
-            },
-            {
-              value: "毛细胞白血病",
-              label: "毛细胞白血病"
-            },
-            {
-              value: "脾B细胞淋巴瘤/白血病，不能分类",
-              label: "脾B细胞淋巴瘤/白血病，不能分类"
-            },
-            {
-              value: "脾弥漫性红髓小B细胞淋巴瘤",
-              label: "脾弥漫性红髓小B细胞淋巴瘤"
-            },
-            {
-              value: "毛细胞白血病变异型",
-              label: "毛细胞白血病变异型"
-            },
-            {
-              value: "淋巴浆细胞淋巴瘤",
-              label: "淋巴浆细胞淋巴瘤"
-            },
-            {
-              value: "意义不明的单克隆丙种球蛋白病（MGUS），IgM型",
-              label: "意义不明的单克隆丙种球蛋白病（MGUS），IgM型"
-            },
-            {
-              value: "Mu重链病",
-              label: "Mu重链病"
-            },
-            {
-              value: "Gamma重链病",
-              label: "Gamma重链病"
-            },
-            {
-              value: "Alpha重链病",
-              label: "Alpha重链病"
-            },
-            {
-              value: "意义不明的单克隆丙种球蛋白病（MGUS），非IgM型",
-              label: "意义不明的单克隆丙种球蛋白病（MGUS），非IgM型"
-            },
-            {
-              value: "浆细胞骨髓瘤",
-              label: "浆细胞骨髓瘤"
-            },
-            {
-              value: "骨孤立性浆细胞瘤",
-              label: "骨孤立性浆细胞瘤"
-            },
-            {
-              value: "骨外浆细胞瘤",
-              label: "骨外浆细胞瘤"
-            },
-            {
-              value: "单克隆免疫球蛋白沉积病",
-              label: "单克隆免疫球蛋白沉积病"
-            },
-            {
-              value: "结外黏膜相关淋巴组织边缘区淋巴瘤（MALT淋巴瘤）",
-              label: "结外黏膜相关淋巴组织边缘区淋巴瘤（MALT淋巴瘤）"
-            },
-            {
-              value: "结内边缘区淋巴瘤",
-              label: "结内边缘区淋巴瘤"
-            },
-            {
-              value: "滤泡性淋巴瘤",
-              label: "滤泡性淋巴瘤",
-              children: [
-                {
-                  value: "1",
-                  label: "1"
-                },
-                {
-                  value: "2",
-                  label: "2"
-                },
-                {
-                  value: "3a",
-                  label: "3a"
-                },
-                {
-                  value: "3b",
-                  label: "3b"
-                }
-              ]
-            },
-            {
-              value: "儿童型滤泡性淋巴瘤",
-              label: "儿童型滤泡性淋巴瘤"
-            },
-            {
-              value: "伴IRF4重排大B细胞淋巴瘤",
-              label: "伴IRF4重排大B细胞淋巴瘤"
-            },
-            {
-              value: "原发皮肤滤泡中心细胞淋巴瘤",
-              label: "原发皮肤滤泡中心细胞淋巴瘤"
-            },
-            {
-              value: "套细胞淋巴瘤",
-              label: "套细胞淋巴瘤"
-            },
-            {
-              value: "弥漫性大B细胞淋巴瘤（DLBCL），非特指型",
-              label: "弥漫性大B细胞淋巴瘤（DLBCL），非特指型",
-              children: [
-                {
-                  value: "生发中心亚型",
-                  label: "生发中心亚型"
-                },
-                {
-                  value: "活化B细胞亚型",
-                  label: "活化B细胞亚型"
-                }
-              ]
-            },
-            {
-              value: "富于T细胞/组织细胞大B细胞淋巴瘤",
-              label: "富于T细胞/组织细胞大B细胞淋巴瘤"
-            },
-            {
-              value: "原发中枢神经系统弥漫性大B细胞淋巴瘤",
-              label: "原发中枢神经系统弥漫性大B细胞淋巴瘤"
-            },
-            {
-              value: "原发皮肤弥漫性大B细胞淋巴瘤，腿型",
-              label: "原发皮肤弥漫性大B细胞淋巴瘤，腿型"
-            },
-            {
-              value: "EBV+弥漫性大B细胞淋巴瘤，非特指型",
-              label: "EBV+弥漫性大B细胞淋巴瘤，非特指型"
-            },
-            {
-              value: "EBV+黏膜皮肤溃疡",
-              label: "EBV+黏膜皮肤溃疡"
-            },
-            {
-              value: "慢性炎症相关弥漫性大B细胞淋巴瘤",
-              label: "慢性炎症相关弥漫性大B细胞淋巴瘤"
-            },
-            {
-              value: "淋巴瘤样肉芽肿",
-              label: "淋巴瘤样肉芽肿"
-            },
-            {
-              value: "原发性纵隔（胸腺）大B细胞淋巴瘤",
-              label: "原发性纵隔（胸腺）大B细胞淋巴瘤"
-            },
-            {
-              value: "血管内大B细胞淋巴瘤",
-              label: "血管内大B细胞淋巴瘤"
-            },
-            {
-              value: "ALK阳性大B细胞淋巴瘤",
-              label: "ALK阳性大B细胞淋巴瘤"
-            },
-            {
-              value: "浆母细胞性淋巴瘤",
-              label: "浆母细胞性淋巴瘤"
-            },
-            {
-              value: "原发渗出性淋巴瘤",
-              label: "原发渗出性淋巴瘤"
-            },
-            {
-              value: "多中心Castleman病",
-              label: "多中心Castleman病"
-            },
-            {
-              value: "HHV8阳性弥漫性大B细胞淋巴瘤，非特指型",
-              label: "HHV8阳性弥漫性大B细胞淋巴瘤，非特指型"
-            },
-            {
-              value: "HHV8阳性亲生发中心淋巴组织增殖性疾病",
-              label: "HHV8阳性亲生发中心淋巴组织增殖性疾病"
-            },
-            {
-              value: "Burkitt淋巴瘤",
-              label: "Burkitt淋巴瘤"
-            },
-            {
-              value: "伴11q异常的Burkitt样淋巴瘤",
-              label: "伴11q异常的Burkitt样淋巴瘤"
-            },
-            {
-              value: "高级别B细胞淋巴瘤，伴MYC和BCL2和（或）BCL6重排",
-              label: "高级别B细胞淋巴瘤，伴MYC和BCL2和（或）BCL6重排"
-            },
-            {
-              value: "高级别B细胞淋巴瘤，非特指型",
-              label: "高级别B细胞淋巴瘤，非特指型"
-            },
-            {
-              value: "介于DLBCL和经典霍奇金淋巴瘤之间的不能分类的B细胞淋巴瘤",
-              label: "介于DLBCL和经典霍奇金淋巴瘤之间的不能分类的B细胞淋巴瘤"
-            },
-            {
-              value: "其他B细胞淋巴瘤",
-              label: "其他B细胞淋巴瘤"
-            }
-          ]
+          value: '成熟T和NK细胞淋巴瘤',
+          label: '成熟T和NK细胞淋巴瘤',
+          children: 
+            [{
+            value: 'T细胞前淋巴细胞白血病',
+            label: 'T细胞前淋巴细胞白血病'
+            },{
+            value: 'T细胞大颗粒淋巴细胞白血病',
+            label: 'T细胞大颗粒淋巴细胞白血病'
+            },{
+            value: '慢性NK细胞淋巴增殖性疾病',
+            label: '慢性NK细胞淋巴增殖性疾病'
+            },{
+            value: '侵袭性NK细胞白血病',
+            label: '侵袭性NK细胞白血病'
+            },{
+            value: '儿童EBV阳性T细胞和NK细胞淋巴组织增殖性疾病',
+            label: '儿童EBV阳性T细胞和NK细胞淋巴组织增殖性疾病',
+            children: 
+              [{                        
+              value: '儿童系统性EBV阳性T细胞淋巴瘤',
+              label: '儿童系统性EBV阳性T细胞淋巴瘤'
+              },{
+              value: '系统性慢性活动性EBV感染，T细胞和NK细胞型',
+              label: '系统性慢性活动性EBV感染，T细胞和NK细胞型'
+              },{
+              value: '种痘水疱病样淋巴组织增殖性疾病',
+              label: '种痘水疱病样淋巴组织增殖性疾病'
+              },{
+              value: '严重蚊虫叮咬过敏症',
+              label: '严重蚊虫叮咬过敏症'
+              }]
+            },{
+            value: '成人T细胞白血病/淋巴瘤',
+            label: '成人T细胞白血病/淋巴瘤'
+            },{
+            value: '结外NK/T细胞淋巴瘤，鼻型',
+            label: '结外NK/T细胞淋巴瘤，鼻型'
+            },{
+            value: '肠道T细胞淋巴瘤',
+            label: '肠道T细胞淋巴瘤',
+            children: 
+              [{
+              value: '单形性亲上皮性肠道T细胞淋巴瘤',
+              label: '单形性亲上皮性肠道T细胞淋巴瘤'
+              },{
+              value: '肠病相关性T细胞淋巴瘤',
+              label: '肠病相关性T细胞淋巴瘤'
+              },{
+              value: '肠道T细胞淋巴瘤，非特指型',
+              label: '肠道T细胞淋巴瘤，非特指型'
+              },{
+              value: '胃肠道惰性T细胞增殖性疾病',
+              label: '胃肠道惰性T细胞增殖性疾病'
+              }]
+            },{
+            value: '肝脾T细胞淋巴瘤',
+            label: '肝脾T细胞淋巴瘤'
+            },{
+            value: '皮下脂膜炎样T细胞淋巴瘤',
+            label: '皮下脂膜炎样T细胞淋巴瘤'
+            },{
+            value: '蕈样肉芽肿',
+            label: '蕈样肉芽肿'
+            },{
+            value: 'Sezary综合征',
+            label: 'Sezary综合征'
+            },{
+            value: '原发性皮肤CD30阳性T细胞淋巴组织增殖性疾病',
+            label: '原发性皮肤CD30阳性T细胞淋巴组织增殖性疾病',
+            children: 
+              [{
+              value: '淋巴瘤样丘疹病',
+              label: '淋巴瘤样丘疹病'
+              },{
+              value: '原发性皮肤间变性大细胞淋巴瘤',
+              label: '原发性皮肤间变性大细胞淋巴瘤'
+              }]
+            },{
+            value: '原发性皮肤外周T细胞淋巴瘤罕见亚型',
+            label: '原发性皮肤外周T细胞淋巴瘤罕见亚型',
+            children:           
+              [{
+              value: '原发性皮肤γδT细胞淋巴瘤',
+              label: '原发性皮肤γδT细胞淋巴瘤'
+              },{
+              value: '原发性皮肤CD8阳性侵袭性嗜表皮性细胞毒性T细胞淋巴瘤',
+              label: '原发性皮肤CD8阳性侵袭性嗜表皮性细胞毒性T细胞淋巴瘤'
+              },{
+              value: '原发性皮肤肢端CD8阳性T细胞淋巴瘤',
+              label: '原发性皮肤肢端CD8阳性T细胞淋巴瘤'
+              },{
+              value: '原发性皮肤CD4阳性小/中等大小T细胞增殖性疾病',
+              label: '原发性皮肤CD4阳性小/中等大小T细胞增殖性疾病'
+              }]
+            },{
+            value: '外周T细胞淋巴瘤，非特指型',
+            label: '外周T细胞淋巴瘤，非特指型'
+            },{
+            value: '血管免疫母细胞性T细胞淋巴瘤及其他淋巴结滤泡辅助T细胞来源的淋巴瘤',
+            label: '血管免疫母细胞性T细胞淋巴瘤及其他淋巴结滤泡辅助T细胞来源的淋巴瘤',
+            children:           
+              [{
+              value: '血管免疫母细胞性T细胞淋巴瘤',
+              label: '血管免疫母细胞性T细胞淋巴瘤'
+              },{
+              value: '滤泡T细胞淋巴瘤',
+              label: '滤泡T细胞淋巴瘤'
+              },{
+              value: '淋巴结外周T细胞淋巴瘤伴滤泡辅助T细胞表型',
+              label: '淋巴结外周T细胞淋巴瘤伴滤泡辅助T细胞表型'
+              }]
+            },{
+            value: '间变性大细胞淋巴瘤，ALK阳性',
+            label: '间变性大细胞淋巴瘤，ALK阳性'
+            },{
+            value: '间变性大细胞淋巴瘤，ALK阴性',
+            label: '间变性大细胞淋巴瘤，ALK阴性'
+            },{
+            value: '乳房植入物相关的间变性大细胞淋巴瘤',
+            label: '乳房植入物相关的间变性大细胞淋巴瘤'
+            }]
         },
         {
-          value: "霍奇金淋巴瘤",
-          label: "霍奇金淋巴瘤",
-          children: [
-            {
-              value: "霍奇金淋巴瘤（亚型无法确定）",
-              label: "霍奇金淋巴瘤（亚型无法确定）"
-            },
-            {
-              value: "结节性淋巴细胞为主型霍奇金淋巴瘤",
-              label: "结节性淋巴细胞为主型霍奇金淋巴瘤"
-            },
-            {
-              value: "经典型霍奇金淋巴瘤",
-              label: "经典型霍奇金淋巴瘤",
-              children: [
-                {
-                  value: "结节硬化型（NS）",
-                  label: "结节硬化型（NS）"
-                },
-                {
-                  value: "富于淋巴细胞型（LP）",
-                  label: "富于淋巴细胞型（LP）"
-                },
-                {
-                  value: "混合细胞型（MC）",
-                  label: "混合细胞型（MC）"
-                },
-                {
-                  value: "淋巴细胞消减型（LD）",
-                  label: "淋巴细胞消减型（LD）"
-                }
-              ]
-            }
-          ]
+          value: '霍奇金淋巴瘤',
+          label: '霍奇金淋巴瘤',
+          children:
+            [{
+            value: '结节性淋巴细胞为主型霍奇金淋巴瘤',
+            label: '结节性淋巴细胞为主型霍奇金淋巴瘤'
+            },{
+            value: '经典型霍奇金淋巴瘤',
+            label: '经典型霍奇金淋巴瘤',
+            children:
+              [{
+              value: '结节硬化型',
+              label: '结节硬化型'
+              },{
+              value: '富于淋巴细胞型',
+              label: '富于淋巴细胞型'
+              },{
+              value: '混合细胞型',
+              label: '混合细胞型'
+              },{
+              value: '淋巴细胞消减型',
+              label: '淋巴细胞消减型'
+              }]
+            }]
+        },
+        {
+          value: '淋巴瘤(类型无法确定)',
+          label: '淋巴瘤(类型无法确定)'
+        },
+        {
+          value: '非霍奇金淋巴瘤(类型无法确定)',
+          label: '非霍奇金淋巴瘤(类型无法确定)'
+        },
+        {
+          value: '成熟B细胞淋巴瘤(类型无法确定)',
+          label: '成熟B细胞淋巴瘤(类型无法确定)'
+        },
+        {
+          value: '成熟T和NK细胞淋巴瘤(类型无法确定)',
+          label: '成熟T和NK细胞淋巴瘤(类型无法确定)'
+        },
+        {
+          value: '霍奇金淋巴瘤(类型无法确定)',
+          label: '霍奇金淋巴瘤(类型无法确定)'
+        },
+        {
+          value: '非典型增生',
+          label: '非典型增生'
+        },
+        {
+          value: '其他恶性肿瘤',
+          label: '其他恶性肿瘤'
+        },
+        {
+          value: '无明确诊断结论',
+          label: '无明确诊断结论'
         }
-      ]
+		  ],
     };
   },
-
   mounted() {
     // this.getTableList();
     // 原医疗机构诊断

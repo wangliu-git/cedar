@@ -12,7 +12,7 @@
           <div class="left">
             <span>创建人 ：</span>
             <el-select placeholder="请选择" size="small" v-model="group_name" @change="getName()">
-              <el-option v-for="(item,index) in this.peopleList" :key="index" :value="item.group_name"></el-option> 
+              <el-option v-for="(item,index) in this.peopleList" :key="index" :value="item.group_username"></el-option> 
             </el-select>
           </div>
           <div class="right">
@@ -69,14 +69,14 @@
           <div>
             <i class="iconfont iconbuzhou-icon"></i>
             <span>选择分析 ：</span>
-            <el-select placeholder="请选择" size="small" v-model="type" style="width:300px" @change="drawLineSex()">
+            <el-select placeholder="请选择" size="small" v-model="type" style="width:300px" >
               <el-option v-for="(item,index)  in choose" :key="index" :value="index" :label="item">{{item}}</el-option>
             </el-select>
           </div>
           <div v-show="this.type == 1">
             <i class="iconfont iconbuzhou-xian1"></i>
             <span>选择淋巴瘤亚型 ：</span>
-            <el-select placeholder="请选择" size="small" v-model="dignosis" style="width:400px"  @change="drawLineSex()">
+            <el-select placeholder="请选择" size="small" v-model="dignosis" style="width:400px" >
               <el-option v-for="(item,index) in chooses" :key="index" :value="item">{{item}}</el-option>
             </el-select>
           </div>
@@ -656,9 +656,8 @@ export default {
 			this.diff_dayShow=false;
 		},
     // 点击获取创建人姓名
-    getName(){
-      console.log(this.group_name)
-      const res = this.axios.get('group/list.php',{params:{group_name:this.group_name}}).then( res => {
+    getName(){    
+      const res = this.axios.get('group/list.php',{params:{group_username:this.group_name}}).then( res => {
         console.log(res.data)
         this.datalist = res.data.data;
         this.queryInfo.page = parseInt(res.data.page);

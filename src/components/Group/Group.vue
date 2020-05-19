@@ -14,7 +14,7 @@
           <div class="left">
             <span>创建人 ：</span>
             <el-select placeholder="请选择" size="small" v-model="groupname" @change="creator">
-              <el-option v-for="(item,index) in this.peopleList" :key="index" :value="item.group_name" ></el-option> 
+              <el-option v-for="(item,index) in this.peopleList" :key="index" :value="item.group_username" ></el-option> 
             </el-select>
           </div>
 
@@ -438,7 +438,7 @@ export default {
     // 点击创建人搜索列表
      creator(){
       console.log(this.groupname)
-      const res = this.axios.get('group/list.php',{params:{group_name:this.groupname}}).then( res => {
+      const res = this.axios.get('group/list.php',{params:{group_username:this.groupname}}).then( res => {
         console.log(res.data)
         this.datalist = res.data.data;
         this.shuInfo.page = parseInt(res.data.page);
