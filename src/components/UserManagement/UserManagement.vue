@@ -17,9 +17,8 @@
           style="width: 100%"
           border
           stripe
-          :header-cell-style="{color:'#333333'}"
-        >
-          <el-table-column type="selection" width="80"></el-table-column>
+          :header-cell-style="{color:'#333333'}">
+          <el-table-column type="selection" width="50"></el-table-column>
           <el-table-column prop="username" label="用户名" width="280"></el-table-column>
           <el-table-column prop="role_id" label="权限" width="280"></el-table-column>
           <el-table-column prop="last_time" label="录入时间" width="280"></el-table-column>
@@ -36,7 +35,7 @@
           </el-table-column>
         </el-table>
         <el-pagination
-          style="margin:10px 30%"
+          style="margin:10px 40%"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="queryInfo.page"
@@ -319,7 +318,7 @@ export default {
     // 删除用户
     async del(row) {
       console.log(row.id);
-      window.sessionStorage.clear();
+      // window.sessionStorage.clear();
       const { data: res } = await this.axios.get("user/del.php", {
         params: { id: row.id }
       });

@@ -85,8 +85,7 @@
             <el-table-column type="selection" width="40"></el-table-column>
             <el-table-column prop="test_id" label="病理号" width="190" sortable></el-table-column>
             <el-table-column prop="name" label="姓名" width="190" sortable></el-table-column>
-            <el-table-column prop="diagnosis2" label="病理亚型" width="190" sortable></el-table-column>
-            <el-table-column prop="diagnosis2" label="病理亚型" width="190" sortable></el-table-column>
+            <el-table-column prop="diagnosis2" label="病理亚型" width="320" sortable></el-table-column>
             <el-table-column prop="sex" label="性别" width="190" sortable></el-table-column>
             <el-table-column prop="age" label="年龄" width="190" sortable></el-table-column>
             <el-table-column

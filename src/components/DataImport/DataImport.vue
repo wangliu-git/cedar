@@ -213,11 +213,11 @@
           </div>
           -->
           <div class="sousuo">
-            <el-input placeholder="请输入关键词..." style="width:500px">
-              <el-button slot="append">搜索</el-button>
+            <el-input placeholder="请输入关键词..." style="width:500px" v-model="search_group"  @keyup.enter.native="groupLists()">
+              <el-button   plain slot="append" @click="groupLists">搜索</el-button>
             </el-input>
           </div>
-           <div class="groupList" >
+           <div class="groupList">
             <el-button v-model="location"  v-for="(it, index) in this.groupList" :key="index" :value="it.group_name" @click="location_name(it)">{{it.group_name}}</el-button>
           </div>
           <div class="name">
@@ -840,8 +840,7 @@
               <div class="text">
                 <span>原始文本</span>
                 <div class="content" >
-                 <span>{{editForm.diagnosis_txt}}</span>
-                 
+                 <span>{{editForm.diagnosis_txt}}</span>               
                 </div>
               </div>
             </div>
@@ -880,12 +879,14 @@ export default {
     this.getDataList();          
   },
   methods:{
-    // 选择分组
-    groupLists(){
-      const {data :res} = this.axios.get('group/list.php').then( res =>{
-        // console.log(res)
-        this.groupList = res.data.data
-      })     
+    // 获取所有分组
+    groupLists() {
+      // alert(1)
+      const { data: res } = this.axios.get("group/list.php",{params:{group_name:this.search_group}}).then(res => {
+        console.log(res);
+        this.groupList = res.data.data;
+        console.log(this.groupList);
+      });
     },
     // 点击分组名
     location_name(it){
@@ -903,11 +904,11 @@ export default {
       this.idss = []
     },
     // 点击添加分组保存
-    async addGroup(item,id){
+    async addGroup(location,id){
       // console.log(item,this.id)
       // console.log(window.sessionStorage.uid)
       var group_name = ''    
-      const res = await this.axios.post('group/add.php',{params:{group_name:item,id:this.id,userid:window.sessionStorage.uid,}}).then( res =>{
+      const res = await this.axios.post('group/add.php',{params:{group_name:location,id:this.id,userid:window.sessionStorage.uid,}}).then( res =>{
         console.log(res)
         this.groupList.push(res.data.data.params)
         console.log(this.groupList)
@@ -1551,8 +1552,10 @@ export default {
   },
   data() { 
     return { 
+      search_group:'',     //搜索分组名
       idss:[],
       row:'',
+      location:'',    //点击选中的分组名
       xiayige:false, 
       groupList:[],
       wenjian:true,
@@ -2585,7 +2588,6 @@ export default {
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus" >
-
 .jiexi {
   background-color #409EFF
   &:hover{

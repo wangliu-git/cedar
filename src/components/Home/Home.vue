@@ -5,32 +5,29 @@
       <el-aside width="240px">
         <!-- 侧边栏菜单区域 -->
         <el-menu
-          text-color="#FFFFFF" active-text-color="#1E7DFE" background-color="#00000000"
+          text-color="#FFFFFF"
+          active-text-color="#1E7DFE"
+          background-color="#00000000"
           unique-opened
           :router="true"
         >
-          <el-menu-item :class="{on: $route.path === '/homepage'}" index="homepage">
+          <el-menu-item index="homepage">
             <i class="iconfont iconshouye"></i>
             <span slot="title">首页</span>
           </el-menu-item>
 
-          <el-menu-item @click="goto('/dataentry')" index="dataentry">
+          <el-menu-item index="dataentry">
             <template slot="title">
               <i class="iconfont iconshujuluru"></i>
               <span>数据录入</span>
-            </template>       
+            </template>
           </el-menu-item>
 
-            <el-menu-item index="dataimport" :class="{on: $route.path === '/dataimport'}">
-             <i class="iconfont iconshujudaoru"></i>数据导入
-            </el-menu-item>
+          <el-menu-item index="dataimport">
+            <i class="iconfont iconshujudaoru"></i>数据导入
+          </el-menu-item>
 
-
-          <el-submenu
-            :class="{on: $route.path === '/dataintegration'}"
-            @click="goto('/dataintegration')"
-            index="1"
-          >
+          <el-submenu index="1">
             <template slot="title">
               <i class="iconfont icondashujuzhenghe"></i>
               <span>数据整合</span>
@@ -40,11 +37,7 @@
             </el-menu-item>
           </el-submenu>
 
-          <el-submenu
-            :class="{on: $route.path === '/datamanage'}"
-            @click="goto('/datamanage')"
-            index="2"
-          >
+          <el-submenu index="2">
             <template slot="title">
               <i class="iconfont iconshujuguanli"></i>
               <span>数据管理</span>
@@ -57,11 +50,7 @@
             </el-menu-item>
           </el-submenu>
 
-          <el-submenu
-            :class="{on: $route.path === '/dataanalysis'}"
-            @click="goto('/dataanalysis')"
-            index="3"
-          >
+          <el-submenu index="3">
             <template slot="title">
               <i class="iconfont icondataAnalysis"></i>
               <span>数据分析</span>
@@ -79,22 +68,9 @@
               <el-menu-item index="try"><i class="iconfont icondian"></i>模拟试用</el-menu-item>         
           </el-submenu>
           -->
-        
-          
-
-          <el-submenu
-            :class="{on: $route.path === '/usermanagement'}"
-            @click="goto('/usermanagement')"
-            index="7"
-          >
-            <template slot="title">
-              <i class="iconfont iconyonghuguanli"></i>
-              <span>用户管理</span>
-            </template>
-            <el-menu-item index="usermanagement">
-              <i class="iconfont icondian"></i>用户管理
-            </el-menu-item>
-          </el-submenu>
+          <el-menu-item index="usermanagement">
+            <i class="iconfont iconyonghuguanli"></i>用户管理
+          </el-menu-item>
         </el-menu>
       </el-aside>
       <el-container class="mian">
@@ -133,14 +109,6 @@ export default {
       this.$router.push("/login");
       window.sessionStorage.clear();
     },
-    goto(path) {
-      if (path == this.$route.path) {
-        // 编程式路由跳转
-        this.$router.push(path);
-      } else {
-        // window.location = path; // 发送一般的http请求 ==> 整个界面会刷新显示
-      }
-    },
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
     },
@@ -165,21 +133,18 @@ export default {
 
 
 <style>
-	.el-submenu__title:hover{ 
-		background-color: #0850C1 !important;
-	}
-	.el-menu-item:hover{
-		background-color: #0850C1 !important;
-	}
-	.el-submenu__title i{
-		color: #FFFFFF !important;
-	}
+.el-submenu__title:hover {
+  background-color: #0850c1 !important;
+}
+.el-menu-item:hover {
+  background-color: #0850c1 !important;
+}
+.el-submenu__title i {
+  color: #ffffff !important;
+}
 </style>
 <style scoped lang="stylus" rel="stylesheet/stylus" >
-
-
-
-.el-menu-item.is-hover{
+.el-menu-item.is-hover {
   outline: 0 !important;
   color: #0850C1 !important;
   background: #FAFAFA !important;
@@ -202,14 +167,15 @@ el-button el-button--default {
 .el-container {
   width: 1920px;
 }
-.el-aside  {
+
+.el-aside {
   height: 100%;
-  background:linear-gradient(180deg,rgba(30,118,254,1),rgba(27,196,255,1)); 
+  background: linear-gradient(180deg, rgba(30, 118, 254, 1), rgba(27, 196, 255, 1));
+
   .el-menu {
     height: 100%;
   }
 }
-
 
 .mian {
   width: 1680px;
@@ -281,9 +247,5 @@ el-button el-button--default {
 
 .el-menu {
   border-right: none;
-
-  .on:focus{
-    background-color: white;
-  }
 }
 </style>

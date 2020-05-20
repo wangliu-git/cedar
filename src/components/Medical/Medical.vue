@@ -113,7 +113,7 @@ export default {
     return {
 			//控制按钮显示隐藏-----
 			
-			sexSsexShowhow:false,
+			sexShow:false,
 			ageShow:false,
 			birthplaceShow:false,
 			address_provShow:false,

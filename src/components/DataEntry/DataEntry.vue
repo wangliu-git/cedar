@@ -66,21 +66,33 @@
           <el-table-column prop="location" label="研究项目" width="300"></el-table-column>
           <el-table-column fixed="right" label="操作" width="300">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="bianji(scope.row)">
+              <el-button type="text"  @click="bianji(scope.row)">
                 <span>编辑</span>
               </el-button>
-              <el-button type="text" size="small" @click="chakan(scope.row,scope.$index)">
+              <el-button type="text"  @click="chakan(scope.row,scope.$index)">
                 <span>查看</span>
               </el-button>
-              <el-button type="text" size="small" @click="dele(scope.row)">
+              <el-button type="text"  @click="dele(scope.row)">
                 <span>删除</span>
               </el-button>
-              <el-button class="jiexi" size="small" v-if="scope.row.status == 1"  @click="jiexi(scope.row)">
+              <el-button class="jiexi" size="mini" v-if="scope.row.status == 1"  @click="jiexi(scope.row)">
                 <i class="iconfont iconxiazai" >开始解析</i>
               </el-button>
-              <el-button class="jiexi" size="small" v-else style="background:#26bc99">
+              <el-button class="jiexi" size="mini" v-else style="background:#26bc99">
                 <i class="iconfont iconxiazai">解析成功</i>
               </el-button>
+              <!--
+                <el-button
+                  size="mini"
+                  @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button
+                  size="mini"
+                  @click="handleEdit(scope.$index, scope.row)">查看</el-button>
+                <el-button
+                  size="mini"
+                  type="danger"
+                  @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                  -->
             </template>
           </el-table-column>
         </el-table>
@@ -194,7 +206,7 @@
       </div>
     </div>
 
-    <!--表单 -->
+    <!--外表单 -->
     <div class="container" id="dataImport" v-if="luru">
       <div class="form">
         <!-- 按钮-->
@@ -216,65 +228,33 @@
                 <i class="iconfont icontubiaozhizuo-"></i>
                 {{patient_infoAll.name}}:
               </template>
-              <!-- 患者信息内容-->
-              <div class="HZdown">
-                <!--病人ID -->
-                <div class="sickItem">
-                  <!-- <span>{{showInfo.patient_id.field_title}}:</span> -->
-                  <span>住院号:</span>
-                  <el-input
-                    type="text"
-                    maxlength="10"
-                    show-word-limit
-                    v-model="editForm.patient_id"
-                    name="patient_id"
-                    size="mini"
-                    placeholder="请输入住院号/门诊号"
-                    style="width:200px"
-                  ></el-input>
-                </div>
-                <!--姓名 <span v-show="editForm.name.length >= maxL">{{textShow}}</span> -->
-                <div class="sickItem">
-                  <span>{{showInfo.name.field_title}}:</span>
-                  <el-input
-                    type="text"
-                    size="mini"
-                    v-model="editForm.name"
-                    name="name"
-                    placeholder="请输入姓名"
-                    style="width:200px"
-                  ></el-input>
-                </div>
+              <el-form :inline="true"  :rules="rules" :label-position="labelPosition" label-width="90px">
+                <el-form-item label="住院号：" prop="patient_id">
+                  <el-input v-model="editForm.patient_id" size="mini" placeholder="请输入住院号/门诊号"  maxlength="10"
+                    show-word-limit></el-input>
+                </el-form-item>
+                
+                <el-form-item label="姓名：">
+                  <el-input v-model="editForm.name"  size="mini" placeholder="请输入姓名"></el-input>
+                </el-form-item>
 
-                <div class="sickItem">
-                  <span>年龄:</span>
-                  <el-input
-                    type="text"
-                    size="mini"
-                    v-model="editForm.age"
-                    name="age"
-                    placeholder="请输入年龄"
-                    style="width:200px"
-                  ></el-input>
-                </div>
-                <!--性別 -->
-                <div class="sickItem">
-                  <span>{{showInfo.sex.field_title}}:</span>
+                <el-form-item label="年龄：">
+                  <el-input v-model="editForm.age" size="mini" placeholder="请输入年龄"></el-input>
+                </el-form-item>
+
+                <el-form-item label="性别：">
                   <el-select
-                    placeholder="请选择"
-                    name="sex"
+                    placeholder="请选择性别"
                     v-model="editForm.sex"
                     size="mini"
-                    style="width:200px"
                   >
                     <el-option v-for="item in showInfo.sex.field_values" :key="item" :value="item">
                       <span>{{item}}</span>
                     </el-option>  
                   </el-select>
-                </div>
-                <!--出生日期 -->
-                <div class="sickItem">
-                  <span>{{showInfo.birthday.field_title}}:</span>
+                </el-form-item>
+
+                <el-form-item label="出生日期">
                   <el-date-picker
                     style="width:200px"
                     name="birthday"
@@ -283,25 +263,15 @@
                     size="mini"
                     placeholder="选择日期"
                   ></el-date-picker>
-                </div>
-                <!-- 联系电话-->
-                <div class="sickItem">
-                  <span>{{showInfo.phone.field_title}}:</span>
-                  <el-input
-                    type="tel"
-                    maxlength="11"
-                    size="mini"
-                    v-model="editForm.phone"
-                    name="phone"
-                    placeholder="请输入电话"
-                    style="width:200px"
-                  ></el-input>
-                </div>
-                <!--民族-->
-                <div class="sickItem">
-                  <span>{{showInfo.nation.field_title}}:</span>
+                </el-form-item>
+
+                <el-form-item label="联系电话：">
+                  <el-input v-model="editForm.phone" size="mini" placeholder="请输入联系电话"></el-input>
+                </el-form-item>
+
+                <el-form-item label="民族：">
                   <el-select
-                    placeholder="请选择"
+                    placeholder="请选择民族"
                     name="nation"
                     v-model="editForm.nation"
                     size="mini"
@@ -315,29 +285,26 @@
                       <span>{{item}}</span>
                     </el-option>
                   </el-select>
-                </div>
-                <!--籍贯-->
-                <div class="sickItem">
-                  <span>{{showInfo.birthplace.field_title}}:</span>
+                </el-form-item>
+
+                <el-form-item label="籍贯：">
                   <el-select
-                    placeholder="请选择"
-                    name="birthplace"
+                    placeholder="请选择籍贯"
+                    name="nation"
                     v-model="editForm.birthplace"
                     size="mini"
-                    style="width:200px"
-                  >
+                    style="width:200px">
                     <el-option
                       v-for="(provinces) in showInfo.birthplace.field_values"
                       :key="provinces"
-                      :value="provinces"
-                    >
+                      :value="provinces">
                       <span>{{provinces}}</span>
                     </el-option>
                   </el-select>
-                </div>
-                <!--居住地-->
-                <div class="sickItem">
-                  <span>{{showInfo.address_prov.field_title}}:</span>
+                </el-form-item>
+
+                <el-form-item label="居住地：">
+
                   <el-select
                     placeholder="请选择"
                     name="birthplace"
@@ -353,12 +320,8 @@
                       <span>{{provinces}}</span>
                     </el-option>
                   </el-select>
-                </div>
-                <!--  市/区
-                <select name="birthplace" v-model="patient.address_prov">
-                <option v-on="changeaddress_prov(cities)" v-for="(cities) in showInfo.birthplace.field_values.cities" :key="cities" :value="citles">{{provinces.citles}}</option>
-                </select>-->
-              </div>
+                </el-form-item>
+              </el-form>
             </el-collapse-item>
           </el-collapse>
 
@@ -368,56 +331,46 @@
               <template slot="title" style="background-color:rgba(232, 232, 232, 1)">
                 <i class="iconfont icontubiaozhizuo-"></i>
                 {{diagnosis_1_info.name}}
-              </template>
-              <div class="origindown">
+              </template>             
+              <div class="origindown">            
                 <!--报告信息 -->
                 <div class="sickIH">
                   <div class="title">
                     <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
                     {{reportMessage.name}}:
                   </div>
-                  <div class="sickItem">
-                    <span>{{fMInstitution.organization.field_title}}:</span>
-                    <el-input
-                      type="text"
-                      v-model="editForm.organization"
-                      placeholder="请输入机构名称"
-                      size="mini"
-                      style="width:200px"
-                    ></el-input>
-                  </div>
-                  <div class="sickItem">
-                    <span>{{fMInstitution.test_id.field_title}}:</span>
-                    <el-input
-                      type="text"
-                      v-model="editForm.test_id"
-                      placeholder="请输入病理号"
-                      size="mini"
-                      style="width:200px"
-                    ></el-input>
-                  </div>
-                  <div class="sickItem">
-                    <span>{{fMInstitution.application_date.field_title}}:</span>
-                    <el-date-picker
-                      name="application_date"
-                      style="width:200px"
-                      v-model="editForm.application_date"
-                      type="date"
-                      size="mini"
-                      placeholder="选择日期"
-                    ></el-date-picker>
-                  </div>
-                  <div class="sickItem">
-                    <span>{{fMInstitution.report_date.field_title}}:</span>
-                    <el-date-picker
-                      name="report_date"
-                      style="width:200px"
-                      v-model="editForm.report_date"
-                      type="date"
-                      size="mini"
-                      placeholder="选择日期"
-                    ></el-date-picker>
-                  </div>
+                  <el-form :inline="true"  :rules="rules" :label-position="labelPosition" label-width="90px">
+                    <el-form-item label="姓名：">
+                      <el-input v-model="editForm.name"  size="mini" placeholder="请输入姓名"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="年龄：">
+                      <el-input v-model="editForm.age" size="mini" placeholder="请输入年龄"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="性别：">
+                      <el-select
+                        placeholder="请选择性别"
+                        v-model="editForm.sex"
+                        size="mini"
+                      >
+                        <el-option v-for="item in showInfo.sex.field_values" :key="item" :value="item">
+                          <span>{{item}}</span>
+                        </el-option>  
+                      </el-select>
+                    </el-form-item>
+
+                    <el-form-item label="出生日期">
+                      <el-date-picker
+                        style="width:200px"
+                        name="birthday"
+                        v-model="editForm.birthday"
+                        type="date"
+                        size="mini"
+                        placeholder="选择日期"
+                      ></el-date-picker>
+                    </el-form-item>
+                  </el-form>
                 </div>
                 <!--诊断结论 -->
                 <div class="sickIH">
@@ -929,8 +882,8 @@
           </div>
           -->
           <div class="sousuo">
-            <el-input placeholder="请输入关键词..." style="width:500px">
-              <el-button   plain slot="append">搜索</el-button>
+            <el-input placeholder="请输入关键词..." style="width:500px" v-model="search_group"  @keyup.enter.native="groupLists()">
+              <el-button   plain slot="append" @click="groupLists">搜索</el-button>
             </el-input>
           </div>
           <div class="groupList">
@@ -1136,7 +1089,7 @@ export default {
     // 获取选择分组
     groupLists() {
       // alert(1)
-      const { data: res } = this.axios.get("group/list.php").then(res => {
+      const { data: res } = this.axios.get("group/list.php",{params:{group_name:this.search_group}}).then(res => {
         console.log(res);
         this.groupList = res.data.data;
         console.log(this.groupList);
@@ -1159,14 +1112,14 @@ export default {
       this.queryInfo.pagerows = res.pagerows; //每页显示多少条
     },
     // 点击添加分组保存
-    async addGroup(item, id) {
-      console.log(item)
+    async addGroup(location, id) {
+      console.log(location)
       // console.log(window.sessionStorage.uid)
-      var group_name = ""; 
+      let group_name = ""; 
       const res = await this.axios
         .post("group/add.php", {
           params: {
-            group_name: item,
+            group_name: location,
             id: this.id,
             userid: window.sessionStorage.uid,
             username: window.sessionStorage.username,           
@@ -1183,7 +1136,7 @@ export default {
               type: "success",
               callback: action => {
                 // this.search = !this.search
-                this.groupList = [];
+                // this.groupList = [];
                 this.groupLists();
                 this.groupName = "";
               }
@@ -1196,8 +1149,7 @@ export default {
             });
           }
         });
-      // console.log(data)
-      
+      // console.log(data)   
     },
     // 点击确定
     async sure(id) {
@@ -1288,13 +1240,13 @@ export default {
         center: true
       })
       .then(() => {
-        const { data: res } = this.axios .get("dataset/del.php", { params: { id: row.id } });
+        const { data: res } = this.axios .get("dataset/del.php", { params: { id: row.id }});
         this.$message({
           type: "success",
           message: "删除成功!"
         });
         this.datalist = [];
-          this.getDataList();
+        this.getDataList();
       })
       .catch(() => {
         this.$message({
@@ -1330,6 +1282,9 @@ export default {
       } 
       if( this.editForm.report_date === '0000-00-00'){
         this.editForm.report_date = ''
+      } 
+      if( this.editForm.birthday === '0000-00-00'){
+        this.editForm.birthday = ''
       } 
       if( this.editForm.birthday === '0000-00-00'){
         this.editForm.birthday = ''
@@ -1509,7 +1464,7 @@ export default {
       this.luru = false;
       this.ji = true;
       this.sousuo = true;
-    },
+    },  
     // 多选框
     func1: function(value) {
       if (this.checkList.length == 0) {
@@ -1575,6 +1530,10 @@ export default {
       this.report.help_diagnosis = this.help_diagnosis;
       // this.jilian = this.editForm.jilian;
       console.log(this.editForm);
+      // if(this.editForm.application_date == ''){
+      //   alert('请填写姓名')
+      //   this.zhezhao = false
+      // }
     },
     // // 免疫租化增删
     // ihcAddData( ihcItem,value) {
@@ -1832,6 +1791,13 @@ export default {
   },
   data() {
     return {
+      rules:{
+        patient_id: [
+            { required: true, message: '请输入活动名称', trigger: 'blur' },
+              ],
+      },
+      labelPosition:'left',
+      search_group:'',        //搜索分组名
       onechoose:[],
       twochoose:[],
       threechoose:[],
@@ -2262,6 +2228,8 @@ export default {
       // 大数组
       sicksArr: [],
       // 表单提交信息
+      user:'',
+      region:'',
       patient: {
         key: uuid(), //唯一标识
         patient_id: "", //病人ID
@@ -2796,6 +2764,9 @@ export default {
 
 
 <style>
+.el-form-item{
+  margin-left: 50px;
+}
 .el-button + .el-button {
   margin-left: 0;
 }

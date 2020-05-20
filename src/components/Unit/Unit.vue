@@ -36,7 +36,7 @@
             ></el-input>
             <el-input
               size="mini"
-              placeholder="请输入住院号"
+              placeholder="请输入病人ID"
               prefix-icon="el-icon-search"
               style="width:180px"
               v-model="patient_id" @keyup.enter.native="getTable()"
@@ -489,7 +489,6 @@
   </div>
 </template>
 
-
 <script type="text/ecmascript-6">
 import uuid from "uuid";
 import allMessage from "../../staic/allMessage.json";
@@ -603,8 +602,7 @@ export default {
               message: "已取消删除"
             });
           });
-      });
-      
+      });      
     },
     // 点击添加
     async tianjia(row) {   
@@ -638,10 +636,8 @@ export default {
       if(this.editForm.diagnosis3 != ''){
         this.jilian.push(this.editForm.diagnosis3)
       }
-      this.editForm.jilian = this.jilian     
-     
-      // this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2)
-        
+      this.editForm.jilian = this.jilian          
+      // this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2)       
       // this.rowAdd = row  
     },
     // 清空
@@ -715,8 +711,9 @@ export default {
     // 搜索
     async getTable() {
       // console.log(row.id)
+      let group_id = "";
       const { data: res } = await this.axios.get("diagnosis_origin/list.php", {
-        params:{name: this.name, test_id: this.test_id }
+        params:{name: this.name, test_id: this.test_id,group_id :this.it,patient_id:this.patient_id}
       });
       // console.log(this.test_id)
       // console.log(this.name)

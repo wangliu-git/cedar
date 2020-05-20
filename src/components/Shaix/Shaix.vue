@@ -352,26 +352,28 @@
               <div class="duan">
                 <span>标志物:</span>
                 <el-select
+                  multiple
                   v-model="edit.mark"
                   placeholder="请选择"
                   size="mini"
                   style="width:200px"
-                  multiple @change="shaixuan()"
+                   @change="shaixuan()"
                 > 
-                  <el-option v-for="(item,index) in this.mark" :key="index"  :value="item"></el-option>              
+                  <el-option v-for="(item,index) in this.markList" :key="index"  :value="item">{{item}}</el-option>              
                 </el-select>
               </div>
 
               <div class="duan">
                 <span>检测结果 ：</span>
                 <el-select
+                  multiple
                   v-model="edit.value"
                   placeholder="请选择"
                   size="mini"
                   style="width:200px"
-                  multiple @change="shaixuan()"
+                   @change="shaixuan()"
                 >
-                  <el-option v-for="(item,index) in this.value" :key="index"  :value="item">{{item}}</el-option>
+                  <el-option v-for="(item,index) in this.valueList" :key="index"  :value="item"></el-option>
                 </el-select>
             </div> 
 
@@ -606,9 +608,9 @@
         <div class="mian">
           <div class="groupList">
             <el-button
-              style="width:300px"
+              v-model="location"
               @click="group_id(it)"
-              v-for="(it, index) in this.groupList"
+              v-for="(it, index) in this.groupLists"
               :key="index"
               :value="it.group_name"
             >{{it.group_name}}</el-button>
@@ -1287,19 +1289,23 @@
   </div>
 </template>
 
-
-
 <script type="text/ecmascript-6">
 import uuid from "uuid";
 import allMessage from "../../staic/allMessage.json";
 export default {
   data() {
-    return { 
-      whole:'',
+    return {   
+      sickIhc:[
+        {
+          mark:'',
+          value:''
+        }
+      ],
+      ihcArr:[],          //免疫组化数组 
+      whole:'',            //全文检索
       twochoose:[],
-      ids: [], //ID 们
-      // 新建分组名
-      groupName: "",
+      ids: [],            //ID 们
+      groupName: "",      //创建的分组名
       multiple: true,
       checkList: [
         "免疫组化",
@@ -1698,9 +1704,10 @@ export default {
       report_date: "", //报告日期
       sample_type: "", //标本类型
       sample_location: "", //取材部位
-     
-      mark:[],   //标志物
-      value:[],   //结果
+      mark:'',
+      value:'',
+      markList:[],   //标志物
+      valueList:[],   //结果
       dataForm:['数据录入','数据导入'],
       Integrate:['有原单位报告','无原单位报告'],
       jilian: [],
@@ -1963,7 +1970,7 @@ export default {
       let name = ''
       const res= await this.axios.get('report/option.php?table=ly_helper_diagnosis&name=mark').then( res =>{
         console.log(res)
-        this.mark = res.data.option
+        this.markList = res.data.option
         // console.log(this.mark)
       })
     },
@@ -1971,7 +1978,7 @@ export default {
       let name = ''
       const res= await this.axios.get('report/option.php?table=ly_helper_diagnosis&name=value').then( res =>{
         console.log(res)
-        this.value = res.data.option
+        this.valueList = res.data.option
         // console.log(this.result)
       })
     }, 
@@ -1993,7 +2000,7 @@ export default {
     groupList() {
       const res  = this.axios.get("group/list.php").then(res => {
         console.log(res);
-        this.groupList = res.data.data;
+        this.groupLists = res.data.data;
         // this.groupList.map( ( items ,index ) => {
         //   console.log(items)
         // })
@@ -2137,14 +2144,14 @@ export default {
 
     },
     // 点击添加分组
-    async addGroup(item, ids) {
-      // console.log(item);
+    async addGroup(groupName, ids) {
+      console.log(groupName);
       // console.log(window.sessionStorage.username);
-      var group_name = "";
-      const { data: res } = await this.axios
+      var group_name = ""
+      const  res  = await this.axios
         .post("group/add.php", {
           params: {
-            group_name: item.group_name,
+            group_name: this.groupName,
             userid: window.sessionStorage.uid,
             ids: this.ids,
             username: window.sessionStorage.username
@@ -2152,12 +2159,18 @@ export default {
         })
         .then(res => {
           console.log(res);
+          this.groupLists.push(res.data.data.params.group_name);
+          console.log(this.groupLists)
           var result = res.data; //JSON.parse(res.body);
           if (result.result) {
             this.$alert("添加成功", "提交结果", {
               confirmButtonText: "确定",
               type: "success",
-              callback: action => {}
+              callback: action => {
+                this.groupLists = [];
+                this.groupList();
+                this.groupName = "";              
+              }
             });
           } else {
             this.$alert("添加失败", "提交结果", {
@@ -2318,7 +2331,7 @@ export default {
       console.log(this.editForm);
     },
     // 免疫租化增删
-    ihcAddData( mark,value) {
+    ihcAddData(mark,value) {
       //判断当前数组的对象是否有数据
       console.log(ihcItem);
         if (mark || value){
@@ -2339,6 +2352,23 @@ export default {
       } else {
         alert("最少保留一个");
       }
+    },
+    // 筛选免疫租化增删
+    ihcAdd() {
+      if (this.edit.mark || this.edit.value){
+        //验证通过 添加新的一条
+        var newValue = {
+            mark: this.edit.mark,
+            value:  this.edit.value
+        };
+      //  this.ihcArr.push(this.edit.mark,this.edit.value);
+        this.ihcArr.push(newValue);
+      } else {
+        alert("请检查输入是否正确");
+      }     
+      console.log(this.ihcArr)
+      // console.log(this.edit.mark)
+      // console.log(this.edit.value)
     },
   },
   mounted() {
@@ -2996,7 +3026,6 @@ export default {
   height: 100%;
   background-color: rgba(245, 247, 251, 0.7);
   z-index: 9;
-
   .nei {
     border-radius: 5px;
     width: 550px;
@@ -3009,7 +3038,6 @@ export default {
     margin: auto;
     background-color: #FAFAFA;
     z-index: 10;
-
     // 头
     .title {
       display: flex;
@@ -3018,29 +3046,23 @@ export default {
       color: white;
       background-color: rgba(41, 184, 252, 1);
     }
-
     // 主体
     .mian {
       background-color: #FAFAFA;
-
       .ming {
         margin-left: 20px;
         margin-top: 10px;
-
         span {
           width: 100px;
         }
       }
-
       .cun {
         margin-left: 30px;
         margin-top: 10px;
-
         span {
           width: 100px;
         }
       }
-
       // 搜索
       .sousuo {
         margin: 20px 20px 10px 20px;
@@ -3048,23 +3070,19 @@ export default {
 
       .groupList {
         width: 500px;
+        height 300px
         border: 1px solid #DCDFE6;
         margin: 20px 20px;
         display: flex;
-        flex-flow: column;
-        justify-content: space-evenly;
-
-        .el-button {
-          margin-left: 20px;
-          font-size: 16px;
-          margin-top: 10px;
+        flex-flow: column;    
+        overflow: scroll;
+        .el-button {        
+          font-size: 16px;       
         }
       }
-
       .name {
         margin-left: 20px;
       }
-
       .button {
         float: right;
         margin-top: 10px;
