@@ -92,7 +92,7 @@
             <el-button :class="{showBtns:mark1Show}" plain @click="drawLineJ_Check(mark)">生物标记物检测率</el-button >
             <el-button :class="{showBtns:mark2Show}" plain @click="drawLineY_Check(mark)">生物标记物阳性率</el-button >
             <el-button :class="{showBtns:diff_dayShow}" plain @click="drawLineDiff_day(diff_day)">诊断时长</el-button >
-            <el-button v-show="this.type == 0" plain @click="drawLineDia()" >各个病理类型分布</el-button >
+            <el-button :class="{showBtns:bingShow}" v-show="this.type == 0" plain @click="drawLineDia()" >各个病理类型分布</el-button >
             <!--@click="drawLineDia()" -->
           </div>
           <div id="tu"></div>
@@ -113,7 +113,7 @@ export default {
     return {
 			//控制按钮显示隐藏-----
 			
-			sexShow:false,
+			sexSsexShowhow:false,
 			ageShow:false,
 			birthplaceShow:false,
 			address_provShow:false,
@@ -122,6 +122,7 @@ export default {
 			mark1Show:false,
 			mark2Show:false,
 			diff_dayShow:false,
+			bingShow:false,
 			
 			//--------------------
 			
@@ -654,6 +655,7 @@ export default {
 			this.mark1Show=false;
 			this.mark2Show=false;
 			this.diff_dayShow=false;
+			this.bingShow=false;
 		},
     // 点击获取创建人姓名
     getName(){    
@@ -2672,6 +2674,8 @@ export default {
     },
     // 病理类型--柱状图
     async drawLineDia() {
+      this.buttonsShowCon();
+			this.bingShow=true;
       // myChart.showLoading(); myChart.hideLoading();  //等待效果
       // 基于准备好的dom，初始化echarts实例
       // console.log(document.getElementById('tu'))   样式

@@ -549,8 +549,7 @@ export default {
     async look(row) { 
       this.zhezhao = true;
       console.log(row);
-      const { data: res } = await this.axios.get("diagnosis_origin/one.php", {
-        params: { id: row.id }
+      const { data: res } = await this.axios.get("diagnosis_origin/one.php",{params:{id:row.id}
       })
       console.log(res);   
       this.rowAdd = row
@@ -621,8 +620,7 @@ export default {
       this.zhezhao = true;
       console.log(row);
       this.rowAdd = row
-      const { data: res } = await this.axios.get("diagnosis_origin/one.php", {
-        params: { id: row.id }
+      const { data: res } = await this.axios.get("diagnosis_origin/one.php",{params:{id:row.id }
       });
       console.log(row.id);
       console.log(res);
