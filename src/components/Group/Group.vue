@@ -166,7 +166,7 @@
           </div>
           <div class="btns">
             <el-button @click="daochu =false">取消</el-button>
-            <el-button @click="sure()">确认导出</el-button>
+            <el-button @click="sure()"><a href="javascript:;"> 确认导出</a></el-button>
           </div>
         </div>
       </div>
@@ -243,10 +243,18 @@
           </div>
           <div class="ZD">
             <button>本单位诊断信息</button>
+            <div >
+              <span>取材部位：</span>
+              {{editForm.sample_location}}
+            </div>
+            <div style="float:left">
+              <span>标本类型：</span>
+              {{editForm.sample_type}}
+            </div>
             <div>
               诊断结论
               <span>病理类型：</span>
-              {{editForm.diagnosis}}
+              {{editForm.diagnosis2}}
             </div>
             <div>
               <span>淋巴细胞来源：</span>
@@ -379,11 +387,12 @@ export default {
     },
     // 确认导出
     async sure() {
-      console.log(this.id);
+      // console.log(this.id);
       let z = "";
-      const res = await this.axios.get("group_report/list.php", {
-        params: { group_id: this.id, z: 1 }
-      });
+      window.location.href ='http://106.13.49.232/cedar/api/group_report/list.php?group_id=48&z=1'
+      // const res = await this.axios.get("group_report/list.php", {
+      //   params: { group_id: this.id, z: 1 }
+      // });
       console.log(res);
     },
     // 点击导出

@@ -76,10 +76,10 @@
                 <span>删除</span>
               </el-button>
               <el-button class="jiexi" size="small" v-if="scope.row.status == 1"  @click="jiexi(scope.row)">
-                <span class="iconfont iconxiazai" >开始解析</span>
+                <i class="iconfont iconxiazai" >开始解析</i>
               </el-button>
               <el-button class="jiexi" size="small" v-else style="background:#26bc99">
-                <span class="iconfont iconxiazai">解析成功</span>
+                <i class="iconfont iconxiazai">解析成功</i>
               </el-button>
             </template>
           </el-table-column>

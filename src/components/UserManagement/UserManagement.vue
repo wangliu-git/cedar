@@ -103,7 +103,7 @@
             </el-form-item>
             <el-form-item>
               <el-button plain @click="group =false">取消</el-button>
-              <el-button plain @click="bianji(userData)">确定</el-button>
+              <el-button plain @click="bianji('ruleForm',userData)">确定</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -165,7 +165,7 @@
             </el-form-item>
             <el-form-item>
               <el-button plain @click="Add =false ">取消</el-button>
-              <el-button plain @click="tianjia()">确定</el-button>
+              <el-button plain @click="tianjia('ruleForm')">确定</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -178,6 +178,14 @@
 export default {
   data() {
     return {
+      ruleForm: {
+       role_id:'',
+      },
+      rules:{
+       role_id: [        
+          { required: true, message: '请选择用户权限', trigger: 'change' }        
+        ]
+      },
       Add: false,
       // 修改用户信息
       userData: {
@@ -242,7 +250,6 @@ export default {
       const { data: res } = await this.axios.get("user/list.php", {
         params: { page: this.queryInfo.page }
       });
-
       this.userlist = res.data;
       console.log(this.userlist);
       this.queryInfo.page = parseInt(res.page);
@@ -276,6 +283,7 @@ export default {
           memo: this.addUserList.memo
         }
       });
+      this.addUserList = {}
       console.log(res.data);
       this.getUserList();
     },

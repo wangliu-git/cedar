@@ -647,6 +647,7 @@ export default {
     // 清空
     qingkong() {
       // this.zhezhao = !this.zhezhao;
+      this.editForm = {}
     },
     // 保存
     baocun(editForm) {

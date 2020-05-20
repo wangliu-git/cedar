@@ -560,6 +560,14 @@
           </div>
           <div class="ZD">
             <button>本单位诊断信息</button>
+            <div >
+              <span>取材部位：</span>
+              {{editForm.sample_location}}
+            </div>
+            <div style="float:left">
+              <span>标本类型：</span>
+              {{editForm.sample_type}}
+            </div>
             <div>
               诊断结论
               <span>病理类型：</span>
