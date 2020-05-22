@@ -59,7 +59,7 @@
             style="width: 100%"
             border
             stripe
-            :header-cell-style="{color:'#333333'}" highlight-current-row="true"
+            :header-cell-style="{color:'#333333'}" 
           >
             <el-table-column type="selection" width="40"></el-table-column>
             <el-table-column prop="patient_id" label="病人ID" width="200" sortable></el-table-column>
@@ -513,6 +513,26 @@ export default {
     this.getgroupList();
   },
   methods: {
+    handleSuccess(response, file, fileList) {
+      this.$success("上传成功");
+    },
+    handleError() {
+      this.$error("上传失败,请重新上传图片!");
+    },
+    handleBeforeUpload(file) {
+      const isImage = file.type.includes("image");
+      if (!isImage) {
+        this.$message.error("上传文件类型必须是图片!");
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        this.$message.error("上传图片大小不能超过 2MB!");
+      }
+      return isImage && isLt2M;
+    },
+    handleProgress(event, file, fileList) {
+      this.loading = true;  //  上传时执行loading事件
+    },
     handleRemove() {
       console.log(file, fileList);
     },

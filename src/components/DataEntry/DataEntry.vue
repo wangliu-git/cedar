@@ -1052,7 +1052,7 @@ export default {
   methods: {
     get2(){
       this.options.map((item, index) => {
-        // console.log(item.children);
+        console.log(item.children);
         item.children.map((it, index) => {
           // console.log(it);
           this.twochoose.push(it.value);         
