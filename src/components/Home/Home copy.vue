@@ -5,13 +5,13 @@
       <el-aside width="240px">
         <!-- 侧边栏菜单区域 -->
         <el-menu   text-color="#FFFFFF" active-text-color="#1E7DFE" unique-opened :router="true">
-          <el-menu-item  :class="{on: $route.path === '/homepage'}" @click="goto('/homepage')">
+          <el-menu-item   @click="goto('/homepage')">
             <i class="iconfont iconshouye"></i>
             <span slot="title">首页</span>
           </el-menu-item>
 
 
-          <el-submenu   @click="goto('/dataentry')" index="4">
+          <el-submenu   @click="goto('/dataentry')" index="4" >
             <template slot="title">
               <i class="iconfont iconshujuluru"></i>
               <span>数据录入</span>

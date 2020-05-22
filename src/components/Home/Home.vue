@@ -16,14 +16,14 @@
             <span slot="title">首页</span>
           </el-menu-item>
 
-          <el-menu-item index="dataentry">
+          <el-menu-item index="dataentry" :class="{on: $route.path === '/dataentry'}">
             <template slot="title">
               <i class="iconfont iconshujuluru"></i>
               <span>数据录入</span>
             </template>
           </el-menu-item>
 
-          <el-menu-item index="dataimport">
+          <el-menu-item index="dataimport" :class="{on: $route.path === '/dataimport'}">
             <i class="iconfont iconshujudaoru"></i>数据导入
           </el-menu-item>
 
@@ -68,6 +68,7 @@
               <el-menu-item index="try"><i class="iconfont icondian"></i>模拟试用</el-menu-item>         
           </el-submenu>
           -->
+
           <el-menu-item index="usermanagement">
             <i class="iconfont iconyonghuguanli"></i>用户管理
           </el-menu-item>

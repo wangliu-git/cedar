@@ -20,7 +20,7 @@
           </span>
           <el-button
             round
-            style="font-size:16px;font-family:Microsoft YaHei;font-weight:400;color:rgba(23,163,209,1);"
+            style="font-size:16px;font-family:Microsoft YaHei;font-weight:400;color:rgba(23,163,209,1);"  @click="go_jy"
           >去校验</el-button>
         </div>
       </div>
@@ -41,7 +41,7 @@
           </span>
           <el-button
             round
-            style="font-size:16px;font-family:Microsoft YaHei;font-weight:400;color:rgba(23,163,209,1);"
+            style="font-size:16px;font-family:Microsoft YaHei;font-weight:400;color:rgba(23,163,209,1);" @click="go_lr" 
           >开始录入</el-button>
         </div>
       </div>
@@ -62,7 +62,7 @@
           </span>
           <el-button
             round
-            style="font-size:16px;font-family:Microsoft YaHei;font-weight:400;color:rgba(23,163,209,1);"
+            style="font-size:16px;font-family:Microsoft YaHei;font-weight:400;color:rgba(23,163,209,1);"  @click="go_zh"
           >外院首诊报告录入</el-button>
         </div>
       </div>
@@ -121,7 +121,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-
 import echarts from "echarts";
 
 export default {
@@ -137,6 +136,15 @@ export default {
     });
   },
   methods: {
+    go_jy(){
+      this.$router.replace('/dataimport')
+    },
+    go_lr(){
+      this.$router.replace('/dataentry')
+    },
+    go_zh(){
+      this.$router.replace('/unit')
+    },
     // echarts图
     async darwPie2() {
       const res = await this.axios.get("report/stat_day.php");

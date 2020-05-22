@@ -495,17 +495,34 @@ import uuid from "uuid";
 import allMessage from "../../staic/allMessage.json";
 
 export default {
+    //  <el-upload   
+    //         class="upload-demo"
+    //         action="http://106.13.49.232/cedar/api/diagnosis_origin/add.php"
+    //         :on-preview="handlePreview"
+    //         :on-remove="handleRemove"
+    //         :file-list="fileList"
+    //         list-type="picture">
+    //         <el-button size="small" type="primary">点击上传</el-button>
+    //         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+    //       </el-upload>
+    // handleRemove(file, fileList) {
+    //   console.log(file, fileList);
+    // },
+    // handlePreview(file) {
+    //   console.log(file);
+    // },
   created() {  
     // this.getTableList();
     this.getgroupList();
   },
   methods: {
+
     // 上传图片成功
-    imgSuccess(res, file, fileList) {
-      console.log(res);
-      console.log(file);
-      console.log(fileList); // 这里可以获得上传成功的相关信息
-    },
+    // imgSuccess(res, file, fileList) {
+    //   console.log(res);
+    //   console.log(file);
+    //   console.log(fileList); // 这里可以获得上传成功的相关信息
+    // },
     // 选择分组
     getgroupList() {
       const { data: res } = this.axios.get("group/list.php").then(res => {

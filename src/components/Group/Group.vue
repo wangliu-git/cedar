@@ -27,11 +27,12 @@
           <div class="storageList">
             <div class="list" style="width:96%">
               <el-table
-                :data="datalist"
-                highlight-current-row
+                :data="datalist"              
                 style="width: 100%"
                 border
-                stripe
+                
+                :row-class-name="tableRowClassName"
+	              :row-style="selectedstyle"
                 :header-cell-style="{color:'#333333'}"  @current-change="handleSelectionChange"
               >
                 <el-table-column prop="id" label="项目编号" width="250"></el-table-column>
@@ -81,7 +82,7 @@
 
         <!--全部创建者的数据 -->
         <div class="down">
-          <el-table :data="tablelist" tooltip-effect="dark" style="width: 100%" border stripe>
+          <el-table :data="tablelist" tooltip-effect="dark" style="width: 100%" border stripe  highlight-current-row>
             <el-table-column type="selection" width="40"></el-table-column>
             <el-table-column prop="test_id" label="病理号" width="190" sortable></el-table-column>
             <el-table-column prop="name" label="姓名" width="190" sortable></el-table-column>
@@ -143,6 +144,7 @@
         </div>
       </div>
     </div>
+
     <!--脱敏导出-->
     <div class="DAO" v-if="daochu">
       <div class="DC">
@@ -170,6 +172,7 @@
         </div>
       </div>
     </div>
+
     <!-- 查看列表单个信息-->
     <div class="zhezhao" v-if="zhezhao">
       <div class="look">
@@ -292,6 +295,7 @@
 export default {
   data() {
     return {
+      getIndex:"",
       peopleList:[],   //创建人数组
       groupname:'',   //创建人
       row:'',    //缓存的row
@@ -365,22 +369,34 @@ export default {
     this.getDataList();
   },
   methods: {
+    selectedstyle ({row, rowIndex}) {
+      if ((this.getIndex) === rowIndex ) {
+        return {
+        "background-color": "#C1C1C1"
+        };
+      }
+    },
+    tableRowClassName ({row, rowIndex}) {
+      row.index = rowIndex;
+    },
     // 点击；列表行
     handleSelectionChange(row) {
+      this.getIndex=row.index
       this.chuangjian = true;
       this.row = row
-      console.log(row);
+      // console.log(row);
       let group_id = "";
       const { data: res } = this.axios
-        .get("report/list.php", { params: { group_id: row.id } })
+        .get("report/list.php", { params: { group_id: row.id,page: this.queryInfo.page} })
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.tablelist = res.data.data;
           this.queryInfo.page = parseInt(res.data.page);
           this.queryInfo.count = parseInt(res.data.count); //总条数
-          console.log(this.queryInfo.page);
-          console.log(this.queryInfo.count);
-          console.log(this.queryInfo.pagerows);
+          // console.log(this.queryInfo.page);
+          // console.log(this.queryInfo.count);
+          // console.log(this.queryInfo.pagerows);
+   
         });
       
     },
@@ -420,7 +436,7 @@ export default {
     },
     // 分组删除
     del(row) {
-      this.$confirm("确定删除该数据？, 是否继续?", "提示", {
+      this.$confirm("确定删除该数据？是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
@@ -458,9 +474,10 @@ export default {
     },  
     // 获取分组列表
     async getDataList() {
-      const { data: res } = await this.axios.get("group/list.php");
+      const { data: res } = await this.axios.get("group/list.php",{params:{page:this.shuInfo.page}});
       this.datalist = res.data;
       this.peopleList = this.datalist 
+      //  this.peopleList = [...new Set(this.peopleList)];  
       console.log(this.datalist);
       this.shuInfo.page = parseInt(res.page);
       this.shuInfo.count = parseInt(res.count); //总条数
@@ -486,7 +503,7 @@ export default {
     handleCurrentChange1(newPage) {
       this.shuInfo.page = newPage;
       // console.log(this.shuInfo.page)
-      this.getDataList();
+      this.getDataList()
     },
     // 病理号删除
     async dele(row) {
@@ -555,6 +572,14 @@ export default {
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus" >
+
+.el-table__body tr.current-row>td{
+  background-color: #bfc !important;
+    color: #fff;
+}
+a{
+  color black
+}
 .iconshujufenxi {
   color: white;
   margin: 10px;

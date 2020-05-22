@@ -25,10 +25,10 @@
             <div class="list" style="width:96%">
               <el-table
                 :data="datalist"
-                highlight-current-row
                 style="width: 100%"
                 border
-                stripe
+                :row-class-name="tableRowClassName"
+	              :row-style="selectedstyle"
                 :header-cell-style="{color:'#333333'}"
                 @current-change="handleSelectionChange"
               >
@@ -111,6 +111,7 @@ import './js/util'
 export default {
   data() {
     return {
+      getIndex:"",  //点击列表行
 			//控制按钮显示隐藏-----
 			
 			sexShow:false,
@@ -644,6 +645,18 @@ export default {
     });
   },
   methods: {
+    // 点击表格行背景色
+    selectedstyle ({row, rowIndex}) {
+      console.log('rowIndex',rowIndex,'this.getIndex',this.getIndex)
+      if ((this.getIndex) === rowIndex ) {
+        return {
+        "background-color": "#C1C1C1"
+        };
+      }
+    },
+    tableRowClassName ({row, rowIndex}) {
+      row.index = rowIndex;
+    },
 		//控制显示的公用方法
 		buttonsShowCon(){
 			this.sexShow=false;
@@ -671,7 +684,7 @@ export default {
    
     // 分组删除
     del(row) {
-      this.$confirm("确定删除该数据？, 是否继续?", "提示", {
+      this.$confirm("确定删除该数据？是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
@@ -695,7 +708,7 @@ export default {
           });
         });
     },
-       // 病理号切换每页显示多少条
+    // 病理号切换每页显示多少条
     handleSizeChange(newSize) {
       this.queryInfo.pagerows = newSize;
       this.getDataList();
@@ -707,6 +720,7 @@ export default {
     },
     // 点击列表行
     handleSelectionChange(row) {
+      this.getIndex=row.index
       this.id = row.id;
       console.log(row);
       return this.id;
@@ -2228,8 +2242,8 @@ export default {
         //X轴、Y轴名称
         // let xAxisText = getAxisName(type)[0];
         // let yAxisText = getAxisName(type)[1];
-        let xAxisText = "检测率";
-        let yAxisText = "数值";
+        let xAxisText = "标志物";
+        let yAxisText = "检测率";
 
         //一个分析维度
         // console.log("myChart:", myChart);
@@ -2259,6 +2273,7 @@ export default {
             top: "10px",
             textAlign: "center"
           },
+         
           tooltip: {
             //提示框组件
             trigger: "axis", //触发类型：axis-坐标轴触发
@@ -2481,8 +2496,8 @@ export default {
         //X轴、Y轴名称
         // let xAxisText = getAxisName(type)[0];
         // let yAxisText = getAxisName(type)[1];
-        let xAxisText = "阳性率";
-        let yAxisText = "数值";
+        let xAxisText = "标志物";
+        let yAxisText = "阳性率";
 
         //一个分析维度
         // console.log("myChart:", myChart);
@@ -2610,6 +2625,7 @@ export default {
             //     "Legend":false
             // }
           },
+         
           grid: {
             //直角坐标系内绘图网格
             top: "8%",

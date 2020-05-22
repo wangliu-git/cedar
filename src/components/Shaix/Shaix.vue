@@ -346,7 +346,7 @@
                   <span>{{item}}</span>
                 </el-option>
               </el-select>          
-            </div>     
+            </div>    
 
             <div class="zhenD">           
               <div class="duan">
@@ -579,7 +579,7 @@
             <div style="float:left">
               辅助诊断
               <span>免疫组化：</span>
-              <th  v-for="(item,index) in this.helper_diagnosis.ihc" :key="index" :value="item">
+              <th  v-for="(item,index) in editForm.helper_diagnosis.ihc" :key="index" :value="item">
                 <td>{{item.mark}}</td>
                 <td>{{item.value}}</td>
               </th>
@@ -1194,10 +1194,10 @@
                       >
                         <el-checkbox style="margin-left=10px" label="免疫组化"></el-checkbox>
                         <el-checkbox label="荧光原位杂交"></el-checkbox>
-                        <el-checkbox label="淋巴瘤克隆性基因重排检测"></el-checkbox>
+                        <!-- <el-checkbox label="淋巴瘤克隆性基因重排检测"></el-checkbox>
                         <el-checkbox label="原位杂交"></el-checkbox>
                         <el-checkbox label="流式细胞检测"></el-checkbox>
-                        <el-checkbox label="ngs检测"></el-checkbox>
+                        <el-checkbox label="ngs检测"></el-checkbox> -->
                       </el-checkbox-group>
                     </div>
                   </div>
@@ -1239,11 +1239,9 @@
                       </div>
                     </div>
 
-                    <div
-                      v-show="seen1"
+                    <div v-show="seen1"
                       v-for="(item,idx) in this.helper_diagnosis.fish"
-                      :key="idx"
-                    >
+                      :key="idx">
                       <span class="titl">
                         <i class="iconfont icontubiaozhizuo-"></i>
                         {{fish.name}}
@@ -1295,7 +1293,7 @@ import allMessage from "../../staic/allMessage.json";
 export default {
   data() {
     return {   
-      sickIhc:[
+      ihcArr:[
         {
           mark:'',
           value:''
@@ -1982,20 +1980,6 @@ export default {
         // console.log(this.result)
       })
     }, 
-    // 添加标志物结果
-    ihcAdd(){     
-      if(this.mark|| this.value){
-        //验证通过 添加新的一条
-        var newValue = [{
-          mark: "",
-          value: ""
-        }];
-        newValue.push(this.mark,this.value);
-        console.log(newValue)
-        } else {
-          alert("请检查输入是否正确");
-        } 
-    },
     // 获取选择分组
     groupList() {
       const res  = this.axios.get("group/list.php").then(res => {
@@ -2246,7 +2230,7 @@ export default {
     },
     // 数据删除
     del(row) {
-      this.$confirm("确定删除该数据？, 是否继续?", "提示", {
+      this.$confirm("确定删除该数据？是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
@@ -2317,6 +2301,7 @@ export default {
         params: { id: row.id }
       });
       this.editForm = res.data;
+      console.log(this.editForm) 
       this.id = row.id;
       if( this.editForm.application_date === '0000-00-00'){
         console.log(44)

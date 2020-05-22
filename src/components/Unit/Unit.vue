@@ -227,212 +227,226 @@
               </div>
 
               <!--报告质量  可折叠-->
-              <div class="sickIH">
-                <div class="title">
-                  <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
-                  {{reportMass.name}}:
-                  <span
-                    style="margin-left:50px"
-                  >{{fMInstitution.report_quality.field_title}} :</span>
-                  <el-select
-                    placeholder="请选择"
-                    name="report_quality"
-                    v-model="editForm.report_quality"
-                    size="mini"
-                  >
-                    <el-option
-                      v-for="(item,index) in fMInstitution.report_quality.field_values"
-                      :key="index"
-                      :value="item"
-                    >
-                      <span>{{item}}</span>
-                    </el-option>
-                  </el-select>
+              <el-collapse-item  name="2">
+                <template slot="title" style="background-color:rgba(172,172,172,0.19)">
+                  <div class="title" >
+                  <i class="iconfont icontubiaozhizuo-"></i>
+                      <!-- <i class="iconfont icontubiaozhizuo-"></i>  {{reportMass.name}}:  style="margin-left:50px"-->
+                      
+                      <span
+                        
+                      >{{fMInstitution.report_quality.field_title}} :</span>
+                      <el-select
+                        placeholder="请选择"
+                        name="report_quality"
+                        v-model="editForm.report_quality"
+                        size="mini"
+                      >
+                        <el-option
+                          v-for="(item,index) in fMInstitution.report_quality.field_values"
+                          :key="index"
+                          :value="item"
+                        >
+                          <span>{{item}}</span>
+                        </el-option>
+                      </el-select>
+                    </div>
+                </template>
+                   
+                <div class="sickIH">
+                  <div class="kuai">
+                    <div class="p-one">
+                      <span class="titles">病理检材质量</span>
+                      <div class="sickItems">
+                        <span class="one">{{fMInstitution.he_number.field_title}}:</span>
+                        <el-input
+                          type="text"
+                          v-model="editForm.he_number"
+                          size="mini"
+                          style="width:100px"
+                        ></el-input>
+                        {{fMInstitution.he_number.field_tail}}
+                      </div>
+                      <div class="sickItems">
+                        <span class="two">{{fMInstitution.he_quality.field_title}}:</span>
+                        <el-select
+                          name="he_quality"
+                          v-model="editForm.he_quality"
+                          size="mini"
+                          style="width:90px"
+                        >
+                          <el-option
+                            v-for="(item,index) in fMInstitution.he_quality.field_values"
+                            :key="index"
+                            :value="item"
+                          >
+                            <span>{{item}}</span>
+                          </el-option>
+                        </el-select>
+                      </div>
+                      <div class="sickItems">
+                        <span class="three">{{fMInstitution.ihc_number.field_title}}:</span>
+                        <el-input
+                          type="text"
+                          v-model="editForm.ihc_number"
+                          size="mini"
+                          style="width:100px"
+                        ></el-input>
+                        {{fMInstitution.he_number.field_tail}}
+                      </div>
+                      <div class="sickItems">
+                        <span class="four">{{fMInstitution.ihc_quality.field_title}}:</span>
+                        <el-select
+                          name="ihc_quality"
+                          v-model="editForm.ihc_quality"
+                          size="mini"
+                          style="width:90px"
+                        >
+                          <el-option
+                            v-for="(item,index) in fMInstitution.ihc_quality.field_values"
+                            :key="index"
+                            :value="item"
+                          >
+                            <span>{{item}}</span>
+                          </el-option>
+                        </el-select>
+                      </div>
+                      <div class="sickItems">
+                        <span class="five">{{fMInstitution.problem_slice.field_title}}</span>
+                        <el-select
+                          name="problem_slice"
+                          v-model="editForm.problem_slice"
+                          size="mini"
+                          style="width:90px"
+                        >
+                          <el-option
+                            v-for="(item,index) in fMInstitution.problem_slice.field_values"
+                            :key="index"
+                            :value="item"
+                          >
+                            <span>{{item}}</span>
+                          </el-option>
+                        </el-select>
+                      </div>
+                    </div>
+                    <div class="p-two">
+                      <span class="titles">病理会诊申请单质量：</span>
+                      <div class="sickItems">
+                        <span class="h">{{fMInstitution.patient_info.field_title}}:</span>
+                        <el-select
+                          name="patient_info"
+                          v-model="editForm.patient_info"
+                          size="mini"
+                          style="width:90px"
+                        >
+                          <el-option
+                            v-for="(item,index) in fMInstitution.patient_info.field_values"
+                            :key="index"
+                            :value="item"
+                          >
+                            <span>{{item}}</span>
+                          </el-option>
+                        </el-select>
+                      </div>
+                      <div class="sickItems">
+                        <span class="h">{{fMInstitution.history_info.field_title}}:</span>
+                        <el-select
+                          name="history_info"
+                          v-model="editForm.history_info"
+                          size="mini"
+                          style="width:90px"
+                        >
+                          <el-option
+                            v-for="(item,index) in fMInstitution.history_info.field_values"
+                            :key="index"
+                            :value="item"
+                          >
+                            <span>{{item}}</span>
+                          </el-option>
+                        </el-select>
+                      </div>
+                      <div class="sickItems">
+                        <span class="h">{{fMInstitution.sample_info.field_title}}:</span>
+                        <el-select
+                          name="sample_info"
+                          v-model="editForm.sample_info"
+                          size="mini"
+                          style="width:90px"
+                        >
+                          <el-option
+                            v-for="(item,index) in fMInstitution.sample_info.field_values"
+                            :key="index"
+                            :value="item"
+                          >
+                            <span>{{item}}</span>
+                          </el-option>
+                        </el-select>
+                      </div>
+                    </div>
+                    <div class="p-three">
+                      <span class="titles">其他临床资料提交情况：</span>
+                      <div class="sickItems">
+                        <span>{{fMInstitution.record.field_title}}:</span>
+                        <el-select
+                          name="record"
+                          v-model="editForm.record"
+                          size="mini"
+                          style="width:90px"
+                        >
+                          <el-option
+                            v-for="(item,index) in fMInstitution.record.field_values"
+                            :key="index"
+                            :value="item"
+                          >
+                            <span>{{item}}</span>
+                          </el-option>
+                        </el-select>
+                      </div>
+                      <div class="sickItems">
+                        <span>{{fMInstitution.helper_report.field_title}}:</span>
+                        <el-select
+                          name="helper_report"
+                          v-model="editForm.helper_report"
+                          size="mini"
+                          style="width:90px"
+                        >
+                          <el-option
+                            v-for="(item,index) in fMInstitution.helper_report.field_values"
+                            :key="index"
+                            :value="item"
+                          >{{item}}</el-option>
+                        </el-select>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-
-                <div class="kuai">
-                  <div class="p-one">
-                    <span class="titles">病理检材质量</span>
-                    <div class="sickItems">
-                      <span class="one">{{fMInstitution.he_number.field_title}}:</span>
-                      <el-input
-                        type="text"
-                        v-model="editForm.he_number"
-                        size="mini"
-                        style="width:100px"
-                      ></el-input>
-                      {{fMInstitution.he_number.field_tail}}
-                    </div>
-                    <div class="sickItems">
-                      <span class="two">{{fMInstitution.he_quality.field_title}}:</span>
-                      <el-select
-                        name="he_quality"
-                        v-model="editForm.he_quality"
-                        size="mini"
-                        style="width:90px"
-                      >
-                        <el-option
-                          v-for="(item,index) in fMInstitution.he_quality.field_values"
-                          :key="index"
-                          :value="item"
-                        >
-                          <span>{{item}}</span>
-                        </el-option>
-                      </el-select>
-                    </div>
-                    <div class="sickItems">
-                      <span class="three">{{fMInstitution.ihc_number.field_title}}:</span>
-                      <el-input
-                        type="text"
-                        v-model="editForm.ihc_number"
-                        size="mini"
-                        style="width:100px"
-                      ></el-input>
-                      {{fMInstitution.he_number.field_tail}}
-                    </div>
-                    <div class="sickItems">
-                      <span class="four">{{fMInstitution.ihc_quality.field_title}}:</span>
-                      <el-select
-                        name="ihc_quality"
-                        v-model="editForm.ihc_quality"
-                        size="mini"
-                        style="width:90px"
-                      >
-                        <el-option
-                          v-for="(item,index) in fMInstitution.ihc_quality.field_values"
-                          :key="index"
-                          :value="item"
-                        >
-                          <span>{{item}}</span>
-                        </el-option>
-                      </el-select>
-                    </div>
-                    <div class="sickItems">
-                      <span class="five">{{fMInstitution.problem_slice.field_title}}</span>
-                      <el-select
-                        name="problem_slice"
-                        v-model="editForm.problem_slice"
-                        size="mini"
-                        style="width:90px"
-                      >
-                        <el-option
-                          v-for="(item,index) in fMInstitution.problem_slice.field_values"
-                          :key="index"
-                          :value="item"
-                        >
-                          <span>{{item}}</span>
-                        </el-option>
-                      </el-select>
-                    </div>
-                  </div>
-                  <div class="p-two">
-                    <span class="titles">病理会诊申请单质量：</span>
-                    <div class="sickItems">
-                      <span class="h">{{fMInstitution.patient_info.field_title}}:</span>
-                      <el-select
-                        name="patient_info"
-                        v-model="editForm.patient_info"
-                        size="mini"
-                        style="width:90px"
-                      >
-                        <el-option
-                          v-for="(item,index) in fMInstitution.patient_info.field_values"
-                          :key="index"
-                          :value="item"
-                        >
-                          <span>{{item}}</span>
-                        </el-option>
-                      </el-select>
-                    </div>
-                    <div class="sickItems">
-                      <span class="h">{{fMInstitution.history_info.field_title}}:</span>
-                      <el-select
-                        name="history_info"
-                        v-model="editForm.history_info"
-                        size="mini"
-                        style="width:90px"
-                      >
-                        <el-option
-                          v-for="(item,index) in fMInstitution.history_info.field_values"
-                          :key="index"
-                          :value="item"
-                        >
-                          <span>{{item}}</span>
-                        </el-option>
-                      </el-select>
-                    </div>
-                    <div class="sickItems">
-                      <span class="h">{{fMInstitution.sample_info.field_title}}:</span>
-                      <el-select
-                        name="sample_info"
-                        v-model="editForm.sample_info"
-                        size="mini"
-                        style="width:90px"
-                      >
-                        <el-option
-                          v-for="(item,index) in fMInstitution.sample_info.field_values"
-                          :key="index"
-                          :value="item"
-                        >
-                          <span>{{item}}</span>
-                        </el-option>
-                      </el-select>
-                    </div>
-                  </div>
-                  <div class="p-three">
-                    <span class="titles">其他临床资料提交情况：</span>
-                    <div class="sickItems">
-                      <span>{{fMInstitution.record.field_title}}:</span>
-                      <el-select
-                        name="record"
-                        v-model="editForm.record"
-                        size="mini"
-                        style="width:90px"
-                      >
-                        <el-option
-                          v-for="(item,index) in fMInstitution.record.field_values"
-                          :key="index"
-                          :value="item"
-                        >
-                          <span>{{item}}</span>
-                        </el-option>
-                      </el-select>
-                    </div>
-                    <div class="sickItems">
-                      <span>{{fMInstitution.helper_report.field_title}}:</span>
-                      <el-select
-                        name="helper_report"
-                        v-model="editForm.helper_report"
-                        size="mini"
-                        style="width:90px"
-                      >
-                        <el-option
-                          v-for="(item,index) in fMInstitution.helper_report.field_values"
-                          :key="index"
-                          :value="item"
-                        >{{item}}</el-option>
-                      </el-select>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              </el-collapse-item>
+              
             </div>
           </el-collapse-item>
           <!--上传图片 -->
-          <el-upload
-            v-model="photo"
-            :action="upLoadUrl"
-            multiple
-            list-type="picture-card"
-            ref="imgUpload"
-            :on-success="imgSuccess"
-            :on-remove="imgRemove"
-            accept="image/gif, image/jpeg, image/jpg, image/png, image/svg"
-            :headers="headerMsg"
-            :on-preview="handlePictureCardPreview"
-          >
-            <i class="el-icon-plus"></i>
-          </el-upload>
+          
+        <!--<el-upload   
+          action="http://106.13.49.232/cedar/api/diagnosis_origin/add.php"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :file-list="fileList"
+           list-type="picture">
+          <el-button size="small" type="primary">点击上传</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+        </el-upload> -->
+        <el-upload
+          action="http://106.13.49.232/cedar/api/diagnosis_origin/add.php"
+          :show-file-list="false"
+          :accept="'image/*'"
+          
+          :on-success="handleSuccess"
+          :on-error="handleError"
+          :before-upload="handleBeforeUpload"
+          :on-progress="handleProgress"
+        >
+          <el-button type="primary" size="medium">上传图片</el-button>
+        </el-upload>
         </el-collapse>
         <div class="foot">
           <el-button @click="qingkong()">清空</el-button>
@@ -499,12 +513,13 @@ export default {
     this.getgroupList();
   },
   methods: {
-    // 上传图片成功
-    imgSuccess(res, file, fileList) {
-      // console.log(res);
-      // console.log(file);
-      // console.log(fileList); // 这里可以获得上传成功的相关信息
+    handleRemove() {
+      console.log(file, fileList);
     },
+    handlePreview() {
+      console.log(file);
+    },
+ 
     // 获取分组
     getgroupList() {
       const { data: res } = this.axios.get("group/list.php").then(res => {
@@ -581,7 +596,7 @@ export default {
       const  res  = await this.axios("diagnosis_origin/del.php", {
         params: { id: row.id }
       }).then(res => {
-        this.$confirm("确定删除该数据？, 是否继续?", "提示", {
+        this.$confirm("确定删除该数据？是否继续?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
@@ -747,7 +762,7 @@ export default {
       it:'',
       groupList:[],
       photo: "",
-      upLoadUrl: "http://106.13.49.232/cedar/api/diagnosis_origin/add.php",
+      // upLoadUrl: "http://106.13.49.232/cedar/api/diagnosis_origin/add.php",
       jilian: "",
       jilian: [],
       item: "",
@@ -1383,23 +1398,19 @@ export default {
     box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
     border-radius: 4px;
     padding-left: 30px;
-
     .el-select {
       margin-left: 10px;
     }
   }
-
   .entry {
     background: rgba(255, 255, 255, 1);
     box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
     border-radius: 4px;
     margin-top: 20px;
-
     .search {
       margin: 20px 30px 0;
       padding-top: 20px;
       padding-bottom: 60px;
-
       .up {
         background-color: #E6E6E6;
         height: 50px;
@@ -1413,7 +1424,6 @@ export default {
             padding-left: 10px;
           }
         }
-
         .right {
           border-left: 1px solid rgba(199, 199, 199, 1);
           float: left;
