@@ -16,7 +16,7 @@
             <span slot="title">首页</span>
           </el-menu-item>
 
-          <el-menu-item index="dataentry" :class="{on: $route.path === '/dataentry'}">
+          <el-menu-item index="dataentry" :class="{on: $route.path === '/dataentry'}" >
             <template slot="title">
               <i class="iconfont iconshujuluru"></i>
               <span>数据录入</span>

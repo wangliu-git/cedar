@@ -114,7 +114,6 @@ export default {
     return {   
       getIndex:"",  //点击列表行
 			//控制按钮显示隐藏-----
-			
 			sexShow:false,
 			ageShow:false,
 			birthplaceShow:false,
@@ -656,7 +655,7 @@ export default {
         center: true
       })
         .then(async () => {
-          const { data: res } = await this.axios.get("group/del.php ", {
+          const { data: res } = await this.axios.get("group/del.php", {
             params: { id: row.id }
           });
           console.log(res);
@@ -684,13 +683,13 @@ export default {
       this.getDataList();
     },
     // 点击列表行
-    handleSelectionChange(row) {
-      this.getIndex=row.index
-      this.id = row.id;
-      console.log(row);
-      return this.id;
-      this.row = row
-    },
+    // handleSelectionChange(row) {
+    //   this.getIndex=row.index
+    //   this.id = row.id;
+    //   console.log(row);
+    //   return this.id;
+    //   this.row = row
+    // },
     // 点击编辑获取ID
     chakan(row) {
       // console.log(row.id)
@@ -700,10 +699,12 @@ export default {
     get() {
       this.options.map((item, index) => {
         console.log(item.children);
-        item.children.map((it, index) => {
-          console.log(it);
-          this.chooses.push(it.value);
-        });
+        if(item.children){
+            item.children.map((it, index) => {
+            console.log(it);
+            this.chooses.push(it.value);
+          });
+        }
       });
     },
     // 获取数据集列表
@@ -712,7 +713,7 @@ export default {
       this.datalist = res.data;
       // console.log(this.datalist )
       this.peopleList = this.datalist 
-      // console.log(this.peopleList);
+      console.log(this.peopleList);
       this.queryInfo.page = parseInt(res.page);
       this.queryInfo.count = parseInt(res.count); //总条数
       this.queryInfo.pagerows = res.pagerows; //每页显示多少条

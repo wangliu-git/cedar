@@ -234,7 +234,7 @@
           <div class="name">
             <span>新建项目名称 ：</span>
             <el-input placeholder="请输入项目名称..." style="width:380px" v-model="groupName">
-              <el-button slot="append" @click="addGroup(groupName)">保存</el-button>
+              <el-button plain slot="append" @click="addGroup(groupName)">保存</el-button>
             </el-input>
           </div>
           <div class="button">
@@ -716,8 +716,7 @@
                       style="width:580px"
                     ></el-cascader>
                   </div> -->
-                  <el-form :inline="true"  :rules="rules" :label-position="labelPosition" label-width="110px">
-
+                  <el-form :inline="true" ref="ruleForm" :rules="rules" :label-position="labelPosition" label-width="110px">
                     <el-form-item label="病理大类：" prop="diagnosis1_normal">
                      <el-select  v-model="editForm.diagnosis1_normal" size="mini" style="width:300px">
                       <el-option
@@ -728,10 +727,8 @@
                         <span>{{item}}</span>
                       </el-option>
                     </el-select>  
-                    </el-form-item> 
-
-                    <el-form-item label="详细类型：" prop="diagnosis2_normal">
-                      <el-select name="sample_type" v-model="editForm.diagnosis2_normal" size="mini" style="width:300px">
+                      
+                     <el-select name="sample_type" v-model="editForm.diagnosis2_normal" size="mini" style="width:300px">
                       <el-option
                         v-for="(item,index) in  this.twochoose"
                         :key="index"
@@ -740,12 +737,24 @@
                         <span>{{item}}</span>
                       </el-option>
                     </el-select>
-                    </el-form-item>    
+                    </el-form-item>  
 
                     <el-form-item label="病理亚型：" prop="diagnosis3_normal">
                       <el-select  v-model="editForm.diagnosis3_normal" size="mini" style="width:300px">
                       <el-option
                         v-for="(item,index) in  this.threechoose"
+                        :key="index"
+                        :value="item"
+                      >
+                        <span>{{item}}</span>
+                      </el-option>
+                    </el-select>
+                    </el-form-item>
+
+                    <el-form-item label="级别：">
+                      <el-select  v-model="editForm.level" size="mini" style="width:300px">
+                      <el-option
+                        v-for="(item,index) in  this.levelList"
                         :key="index"
                         :value="item"
                       >
@@ -925,10 +934,13 @@ export default {
     get2(){
       this.options.map((item, index) => {
         console.log(item);
-        item.children.map((it, index) => {
-          // console.log(it);
-          this.twochoose.push(it.value);         
-        });        
+          if(item.children){
+            item.children.map((it, index) => {
+            // console.log(it);
+            this.twochoose.push(it.value);         
+          });  
+        }
+             
       });
       // console.log(this.twochoose)
     },
@@ -941,16 +953,18 @@ export default {
     get3(){
       this.options.map((item, index) => {
         // console.log(item.children);
+      if(item.children) {
         item.children.map((it, index) => {
           if(it.children){
             it.children.map( (i,index) =>{
               this.threechoose.push(i.value)
             })
           }        
-        });      
+        }); 
+      }
       });
       console.log(this.threechoose)
-    },
+    }, 
     // 获取所有分组
     groupLists() {
       // alert(1)
@@ -1092,15 +1106,38 @@ export default {
       this.getTableList(row);        
     },
     // 点击数据集删除
-    async dele(row){
-      // console.log(row.id)
-      const { data :res} = await this.axios.get(
-        "dataset/del.php" ,{params:{id:row.id}}
-      ).then( res =>{
-        this.$alert("删除成功！")
-        this.getDataList()
+    async dele(row) {
+      console.log(row.id);
+      this.$confirm("确定删除该数据？是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true
+      })
+      .then(() => {
+        const { data: res } = this.axios .get("dataset/del.php", { params: { id: row.id }});
+        this.$message({
+          type: "success",
+          message: "删除成功!"
+        });
+        this.datalist = [];
+        this.getDataList();
+      })
+      .catch(() => {
+        this.$message({
+          type: "info",
+          message: "已取消删除"
+        });
       });
-      console.log(res)
+      // const res = await this.axios
+      //   .get("dataset/del.php", { params: { id: row.id } })
+      //   .then(res => {
+      //     this.$alert("删除成功！");
+      //     this.datalist = [];
+      //     this.getDataList();
+      //   });
+
+      // console.log(res)
     },
     // 点击病理号校验
     async look(row){  
@@ -1299,33 +1336,32 @@ export default {
       // console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);             
     },
     // 病理号删除
-    async del(row) {     
-      const { data: res } = await this.axios.get(
-      "excel_data/del.php" , {params:{id:row.id}}).then( res =>{
-        this.$confirm("确定删除该数据？是否继续?", "提示", {
+    del(row) {     
+      this.$confirm("确定删除该数据？是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
         center: true
       })
       .then(() => {
-
-        this.tablelist = []
-        this.getTableList2(this.Row)
-        this.$message({
+       const { data: res } =  this.axios.get(
+      "excel_data/del.php" , {params:{id:row.id}})    
+      this.$message({
           type: "success",
           message: "删除成功!"
         });
+        this.tablelist = []
+        this.getTableList2(this.Row)
       })
       .catch(() => {
         this.$message({
           type: "info",
           message: "已取消删除"
         });
-      });
+
       })
       
-    },   
+    },    
     // 搜索
     async getTable() {      
       // console.log(row.id)
@@ -1633,6 +1669,8 @@ export default {
   },
   data() { 
     return { 
+      level:'',
+      levelList:['1','2','3a','3b'],
       labelPosition:'left',
       rules:{
         patient_id: [
@@ -3009,7 +3047,6 @@ a {
       .sousuo {
         margin: 20px 20px 10px 20px;
       }
-
       .groupList {
         width: 500px;
         height 280px

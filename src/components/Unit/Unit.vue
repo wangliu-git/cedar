@@ -595,9 +595,12 @@ export default {
       })
       console.log(res);   
       this.rowAdd = row
+      if( this.editForm.report_date === '0000-00-00'){
+        this.editForm.report_date = ''
+      } 
       if(res != null){
         this.editForm = res;
-        console.log(this.editForm);
+        // console.log(this.editForm);
         this.jilian = []
         if(this.editForm.diagnosis1 !=  ''){
           this.jilian.push(this.editForm.diagnosis1)
@@ -620,9 +623,11 @@ export default {
     },
     // 点击删除
     async del(row) {
+      console.log(row)
       console.log(row.id)
+      // let report= ''
       const  res  = await this.axios("diagnosis_origin/del.php", {
-        params: { id: row.id }
+        params: { id:row.id }
       }).then(res => {
         this.$confirm("确定删除该数据？是否继续?", "提示", {
           confirmButtonText: "确定",

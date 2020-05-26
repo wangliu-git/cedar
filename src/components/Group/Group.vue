@@ -407,7 +407,7 @@ export default {
       // window.open('http://106.13.49.232/cedar/api/group_report/list.php?&z=1' +'&group_id=' +this.row.id)
       // // const res = await this.axios.get("group_report/list.php", {
       // //   params: { group_id: this.id, z: 1 }
-      // // });
+      // // }); 
       // console.log(res);    
       this.axios.get('http://106.13.49.232/cedar/api/group_report/list.php?&z=1' +'&group_id=' +this.row.id, { //url: 接口地址
         responseType: `arraybuffer` //一定要写

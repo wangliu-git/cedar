@@ -84,6 +84,7 @@
             range-separator="至"
             start-placeholder="请选择开始时间"
             end-placeholder="请选择结束时间"
+            @change="darwPie2"
           ></el-date-picker>
         </div>
 
@@ -137,8 +138,7 @@ export default {
   },
   methods: {
     go_jy(){
-      this.$router.replace('/dataimport')
-      
+      this.$router.replace('/dataimport')    
     },
     go_lr(){
       this.$router.replace('/dataentry')
@@ -148,7 +148,11 @@ export default {
     },
     // echarts图
     async darwPie2() {
-      const res = await this.axios.get("report/stat_day.php");
+      let type =''
+      let startdate =''
+      let enddate =''
+      console.log(this.value)
+      const res = await this.axios.get("report/stat_day.php",{params:{type:1,startdate:this.value[0],enddate:this.value[1]}});
       console.log(res);
       let myChart = this.$echarts.init(
         document.getElementById("liu"),
@@ -260,7 +264,6 @@ export default {
         myChart.setOption(option, { notMerge: true });
       }
     },
-
     // echarts图
     async darwPie3() {
       const res = await this.axios.get("report/stat.php");

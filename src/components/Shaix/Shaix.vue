@@ -1293,6 +1293,7 @@ import allMessage from "../../staic/allMessage.json";
 export default {
   data() {
     return {   
+      location:'',
       ihcArr:[
         {
           mark:'',
@@ -2027,11 +2028,14 @@ export default {
   methods: {
     get2(){
       this.options.map((item, index) => {
-        // console.log(item.children);
-        item.children.map((it, index) => {
-          // console.log(it);
-          this.twochoose.push(it.value);         
-        });        
+        console.log(item);
+          if(item.children){
+            item.children.map((it, index) => {
+            // console.log(it);
+            this.twochoose.push(it.value);         
+          });  
+        }
+             
       });
       // console.log(this.twochoose)
     },
@@ -2247,7 +2251,7 @@ export default {
             });
           }
         });
-      console.log(data);
+     
     },
     inGroup(ids) {
       //console.log(this.ids)
