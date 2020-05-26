@@ -435,18 +435,18 @@
           <el-button size="small" type="primary">点击上传</el-button>
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload> -->
-        <el-upload
-          action="http://106.13.49.232/cedar/api/diagnosis_origin/add.php"
-          :show-file-list="false"
-          :accept="'image/*'"
-          
+        
+        <el-upload       
+          action="http://106.13.49.232/cedar/api/upload_file/add2.php"
+          :show-file-list="true"
+          :accept="'image/*'"         
           :on-success="handleSuccess"
           :on-error="handleError"
           :before-upload="handleBeforeUpload"
-          :on-progress="handleProgress"
-        >
+          :on-progress="handleProgress">        
           <el-button type="primary" size="medium">上传图片</el-button>
         </el-upload>
+        
         </el-collapse>
         <div class="foot">
           <el-button @click="qingkong()">清空</el-button>
@@ -514,7 +514,15 @@ export default {
   },
   methods: {
     handleSuccess(response, file, fileList) {
-      this.$success("上传成功");
+      this.$message("上传成功");
+      this.imageUrl = URL.createObjectURL(file.raw);  
+      // console.log(this.editForm.imageUrl)
+      console.log(file.raw)
+      console.log(file)
+      console.log(file.response.id)
+      this.pics.push(file.response.id)
+      console.log(this.pics)
+       
     },
     handleError() {
       this.$error("上传失败,请重新上传图片!");
@@ -682,9 +690,12 @@ export default {
     },
     // 保存
     baocun(editForm) {
+      // console.log(this)
+      this.editForm.pics =  this.pics
+      console.log(this.editForm.uid)
       this.zhezhao = !this.zhezhao;      
       console.log(this.rowAdd)
-      // console.log(this.rowAdd.attached)
+      console.log(this.rowAdd.attached)
       this.jilian = this.editForm.jilian;
       this.editForm.detail_type = "淋巴瘤";
       console.log(this.editForm);
@@ -775,6 +786,9 @@ export default {
   },
   data() {
     return {
+      pics:[],    //  上传图片的数组
+      imageUrl: '',
+      pic:'',
       rowAdd:'',   //点击添加获取的row
       row:'',
       yuanlist:'',
@@ -879,14 +893,14 @@ export default {
             label: 'B淋巴母细胞白血病/淋巴瘤伴重现性遗传学异常',
             children: 
               [{            
-              value: 'B淋巴母细胞白血病/淋巴瘤伴t(9；22)(q34.1；q11.2)；BCR-ABL1',
-              label: 'B淋巴母细胞白血病/淋巴瘤伴t(9；22)(q34.1；q11.2)；BCR-ABL1'
+              value: 'B淋巴母细胞白血病/淋巴瘤伴t（9；22）（q34.1；q11.2）；BCR-ABL1',
+              label: 'B淋巴母细胞白血病/淋巴瘤伴t（9；22）（q34.1；q11.2）；BCR-ABL1'
               },{
-              value: 'B淋巴母细胞白血病/淋巴瘤伴t(v；11q23.3)；KMT2A重排',
-              label: 'B淋巴母细胞白血病/淋巴瘤伴t(v；11q23.3)；KMT2A重排'
+              value: 'B淋巴母细胞白血病/淋巴瘤伴t（v；11q23.3）；KMT2A重排',
+              label: 'B淋巴母细胞白血病/淋巴瘤伴t（v；11q23.3）；KMT2A重排'
               },{
-              value: 'B淋巴母细胞白血病/淋巴瘤伴t(12；21)(p13.2；q22.1)；ETV6-RUNX1',
-              label: 'B淋巴母细胞白血病/淋巴瘤伴t(12；21)(p13.2；q22.1)；ETV6-RUNX1'
+              value: 'B淋巴母细胞白血病/淋巴瘤伴t（12；21）（p13.2；q22.1）；ETV6-RUNX1',
+              label: 'B淋巴母细胞白血病/淋巴瘤伴t（12；21）（p13.2；q22.1）；ETV6-RUNX1'
               },{
               value: 'B淋巴母细胞白血病/淋巴瘤伴超二倍体',
               label: 'B淋巴母细胞白血病/淋巴瘤伴超二倍体'
@@ -894,11 +908,11 @@ export default {
               value: 'B淋巴母细胞白血病/淋巴瘤伴亚二倍体',
               label: 'B淋巴母细胞白血病/淋巴瘤伴亚二倍体'
               },{
-              value: 'B淋巴母细胞白血病/淋巴瘤伴t(5；14)(q31.1；q32.3)；IL3-IGH',
-              label: 'B淋巴母细胞白血病/淋巴瘤伴t(5；14)(q31.1；q32.3)；IL3-IGH'
+              value: 'B淋巴母细胞白血病/淋巴瘤伴t（5；14）（q31.1；q32.3）；IL3-IGH',
+              label: 'B淋巴母细胞白血病/淋巴瘤伴t（5；14）（q31.1；q32.3）；IL3-IGH'
               },{
-              value: 'B淋巴母细胞白血病/淋巴瘤伴t(1；19)(q23；p13.3)；TCF3-PBX1',
-              label: 'B淋巴母细胞白血病/淋巴瘤伴t(1；19)(q23；p13.3)；TCF3-PBX1'
+              value: 'B淋巴母细胞白血病/淋巴瘤伴t（1；19）（q23；p13.3）；TCF3-PBX1',
+              label: 'B淋巴母细胞白血病/淋巴瘤伴t（1；19）（q23；p13.3）；TCF3-PBX1'
               },{
               value: 'B淋巴母细胞白血病/淋巴瘤，BCR-ABL1样',
               label: 'B淋巴母细胞白血病/淋巴瘤，BCR-ABL1样'
@@ -969,7 +983,7 @@ export default {
               label: 'γ重链病'
               },{
               value: 'α重链病',
-              label: 'α重链病'           
+              label: 'α重链病'
             }]
             },{
             value: '浆细胞肿瘤',
@@ -982,21 +996,21 @@ export default {
               value: '浆细胞骨髓瘤',
               label: '浆细胞骨髓瘤'
               },{
-              value: '浆细胞骨髓瘤变异型(无症状型、非分泌型、浆细胞白血病)',
-              label: '浆细胞骨髓瘤变异型(无症状型、非分泌型、浆细胞白血病)'
+              value: '浆细胞骨髓瘤变异型（无症状型、非分泌型、浆细胞白血病）',
+              label: '浆细胞骨髓瘤变异型（无症状型、非分泌型、浆细胞白血病）'
               },{
-              value: '浆细胞瘤(骨孤立性浆细胞瘤、骨外浆细胞瘤)',
-              label: '浆细胞瘤(骨孤立性浆细胞瘤、骨外浆细胞瘤)'
+              value: '浆细胞瘤（骨孤立性浆细胞瘤、骨外浆细胞瘤）',
+              label: '浆细胞瘤（骨孤立性浆细胞瘤、骨外浆细胞瘤）'
               },{
-              value: '单克隆免疫球蛋白沉积症(原发性淀粉样变、轻链和重链沉积病)',
-              label: '单克隆免疫球蛋白沉积症(原发性淀粉样变、轻链和重链沉积病)'
+              value: '单克隆免疫球蛋白沉积症（原发性淀粉样变、轻链和重链沉积病）',
+              label: '单克隆免疫球蛋白沉积症（原发性淀粉样变、轻链和重链沉积病）'
               },{
-              value: '浆细胞肿瘤伴副肿瘤综合征(POEMS综合征、TEMPI综合征)',
-              label: '浆细胞肿瘤伴副肿瘤综合征(POEMS综合征、TEMPI综合征)'
+              value: '浆细胞肿瘤伴副肿瘤综合征（POEMS综合征、TEMPI综合征）',
+              label: '浆细胞肿瘤伴副肿瘤综合征（POEMS综合征、TEMPI综合征）'
               }]
             },{
-            value: '黏膜相关淋巴组织结外边缘区淋巴瘤(MALT淋巴瘤)',
-            label: '黏膜相关淋巴组织结外边缘区淋巴瘤(MALT淋巴瘤)'
+            value: '黏膜相关淋巴组织结外边缘区淋巴瘤',
+            label: '黏膜相关淋巴组织结外边缘区淋巴瘤'
             },{
             value: '淋巴结边缘区淋巴瘤',
             label: '淋巴结边缘区淋巴瘤',
@@ -1026,8 +1040,8 @@ export default {
             value: '伴IRF4重排大B细胞淋巴瘤',
             label: '伴IRF4重排大B细胞淋巴瘤'
             },{
-            value: '原发皮肤滤泡中心细胞淋巴瘤',
-            label: '原发皮肤滤泡中心细胞淋巴瘤'
+            value: '原发皮肤滤泡中心淋巴瘤',
+            label: '原发皮肤滤泡中心淋巴瘤'
             },{
             value: '套细胞淋巴瘤',
             label: '套细胞淋巴瘤',
@@ -1063,11 +1077,11 @@ export default {
             value: 'EBV阳性弥漫性大B细胞淋巴瘤，非特指型',
             label: 'EBV阳性弥漫性大B细胞淋巴瘤，非特指型'
             },{
-            value: 'EBV阳性黏膜皮肤溃疡',
-            label: 'EBV阳性黏膜皮肤溃疡'
+            value: 'EBV阳性皮肤黏膜溃疡',
+            label: 'EBV阳性皮肤黏膜溃疡'
             },{
-            value: '慢性炎症相关弥漫性大B细胞淋巴瘤',
-            label: '慢性炎症相关弥漫性大B细胞淋巴瘤',
+            value: '慢性炎症相关的弥漫性大B细胞淋巴瘤',
+            label: '慢性炎症相关的弥漫性大B细胞淋巴瘤',
             children:
               [{
               value: '纤维素相关弥漫性大B细胞淋巴瘤',
@@ -1077,8 +1091,8 @@ export default {
             value: '淋巴瘤样肉芽肿',
             label: '淋巴瘤样肉芽肿'
             },{
-            value: '原发性纵隔(胸腺)大B细胞淋巴瘤',
-            label: '原发性纵隔(胸腺)大B细胞淋巴瘤'
+            value: '原发性纵隔（胸腺）大B细胞淋巴瘤',
+            label: '原发性纵隔（胸腺）大B细胞淋巴瘤'
             },{
             value: '血管内大B细胞淋巴瘤',
             label: '血管内大B细胞淋巴瘤'
@@ -1116,8 +1130,8 @@ export default {
             label: '高级别B细胞淋巴瘤',
             children:
               [{      
-              value: '高级别B细胞淋巴瘤，伴MYC和BCL2和(或)BCL6重排',
-              label: '高级别B细胞淋巴瘤，伴MYC和BCL2和(或)BCL6重排'
+              value: '高级别B细胞淋巴瘤，伴MYC和BCL2和（或）BCL6重排',
+              label: '高级别B细胞淋巴瘤，伴MYC和BCL2和（或）BCL6重排'
               },{
               value: '高级别B细胞淋巴瘤，非特指型',
               label: '高级别B细胞淋巴瘤，非特指型'
@@ -1180,8 +1194,8 @@ export default {
               value: '肠道T细胞淋巴瘤，非特指型',
               label: '肠道T细胞淋巴瘤，非特指型'
               },{
-              value: '胃肠道惰性T细胞增殖性疾病',
-              label: '胃肠道惰性T细胞增殖性疾病'
+              value: '胃肠道惰性T细胞淋巴组织增殖性疾病',
+              label: '胃肠道惰性T细胞淋巴组织增殖性疾病'
               }]
             },{
             value: '肝脾T细胞淋巴瘤',
@@ -1190,8 +1204,8 @@ export default {
             value: '皮下脂膜炎样T细胞淋巴瘤',
             label: '皮下脂膜炎样T细胞淋巴瘤'
             },{
-            value: '蕈样肉芽肿',
-            label: '蕈样肉芽肿'
+            value: '蕈样霉菌病',
+            label: '蕈样霉菌病'
             },{
             value: 'Sezary综合征',
             label: 'Sezary综合征'
@@ -1220,8 +1234,8 @@ export default {
               value: '原发性皮肤肢端CD8阳性T细胞淋巴瘤',
               label: '原发性皮肤肢端CD8阳性T细胞淋巴瘤'
               },{
-              value: '原发性皮肤CD4阳性小/中等大小T细胞增殖性疾病',
-              label: '原发性皮肤CD4阳性小/中等大小T细胞增殖性疾病'
+              value: '原发性皮肤CD4阳性小/中等大小T细胞淋巴组织增殖性疾病',
+              label: '原发性皮肤CD4阳性小/中等大小T细胞淋巴组织增殖性疾病'
               }]
             },{
             value: '外周T细胞淋巴瘤，非特指型',
@@ -1278,24 +1292,12 @@ export default {
             }]
         },
         {
-          value: '淋巴瘤(类型无法确定)',
-          label: '淋巴瘤(类型无法确定)'
+          value: '淋巴瘤',
+          label: '淋巴瘤'
         },
         {
-          value: '非霍奇金淋巴瘤(类型无法确定)',
-          label: '非霍奇金淋巴瘤(类型无法确定)'
-        },
-        {
-          value: '成熟B细胞淋巴瘤(类型无法确定)',
-          label: '成熟B细胞淋巴瘤(类型无法确定)'
-        },
-        {
-          value: '成熟T和NK细胞淋巴瘤(类型无法确定)',
-          label: '成熟T和NK细胞淋巴瘤(类型无法确定)'
-        },
-        {
-          value: '霍奇金淋巴瘤(类型无法确定)',
-          label: '霍奇金淋巴瘤(类型无法确定)'
+          value: '非霍奇金淋巴瘤',
+          label: '非霍奇金淋巴瘤'
         },
         {
           value: '非典型增生',

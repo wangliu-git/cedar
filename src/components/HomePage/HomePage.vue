@@ -138,6 +138,7 @@ export default {
   methods: {
     go_jy(){
       this.$router.replace('/dataimport')
+      
     },
     go_lr(){
       this.$router.replace('/dataentry')

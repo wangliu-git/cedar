@@ -56,7 +56,7 @@
             <i class="iconfont iconx"></i>
           </span>
         </div>
-        <div class="down">
+        <div class="Down">
           <el-form :model="userData" :rules="rules" label-width="100px" class="demo-ruleForm">
             <el-form-item label="用户名" prop="username">
               <el-input v-model="userData.username" style="width:300px" size="mini"></el-input>
@@ -118,7 +118,7 @@
             <i class="iconfont iconx"></i>
           </span>
         </div>
-        <div class="down">
+        <div class="Down">
           <el-form :rules="rules" :model="addUserList" label-width="100px" class="demo-ruleForm">
             <el-form-item label="用户名" prop="username">
               <el-input v-model="addUserList.username" style="width:300px" size="mini"></el-input>
@@ -351,6 +351,10 @@ export default {
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus" >
+.el-form-item {
+  margin-left: 0;
+}
+
 a {
   color: #1CB2FF;
 
@@ -409,7 +413,6 @@ a {
       background: rgba(255, 255, 255, 1);
       border-top: 3px solid rgba(28, 165, 255, 1);
       margin: 10px 20px;
-
       .el-pagination {
         height: 50px;
         margin-top: 10px;

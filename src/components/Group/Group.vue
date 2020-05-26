@@ -402,14 +402,39 @@ export default {
     },
     // 确认导出
     async sure() {
-      // console.log(this.id);
-      let z = "";
-      window.location.href ='http://106.13.49.232/cedar/api/group_report/list.php?group_id=48&z=1'
-      // const res = await this.axios.get("group_report/list.php", {
-      //   params: { group_id: this.id, z: 1 }
-      // });
-      console.log(res);
+      // console.log(this.row.id);
+      // let z = "";
+      // window.open('http://106.13.49.232/cedar/api/group_report/list.php?&z=1' +'&group_id=' +this.row.id)
+      // // const res = await this.axios.get("group_report/list.php", {
+      // //   params: { group_id: this.id, z: 1 }
+      // // });
+      // console.log(res);    
+      this.axios.get('http://106.13.49.232/cedar/api/group_report/list.php?&z=1' +'&group_id=' +this.row.id, { //url: 接口地址
+        responseType: `arraybuffer` //一定要写
+      })
+      .then(res => {
+        if(res.status == 200){
+          let blob = new Blob([res.data], {
+            type: `application/json` //word文档为msword,pdf文档为pdf
+          });
+          let objectUrl = URL.createObjectURL(blob);
+          let link = document.createElement("a");
+          let fname = `我的文档`; //下载文件的名字
+          link.href = objectUrl;
+          link.setAttribute("download", fname);
+          document.body.appendChild(link);
+          link.click();
+        }else {
+          this.$message({
+          type: "error",
+          message: "导出失败"
+          })
+        }
+      })
+
+
     },
+ 
     // 点击导出
     async daoChu(row) {
       console.log(row.id);
