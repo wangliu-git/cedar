@@ -16,14 +16,14 @@
             <span slot="title">首页</span>
           </el-menu-item>
 
-          <el-menu-item index="dataentry" :class="{on: $route.path === '/dataentry'}" >
+          <el-menu-item index="dataentry"  >
             <template slot="title">
               <i class="iconfont iconshujuluru"></i>
               <span>数据录入</span>
             </template>
           </el-menu-item>
 
-          <el-menu-item index="dataimport" :class="{on: $route.path === '/dataimport'}">
+          <el-menu-item index="dataimport"  >
             <i class="iconfont iconshujudaoru"></i>数据导入
           </el-menu-item>
 
@@ -102,6 +102,12 @@
 <script type="text/ecmascript-6">
 export default {
   methods: {
+    // 点击刷新页面
+    goto(){
+      if(this.$route.path == this.$route.path){
+         location.reload()  //强制刷新页面
+      }
+    },
     // 退出登录
     async loginout() {
       const { data: res } = await this.axios.get("user/logout.php");

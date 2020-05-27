@@ -607,6 +607,7 @@ export default {
       // this.drawLineDiff_day();        //柱状图
       this.get();
     });
+
   },
   methods: {
     // 点击表格行背景色
@@ -659,6 +660,7 @@ export default {
           });
           console.log(res);
           this.getDataList();
+          this.groupname = ''
           this.$message({
             type: "success",
             message: "删除成功!"

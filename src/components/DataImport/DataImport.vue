@@ -3110,6 +3110,7 @@ a {
       .el-button {
         margin-left: 28px;
         margin-top: 12px;
+        margin-right:20px
       }
       .next {
         background-color: rgba(41, 184, 252, 1);

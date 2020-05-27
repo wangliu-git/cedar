@@ -2478,7 +2478,7 @@ export default {
       const res = await this.axios
         .post("group/add.php", {
           params: {
-            group_name: this.groupName,
+            group_name: groupName.group_name,
             userid: window.sessionStorage.uid,
             ids: this.ids,
             username: window.sessionStorage.username

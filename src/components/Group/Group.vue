@@ -471,9 +471,11 @@ export default {
           });
           console.log(res);
           this.getDataList();
+          this.groupname = ''
           this.$message({
             type: "success",
             message: "删除成功!"
+           
           });
         })
         .catch(() => {

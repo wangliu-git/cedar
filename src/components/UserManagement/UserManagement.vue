@@ -236,7 +236,8 @@ export default {
           },
           { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
         ],
-        region: [{ required: true, message: "请选择权限", trigger: "blur" }],
+        region: [{ required: true, message: "请选择权限", trigger: "change" },
+         { min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur" }],
         pass: [{ required: true, message: "输入密码", trigger: "blur" }],
         memo: [{ required: true, message: "请填写备注", trigger: "blur" }]
       }

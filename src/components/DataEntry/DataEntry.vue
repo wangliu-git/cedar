@@ -897,8 +897,7 @@
               :value="it.group_name"
               style="width:100%"
              @click="location_name(it)">{{it.group_name}}</el-button>
-            </el-scrollbar>
-            
+            </el-scrollbar>            
           </div>
  
          
@@ -1103,8 +1102,16 @@ export default {
       // alert(1)
       const { data: res } = this.axios.get("group/list.php",{params:{group_name:this.search_group}}).then(res => {
         console.log(res);
-        this.groupList = res.data.data;
-        console.log(this.groupList);
+        this.groupList = res.data.data
+        // res.data.data.map( (item,index) =>{
+        //   console.log(item)
+        //   // if(item.group_name != ''){
+        //   //   this.groupList.push(item)           
+        //   // }
+        // })
+        // this.groupList = [...new Set(this.groupList)] 
+        // console.log(this.groupList);
+     
       });
     },
     // 点击查看
@@ -1139,8 +1146,10 @@ export default {
           }
         })
         .then(res => {
-          // console.log(res)
-          this.groupList.push(res.data.data.params);
+          console.log(res)
+          
+            this.groupList.push(res.data.data.params);
+     
           console.log(this.groupList);
           var result = res.data; //JSON.parse(res.body);
           if (result.result == 1) {
@@ -1150,7 +1159,7 @@ export default {
               callback: action => {
                 // this.search = !this.search
                 // this.groupList = [];
-                this.groupLists();             
+                // this.groupLists();             
               }
             });
           } else {
