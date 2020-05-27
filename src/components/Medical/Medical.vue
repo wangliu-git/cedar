@@ -644,8 +644,7 @@ export default {
         this.queryInfo.pagerows = res.data.pagerows; //每页显示多少条
         console.log(this.queryInfo.count)
       })
-    },
-   
+    }, 
     // 分组删除
     del(row) {
       this.$confirm("确定删除该数据？是否继续?", "提示", {
@@ -683,13 +682,13 @@ export default {
       this.getDataList();
     },
     // 点击列表行
-    // handleSelectionChange(row) {
-    //   this.getIndex=row.index
-    //   this.id = row.id;
-    //   console.log(row);
-    //   return this.id;
-    //   this.row = row
-    // },
+    handleSelectionChange(row) {
+      this.getIndex=row.index
+      this.id = row.id;
+      console.log(row);
+      return this.id;
+      this.row = row
+    },
     // 点击编辑获取ID
     chakan(row) {
       // console.log(row.id)
@@ -698,7 +697,7 @@ export default {
     },
     get() {
       this.options.map((item, index) => {
-        console.log(item.children);
+        console.log(item);
         if(item.children){
             item.children.map((it, index) => {
             console.log(it);
@@ -1008,7 +1007,7 @@ export default {
                   var axisData = opt.xAxis[0].data;
                   var series = opt.series;
                   var table =
-                    '<table  border scroll style="width:50%;text-align:center"><thead><tr>' +
+                    '<table   border="1" bordercolor="gray" cellpadding="10" cellspacing="0" scroll style="width:50%;text-align:center;margin-left:300px"><thead><tr>' +
                     "<th>" +
                     xAxisText +
                     "</th>" +
@@ -2036,7 +2035,8 @@ export default {
                   var axisData = opt.xAxis[0].data;
                   var series = opt.series;
                   var table =
-                    '<table class="table table-striped table-bordered table-hover" style="width:100%;text-align:center"><thead><tr>' +
+                    '<table   border="1" bordercolor="gray" cellpadding="10" cellspacing="0" scroll style="width:50%;text-align:center;margin-left:300px"><thead><tr>' +
+               
                     "<th>" +
                     xAxisText +
                     "</th>" +
@@ -2293,8 +2293,8 @@ export default {
                   var axisData = opt.xAxis[0].data;
                   var series = opt.series;
                   var table =
-                    '<table class="table table-striped table-bordered table-hover" style="width:100%;text-align:center"><thead><tr>' +
-                    "<th>" +
+                    '<table   border="1" bordercolor="gray" cellpadding="10" cellspacing="0" scroll style="width:50%;text-align:center;margin-left:300px"><thead><tr>' +
+                  "<th>" +
                     xAxisText +
                     "</th>" +
                     "<th>" +
@@ -2546,7 +2546,8 @@ export default {
                   var axisData = opt.xAxis[0].data;
                   var series = opt.series;
                   var table =
-                    '<table   style="width:100%;text-align:center">< thead ><tr>' +
+                    '<table   border="1" bordercolor="gray" cellpadding="10" cellspacing="0" scroll style="width:50%;text-align:center;margin-left:300px"><thead><tr>' +
+               
                     "<th>" +
                     xAxisText +
                     "</th>" +
@@ -2783,7 +2784,8 @@ export default {
                   var axisData = opt.xAxis[0].data;
                   var series = opt.series;
                   var table =
-                    '<table class="table table-striped table-bordered table-hover" style="width:100%;text-align:center"><thead><tr>' +
+                   '<table   border="1" bordercolor="gray" cellpadding="10" cellspacing="0" scroll style="width:50%;text-align:center;margin-left:300px"><thead><tr>' +
+               
                     "<th>" +
                     xAxisText +
                     "</th>" +

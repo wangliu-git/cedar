@@ -254,14 +254,15 @@
               {{editForm.sample_type}}
             </div>
             <div>
+              <span>淋巴细胞来源：</span>
+              {{editForm.type}}
+            </div>
+            <div>
               诊断结论
               <span>病理类型：</span>
               {{editForm.diagnosis2}}
             </div>
-            <div>
-              <span>淋巴细胞来源：</span>
-              {{editForm.type}}
-            </div>
+            
             <div style="float:left">
               辅助诊断
               <span>免疫组化：</span>
@@ -395,13 +396,12 @@ export default {
           this.queryInfo.count = parseInt(res.data.count); //总条数
           // console.log(this.queryInfo.page);
           // console.log(this.queryInfo.count);
-          // console.log(this.queryInfo.pagerows);
-   
+          // console.log(this.queryInfo.pagerows); 
         });
       
     },
     // 确认导出
-    async sure() {
+    async sure() {                 
       // console.log(this.row.id);
       // let z = "";
       // window.open('http://106.13.49.232/cedar/api/group_report/list.php?&z=1' +'&group_id=' +this.row.id)
@@ -431,8 +431,6 @@ export default {
           })
         }
       })
-
-
     },
  
     // 点击导出
@@ -597,7 +595,6 @@ export default {
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus" >
-
 .el-table__body tr.current-row>td{
   background-color: #bfc !important;
     color: #fff;
@@ -898,7 +895,8 @@ a{
         position: relative;
         border-top: 1px solid rgba(185, 222, 255, 1);
         margin: 20px 30px;
-
+        display: flex;
+        flex-flow: column;
         th {
           display: inline-block;
           line-height: 11px;

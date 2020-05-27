@@ -436,16 +436,22 @@
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload> -->
         
-        <el-upload       
+        <el-upload   v-model="editForm.img"
           action="http://106.13.49.232/cedar/api/upload_file/add2.php"
           :show-file-list="true"
-          :accept="'image/*'"         
+          :accept="'image/*'"        
+           list-type="picture-card" 
           :on-success="handleSuccess"
           :on-error="handleError"
           :before-upload="handleBeforeUpload"
-          :on-progress="handleProgress">        
-          <el-button type="primary" size="medium">上传图片</el-button>
+          :on-progress="handleProgress"
+          :on-preview="handlePictureCardPreview"
+          :on-remove="handleRemove">                
+          <i class="el-icon-plus"></i>
         </el-upload>
+        <el-dialog :visible.sync="dialogVisible">
+          <img width="100%" :src="img[0]" >
+        </el-dialog>
         
         </el-collapse>
         <div class="foot">
@@ -515,7 +521,6 @@ export default {
   methods: {
     handleSuccess(response, file, fileList) {
       this.$message("上传成功");
-      this.imageUrl = URL.createObjectURL(file.raw);  
       // console.log(this.editForm.imageUrl)
       console.log(file.raw)
       console.log(file)
@@ -541,11 +546,20 @@ export default {
     handleProgress(event, file, fileList) {
       this.loading = true;  //  上传时执行loading事件
     },
-    handleRemove() {
-      console.log(file, fileList);
+    handleRemove(file) {
+      // console.log(file, fileList);
+      console.log(file.response.id)
+      this.pics.splice(file.response.id)
+      console.log(this.pics)
     },
-    handlePreview() {
-      console.log(file);
+    // handlePreview() {
+    //   console.log(file);
+    // },
+    handlePictureCardPreview(file) {
+      // console.log(file)
+      this.img = file.url;
+      this.dialogVisible = true;
+      
     },
  
     // 获取分组
@@ -569,16 +583,6 @@ export default {
       console.log(this.attached)
       this.getTableList2()
     },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      // this.dialogVisible = true;
-      this.dialogVisible = dialogImageUrl.map(item => {
-        return {
-          name: item,
-          url: item
-        };
-      });
-    },
     // 解析
     jiexi() {
       this.$alert("解析错误，请校验文字格式！", "解析错误", {
@@ -595,11 +599,16 @@ export default {
       })
       console.log(res);   
       this.rowAdd = row
-      if( this.editForm.report_date === '0000-00-00'){
-        this.editForm.report_date = ''
-      } 
+     
+
       if(res != null){
         this.editForm = res;
+        if(this.editForm.report_date === '0000-00-00'){
+          this.editForm.report_date = ''
+        } 
+        if(this.editForm.application_date === '0000-00-00'){
+          this.editForm.application_date = ''
+        } 
         // console.log(this.editForm);
         this.jilian = []
         if(this.editForm.diagnosis1 !=  ''){
@@ -613,6 +622,12 @@ export default {
         }    
         // this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2)
          this.editForm.jilian = this.jilian  
+        if(this.editForm.img){
+          this.editForm.img.map( (item,index) =>{
+           this.img.push(item)
+          })
+          console.log(this.img[0])
+        }
         
       }  else{
         this.editForm = {};
@@ -791,6 +806,9 @@ export default {
   },
   data() {
     return {
+      img:[],    //图片
+      // dialogImageUrl: '',
+      dialogVisible: false,
       pics:[],    //  上传图片的数组
       imageUrl: '',
       pic:'',
@@ -820,7 +838,7 @@ export default {
       data: [],
       attached: "",
       // 上传图片
-      dialogImageUrl: "",
+      // dialogImageUrl: "",
       dialogVisible: false,
       // 弹窗
       zhezhao: false,

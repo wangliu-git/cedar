@@ -30,7 +30,7 @@ import {
     Dialog,
     Loading ,
     Cascader,
-    Dropdown
+    Dropdown,
     
     
 } from 'element-ui'
@@ -64,6 +64,7 @@ Vue.use(Dialog)
 Vue.use(Loading)
 Vue.use(Cascader)
 Vue.use(Dropdown)
+
 
 
 

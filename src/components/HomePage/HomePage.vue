@@ -99,21 +99,6 @@
           <i class="iconfont icontubiaozhizuo-">病理报告量详情</i>
         </div>
         <div id="wang">
-          <!--
-          <div class="one">
-            <span>{{reportLists.total1}}</span>
-          </div>
-          <div class="two">
-            <span>{{reportLists.total2}}</span>
-          </div>
-          <div class="three">
-            <span>{{reportLists.total3}}</span>
-          </div>
-
-          <span>本单位</span>
-          <span>本单位会诊</span>
-          <span>外单位首诊</span>
-          -->
         </div>
         <div class="zi"></div>
       </div>

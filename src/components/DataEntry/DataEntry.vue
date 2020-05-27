@@ -231,7 +231,7 @@
                 <i class="iconfont icontubiaozhizuo-"></i>
                 {{patient_infoAll.name}}:
               </template>
-              <el-form :inline="true" :rules="rules" :label-position="labelPosition" label-width="90px" ref="ruleForm"> 
+              <el-form :inline="true" :rules="rules" :label-position="labelPosition" label-width="90px" ref="Formone"> 
                    
                 <el-form-item label="住院号：" prop="patient_id" >
                   <el-input v-model="editForm.patient_id" size="mini" placeholder="请输入住院号/门诊号"  maxlength="10"
@@ -339,7 +339,7 @@
                     <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
                     {{reportMessage.name}}:
                   </div>
-                  <el-form :inline="true" ref="ruleForm" :rules="rules" :label-position="labelPosition" label-width="90px">
+                  <el-form :inline="true" ref="Formtwo" :rules="rules" :label-position="labelPosition" label-width="90px">
                     <el-form-item label="姓名：">
                       <el-input v-model="editForm.name"  size="mini" placeholder="请输入姓名"></el-input>
                     </el-form-item>
@@ -378,13 +378,13 @@
                     <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
                     {{reportResult.name}}:
                   </div>                 
-                  <div class="sickItem">
-                    <span>病理类型原文:</span>
+                  <div class="sickItem" >                                    
+                    <span style="color:#CD0404">病理类型原文:</span>
                     <el-input
                       size="mini"
                       v-model="editForm.diagnosis2"                    
                       clearable
-                      style="width:350px"
+                      style="width:350px" required
                     ></el-input>
                   </div>
                 </div>
@@ -567,7 +567,7 @@
                     {{reportMessage.name}}:
                   </div>
 
-                  <el-form :inline="true" ref="ruleForm" :rules="rules" :label-position="labelPosition" label-width="100px">
+                  <el-form :inline="true" ref="Formthree" :rules="rules" :label-position="labelPosition" label-width="100px">
                     <el-form-item label="病理号：" prop="test_id">
                       <el-input v-model="editForm.test_id"  size="mini" placeholder="请输入病理号"></el-input>
                     </el-form-item>
@@ -629,7 +629,7 @@
                     <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
                     {{materMessage.name}}:
                   </div>
-                  <el-form :inline="true" ref="ruleForm" :rules="rules" :label-position="labelPosition" label-width="100px">
+                  <el-form :inline="true" ref="Formfour" :rules="rules" :label-position="labelPosition" label-width="100px">
 
                     <el-form-item label="标本类型：" prop="sample_type">
                      <el-select  v-model="editForm.sample_type" size="mini">
@@ -679,8 +679,17 @@
                       style="width:580px"
                     ></el-cascader>
                   </div> -->
-                  <el-form :inline="true" ref="ruleForm" :rules="rules" :label-position="labelPosition" label-width="110px">
-                    <el-form-item label="病理大类：" prop="diagnosis1_normal">
+                  <el-form :inline="true" ref="Formfive" :rules="rules" :label-position="labelPosition" label-width="110px">
+                    <el-form-item label="病理类型原文：">
+                      <el-input
+                      size="mini"
+                      v-model="editForm.diagnosis_txt2"                    
+                      clearable
+                      style="width:550px"
+                    ></el-input>
+                    </el-form-item>  
+
+                    <el-form-item label="病理类型：" prop="diagnosis1_normal">
                      <el-select  v-model="editForm.diagnosis1_normal" size="mini" style="width:300px">
                       <el-option
                         v-for="(item,index) in  this.onechoose"
@@ -726,14 +735,7 @@
                     </el-select>
                     </el-form-item>
 
-                    <el-form-item label="病理类型原文：">
-                      <el-input
-                      size="mini"
-                      v-model="editForm.diagnosis_txt2"                    
-                      clearable
-                      style="width:550px"
-                    ></el-input>
-                    </el-form-item>                               
+                                           
                   </el-form>
                 </div>
 
@@ -847,15 +849,16 @@
               </div>
             </el-collapse-item>
             <el-button type="primary" @click="submit(ruleForm)" class="commit" style="width:100%">提交</el-button>
-            <div class="textCon">
-              <div class="text">
-                <span>原始文本</span>
-                <div class="content">
-                  <span>{{editForm.diagnosis_txt}}</span>
-                </div>
-              </div>
-            </div>
+           
           </el-collapse>
+        </div>
+      </div>
+      <div class="textCon">
+        <div class="text">
+          <span>原始文本</span>
+          <div class="content">
+            <span>{{editForm.diagnosis_txt}}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -885,13 +888,20 @@
               <el-button   plain slot="append" @click="groupLists">搜索</el-button>
             </el-input>
           </div>
+    
           <div class="groupList">
-            <el-button v-model="location"
+            <el-scrollbar >
+              <el-button v-model="location"
               v-for="(it, index) in this.groupList"
               :key="index"
               :value="it.group_name"
+              style="width:100%"
              @click="location_name(it)">{{it.group_name}}</el-button>
+            </el-scrollbar>
+            
           </div>
+ 
+         
           <div class="name">
             <span>新建项目名称 ：</span>
             <el-input placeholder="请输入项目名称..." style="width:380px" v-model="groupName">
@@ -1054,6 +1064,12 @@ export default {
     this.get3()
   },
   methods: {
+    get1(){
+      this.options.map((item, index) => {
+        this.onechoose.push(item.value);              
+      });
+      console.log(this.onechoose)
+    },
     get2(){
       this.options.map((item, index) => {
         console.log(item);
@@ -1064,14 +1080,9 @@ export default {
           });  
         }            
       });
-      // console.log(this.twochoose)
+      console.log(this.twochoose)
     },
-    get1(){
-      this.options.map((item, index) => {
-        this.onechoose.push(item.value);              
-      });
-      // console.log(this.onechoose)
-    },
+    
     get3(){
       this.options.map((item, index) => {
         // console.log(item.children);
@@ -1436,7 +1447,7 @@ export default {
           message: "已取消"
         });
       });
-      
+     
     },
     // 点击下一个
     next(id) {
@@ -1547,15 +1558,7 @@ export default {
       //   alert('请填写姓名')
       //   this.zhezhao = false
       // }
-    
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!');
-        } else {
-          console.log('error submit!!');
-          return false;
-        }
-      });
+
     
       // console.log(this)
     },
@@ -1584,22 +1587,22 @@ export default {
     //   }
     // },
     // 免疫租化增删
-    ihcAddData( ihcItem,value) {
+    ihcAddData(mark, value) {
       //判断当前数组的对象是否有数据
       console.log(ihcItem);
-        if (value.mark || value.value){
-          //验证通过 添加新的一条
-          var newValue = {
-             mark: "",
-             value: ""
-           };
-         ihcItem.push(newValue);
-        } else {
-          alert("请检查输入是否正确");
-        }     
+      if (mark || value) {
+        //验证通过 添加新的一条
+        var newValue = {
+          mark: "",
+          value: ""
+        };
+        ihcItem.push(newValue);
+      } else {
+        alert("请检查输入是否正确");
+      }
     },
     // 免疫组化删除
-    ihcDeleteData(ihcItem,idx) {
+    ihcDeleteData(mark, idx) {
       if (ihcItem.length > 1) {
         ihcItem.splice(idx, 1);
       } else {
@@ -2894,12 +2897,14 @@ export default {
 };
 </script>
 
-
 <style>
 .el-form-item{
   margin-left: 50px;
 }
-.el-button + .el-button {
+#dataImport .el-scrollbar__thumb{
+  background: #b8c3d5;
+}
+#dataImport .el-button+.el-button {
   margin-left: 0;
 }
 #dataImport .el-collapse-item__header {
@@ -3110,7 +3115,6 @@ a {
           width: 100px;
         }
       }
-
       .cun {
         margin-left: 20px;
         margin-top: 5px;
@@ -3119,12 +3123,10 @@ a {
           width: 100px;
         }
       }
-
       // 搜索
       .sousuo {
         margin: 20px 20px 10px 20px;
       }
-
       .groupList {
         width: 500px;
         height: 280px;
@@ -3132,17 +3134,14 @@ a {
         margin: 20px 20px;
         display: flex;
         flex-flow: column;
-        overflow: scroll;
-
+        overflow: auto;
         .el-button {
           font-size: 16px;
         }
       }
-
       .name {
         margin-left: 20px;
       }
-
       .button {
         float: right;
         margin-top: 10px;
@@ -3151,38 +3150,32 @@ a {
     }
   }
 }
-
 // 表单
 .container {
   width: 100%;
   overflow-x: hidden;
   margin-top: 20px;
-
   .el-input {
     width: 200px;
   }
-
   .form {
-    height: 1900px;
     background: rgba(255, 255, 255, 1);
     box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
     border-radius: 4px;
     position: relative;
-
+    margin-bottom 120px
     // 按钮
     .header {
       border-bottom: 1px solid rgba(232, 232, 232, 1);
       height: 55px;
-
       .el-button {
         margin-left: 28px;
         margin-top: 12px;
+        margin-right 20px
       }
-
       .next {
         background-color: rgba(41, 184, 252, 1);
       }
-
       .iconfont {
         color: white;
       }
@@ -3586,31 +3579,31 @@ a {
         border: none;
       }
 
-      .textCon {
-        margin-left: -40px;
-        position: fixed;
-        bottom: 0px;
-        z-index: 9;
-        background: rgba(255, 255, 255, 1);
-        box-shadow: 0px 1px 10px 0px rgba(179, 179, 179, 0.75);
-        border-radius: 4px;
+      
+    }
+  }
+  .textCon {
+    margin-left: -20px;
+    position: fixed;
+    bottom: 0px;
+    z-index: 9;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0px 1px 10px 0px rgba(179, 179, 179, 0.75);
+    border-radius: 4px;
+    height 140px
+    .text {
+      font-size: 20px;
+      margin: 6px 30px 0;
 
-        .text {
-          font-size: 18px;
-          width: 1600px;
-          margin: 6px 30px 0;
+      span {
+        height: 30px;
+        display: block;
+        margin-bottom: 8px;
+      }
 
-          span {
-            height: 30px;
-            display: block;
-            margin-bottom: 8px;
-          }
-
-          .content {
-            font-size: 14px;
-            height: 60px;
-          }
-        }
+      .content {
+        font-size: 16px;
+        height: 60px;
       }
     }
   }

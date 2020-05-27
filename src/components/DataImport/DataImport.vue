@@ -229,8 +229,14 @@
             </el-input>
           </div>
            <div class="groupList">
-            <el-button v-model="location"  v-for="(it, index) in this.groupList" :key="index" :value="it.group_name" @click="location_name(it)">{{it.group_name}}</el-button>
-          </div>
+       <el-scrollbar >
+              <el-button v-model="location"
+              v-for="(it, index) in this.groupList"
+              :key="index"
+              :value="it.group_name"
+              style="width:100%"
+             @click="location_name(it)">{{it.group_name}}</el-button>
+            </el-scrollbar>      </div>
           <div class="name">
             <span>新建项目名称 ：</span>
             <el-input placeholder="请输入项目名称..." style="width:380px" v-model="groupName">
@@ -717,6 +723,15 @@
                     ></el-cascader>
                   </div> -->
                   <el-form :inline="true" ref="ruleForm" :rules="rules" :label-position="labelPosition" label-width="110px">
+                    <el-form-item label="病理类型原文：">
+                      <el-input
+                      size="mini"
+                      v-model="editForm.diagnosis_txt2"                    
+                      clearable
+                      style="width:550px"
+                    ></el-input>
+                    </el-form-item>    
+                 
                     <el-form-item label="病理大类：" prop="diagnosis1_normal">
                      <el-select  v-model="editForm.diagnosis1_normal" size="mini" style="width:300px">
                       <el-option
@@ -763,14 +778,7 @@
                     </el-select>
                     </el-form-item>
 
-                    <el-form-item label="病理类型原文：">
-                      <el-input
-                      size="mini"
-                      v-model="editForm.diagnosis_txt2"                    
-                      clearable
-                      style="width:550px"
-                    ></el-input>
-                    </el-form-item>                               
+                                               
                   </el-form>
                 </div>
 
@@ -884,15 +892,16 @@
               </div>
             </el-collapse-item>
             <el-button type="primary" @click="submit()" class="commit" style="width:100%">提交</el-button>
-            <div class="textCon">
-              <div class="text">
-                <span>原始文本</span>
-                <div class="content">
-                  <span>{{editForm.diagnosis_txt}}</span>
-                </div>
-              </div>
-            </div>
+          
           </el-collapse>
+        </div>
+      </div>
+      <div class="textCon">
+        <div class="text">
+          <span>原始文本</span>
+          <div class="content">
+            <span>{{editForm.diagnosis_txt}}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -1033,9 +1042,10 @@ export default {
 		},
     // 点击查看数据集显示病理数据
     async chakanj(row){
+      let type = ''
       this.chakan = true
       console.log(row)
-      const {data :res} = await  this.axios.get("excel_data/list.php",{params:{id:row.id}})      
+      const {data :res} = await  this.axios.get("excel_data/list.php",{params:{id:row.id,type:2}})      
       console.log(res)
       this.tablelist = res.data
       this.queryInfo.page = parseInt(res.page);     
@@ -1087,6 +1097,7 @@ export default {
               confirmButtonText: '确定',
               type: 'success',
               callback: action => {
+                row.status = 0
                 this.chakan =true
                 this.axios.get("dataset/list.php?id=", + row.id)
               },
@@ -1307,7 +1318,7 @@ export default {
     // 获取病理号
     async getTableList2(row) {  
       // console.log(row.id)
-      console.log(this.queryInfo.page)
+      // console.log(this.queryInfo.page)
       const { data: res } = await this.axios.get(     
       "excel_data/list.php" , {params:{id:row.id,page:this.queryInfo.page}});
       //console.log(row.id)
@@ -1322,7 +1333,7 @@ export default {
     },
     // 点击切换页码获取数据
     async getTableList() {  
-      console.log(this.Row.id)
+      // console.log(this.Row.id)
       console.log(this.queryInfo.page)
       const { data: res } = await this.axios.get(     
       "excel_data/list.php" , {params:{page:this.queryInfo.page,id:this.Row.id}});
@@ -2728,6 +2739,9 @@ export default {
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus" >
+#dataImport .el-scrollbar__thumb{
+  background: #b8c3d5;
+}
 .jiexi {
   background-color #409EFF
   &:hover{
@@ -2950,6 +2964,8 @@ a {
               position relative
               border-top :1px solid rgba(185,222,255,1); 
               margin 20px 30px
+              display: flex;
+              flex-flow: column;
               th{              
                 display inline-block               
                 line-height 11px
@@ -3082,11 +3098,11 @@ a {
     width: 200px;
   }
   .form {
-    height: 1900px;
     background: rgba(255, 255, 255, 1);
     box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
     border-radius: 4px;
     position: relative;
+    margin-bottom 120px
     // 按钮
     .header {
       border-bottom: 1px solid rgba(232, 232, 232, 1);
@@ -3444,28 +3460,29 @@ a {
         border-radius: 4px;
         border: none;
       }
-      .textCon {
-        margin-left: -40px;
-        position: fixed;
-        bottom: 0px;
-        z-index: 9;      
-        background: rgba(255, 255, 255, 1);
-        box-shadow: 0px 1px 10px 0px rgba(179, 179, 179, 0.75);
-        border-radius: 4px;
-        .text {
-          font-size 18px
-          width: 1600px;
-          margin: 6px 30px 0;  
-          span {
-            height: 30px;
-            display: block;
-            margin-bottom 8px
-          }
-          .content {
-            font-size: 14px;
-            height 60px
-          }
-        }
+      
+    }
+  }
+  .textCon {
+    margin-left: -20px;
+    position: fixed;
+    bottom: 0px;
+    z-index: 9;      
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0px 1px 10px 0px rgba(179, 179, 179, 0.75);
+    border-radius: 4px;
+    height 140px
+    .text {
+      font-size 20px
+      margin: 6px 30px 0;  
+      span {
+        height: 30px;
+        display: block;
+        margin-bottom 8px
+      }
+      .content {
+        font-size: 16px;
+        height 60px
       }
     }
   }

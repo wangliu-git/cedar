@@ -94,7 +94,6 @@
         <el-main>
           <router-view></router-view>
         </el-main>
-        <el-footer></el-footer>
       </el-container>
     </el-container>
   </div>
@@ -190,6 +189,8 @@ el-button el-button--default {
 
 .el-footer {
   background-color: #F5F7FB;
+  height 400px
+
 }
 
 .el-header {
@@ -203,6 +204,7 @@ el-button el-button--default {
   img {
     width: 73px;
     height: 46px;
+    
   }
 
   .logo {
