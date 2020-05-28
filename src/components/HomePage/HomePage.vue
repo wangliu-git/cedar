@@ -137,27 +137,41 @@ export default {
       let startdate =''
       let enddate =''
       console.log(this.value)
-      const res = await this.axios.get("report/stat_day.php",{params:{type:1,startdate:this.value[0],enddate:this.value[1]}});
-      console.log(res);
-      let myChart = this.$echarts.init(
-        document.getElementById("liu"),
-        "macarons"
-      );
-      let datas = res.data.stat;
-      setEChart_barWithTool({
-        myChart: myChart,
-        dataEcharts: datas
-        // title: "折线图"
-      });
-
+      if(this.value != null){
+        const res = await this.axios.get("report/stat_day.php",{params:{type:1,startdate:this.value[0],enddate:this.value[1]}});
+        console.log(res);
+        let myChart = this.$echarts.init(
+          document.getElementById("liu"),
+          "macarons"
+        );
+        let datas = res.data.stat;
+        setEChart_barWithTool({
+          myChart: myChart,
+          dataEcharts: datas
+          // title: "折线图"
+        });    
+      }else{
+        const res = await this.axios.get("report/stat_day.php",{params:{type:1}});
+        console.log(res);
+        let myChart = this.$echarts.init(
+          document.getElementById("liu"),
+          "macarons"
+        );
+        let datas = res.data.stat;
+        setEChart_barWithTool({
+          myChart: myChart,
+          dataEcharts: datas
+          // title: "折线图"
+        });    
+      }
       /**
-       * @description EChart -带有工具栏的柱状图，操作echarts对象更换图形
-       * @param {object} param 参数列表
-       * @param  {object} param.myChart 待更新的echarts对象
-       * @param {object} param.dataEcharts 待分析的源数据
-       * @param {string} [param.type] 分析项（英文名称） 可选
-       * @param {string} param.title 表格title名称
-       */
+        * @description EChart -带有工具栏的柱状图，操作echarts对象更换图形
+        * @param {object} param 参数列表
+        * @param  {object} param.myChart 待更新的echarts对象
+        * @param {object} param.dataEcharts 待分析的源数据
+        * @param {string} [param.type] 分析项（英文名称） 可选
+        * @param {string} param.title 表格title名称
+      */
       function setEChart_barWithTool(param) {
         let myChart = param.myChart,
           dataEcharts = param.dataEcharts,

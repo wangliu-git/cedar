@@ -1,5 +1,5 @@
 <template>
-  <div class="mainContainer" ref="form">
+  <div class="mainContainer" >
     <!--数据存储 -->
     <div class="storage" v-if="wenjian">
       <div class="storageR">
@@ -231,9 +231,9 @@
                 <i class="iconfont icontubiaozhizuo-"></i>
                 {{patient_infoAll.name}}:
               </template>
-              <el-form :inline="true" :rules="rules" :label-position="labelPosition" label-width="90px" ref="Formone"> 
+              <el-form :inline="true"  :label-position="labelPosition" label-width="90px" > 
                    
-                <el-form-item label="住院号：" prop="patient_id" >
+                <el-form-item label="住院号：" prop="patient_id">
                   <el-input v-model="editForm.patient_id" size="mini" placeholder="请输入住院号/门诊号"  maxlength="10"
                     show-word-limit></el-input>
                 </el-form-item>
@@ -339,7 +339,7 @@
                     <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
                     {{reportMessage.name}}:
                   </div>
-                  <el-form :inline="true" ref="Formtwo" :rules="rules" :label-position="labelPosition" label-width="90px">
+                  <el-form :inline="true"  :label-position="labelPosition" label-width="90px">
                     <el-form-item label="姓名：">
                       <el-input v-model="editForm.name"  size="mini" placeholder="请输入姓名"></el-input>
                     </el-form-item>
@@ -567,7 +567,7 @@
                     {{reportMessage.name}}:
                   </div>
 
-                  <el-form :inline="true" ref="Formthree" :rules="rules" :label-position="labelPosition" label-width="100px">
+                  <el-form :inline="true"  :label-position="labelPosition" label-width="100px">
                     <el-form-item label="病理号：" prop="test_id">
                       <el-input v-model="editForm.test_id"  size="mini" placeholder="请输入病理号"></el-input>
                     </el-form-item>
@@ -629,7 +629,7 @@
                     <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
                     {{materMessage.name}}:
                   </div>
-                  <el-form :inline="true" ref="Formfour" :rules="rules" :label-position="labelPosition" label-width="100px">
+                  <el-form :inline="true"  :label-position="labelPosition" label-width="100px">
 
                     <el-form-item label="标本类型：" prop="sample_type">
                      <el-select  v-model="editForm.sample_type" size="mini">
@@ -679,7 +679,7 @@
                       style="width:580px"
                     ></el-cascader>
                   </div> -->
-                  <el-form :inline="true" ref="Formfive" :rules="rules" :label-position="labelPosition" label-width="110px">
+                  <el-form :inline="true"  :label-position="labelPosition" label-width="110px">
                     <el-form-item label="病理类型原文：">
                       <el-input
                       size="mini"
@@ -848,7 +848,7 @@
                 </div>
               </div>
             </el-collapse-item>
-            <el-button type="primary" @click="submit(ruleForm)" class="commit" style="width:100%">提交</el-button>
+            <el-button type="primary" @click="submit()" class="commit" style="width:100%">提交</el-button>
            
           </el-collapse>
         </div>
@@ -885,7 +885,7 @@
           -->
           <div class="sousuo">
             <el-input placeholder="请输入关键词..." style="width:500px" v-model="search_group"  @keyup.enter.native="groupLists()">
-              <el-button   plain slot="append" @click="groupLists">搜索</el-button>
+              <el-button  style="background:#DCDCDC;color:black" slot="append" @click="groupLists">搜索</el-button>
             </el-input>
           </div>
     
@@ -904,7 +904,7 @@
           <div class="name">
             <span>新建项目名称 ：</span>
             <el-input placeholder="请输入项目名称..." style="width:380px" v-model="groupName">
-              <el-button plain slot="append" @click="addGroup(groupName)">保存</el-button>
+              <el-button style="background:#DCDCDC;color:black" slot="append" @click="addGroup(groupName)">保存</el-button>
             </el-input>
           </div>
           <div class="button">
@@ -1067,7 +1067,7 @@ export default {
       this.options.map((item, index) => {
         this.onechoose.push(item.value);              
       });
-      console.log(this.onechoose)
+      // console.log(this.onechoose)
     },
     get2(){
       this.options.map((item, index) => {
@@ -1079,7 +1079,7 @@ export default {
           });  
         }            
       });
-      console.log(this.twochoose)
+      // console.log(this.twochoose)
     },
     
     get3(){
@@ -1095,7 +1095,7 @@ export default {
         }); 
       }
       });
-      console.log(this.threechoose)
+      // console.log(this.threechoose)
     },   
     // 获取选择分组
     groupLists() {
@@ -1146,10 +1146,8 @@ export default {
           }
         })
         .then(res => {
-          console.log(res)
-          
-            this.groupList.push(res.data.data.params);
-     
+          console.log(res)    
+          this.groupList.push(res.data.data.params);  
           console.log(this.groupList);
           var result = res.data; //JSON.parse(res.body);
           if (result.result == 1) {
@@ -1175,9 +1173,8 @@ export default {
      }else{
         this.$alert('项目名称不能为空', '标题名称', {
         confirmButtonText: '确定',
-        callback: action => {
-         
-        }
+        type: "warning",
+        
       });
      }
     },
@@ -1607,7 +1604,11 @@ export default {
         };
         ihcItem.push(newValue);
       } else {
-        alert("请检查输入是否正确");
+        this.$alert("请检查输入是否正确", "提交结果", {
+          confirmButtonText: "确定",
+          type: "warning",
+            
+        });
       }
     },
     // 免疫组化删除
@@ -1615,7 +1616,11 @@ export default {
       if (ihcItem.length > 1) {
         ihcItem.splice(idx, 1);
       } else {
-        alert("最少保留一个");
+        this.$alert("至少保留一个", "提交结果", {
+            confirmButtonText: "确定",
+            type: "warning",
+            
+        });
       }
     },
     // 病理号切换每页显示多少条
@@ -1829,34 +1834,7 @@ export default {
     return {
       level:'',
       levelList:['1','2','3a','3b'],
-      rules:{
-        patient_id: [
-          { required: true, message: '请输入病理号',trigger: 'blur'},
-          {  max: 10, message: '长度最大为5 个字符',trigger: 'blur' }
-        ],
-        age: [
-          { required: true, message: '请输入年龄',trigger: 'blur' },
-        ],
-        sex: [
-          { required: true, message: '请选择性别', trigger: 'blur' },
-        ],
-        test_id: [
-          { required: true, message: '请输入病理号', trigger: 'blur' },
-        ],
-        diagnosis_type: [
-          { required: true, message: '请选择就诊类型', trigger: 'blur' },
-        ],
-        sample_type: [
-          { required: true, message: '请选择标本类型', trigger: 'blur' },
-        ],
-        sample_location: [
-          { required: true, message: '请选择取材部位', trigger: 'blur' },
-        ],
-        diagnosis1_normal: [
-          { required: true, message: '请选择病理大类', trigger: 'blur' },
-        ],
-
-      },
+  
       labelPosition:'left',
       search_group:'',        //搜索分组名
       onechoose:[],

@@ -664,7 +664,7 @@
             <div style="float:left">
               辅助诊断
               <span>免疫组化：</span>
-              <th  v-for="(item,index) in editForm.helper_diagnosis.ihc" :key="index" :value="item">
+              <th  v-for="(item,index) in this.helper_diagnosis.ihc" :key="index" :value="item">
                 <td>{{item.mark}}</td>
                 <td>{{item.value}}</td>
               </th>
@@ -708,7 +708,7 @@
           <div class="name">
             <span>新建项目名称 ：</span>
             <el-input placeholder="请输入项目名称..." style="width:380px" v-model="groupName">
-              <el-button slot="append" @click="addGroup(groupName)">保存</el-button>
+              <el-button slot="append" style="background:#DCDCDC;color:black" plain @click="addGroup(groupName)">保存</el-button>
             </el-input>
           </div>
           <div class="button">
@@ -2456,14 +2456,20 @@ export default {
       this.id = row.id;
       this.jilian = [];
       this.helper_diagnosis = this.editForm.helper_diagnosis;
-      // console.log(this.helper_diagnosis);
-      this.jilian.push(
-        this.editForm.diagnosis1,
-        this.editForm.diagnosis2,
-        this.editForm.diagnosis3
-      );
-      // console.log(this.jilian)
-      this.editForm.jilian = this.jilian;
+      console.log(this.helper_diagnosis);
+       if(this.editForm.diagnosis1_normal !=  ''){
+        this.jilian.push(this.editForm.diagnosis1_normal)
+      }
+      if(this.editForm.diagnosis2_normal != ''){
+        this.jilian.push(this.editForm.diagnosis2_normal)
+      }
+      if(this.editForm.diagnosis3_normal != ''){
+        this.jilian.push(this.editForm.diagnosis3_normal)
+      }    
+      // this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2)
+      this.editForm.jilian = this.jilian     
+      console.log(this.jilian)
+      
     },
     // 筛选重置按钮
     reset(edit) {
@@ -2474,11 +2480,13 @@ export default {
     async addGroup(groupName, ids) {
       console.log(groupName);
       // console.log(window.sessionStorage.username);
-      var group_name = "";
-      const res = await this.axios
+    
+      if(groupName.trim()){
+        let group_name ; 
+        const res = await this.axios
         .post("group/add.php", {
           params: {
-            group_name: groupName.group_name,
+            group_name: groupName,
             userid: window.sessionStorage.uid,
             ids: this.ids,
             username: window.sessionStorage.username
@@ -2486,7 +2494,7 @@ export default {
         })
         .then(res => {
           console.log(res);
-          this.groupLists.push(res.data.data.params.group_name);
+          this.groupLists.push(res.data.data.params);
           console.log(this.groupLists);
           var result = res.data; //JSON.parse(res.body);
           if (result.result) {
@@ -2494,9 +2502,9 @@ export default {
               confirmButtonText: "确定",
               type: "success",
               callback: action => {
-                this.groupLists = [];
-                this.groupList();
-                this.groupName = "";
+                // this.groupLists = [];
+                // this.groupList();
+                
               }
             });
           } else {
@@ -2506,7 +2514,18 @@ export default {
               callback: action => {}
             });
           }
+          this.groupName = "";
         });
+      // console.log(data)   
+     }else{
+        this.$alert('项目名称不能为空', '标题名称', {
+        confirmButtonText: '确定',
+        callback: action => {
+         
+        }
+      });
+     }
+      
     },
     inGroup(ids) {
       //console.log(this.ids)
@@ -2701,7 +2720,11 @@ export default {
       if (this.ihcArr.length > 1) {
         this.ihcArr.splice(idx, 1);
       } else {
-        alert("最少保留一个");
+        this.$alert("至少保留一个", "提交结果", {
+          confirmButtonText: "确定",
+          type: "warning",
+            
+        });
       }
       console.log(this.ihcArr);
     },

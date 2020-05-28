@@ -81,7 +81,7 @@
                   type="text"
                   size="small"
                   @click="tianjia(scope.row)"
-                  v-if="scope.row.attached == 1"
+                  v-if="scope.row.attached == 0"
                 >添加</el-button>
                 <div v-else>
                   <el-button
@@ -434,7 +434,7 @@
            list-type="picture">
           <el-button size="small" type="primary">点击上传</el-button>
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-        </el-upload> -->
+        </el-upload>http://106.13.49.232/cedar/ -->
         
         <el-upload   v-model="editForm.img"
           action="http://106.13.49.232/cedar/api/upload_file/add2.php"
@@ -447,13 +447,13 @@
           :on-progress="handleProgress"
           :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove">                
-          <i class="el-icon-plus"></i>
-        </el-upload>
-        <el-dialog :visible.sync="dialogVisible" v-for="(item,index) in this.img" :key="index">
-          <img width="100%" :src="item" >
-        </el-dialog>
-        
+          <i class="iconfont iconOCRshibieyichangjilu"></i>
+        </el-upload>    
         </el-collapse>
+        <el-dialog :visible.sync="dialogVisible">
+          <img width="100%" :src="img" >
+        </el-dialog>
+         <img  :src="this.src" alt="上传的图片">
         <div class="foot">
           <el-button @click="qingkong()">清空</el-button>
           <el-button @click="baocun(editForm)">保存</el-button>
@@ -592,6 +592,7 @@ export default {
     async look(row) { 
       this.zhezhao = true;
       console.log(row);
+      // let report_id 
       const { data: res } = await this.axios.get("diagnosis_origin/one.php",{params:{id:row.id}
       })
       console.log(res);   
@@ -621,7 +622,9 @@ export default {
           this.editForm.img.map( (item,index) =>{
            this.img.push(item)
           })
-          
+          console.log(this.img[0])
+          this.src = 'http://106.13.49.232/cedar/' + this.img[0]
+          console.log(this.src)
         }
         
       }  else{
@@ -635,9 +638,9 @@ export default {
     async del(row) {
       console.log(row)
       console.log(row.id)
-      // let report= ''
+      let report_id= ''
       const  res  = await this.axios("diagnosis_origin/del.php", {
-        params: { id:row.id }
+        params: {report_id:row.id }
       }).then(res => {
         this.$confirm("确定删除该数据？是否继续?", "提示", {
           confirmButtonText: "确定",
@@ -653,6 +656,8 @@ export default {
             console.log(res)
             this.tablelist = []
             this.getTableList()
+            // this.editForm = {}
+            // console.log(this.editForm)
           })
           .catch(() => {
             this.$message({
@@ -669,7 +674,8 @@ export default {
       this.zhezhao = true;
       this.id = this.rowAdd.id;
       this.attached = this.rowAdd.attached;
-      this.getTableList()
+      // this.getTableList()
+      this.editForm = {}
     },
     // 点击原单位编辑
     async bianji(row){
@@ -683,18 +689,51 @@ export default {
       this.editForm = res;
       console.log(this.editForm);
       this.jilian = []
+      if(res != null){
+        this.editForm = res;
+        if(this.editForm.report_date === '0000-00-00'){
+          this.editForm.report_date = ''
+        } 
+        if(this.editForm.application_date === '0000-00-00'){
+          this.editForm.application_date = ''
+        } 
+        // console.log(this.editForm);
+        this.jilian = []
+        if(this.editForm.diagnosis1 !=  ''){
+          this.jilian.push(this.editForm.diagnosis1)
+        }
+        if(this.editForm.diagnosis2 != ''){
+          this.jilian.push(this.editForm.diagnosis2)
+        }
+        if(this.editForm.diagnosis3 != ''){
+          this.jilian.push(this.editForm.diagnosis3)
+        }    
+        // this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2)
+         this.editForm.jilian = this.jilian  
+        if(this.editForm.img){
+          this.editForm.img.map( (item,index) =>{
+           this.img.push(item)
+          })
+          console.log(this.img[0])
+        }
+        
+      }  else{
+        this.editForm = {};
+        return
+      }    
+      
       //  this.editForm.helper_diagnosis =  this.helper_diagnosis 
       // console.log(this.helper_diagnosis);    
-      if(this.editForm.diagnosis1 !=  ''){
-        this.jilian.push(this.editForm.diagnosis1)
-      }
-      if(this.editForm.diagnosis2 != ''){
-        this.jilian.push(this.editForm.diagnosis2)
-      }
-      if(this.editForm.diagnosis3 != ''){
-        this.jilian.push(this.editForm.diagnosis3)
-      }
-      this.editForm.jilian = this.jilian          
+      // if(this.editForm.diagnosis1 !=  ''){
+      //   this.jilian.push(this.editForm.diagnosis1)
+      // }
+      // if(this.editForm.diagnosis2 != ''){
+      //   this.jilian.push(this.editForm.diagnosis2)
+      // }
+      // if(this.editForm.diagnosis3 != ''){
+      //   this.jilian.push(this.editForm.diagnosis3)
+      // }
+      // this.editForm.jilian = this.jilian          
       // this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2)       
       // this.rowAdd = row  
     },
@@ -706,8 +745,8 @@ export default {
     // 保存
     baocun(editForm) {
       // console.log(this)
-      this.editForm.pics =  this.pics
-      console.log(this.editForm.uid)
+       this.editForm.pics = this.pics 
+      // console.log(this.editForm.uid)
       this.zhezhao = !this.zhezhao;      
       console.log(this.rowAdd)
       console.log(this.rowAdd.attached)
@@ -801,6 +840,7 @@ export default {
   },
   data() {
     return {
+      src:'',    //获取图片路径
       img:[],    //图片
       // dialogImageUrl: '',
       dialogVisible: false,
@@ -1430,6 +1470,10 @@ export default {
 
 
 <style scoped lang="stylus" rel="stylesheet/stylus" >
+.iconOCRshibieyichangjilu{
+  color blue
+}
+
 .outest {
   .sContainer {
     height: 58px;

@@ -331,11 +331,17 @@ export default {
         center: true
       })
         .then(() => {
-          this.getUserList();
           this.$message({
             type: "success",
             message: "删除成功!"
           });
+          if(row.id == window.sessionStorage.uid){
+            window.sessionStorage.clear();
+            this.$router.push("/login");
+          }else{
+            this.getUserList();
+          }
+           
         })
         .catch(() => {
           this.$message({

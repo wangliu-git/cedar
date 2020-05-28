@@ -225,22 +225,23 @@
           -->
           <div class="sousuo">
             <el-input placeholder="请输入关键词..." style="width:500px" v-model="search_group"  @keyup.enter.native="groupLists()">
-              <el-button   plain slot="append" @click="groupLists">搜索</el-button>
+              <el-button   style="background:#DCDCDC;color:black"  slot="append" @click="groupLists">搜索</el-button>
             </el-input>
           </div>
-           <div class="groupList">
-       <el-scrollbar >
+          <div class="groupList">
+            <el-scrollbar >
               <el-button v-model="location"
               v-for="(it, index) in this.groupList"
               :key="index"
               :value="it.group_name"
               style="width:100%"
              @click="location_name(it)">{{it.group_name}}</el-button>
-            </el-scrollbar>      </div>
+            </el-scrollbar>      
+          </div>
           <div class="name">
             <span>新建项目名称 ：</span>
             <el-input placeholder="请输入项目名称..." style="width:380px" v-model="groupName">
-              <el-button plain slot="append" @click="addGroup(groupName)">保存</el-button>
+              <el-button style="background:#DCDCDC;color:black"  slot="append" @click="addGroup(groupName)">保存</el-button>
             </el-input>
           </div>
           <div class="button">
@@ -274,7 +275,7 @@
                 <i class="iconfont icontubiaozhizuo-"></i>
                 {{patient_infoAll.name}}:
               </template>
-              <el-form :inline="true"  :rules="rules" :label-position="labelPosition" label-width="90px">
+              <el-form :inline="true"   :label-position="labelPosition" label-width="90px">
                    
                 <el-form-item label="住院号：" prop="patient_id" >
                   <el-input v-model="editForm.patient_id" size="mini" placeholder="请输入住院号/门诊号"  maxlength="10"
@@ -382,7 +383,7 @@
                     <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
                     {{reportMessage.name}}:
                   </div>
-                  <el-form :inline="true"  :rules="rules" :label-position="labelPosition" label-width="90px">
+                  <el-form :inline="true"   :label-position="labelPosition" label-width="90px">
                     <el-form-item label="姓名：">
                       <el-input v-model="editForm.name"  size="mini" placeholder="请输入姓名"></el-input>
                     </el-form-item>
@@ -610,7 +611,7 @@
                     {{reportMessage.name}}:
                   </div>
 
-                  <el-form :inline="true"  :rules="rules" :label-position="labelPosition" label-width="100px">
+                  <el-form :inline="true"   :label-position="labelPosition" label-width="100px">
                     <el-form-item label="病理号：" prop="test_id">
                       <el-input v-model="editForm.test_id"  size="mini" placeholder="请输入病理号"></el-input>
                     </el-form-item>
@@ -672,7 +673,7 @@
                     <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
                     {{materMessage.name}}:
                   </div>
-                  <el-form :inline="true"  :rules="rules" :label-position="labelPosition" label-width="100px">
+                  <el-form :inline="true"  :label-position="labelPosition" label-width="100px">
 
                     <el-form-item label="标本类型：" prop="sample_type">
                      <el-select  v-model="editForm.sample_type" size="mini">
@@ -722,7 +723,7 @@
                       style="width:580px"
                     ></el-cascader>
                   </div> -->
-                  <el-form :inline="true" ref="ruleForm" :rules="rules" :label-position="labelPosition" label-width="110px">
+                  <el-form :inline="true" ref="ruleForm"  :label-position="labelPosition" label-width="110px">
                     <el-form-item label="病理类型原文：">
                       <el-input
                       size="mini"
@@ -891,7 +892,7 @@
                 </div>
               </div>
             </el-collapse-item>
-            <el-button type="primary" @click="submit()" class="commit" style="width:100%">提交</el-button>
+            <el-button type="primary" @click="submit(editForm)" class="commit" style="width:100%">提交</el-button>
           
           </el-collapse>
         </div>
@@ -972,28 +973,28 @@ export default {
         }); 
       }
       });
-      console.log(this.threechoose)
+      // console.log(this.threechoose)
     }, 
     // 获取所有分组
     groupLists() {
       // alert(1)
       const { data: res } = this.axios.get("group/list.php",{params:{group_name:this.search_group}}).then(res => {
-        console.log(res);
+        // console.log(res);
         this.groupList = res.data.data;
-        console.log(this.groupList);
+        // console.log(this.groupList);
       });
     },
     // 点击分组名
     location_name(it){
       this.it = it
-      console.log(it)
+      // console.log(it)
     },
     // 批量通过
     async passList(idss){
-      console.log(this.idss)
+      // console.log(this.idss)
       let ids = ''
       const res = await this.axios.get('excel_data/checkall.php',{params:{ids:this.idss}}).then( res=>{
-        console.log(res)
+        // console.log(res)
         this.getTableList2(this.row)
       })
       this.idss = []
@@ -1004,9 +1005,9 @@ export default {
       // console.log(window.sessionStorage.uid)
       var group_name = ''    
       const res = await this.axios.post('group/add.php',{params:{group_name:location,id:this.id,userid:window.sessionStorage.uid,}}).then( res =>{
-        console.log(res)
+        // console.log(res)
         this.groupList.push(res.data.data.params)
-        console.log(this.groupList)
+        // console.log(this.groupList)
          var result = res.data;//JSON.parse(res.body);
         if(result.result == 1){       
           this.$alert("添加成功", '提交结果', {           
@@ -1032,21 +1033,21 @@ export default {
     },
     // 获取选中数据
     checkTable(rows){
-			console.log("rows",rows);	     
+			// console.log("rows",rows);	     
       rows.map( (item,index) =>{
-        console.log(item.id)               
+        // console.log(item.id)               
         this.idss.push(item.id)       
       })
       this.idss = [...new Set(this.idss)];       
-      console.log(this.idss)      
+      // console.log(this.idss)      
 		},
     // 点击查看数据集显示病理数据
     async chakanj(row){
       let type = ''
       this.chakan = true
-      console.log(row)
+      // console.log(row)
       const {data :res} = await  this.axios.get("excel_data/list.php",{params:{id:row.id,type:2}})      
-      console.log(res)
+      // console.log(res)
       this.tablelist = res.data
       this.queryInfo.page = parseInt(res.page);     
       this.queryInfo.count = parseInt(res.count)  //总条数
@@ -1068,9 +1069,9 @@ export default {
       const { data : res } = await this.axios.post(
         "dataset/edit.php",{params:{id:this.id,file_name:this.data.file_name,location: this.it.group_name}}
       );    
-      console.log(this.data.file_name)
-      console.log(res)
-      console.log(this.id)
+      // console.log(this.data.file_name)
+      // console.log(res)
+      // console.log(this.id)
       this.group = false
       this.getDataList()
     },
@@ -1118,7 +1119,7 @@ export default {
     },
     // 点击数据集删除
     async dele(row) {
-      console.log(row.id);
+      // console.log(row.id);
       this.$confirm("确定删除该数据？是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -1183,11 +1184,11 @@ export default {
         this.jilian.push(this.editForm.diagnosis3)
       }  
       this.editForm.jilian = this.jilian
-      console.log(this.editForm);   
+      // console.log(this.editForm);   
     },
     //点击病理号查看
     async jiaoyan(row){
-      console.log(row.id)
+      // console.log(row.id)
       this.zhezhao = true    
       this.id  = row.id
       const { data :res} = await this.axios.get(
@@ -1242,7 +1243,7 @@ export default {
       if(data){
       // console.log(data)
        this.axios.post('report/add.php',data).then(res => {
-          console.log('res:',res); 
+          // console.log('res:',res); 
           var result = res.data;//JSON.parse(res.body);
           if(result.result=='done'){
             this.getTableList2(this.row); 
@@ -1263,16 +1264,16 @@ export default {
           }
         })
       }else {
-        console.log('error submit!!');
+      
         return false;
       }    
-      // this.next()
+   
     }, 
     // 点击下一个
     next(){
       this.id = this.id    
       this.xiayige = true     
-      console.log(this.id)   
+      // console.log(this.id)   
     },
     // 是
     shi(){
@@ -1313,7 +1314,7 @@ export default {
         this.shuInfo.page = parseInt(res.page);     
         this.shuInfo.count = parseInt(res.count)  //总条数
         this.shuInfo.pagerows = res.pagerows  //每页显示多少条
-        console.log(res)
+        // console.log(res)
     },
     // 获取病理号
     async getTableList2(row) {  
@@ -1329,12 +1330,12 @@ export default {
       this.queryInfo.count = parseInt(res.count)  //总条数
       this.queryInfo.pagerows = res.pagerows  //每页显示多少条 
       this.id = row.id  
-      console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);             
+      // console.log(this.queryInfo.page);console.log(this.queryInfo.count);console.log(this.queryInfo.pagerows);             
     },
     // 点击切换页码获取数据
     async getTableList() {  
       // console.log(this.Row.id)
-      console.log(this.queryInfo.page)
+      // console.log(this.queryInfo.page)
       const { data: res } = await this.axios.get(     
       "excel_data/list.php" , {params:{page:this.queryInfo.page,id:this.Row.id}});
       //console.log(row.id)
@@ -1384,8 +1385,8 @@ export default {
       this.tablelist = res.data
        this.queryInfo.page = parseInt(res.page);     
       this.queryInfo.count = parseInt(res.count)  //总条数
-      console.log(res.data)
-      console.log("getTableList",res);   
+      // console.log(res.data)
+      // console.log("getTableList",res);   
       // this.queryInfo.page = res.page     
       // this.count = res.count  //总条数
       // this.queryInfo.pagerows = res.pagerows  //每页显示多少条        
@@ -1450,7 +1451,7 @@ export default {
             }
             })
         }else {
-        console.log('error submit!!');
+        // console.log('error submit!!');
         return false;
         } 
         // this.fou()   
@@ -1683,34 +1684,7 @@ export default {
       level:'',
       levelList:['1','2','3a','3b'],
       labelPosition:'left',
-      rules:{
-        patient_id: [
-          { required: true, message: '请输入病理号',trigger: 'blur'},
-          {  max: 10, message: '长度最大为5 个字符',trigger: 'blur' }
-        ],
-        age: [
-          { required: true, message: '请输入年龄',trigger: 'blur' },
-        ],
-        sex: [
-          { required: true, message: '请选择性别', trigger: 'blur' },
-        ],
-        test_id: [
-          { required: true, message: '请输入病理号', trigger: 'blur' },
-        ],
-        diagnosis_type: [
-          { required: true, message: '请选择就诊类型', trigger: 'blur' },
-        ],
-        sample_type: [
-          { required: true, message: '请选择标本类型', trigger: 'blur' },
-        ],
-        sample_location: [
-          { required: true, message: '请选择取材部位', trigger: 'blur' },
-        ],
-        diagnosis1_normal: [
-          { required: true, message: '请选择病理大类', trigger: 'blur' },
-        ],
-
-      },
+    
       // 级联下拉信息
       onechoose:[],
       twochoose:[],

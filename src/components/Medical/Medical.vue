@@ -69,14 +69,14 @@
           <div>
             <i class="iconfont iconbuzhou-icon"></i>
             <span>选择分析 ：</span>
-            <el-select placeholder="请选择" size="small" v-model="type" style="width:300px" >
+            <el-select placeholder="请选择" size="small" v-model="type" style="width:300px" @change="drawLineSex">
               <el-option v-for="(item,index)  in choose" :key="index" :value="index" :label="item">{{item}}</el-option>
             </el-select>
           </div>
           <div v-show="this.type == 1">
             <i class="iconfont iconbuzhou-xian1"></i>
             <span>选择淋巴瘤亚型 ：</span>
-            <el-select placeholder="请选择" size="small" v-model="dignosis" style="width:400px" >
+            <el-select placeholder="请选择" size="small" v-model="dignosis" style="width:400px"  @change="drawLineSex">
               <el-option v-for="(item,index) in chooses" :key="index" :value="item">{{item}}</el-option>
             </el-select>
           </div>
@@ -726,6 +726,8 @@ export default {
 				this.buttonsShowCon();
 				this.sexShow=true;
 			}
+      this.buttonsShowCon();
+			this.sexShow=true;
       console.log(this.sex)
       console.log(this.id)
       // myChart.showLoading(); myChart.hideLoading();  //等待效果

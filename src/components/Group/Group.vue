@@ -165,7 +165,7 @@
           </div>
           <div class="btns">
             <el-button @click="daochu =false">取消</el-button>
-            <el-button @click="sure()"><a href="javascript:;"> 确认导出</a></el-button>
+            <el-button @click="sure()">确认导出</el-button>
           </div>
         </div>
       </div>
