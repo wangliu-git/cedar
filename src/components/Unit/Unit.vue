@@ -449,8 +449,8 @@
           :on-remove="handleRemove">                
           <i class="el-icon-plus"></i>
         </el-upload>
-        <el-dialog :visible.sync="dialogVisible">
-          <img width="100%" :src="img[0]" >
+        <el-dialog :visible.sync="dialogVisible" v-for="(item,index) in this.img" :key="index">
+          <img width="100%" :src="item" >
         </el-dialog>
         
         </el-collapse>
@@ -525,9 +525,10 @@ export default {
       console.log(file.raw)
       console.log(file)
       console.log(file.response.id)
-      this.pics.push(file.response.id)
-      console.log(this.pics)
-       
+      this.pics.push(file.response.id)     
+      // this.img = file.url
+      // console.log(this.img)
+      console.log(this.pics)      
     },
     handleError() {
       this.$error("上传失败,请重新上传图片!");
@@ -558,18 +559,14 @@ export default {
     handlePictureCardPreview(file) {
       // console.log(file)
       this.img = file.url;
-      this.dialogVisible = true;
-      
+      this.dialogVisible = true;     
     },
  
     // 获取分组
     getgroupList() {
       const { data: res } = this.axios.get("group/list.php").then(res => {
         console.log(res);
-        this.groupList = res.data.data;
-        // this.groupList.map( ( items ,index ) => {
-        //   console.log(items)
-        // })
+        this.groupList = res.data.data
         console.log(res.data.data);
       });
     },
@@ -598,9 +595,7 @@ export default {
       const { data: res } = await this.axios.get("diagnosis_origin/one.php",{params:{id:row.id}
       })
       console.log(res);   
-      this.rowAdd = row
-     
-
+      this.rowAdd = row  
       if(res != null){
         this.editForm = res;
         if(this.editForm.report_date === '0000-00-00'){
@@ -626,7 +621,7 @@ export default {
           this.editForm.img.map( (item,index) =>{
            this.img.push(item)
           })
-          console.log(this.img[0])
+          
         }
         
       }  else{

@@ -5,8 +5,7 @@
       <el-collapse-item name="1">
         <template
           slot="title"
-          style="background-color:rgba(232, 232, 232, 1) ,border:1px solid,margin-left:10px"
-        >
+          style="background-color:rgba(232, 232, 232, 1) ,border:1px solid,margin-left:10px">
           <i class="iconfont icontubiaozhizuo-"></i> 选择分组
         </template>
         <!--项目编号 -->
@@ -29,8 +28,7 @@
               <el-table
                 :data="datalist"              
                 style="width: 100%"
-                border
-                
+                border              
                 :row-class-name="tableRowClassName"
 	              :row-style="selectedstyle"
                 :header-cell-style="{color:'#333333'}"  @current-change="handleSelectionChange"
@@ -266,7 +264,7 @@
             <div style="float:left">
               辅助诊断
               <span>免疫组化：</span>
-              <th  v-for="(item,index) in editForm.helper_diagnosis.ihc" :key="index" :value="item">
+              <th  v-for="(item,index) in this.helper_diagnosis.ihc" :key="index" :value="item">
                 <td>{{item.mark}}</td>
                 <td>{{item.value}}</td>
               </th>
@@ -325,6 +323,7 @@ export default {
       zhezhao: false,
       // 查询到的用户信息对象
       editForm: {},
+      helper_diagnosis:[],
       //测试数据
       help_diagnosis: {
         ihc: [
@@ -453,6 +452,7 @@ export default {
       });
       this.editForm = res.data;
       this.id = row.id;
+      this.helper_diagnosis = this.editForm.helper_diagnosis
       // this.editForm = Object.assign(res.data[0],res.data[1],res.data[2])
       // 表单对象
       console.log(this.editForm);
@@ -949,3 +949,4 @@ a{
   }
 }
 </style>
+

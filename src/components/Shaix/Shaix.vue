@@ -466,7 +466,7 @@
             <div class="duan">
               <span>标志物:</span>
               <el-select
-                multiple
+               
                 v-model="edit.mark"
                 placeholder="请选择"
                 size="mini"
@@ -484,7 +484,7 @@
             <div class="duan">
               <span>检测结果 ：</span>
               <el-select
-                multiple
+              
                 v-model="edit.value"
                 placeholder="请选择"
                 size="mini"
@@ -494,7 +494,7 @@
                 <el-option v-for="(item,index) in this.valueList" :key="index" :value="item"></el-option>
               </el-select>
             </div>
-
+          
             <div>
               <button style="margin-right: 5px;margin-left: 5px;" @click="ihcAdd(mark,value)">
                 <i class="iconfont iconic_join_dialing_norm"></i>
@@ -2696,7 +2696,15 @@ export default {
       console.log(this.ihcArr);
       // console.log(this.edit.mark)
       // console.log(this.edit.value)
-    }
+    },
+    ihcDelete(mark, idx) {
+      if (this.ihcArr.length > 1) {
+        this.ihcArr.splice(idx, 1);
+      } else {
+        alert("最少保留一个");
+      }
+      console.log(this.ihcArr);
+    },
   },
   mounted() {
     // 患者信息
