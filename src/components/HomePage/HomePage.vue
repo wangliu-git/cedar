@@ -266,7 +266,7 @@ export default {
     // echarts图
     async darwPie3() {
       const res = await this.axios.get("report/stat.php");
-      console.log(res);
+      // console.log(res);
       let myChart = this.$echarts.init(
         document.getElementById("wang"),
         "macarons"
@@ -324,11 +324,96 @@ export default {
           }
         ]
       };
-      console.log("option:", option);
+      // console.log("option:", option);
       // 使用刚指定的配置项和数据显示图表。
       myChart.clear();
       myChart.setOption(option, { notMerge: true });
     },
+
+    // async darwPie2(){
+    //   let type =''
+    //   let startdate =''
+    //   let enddate =''
+    //   console.log(this.value)
+    //   if(this.value != '' ){
+    //     const res = await this.axios.get("report/stat_day.php",{params:{type:1,startdate:this.value[0],enddate:this.value[1]}});
+    //     console.log(res);
+    //     let myChart = this.$echarts.init(
+    //       document.getElementById("liu"),
+    //       "macarons"
+    //     );
+    //     let datas = res.data.stat;
+    //     console.log(datas)
+    //     return datas
+        
+    //   }else{
+    //     const res = await this.axios.get("report/stat_day.php",{params:{type:1}});
+    //     console.log(res);
+    //     let myChart = this.$echarts.init(
+    //       document.getElementById("liu"),
+    //       "macarons"
+    //     );
+    //     let datas = res.data.stat;
+    //     console.log(datas)
+    //     return datas
+        
+    //   }
+    //   let option = {
+    //       color: ['#3398DB'],
+    //      title: {
+    //       left: "center",
+    //       top: "10px",
+    //       textAlign: "center"
+    //     },
+    //     tooltip: {
+    //       //提示框组件
+    //       trigger: "axis", //触发类型：axis-坐标轴触发
+
+    //       axisPointer: {
+    //         //坐标轴指示器配置项
+    //         type: "cross", //十字准星指示器
+    //         label: {
+    //           //指示器文本
+    //           show: true,
+    //           precision: 0 //精确度，小数点后零位，即整数
+    //         }
+    //       }
+    //     },
+    //     grid: {
+    //       //直角坐标系内绘图网格
+    //       top: "15%",
+    //       left: "20%",
+    //       right: "5%",
+    //       bottom: "0%",
+    //       containLabel: true //grid是否包含刻度标签
+    //     },
+    //       xAxis: [
+    //           {
+    //               type: 'category',
+    //               data: datas.map(  r=> r.report_date),
+    //               axisTick: {
+    //                   alignWithLabel: true
+    //               }
+    //           }
+    //       ],
+    //       yAxis: [
+    //           {
+    //               type: 'value',
+    //               data: datas.map(  r=> r.daycount) 
+    //           }
+    //       ],
+    //       series: [
+    //           {
+    //               name: '直接访问',
+    //               type: 'line',
+    //               // barWidth: '60%',
+                 
+    //           }
+    //       ]
+    //   };
+    //   console.log("option:", option);
+    //   myChart.setOption(option)
+    // },
     // 统计数据1
     async tongji1() {
       let type = "";

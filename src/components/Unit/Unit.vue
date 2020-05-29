@@ -539,11 +539,12 @@ export default {
       if (!isImage) {
         this.$message.error("上传文件类型必须是图片!");
       }
-      const isLt2M = file.size / 1024 / 1024 < 2;
-      if (!isLt2M) {
-        this.$message.error("上传图片大小不能超过 2MB!");
-      }
-      return isImage && isLt2M;
+      // const isLt2M = file.size / 1024 / 1024 < 2;
+      // if (!isLt2M) {
+      //   this.$message.error("上传图片大小不能超过 2MB!");
+      // }
+      return isImage ;
+      // return isImage && isLt2M;
     },
     handleProgress(event, file, fileList) {
       this.loading = true;  //  上传时执行loading事件

@@ -1004,15 +1004,12 @@ export default {
                 // onclick: function() {
                 //   // alert('myToolHandler1');
                 //   // setEChart_line(myChart, dataEcharts);
-                //   // setEChart('pieWithTool')
-                  
+                //   // setEChart('pieWithTool')             
                 // }
               },
               magicType: {
-                //多个工具项-动态视图类型切换的选项
-                show: true,
-                type: ["line", "bar",'pie']
-              },
+        type: ['line', 'bar', 'stack', 'tiled']
+    },
               dataView: {
                 //工具项-原始数据展示
                 show: true,

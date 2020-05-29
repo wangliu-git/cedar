@@ -23,8 +23,8 @@
                     :on-remove="handleRemove"
                     :file-list="fileList"
                     :auto-upload="false">
-                    <el-button slot="trigger" size="small" type="primary">选取csv格式文件</el-button>
-                    <div slot="tip" class="el-upload_tip">只能上传.csv文件</div>
+                    <el-button slot="trigger" size="small" type="primary">选取csv/xls/xlsx格式文件</el-button>
+                    <div slot="tip" class="el-upload_tip">只能上传.csv/.xls/.xlsx文件</div>
                   </el-upload>
                 </el-col>
               </el-row>
@@ -1441,11 +1441,14 @@ export default {
         const res =  this.axios.get('excel_data/checkall.php',{params:{ids:this.idss}}).then( res=>{
           console.log(res)     
         })
+        
         this.$message({
           type: "success",
           message: "通过成功!"
         });
         this.getTableList2(this.row)
+        this.idss = []
+        
       })
       .catch(() => {
         this.$message({
@@ -1757,13 +1760,16 @@ export default {
       var that = this;
       //文件类型
       var fileName = file.name.substring(file.name.lastIndexOf(".") + 1);
-      if (fileName != "csv") {
+      // const extension = file.name.split('.')[1] === 'xls'
+      // const extension2 = file.name.split('.')[1] === 'xlsx'
+      // const extension3 = file.name.split('.')[1] === 'csv' && fileName != ".xls" && fileName != ".xlsx"
+      if (fileName != "csv" &&  fileName != "xls" && fileName != "xlsx") {
         that.uploadTemplateDialog = false;
         that.$message({
           type: "error",
           showClose: true,
           duration: 3000,
-          message: "文件类型不是.csv文件!"
+          message: "文件类型不是.csv/.xls/.xlsx文件!"
         });
         return false;
       }
@@ -2320,7 +2326,8 @@ export default {
       uploadTemplateDialog: false,
       fileList: [],
       uploadLoading: false,
-      acceptFileType: ".csv",
+      acceptFileType: ".csv,.xls,.xlsx",
+      // acceptFileType: ".csv",
       downLoadLoading: "",
       tablelist: [], //病理号数组
       row: {}, //缓存的row

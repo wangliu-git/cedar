@@ -1617,43 +1617,43 @@ export default {
       //文件类型
       var fileName=file.name.substring(file.name.lastIndexOf('.')+1);
       if(fileName!='json'){
-          that.uploadTemplateDialog=false;
-          that.$message({
-              type:'error',
-              showClose:true,
-              duration:3000,
-              message:'文件类型不是.json文件!'
-          });
-          return false;
+        that.uploadTemplateDialog=false;
+        that.$message({
+          type:'error',
+          showClose:true,
+          duration:3000,
+          message:'文件类型不是.json文件!'
+        });
+        return false;
       }
       //读取文件大小
       var fileSize=file.size;
       console.log(fileSize);
       if(fileSize>1048576){
-          that.uploadTemplateDialog=false;
-          that.$message({
-              type:'error',
-              showClose:true,
-              duration:3000,
-              message:'文件大于1M!'
-          });
-          return false;
+        that.uploadTemplateDialog=false;
+        that.$message({
+            type:'error',
+            showClose:true,
+            duration:3000,
+            message:'文件大于1M!'
+        });
+        return false;
       }
       that.downloadLoading=that.$loading({
-          lock:true,
-          text:'数据导入中...',
-          spinner:'el-icon-loading',
-          background:'rgba(0,0,0,0.7)'
+        lock:true,
+        text:'数据导入中...',
+        spinner:'el-icon-loading',
+        background:'rgba(0,0,0,0.7)'
       });
       let fd=new FormData();
       fd.append('pic',file);
       fd.append('_t1',new Date());
       axios({
-          method:'post',
-          url:"upload_file/add.php",
-          data:fd,
-          
-          headers:{"Content-Type":"multipart/form-data;boundary="+new Date().getTime()}
+        method:'post',
+        url:"upload_file/add.php",
+        data:fd,
+        
+        headers:{"Content-Type":"multipart/form-data;boundary="+new Date().getTime()}
       }).then(rsp=>{
           that.downloadLoading.close();
           that.uploadLoading=false;

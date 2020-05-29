@@ -59,3 +59,8 @@ export default {
   }
 };
 
+
+
+## 写法
+<div ref="chart"> </div>
+const myChart = echarts.init(this.$refs.chart);
