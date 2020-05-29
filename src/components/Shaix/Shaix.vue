@@ -2383,10 +2383,7 @@ export default {
       if (this.checkList.length == 0) {
         this.seen = false;
         this.seen1 = false;
-        this.seen2 = false;
-        this.seen3 = false;
-        this.seen4 = false;
-        this.seen5 = false;
+
       }
       for (var i = 0; i < this.checkList.length; i++) {
         if (this.checkList[i] == "免疫组化") {
@@ -2397,45 +2394,14 @@ export default {
         }
       }
       for (var i = 0; i < this.checkList.length; i++) {
-        if (this.checkList[i] == "荧光原位杂交") {
+        if (this.checkList[i] == "分子检测") {
           this.seen1 = true;
           break;
         } else {
           this.seen1 = false;
         }
       }
-      for (var i = 0; i < this.checkList.length; i++) {
-        if (this.checkList[i] == "淋巴瘤克隆性基因重排检测") {
-          this.seen2 = true;
-          break;
-        } else {
-          this.seen2 = false;
-        }
-      }
-      for (var i = 0; i < this.checkList.length; i++) {
-        if (this.checkList[i] == "原位杂交") {
-          this.seen3 = true;
-          break;
-        } else {
-          this.seen3 = false;
-        }
-      }
-      for (var i = 0; i < this.checkList.length; i++) {
-        if (this.checkList[i] == "流式细胞检测") {
-          this.seen4 = true;
-          break;
-        } else {
-          this.seen4 = false;
-        }
-      }
-      for (var i = 0; i < this.checkList.length; i++) {
-        if (this.checkList[i] == "ngs检测") {
-          this.seen5 = true;
-          break;
-        } else {
-          this.seen5 = false;
-        }
-      }
+      
     },
     // 编辑按钮
     async bianji(row) {
@@ -2476,8 +2442,8 @@ export default {
       this.edit = {};
       this.getTableList();
     },
-    // 点击添加分组
-    async addGroup(groupName, ids) {
+    // 点击添加保存分组
+    async addGroup(groupName) {
       console.log(groupName);
       // console.log(window.sessionStorage.username);
     
@@ -2488,7 +2454,7 @@ export default {
           params: {
             group_name: groupName,
             userid: window.sessionStorage.uid,
-            ids: this.ids,
+            
             username: window.sessionStorage.username
           }
         })
@@ -2531,10 +2497,42 @@ export default {
       this.group = true;
     },
     // 点击拿到分组的ID
-    group_id(it) {
-      // console.log(it.id)
+    async group_id(it) {
+      console.log(it)
       this.id = it.id;
-      this.addGroup(it);
+      let ids 
+      let group_name
+       const res = await this.axios
+        .post("group/add.php", {
+          params: {
+            group_name: it.group_name,
+            userid: window.sessionStorage.uid,
+            ids: this.ids,
+            username: window.sessionStorage.username
+          }
+        }).then(res => {
+          console.log(res);
+          this.groupLists.push(res.data.data.params);
+          console.log(this.groupLists);
+          var result = res.data; //JSON.parse(res.body);
+          if (result.result) {
+            this.$alert("添加成功", "提交结果", {
+              confirmButtonText: "确定",
+              type: "success",
+              callback: action => {
+                // this.groupLists = [];
+                // this.groupList();              
+              }
+            });
+          } else {
+            this.$alert("添加失败", "提交结果", {
+              confirmButtonText: "确定",
+              type: "warning",
+              callback: action => {}
+            });
+          }
+          this.groupName = "";
+        });
     },
     // 点击确定
     async sure(id) {
@@ -3070,6 +3068,7 @@ export default {
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus" >
+
 #dataImport .el-collapse-item__header {
   border-left: 5px #1CA5FF solid;
   margin: 10px;

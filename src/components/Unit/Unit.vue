@@ -5,7 +5,7 @@
       <el-select size="mini" style="width:250px" placeholder="请选择分组" v-model="it" @change="group_id()">
         <el-option
           v-for="(gl,index) in this.groupList"
-          :key="index"
+          :key="index"  
           :value="gl.id"
           :label="gl.group_name"  
         >
@@ -450,10 +450,12 @@
           <i class="el-icon-plus"></i>
         </el-upload>    
         </el-collapse>
-        <el-dialog :visible.sync="dialogVisible">
-          <img width="100%" :src="img" >
-        </el-dialog>
-         <img  :src="this.src"  style="width:500px.height:500px">
+        <el-dialog :visible.sync="dialogVisible">     
+          <img width="100%" :src="img" >      
+        </el-dialog>    
+        <div class="image" >
+          <img  :src="this.src" >  
+        </div>     
         <div class="foot">
           <el-button style="margin-right:10px"><i class="iconfont iconOCRshibieyichangjilu"></i></el-button>
           <el-button style="margin-right:10px" @click="qingkong()">清空</el-button>
@@ -1483,6 +1485,17 @@ export default {
 
 
 <style scoped lang="stylus" rel="stylesheet/stylus" >
+.image{
+  display inline-block
+  border none
+  width 400px
+  height 280px
+  margin-left 20px
+  img{
+    width 100%
+    height 100%
+  }
+}
   .iconOCRshibieyichangjilu{
     color blue
   }
@@ -1770,6 +1783,7 @@ export default {
       }
 
       .foot {
+        
         float: right;
         margin-right: 20px;
       }

@@ -39,7 +39,7 @@
                 <el-table-column prop="group_username" label="创建人" width="250"></el-table-column>
                 <el-table-column fixed="right" label="操作" width="250">
                   <template slot-scope="scope">
-                    <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>
+                    <el-button type="text" size="small" @click.stop="del(scope.row)">删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>

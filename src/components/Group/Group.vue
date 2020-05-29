@@ -31,7 +31,7 @@
                 border              
                 :row-class-name="tableRowClassName"
 	              :row-style="selectedstyle"
-                :header-cell-style="{color:'#333333'}"  @current-change="handleSelectionChange"
+                :header-cell-style="{color:'#333333'}"  @current-change="handleSelectionChange"  
               >
                 <el-table-column prop="id" label="项目编号" width="250"></el-table-column>
                 <el-table-column prop="group_name" label="项目名称" width="250"></el-table-column>
@@ -46,7 +46,7 @@
                     <el-button type="text" size="small" @click="jieshi = true">
                       <i class="iconfont iconwenhao"></i>
                     </el-button>
-                    <el-button type="text" size="small" @click="del(scope.row)">
+                    <el-button type="text" size="small" @click.stop="del(scope.row)">
                       <span>删除</span>
                     </el-button>
                   </template>
@@ -421,27 +421,67 @@ export default {
       // //   params: { group_id: this.id, z: 1 }
       // // }); 
       // console.log(res);    
-      this.axios.get('http://106.13.49.232/cedar/api/group_report/list.php?&z=1' +'&group_id=' +this.row.id, { //url: 接口地址
+
+      // this.axios.get('http://106.13.49.232/cedar/api/group_report/list.php?&z=1' +'&group_id=' +this.row.id, { //url: 接口地址
+      //   responseType: `arraybuffer` //一定要写
+        
+      // })
+      // .then(res => {
+      //   if(res.status == 200){
+      //     let blob = new Blob([res.data], {
+      //       type: `application/xlsx` //word文档为msword,pdf文档为pdf          
+      //     });
+      //     let objectUrl = URL.createObjectURL(blob);
+      //     let link = document.createElement("a");
+      //     let fname = `我的文档`; //下载文件的名字
+      //     link.href = objectUrl;
+      //     link.setAttribute("download", fname);
+      //     document.body.appendChild(link);
+      //     link.click();
+      //   }else {
+      //     this.$message({
+      //     type: "error",
+      //     message: "导出失败"
+      //     })
+      //   }
+      // })
+
+      this.btnSendTem = true
+      // 加载loading
+      this.loading = true
+      this.loadingText = '正在导出模板...'
+     this.axios.get('http://106.13.49.232/cedar/api/group_report/list.php?&z=1' +'&group_id=' +this.row.id, { //url: 接口地址
         responseType: `arraybuffer` //一定要写
-      })
-      .then(res => {
-        if(res.status == 200){
-          let blob = new Blob([res.data], {
-            type: `application/json` //word文档为msword,pdf文档为pdf
-          });
-          let objectUrl = URL.createObjectURL(blob);
-          let link = document.createElement("a");
-          let fname = `我的文档`; //下载文件的名字
-          link.href = objectUrl;
-          link.setAttribute("download", fname);
-          document.body.appendChild(link);
-          link.click();
-        }else {
-          this.$message({
-          type: "error",
-          message: "导出失败"
-          })
+      }).then((res) => {
+        // 关闭loading
+        this.loading = false
+        console.log(res)
+        // 此处有个坑。这里用content保存文件流，最初是content=res，但下载的test.xls里的内容如下图1，
+        // 检查了下才发现，后端对文件流做了一层封装，所以将content指向res.data即可
+        // 另外，流的转储属于浅拷贝，所以此处的content转储仅仅是便于理解，并没有实际作用=_=
+        const content = res.data
+        const blob = new Blob([content]) // 构造一个blob对象来处理数据
+        const fileName = 'wangliu.json' // 导出文件名
+        // 对于<a>标签，只有 Firefox 和 Chrome（内核） 支持 download 属性
+        // IE10以上支持blob但是依然不支持download
+        if ('download' in document.createElement('a')) { // 支持a标签download的浏览器
+          const link = document.createElement('a') // 创建a标签
+          link.download = fileName // a标签添加属性
+          link.style.display = 'none'
+          link.href = URL.createObjectURL(blob)
+          document.body.appendChild(link)
+          link.click() // 执行下载
+          URL.revokeObjectURL(link.href) // 释放url
+          document.body.removeChild(link) // 释放标签
+        } else { // 其他浏览器
+          navigator.msSaveBlob(blob, fileName)
         }
+        this.btnSendTem = false
+      }).catch((error) => {
+        console.log(error)
+        // 关闭loading
+        this.loading = false
+        this.btnSendTem = false
       })
     },
  
@@ -471,7 +511,8 @@ export default {
       console.log(this.editForm);
     },
     // 分组删除
-    del(row) {
+    del(row,e) {
+      
       this.$confirm("确定删除该数据？是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
