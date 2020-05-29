@@ -2481,7 +2481,7 @@ export default {
       console.log(groupName);
       // console.log(window.sessionStorage.username);
     
-      if(groupName.trim()){
+      if(this.groupName.trim()){
         let group_name ; 
         const res = await this.axios
         .post("group/add.php", {
@@ -2503,8 +2503,7 @@ export default {
               type: "success",
               callback: action => {
                 // this.groupLists = [];
-                // this.groupList();
-                
+                // this.groupList();              
               }
             });
           } else {
@@ -2517,14 +2516,14 @@ export default {
           this.groupName = "";
         });
       // console.log(data)   
-     }else{
+      }else{
         this.$alert('项目名称不能为空', '标题名称', {
-        confirmButtonText: '确定',
-        callback: action => {
-         
-        }
-      });
-     }
+          confirmButtonText: '确定',
+          callback: action => {
+            
+          }
+        });
+      }
       
     },
     inGroup(ids) {
@@ -2688,7 +2687,11 @@ export default {
         };
         ihcItem.push(newValue);
       } else {
-        alert("请检查输入是否正确");
+        this.$alert("请检查输入是否正确", "提交结果", {
+          confirmButtonText: "确定",
+          type: "warning",
+            
+        });
       }
     },
     // 免疫组化删除
@@ -2696,7 +2699,11 @@ export default {
       if (ihcItem.length > 1) {
         ihcItem.splice(idx, 1);
       } else {
-        alert("最少保留一个");
+        this.$alert("至少保留一个", "提交结果", {
+          confirmButtonText: "确定",
+          type: "warning",
+            
+        });
       }
     },
     // 筛选免疫租化增删
@@ -2710,7 +2717,11 @@ export default {
         //  this.ihcArr.push(this.edit.mark,this.edit.value);
         this.ihcArr.push(newValue);
       } else {
-        alert("请检查输入是否正确");
+        this.$alert("请检查输入是否正确", "提交结果", {
+          confirmButtonText: "确定",
+          type: "warning",
+            
+        });
       }
       console.log(this.ihcArr);
       // console.log(this.edit.mark)

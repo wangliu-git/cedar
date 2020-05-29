@@ -447,15 +447,16 @@
           :on-progress="handleProgress"
           :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove">                
-          <i class="iconfont iconOCRshibieyichangjilu"></i>
+          <i class="el-icon-plus"></i>
         </el-upload>    
         </el-collapse>
         <el-dialog :visible.sync="dialogVisible">
           <img width="100%" :src="img" >
         </el-dialog>
-         <img  :src="this.src" alt="上传的图片">
+         <img  :src="this.src"  style="width:500px.height:500px">
         <div class="foot">
-          <el-button @click="qingkong()">清空</el-button>
+          <el-button style="margin-right:10px"><i class="iconfont iconOCRshibieyichangjilu"></i></el-button>
+          <el-button style="margin-right:10px" @click="qingkong()">清空</el-button>
           <el-button @click="baocun(editForm)">保存</el-button>
         </div>
       </div>
@@ -665,7 +666,12 @@ export default {
               message: "已取消删除"
             });
           });
-      });      
+      });  
+      // let id = ''
+      // const res1 = await this.axios.get('upload_file/del.php',{params:{id :this.editForm.pics}}).then( res=>{
+      //   console.log(res1)
+      // })    
+      // this.editForm.pics = ''
     },
     // 点击添加
     async tianjia(row) {   
@@ -716,6 +722,7 @@ export default {
           })
           console.log(this.img[0])
         }
+        this.src = 'http://106.13.49.232/cedar/' + this.img[0]
         
       }  else{
         this.editForm = {};
@@ -740,7 +747,12 @@ export default {
     // 清空
     qingkong() {
       // this.zhezhao = !this.zhezhao;
+      const res = this.axios.get('upload_file/del.php',{params:{id:this.editForm.pics}}).then( res=>{
+        console.log(res)
+      })
+      this.src = ''
       this.editForm = {}
+      console.log(this.editForm)  
     },
     // 保存
     baocun(editForm) {
@@ -1470,75 +1482,75 @@ export default {
 
 
 <style scoped lang="stylus" rel="stylesheet/stylus" >
-.iconOCRshibieyichangjilu{
-  color blue
-}
-
-.outest {
-  .sContainer {
-    height: 58px;
-    line-height: 58px;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
-    border-radius: 4px;
-    padding-left: 30px;
-    .el-select {
-      margin-left: 10px;
-    }
+  .iconOCRshibieyichangjilu{
+    color blue
   }
-  .entry {
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
-    border-radius: 4px;
-    margin-top: 20px;
-    .search {
-      margin: 20px 30px 0;
-      padding-top: 20px;
-      padding-bottom: 60px;
-      .up {
-        background-color: #E6E6E6;
-        height: 50px;
 
-        .left {
-          float: left;
-          width: 300px;
-
-          span {
-            line-height: 50px;
-            padding-left: 10px;
-          }
-        }
-        .right {
-          border-left: 1px solid rgba(199, 199, 199, 1);
-          float: left;
-
-          span {
-            line-height: 50px;
-            padding-left: 10px;
-          }
-
-          .el-input {
-            margin: 0 5px;
-          }
-
-          .el-button {
-            background: rgba(41, 184, 252, 1);
-            border-radius: 4px;
-          }
-
-          .pass {
-            margin: 10px;
-          }
- 
-          }
-        }
-      }
-
-      .el-pagination {
-        float: right;
-        margin: 10px 10px 0 0;
+  .outest {
+    .sContainer {
+      height: 58px;
+      line-height: 58px;
+      background: rgba(255, 255, 255, 1);
+      box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
+      border-radius: 4px;
+      padding-left: 30px;
+      .el-select {
+        margin-left: 10px;
       }
     }
+    .entry {
+      background: rgba(255, 255, 255, 1);
+      box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
+      border-radius: 4px;
+      margin-top: 20px;
+      .search {
+        margin: 20px 30px 0;
+        padding-top: 20px;
+        padding-bottom: 60px;
+        .up {
+          background-color: #E6E6E6;
+          height: 50px;
+
+          .left {
+            float: left;
+            width: 300px;
+
+            span {
+              line-height: 50px;
+              padding-left: 10px;
+            }
+          }
+          .right {
+            border-left: 1px solid rgba(199, 199, 199, 1);
+            float: left;
+
+            span {
+              line-height: 50px;
+              padding-left: 10px;
+            }
+
+            .el-input {
+              margin: 0 5px;
+            }
+
+            .el-button {
+              background: rgba(41, 184, 252, 1);
+              border-radius: 4px;
+            }
+
+            .pass {
+              margin: 10px;
+            }
+  
+            }
+          }
+        }
+
+        .el-pagination {
+          float: right;
+          margin: 10px 10px 0 0;
+        }
+      }
   }
 
   .icontubiaozhizuo-:before {

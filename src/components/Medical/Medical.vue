@@ -16,8 +16,8 @@
             </el-select>
           </div>
           <div class="right">
-            <el-input placeholder="搜索" size="small" class="input-with-select">
-              <el-button slot="append" class="iconfont iconsousuo" size="small"></el-button>
+            <el-input  v-model="searchname"  @keyup.enter.native="search()" placeholder="搜索" size="small" class="input-with-select">
+              <el-button slot="append" @click="search()" class="iconfont iconsousuo" size="small"></el-button>
             </el-input>
           </div>
           <!-- <el-button type="text" size="small" @click="chakan(scope.row)">查看</el-button>-->
@@ -112,6 +112,7 @@ import './js/util'
 export default {
   data() {
     return {   
+      searchname:'',   //模糊搜索
       getIndex:"",  //点击列表行
 			//控制按钮显示隐藏-----
 			sexShow:false,
@@ -610,6 +611,18 @@ export default {
 
   },
   methods: {
+     // 搜索模糊
+    async search(){
+      let group_name
+      const res = await this.axios.get('group/list.php',{params:{group_name:this.searchname}}).then( res => {
+        console.log(res)
+        this.datalist = res.data.data;
+        this.queryInfo.page = parseInt(res.data.page);
+        this.queryInfo.count = parseInt(res.data.count); //总条数
+        this.queryInfo.pagerows = res.data.pagerows; //每页显示多少条
+        console.log(this.queryInfo.count)
+      })
+    },
     // 点击表格行背景色
     selectedstyle ({row, rowIndex}) {
       console.log('rowIndex',rowIndex,'this.getIndex',this.getIndex)

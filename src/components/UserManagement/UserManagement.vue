@@ -2,11 +2,11 @@
   <div class="container">
     <div class="content">
       <div class="up">
-        <el-input placeholder="搜索" size="small" class="input-with-select">
-          <el-button slot="append" class="iconfont iconsousuo" size="small"></el-button>
+        <el-input placeholder="搜索" size="small" class="input-with-select" v-model="searchname" @keyup.enter.native="search()">
+          <el-button slot="append" class="iconfont iconsousuo" size="small"  @click="search()"></el-button>
         </el-input>
         <el-button class="iconfont iconic_join_dialing_norm" size="small" @click="add()">添加</el-button>
-        <el-button class="iconfont iconpiliangshanchu" size="small">批量删除</el-button>
+        <el-button class="iconfont iconpiliangshanchu" size="small" @click="dels()">批量删除</el-button>
       </div>
 
       <div class="down" style="width:96%">
@@ -17,6 +17,7 @@
           style="width: 100%"
           border
           stripe
+          @selection-change="checkTable"
           :header-cell-style="{color:'#333333'}">
           <el-table-column type="selection" width="50"></el-table-column>
           <el-table-column prop="username" label="用户名" width="280"></el-table-column>
@@ -177,6 +178,8 @@
 export default {
   data() {
     return {
+      idss:[],
+      searchname:'',    //搜索
       ruleForm: {
        role_id:'',
       },
@@ -244,6 +247,56 @@ export default {
     };
   },
   methods: {
+    // 批量删除
+    checkTable(rows){
+      console.log(rows)
+      rows.map( (item,index) =>{
+        console.log(item.id)               
+        this.idss.push(item.id)       
+      })
+      this.idss = [...new Set(this.idss)];       
+      console.log(this.idss)   
+    },
+    dels(){
+      let ids 
+      this.$confirm("确定批量删除这（个）些用户？, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true
+      })
+      .then(() => {
+        const res =  this.axios.get('user/del.php',{params:{ids:this.idss}}).then( res=>{
+          console.log(res)     
+        })
+         this.getUserList()
+        this.idss = []
+        console.log(this.idss)
+        this.$message({
+          type: "success",
+          message: "删除成功!"
+        });
+       
+      })
+      .catch(() => {
+        this.$message({
+          type: "info",
+          message: "已取消"
+        });
+      });
+    },
+    // 搜索模糊
+    async search(){
+      let username
+      const res = await this.axios.get('user/list.php',{params:{username:this.searchname}}).then( res => {
+        console.log(res)
+        this.userlist = res.data.data;
+        this.queryInfo.page = parseInt(res.data.page);
+        this.queryInfo.count = parseInt(res.data.count); //总条数
+        this.queryInfo.pagerows = res.data.pagerows; //每页显示多少条
+        console.log(this.queryInfo.count)
+      })
+    },
     // 获取用户列表
     async getUserList() {
       // alert(1)

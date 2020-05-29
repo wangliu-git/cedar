@@ -1552,7 +1552,11 @@ export default {
            };
          ihcItem.push(newValue);
         } else {
-          alert("请检查输入是否正确");
+          this.$alert("请检查输入是否正确", "提交结果", {
+            confirmButtonText: "确定",
+            type: "warning",
+              
+          });
         }     
     },
     // 免疫组化删除
@@ -1560,7 +1564,11 @@ export default {
       if (ihcItem.length > 1) {
         ihcItem.splice(idx, 1);
       } else {
-        alert("最少保留一个");
+         this.$alert("至少保留一个", "提交结果", {
+          confirmButtonText: "确定",
+          type: "warning",
+            
+        });
       }
     },
     //上传文件方法

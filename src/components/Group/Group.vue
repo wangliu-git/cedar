@@ -18,8 +18,8 @@
           </div>
 
           <div class="right">
-            <el-input placeholder="搜索" size="small" class="input-with-select">
-              <el-button slot="append" class="iconfont iconsousuo" size="small"></el-button>
+            <el-input v-model="searchname" placeholder="搜索" size="small" class="input-with-select"  @keyup.enter.native="search()">
+              <el-button slot="append" class="iconfont iconsousuo" size="small" @click="search()"></el-button>
             </el-input>
           </div>
 
@@ -294,6 +294,7 @@
 export default {
   data() {
     return {
+      searchname:'',   //模糊搜索
       getIndex:"",
       peopleList:[],   //创建人数组
       groupname:'',   //创建人
@@ -369,6 +370,18 @@ export default {
     this.getDataList();
   },
   methods: {
+    // 搜索模糊
+    async search(){
+      let group_name
+      const res = await this.axios.get('group/list.php',{params:{group_name:this.searchname}}).then( res => {
+        console.log(res)
+        this.datalist = res.data.data;
+        this.shuInfo.page = parseInt(res.data.page);
+        this.shuInfo.count = parseInt(res.data.count); //总条数
+        this.shuInfo.pagerows = res.data.pagerows; //每页显示多少条
+        console.log(this.shuInfo.count)
+      })
+    },
     selectedstyle ({row, rowIndex}) {
       if ((this.getIndex) === rowIndex ) {
         return {
