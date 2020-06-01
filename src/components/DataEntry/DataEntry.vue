@@ -59,8 +59,8 @@
         >
           <el-table-column prop="file_name" label="文件名称" width="300"></el-table-column>
           <el-table-column prop="upload_time" label="上传时间" width="300"></el-table-column>
-          <el-table-column label="已录入:未录入" width="300">
-            <template slot-scope="scope">{{ scope.row.exec_line}} : {{ scope.row.total_line }}</template>
+          <el-table-column label="已校验:未校验" width="300">
+            <template slot-scope="scope">{{ scope.row.exec_line}} : {{(scope.row.total_line)-(scope.row.exec_line)}}</template>
           </el-table-column>
           <el-table-column prop="location" label="研究项目" width="300"></el-table-column>
           <el-table-column fixed="right" label="操作" width="300">
@@ -166,7 +166,7 @@
             ></el-table-column>
             <el-table-column
               prop="entry_status"
-              label="录入状态"
+              label="校验状态"
               show-overflow-tooltip
               width="170"
               sortable
@@ -180,8 +180,11 @@
             ></el-table-column>
             <el-table-column fixed="right" label="操作" width="170">
               <template slot-scope="scope">
+                <el-button type="text" size="small" @click="check(scope.row)">
+                  <span>查看</span>
+                </el-button>
                 <el-button type="text" size="small" @click="look(scope.row)">
-                  <span>录入</span>
+                  <span>校验</span>
                 </el-button>
                 <el-button type="text" size="small" @click="del(scope.row)">
                   <span>删除</span>
@@ -189,7 +192,7 @@
               </template>
             </el-table-column>
           </el-table>
-          <!--    :current-page="count"                      当前显示的页数
+          <!--  :current-page="count"                      当前显示的页数
                 :page-sizes="[10]"                        切换每页显示的条数
                 :page-size="pagerows"                    当前每页显示的条数
                 @size-change="handleSizeChange"           点击切换每页显示多少条
@@ -784,7 +787,7 @@
                   <div v-show="seen">
                     <span  class="titl">
                       <i class="iconfont icontubiaozhizuo-"></i>
-                      <i class="iconfont iconxinghao1"></i>
+                      
                       {{ihc.name}}
                     </span>
                     <div id="one" v-for="(ihcItem,idx) in this.helper_diagnosis.ihc" :key="idx">
@@ -792,13 +795,13 @@
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.key_ihc.field_title}}：</span>
-                          <el-input v-model="ihcItem.mark" style="width:80px"></el-input>
+                          <el-input v-model="ihcItem.mark" style="width:80px" size="mini"></el-input>
                         </div>
                       </div>
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.value_ihc.field_title}}：</span>
-                          <el-input v-model="ihcItem.value" style="width:130px"></el-input>
+                          <el-input v-model="ihcItem.value" style="width:130px" size="mini"></el-input>
                         </div>
                       </div>
                       <!-- + - 操作只需要传入当前循环的数组 -->
@@ -1023,7 +1026,7 @@
             <div style="float:left">
               辅助诊断
               <span>免疫组化：</span>
-              <th v-for="(item,index) in editForm.helper_diagnosis.ihc" :key="index" :value="item">
+              <th v-for="(item,index) in this.helper_diagnosis.ihc" :key="index" :value="item">
                 <td>{{item.mark}}</td>
                 <td>{{item.value}}</td>
               </th> 
@@ -1132,7 +1135,7 @@ export default {
      
       });
     },
-    // 点击查看
+    // 点击数据集查看
     async chakan(row) {
       this.sousuo = true;
       console.log(row.id);
@@ -1277,8 +1280,8 @@ export default {
       this.getTableList2(row);
     },
     // 点击数据集删除
-    async dele(row) {
-      console.log(row.id);
+    dele(row) {
+      // console.log(row.id);
       this.$confirm("确定删除该数据？是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -1293,6 +1296,7 @@ export default {
         });
         this.datalist = [];
         this.getDataList();
+        
       })
       .catch(() => {
         this.$message({
@@ -1310,7 +1314,17 @@ export default {
 
       // console.log(res)
     },
-    // 点击病理号录入
+    // 点击病理号查看
+    async check(row){
+      this.zhezhao = true
+       const { data :res} = await this.axios.get(
+        "excel_data/onedata.php" ,{params:{id:row.id}}
+      );
+      // console.log("getTableList",res);
+      this.editForm = res.data;
+      this.helper_diagnosis = this.editForm.helper_diagnosis;
+    },
+    // 点击病理号校验
     async look(row) {
       // console.log(this.editForm.jilian)
       this.wenjian = false;
@@ -1368,17 +1382,20 @@ export default {
       this.shuInfo.count = parseInt(res.count); //总条数
       this.shuInfo.pagerows = res.pagerows; //每页显示多少条
       // this.datalist.map( (item,index) => {
-      // 拼接已录入和未录入
-      // this.L_W = item.exec_line + ':' + item.total_line
-      //  console.log(this.L_W)
-      // this.total_line = item.total_line
-      // this.exec_line = item.exec_line
-      // console.log(item.total_line)
+      // // 计算未校验
+      // // console.log(item)
+      // this.WLR  = item.total_line - item.exec_line
+      // console.log(this.WLR)
+      // // this.total_line = item.total_line
+      // // this.exec_line = item.exec_line
+      // // console.log(item.total_line)
       // })
+      
       console.log(this.datalist);
     },
     // 获取病理号
     async getTableList2(row) {
+      // this.row = row
       // alert(1)
       // this.search =! this.search
       // alert("gt2"+this.sousuo);
@@ -1447,7 +1464,7 @@ export default {
       console.log(this.idss)      
 		},
     // 批量通过
-    async passList(idss){
+    passList(idss){
       console.log(this.idss)
       let ids = ''
       this.$confirm("确定批量通过这（个）些数据？, 是否继续?", "提示", {
@@ -1457,16 +1474,15 @@ export default {
         center: true
       })
       .then(() => {
-        const res =  this.axios.get('excel_data/checkall.php',{params:{ids:this.idss}}).then( res=>{
-          console.log(res)     
-        })
+        const res =  this.axios.get('excel_data/checkall.php',{params:{ids:this.idss}});        
+          this.$message({
+            type: "success",
+            message: "通过成功!"
+          });
+         this.idss = []
+        this.getTableList2(this.row)    //获取病理号
+        this.getDataList();       //更新数据集校验数据
         
-        this.$message({
-          type: "success",
-          message: "通过成功!"
-        });
-        this.getTableList2(this.row)
-        this.idss = []
         
       })
       .catch(() => {
@@ -1666,8 +1682,7 @@ export default {
       } else {
         this.$alert("请检查输入是否正确", "提交结果", {
           confirmButtonText: "确定",
-          type: "warning",
-            
+          type: "warning",            
         });
       }
     },
@@ -1895,7 +1910,8 @@ export default {
   },
   data() {
     return {
-      level:'',
+      // WLR:'',     //未校验的数据
+      level:'',   
       levelList:['1','2','3a','3b'],
       ihcItem:[],    //免疫组化增减数组
       labelPosition:'left',
@@ -2341,7 +2357,7 @@ export default {
       xiayige: false,
       wenjian: true, //上传文件
       item: "",
-      // 拼接录入和未录入
+      // 拼接校验和未校验
       exec_line: "",
       total_line: "",
       L_W: "",
@@ -2350,8 +2366,8 @@ export default {
       ji: true,
       jilian:'',
       value: {
-        mark: "",
-        value: ""
+        // mark: "",
+        // value: ""
       },     
       diagnosis1_normal:'',
       diagnosis2_normal:'',

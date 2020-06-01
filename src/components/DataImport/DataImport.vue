@@ -825,8 +825,7 @@
                   <!-- 遍历患者已有的免疫组化v-for="(item,idx) in editForm.helper_diagnosis.ihc" :key="idx" -->
                   <div v-show="seen">
                     <span  class="titl">
-                      <i class="iconfont icontubiaozhizuo-"></i>
-                      <i class="iconfont iconxinghao1"></i>
+                      <i class="iconfont icontubiaozhizuo-"></i>                 
                       {{ihc.name}}
                     </span>
                     <div id="one" v-for="(ihcItem,idx) in this.helper_diagnosis.ihc" :key="idx">
@@ -834,13 +833,13 @@
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.key_ihc.field_title}}：</span>
-                          <el-input v-model="ihcItem.mark" style="width:80px"></el-input>
+                          <el-input v-model="ihcItem.mark" style="width:80px" size="mini"></el-input>
                         </div>
                       </div>
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.value_ihc.field_title}}：</span>
-                          <el-input v-model="ihcItem.value" style="width:130px"></el-input>
+                          <el-input v-model="ihcItem.value" style="width:130px" size="mini"></el-input>
                         </div>
                       </div>
                       <!-- + - 操作只需要传入当前循环的数组 -->
@@ -1006,14 +1005,34 @@ export default {
       // console.log(it)
     },
     // 批量通过
-    async passList(idss){
-      // console.log(this.idss)
+    passList(idss){
+      console.log(this.idss)
       let ids = ''
-      const res = await this.axios.get('excel_data/checkall.php',{params:{ids:this.idss}}).then( res=>{
-        // console.log(res)
-        this.getTableList2(this.row)
+      this.$confirm("确定批量通过这（个）些数据？, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true
       })
-      this.idss = []
+      .then(() => {
+        const res =  this.axios.get('excel_data/checkall.php',{params:{ids:this.idss}});        
+        this.$message({
+          type: "success",
+          message: "通过成功!"
+        });
+        this.idss = []
+        this.getTableList2(this.row)
+        this.getDataList(); 
+        
+        
+      })
+      .catch(() => {
+        this.$message({
+          type: "info",
+          message: "已取消"
+        });
+      });
+     
     },
     // 点击添加分组保存
     async addGroup(location,id){
@@ -1160,7 +1179,7 @@ export default {
       this.getTableList(row);        
     },
     // 点击数据集删除
-    async dele(row) {
+    dele(row) {
       // console.log(row.id);
       this.$confirm("确定删除该数据？是否继续?", "提示", {
         confirmButtonText: "确定",
@@ -1271,12 +1290,53 @@ export default {
       // this.zhezhao = false
       this.id = this.id
       // console.log(this.id)   
-      this.editFrm = this.editForm
+      this.editForm = this.editForm
       // console.log(this.editForm)
       this.jilian = this.editForm.jilian
       this.editForm.help_diagnosis = this.help_diagnosis;
       // const sicksList = JSON.stringify(sicksArr)      
-      let data={
+      if(this.editForm.patient_id == ''){
+        this.$alert('病人ID不能为空，请填入并仔细检查其他选项', '标题名称', {
+          confirmButtonText: '确定',
+          type: "warning",       
+        });
+      }else if(this.editForm.age == ''){
+        this.$alert('年龄不能为空，请填入并仔细检查其他选项', '标题名称', {
+          confirmButtonText: '确定',
+          type: "warning",       
+        });
+      }else if(this.editForm.sex == ''){
+        this.$alert('性别不能为空，请填入并仔细检查其他选项', '标题名称', {
+          confirmButtonText: '确定',
+          type: "warning",       
+        });
+      }else if(this.editForm.test_id == ''){
+        this.$alert('病理号不能为空，请填入并仔细检查其他选项', '标题名称', {
+          confirmButtonText: '确定',
+          type: "warning",       
+        });
+      }else if(this.editForm.diagnosis_type == ''){
+        this.$alert('就诊类型不能为空，请填入并仔细检查其他选项', '标题名称', {
+          confirmButtonText: '确定',
+          type: "warning",       
+        });
+      }else if(this.editForm.sample_type == ''){
+        this.$alert('标本类型不能为空，请填入并仔细检查其他选项', '标题名称', {
+          confirmButtonText: '确定',
+          type: "warning",       
+        });
+      }else if(this.editForm.sample_location == ''){
+        this.$alert('取材部位不能为空，请填入并仔细检查其他选项', '标题名称', {
+          confirmButtonText: '确定',
+          type: "warning",       
+        });
+      }else if(this.editForm.diagnosis1_normal == ''){
+        this.$alert('病理类型不能为空，请填入并仔细检查其他选项', '标题名称', {
+          confirmButtonText: '确定',
+          type: "warning",       
+        });
+      }else{
+          let data={
         "id":this.id,
         "data":this.editForm
       }
@@ -1284,7 +1344,7 @@ export default {
       // console.log("data:",data);
       if(data){
       // console.log(data)
-       this.axios.post('report/add.php',data).then(res => {
+        this.axios.post('report/add.php',data).then(res => {
           // console.log('res:',res); 
           var result = res.data;//JSON.parse(res.body);
           if(result.result=='done'){
@@ -1305,10 +1365,11 @@ export default {
             });
           }
         })
-      }else {
-      
+      }else {      
         return false;
-      }    
+      }   
+      }
+       
    
     }, 
     // 点击下一个

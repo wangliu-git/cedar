@@ -394,23 +394,25 @@ export default {
     },
     // 点击；列表行
     handleSelectionChange(row) {
-      this.getIndex=row.index
-      this.chuangjian = true;
-      this.row = row
-      // console.log(row);
-      let group_id = "";
-      const { data: res } = this.axios
-        .get("report/list.php", { params: { group_id: row.id,page: this.queryInfo.page} })
-        .then(res => {
-          // console.log(res);
-          this.tablelist = res.data.data;
-          this.queryInfo.page = parseInt(res.data.page);
-          this.queryInfo.count = parseInt(res.data.count); //总条数
-          // console.log(this.queryInfo.page);
-          // console.log(this.queryInfo.count);
-          // console.log(this.queryInfo.pagerows); 
-        });
-      
+      if (row) {
+        this.getIndex = row.index
+        this.chuangjian = true;
+        this.row = row
+         // console.log(row);
+        let group_id = "";
+        const { data: res } = this.axios
+          .get("report/list.php", { params: { group_id: row.id,page: this.queryInfo.page} })
+          .then(res => {
+            // console.log(res);
+            this.tablelist = res.data.data;
+            this.queryInfo.page = parseInt(res.data.page);
+            this.queryInfo.count = parseInt(res.data.count); //总条数
+            // console.log(this.queryInfo.page);
+            // console.log(this.queryInfo.count);
+            // console.log(this.queryInfo.pagerows); 
+          });
+      }
+          
     },
     // 确认导出
     async sure() {                 
@@ -511,7 +513,7 @@ export default {
       console.log(this.editForm);
     },
     // 分组删除
-    del(row,e) {
+    del(row) {
       
       this.$confirm("确定删除该数据？是否继续?", "提示", {
         confirmButtonText: "确定",
@@ -531,6 +533,7 @@ export default {
             message: "删除成功!"
            
           });
+          
         })
         .catch(() => {
           this.$message({

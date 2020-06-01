@@ -462,19 +462,18 @@
             </div>        
           </div>
 
-          <div class="zhenD">
+          <div class="zhenD" v-for="(item,idx) in this.ihcArr" :key="idx">
             <div class="duan">
               <span>标志物:</span>
-              <el-select
-               
+              <el-select   
+                multiple           
                 v-model="edit.mark"
                 placeholder="请选择"
                 size="mini"
                 style="width:200px"
-                @change="shaixuan()"
-              >
+                @change="shaixuan()">
                 <el-option
-                  v-for="(item,index) in this.markList"
+                  v-for="(item,index) in markList"
                   :key="index"
                   :value="item"
                 >{{item}}</el-option>
@@ -483,15 +482,14 @@
 
             <div class="duan">
               <span>检测结果 ：</span>
-              <el-select
-              
+              <el-select   
+                multiple          
                 v-model="edit.value"
                 placeholder="请选择"
                 size="mini"
                 style="width:200px"
-                @change="shaixuan()"
-              >
-                <el-option v-for="(item,index) in this.valueList" :key="index" :value="item"></el-option>
+                @change="shaixuan()">
+                <el-option v-for="(item,index) in valueList" :key="index" :value="item"></el-option>
               </el-select>
             </div>
           
@@ -1398,8 +1396,8 @@ export default {
       location: "", //分组
       ihcArr: [
         {
-          mark: "",
-          value: ""
+          mark: [],
+          value:[]
         }
       ], //免疫组化数组
       whole: "", //全文检索
@@ -2307,7 +2305,7 @@ export default {
         .then(res => {
           console.log(res);
           this.markList = res.data.option;
-          // console.log(this.mark)
+          console.log(this.markList)
         });
     },
     async getresult() {
@@ -2706,7 +2704,7 @@ export default {
     },
     // 筛选免疫租化增删
     ihcAdd() {
-      if (this.edit.mark || this.edit.value) {
+      if ( this.edit.mark ||  this.edit.value) {
         //验证通过 添加新的一条
         var newValue = {
           mark: this.edit.mark,

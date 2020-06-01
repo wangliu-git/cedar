@@ -1008,8 +1008,8 @@ export default {
                 // }
               },
               magicType: {
-        type: ['line', 'bar', 'stack', 'tiled']
-    },
+                type: ['line', 'bar', 'stack', 'tiled']
+              },
               dataView: {
                 //工具项-原始数据展示
                 show: true,
@@ -2233,7 +2233,7 @@ export default {
           let item = dataEcharts[i];
           for (name in item) {
             if (name == "value") {
-              //此处value属性固定
+              //此处value属性固定            
               valueArray.push(item[name]);
             } else {
               nameArray.push(item[name]);
@@ -2920,7 +2920,6 @@ export default {
 			color: rgba(255, 255, 255, 1) !important;
 	}
 </style>
-
 <style scoped lang="stylus" rel="stylesheet/stylus">
 .iconbuzhou-icon {
   width: 4px;
