@@ -886,8 +886,7 @@ export default {
     // 年龄--柱状图
     async drawLineAge(age,id) {
 			this.buttonsShowCon();
-			this.ageShow=true;
-			
+			this.ageShow=true;		
       // myChart.showLoading(); myChart.hideLoading();  //等待效果
       // 基于准备好的dom，初始化echarts实例
       // console.log(document.sgetElementById('tu'))   样式
