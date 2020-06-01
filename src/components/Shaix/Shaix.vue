@@ -9,7 +9,7 @@
           placeholder="搜索"
           size="small"
           class="input-with-select"
-          v-model="whole"
+          v-model.trim="whole"
           @keyup.enter.native="shaixuan()">
           <el-button slot="append" class="iconfont iconsousuo" size="small" @click="shaixuan"></el-button>
         </el-input>
@@ -30,7 +30,7 @@
                 size="mini"
                 @keyup.enter.native="shaixuan()"
                 style="width:200px"
-                v-model="edit.name"
+                v-model.trim="edit.name"
               ></el-input>
             </div>
             <!--性別 -->
@@ -74,7 +74,7 @@
                 size="mini"
                 style="width:200px"
                 placeholder="请输入电话"
-                v-model="edit.phone"
+                v-model.trim="edit.phone"
                 @keyup.enter.native="shaixuan()"
               ></el-input>
             </div>
@@ -167,7 +167,7 @@
             <div class="bao">
               <span>{{fMInstitution.organization.field_title}}:</span>
               <el-input
-                v-model="edit.organization"
+                v-model.trim="edit.organization"
                 placeholder="请输入机构名称"
                 size="mini"
                 style="width:200px"
@@ -178,7 +178,7 @@
             <div class="bao">
               <span>{{fMInstitution.test_id.field_title}}:</span>
               <el-input
-                v-model="edit.test_Yid"
+                v-model.trim="edit.test_Yid"
                 placeholder="请输入病理号"
                 size="mini"
                 style="width:200px"
@@ -620,7 +620,7 @@
             </div>
             <div>
               <span>病理号：</span>
-              {{editForm.patient_id}}
+              {{editForm.test_id}}
             </div>
             <div>
               <span>送检科室：</span>
@@ -690,6 +690,13 @@
           </span>
         </div>
         <div class="mian">
+
+          <div class="sousuo">
+            <el-input placeholder="请输入关键词..." style="width:500px" v-model.trim="search_group"  @keyup.enter.native="groupList()">
+              <el-button  style="background:#DCDCDC;color:black" slot="append" @click="groupList">搜索</el-button>
+            </el-input>
+          </div>
+
           <div class="groupList">
             <el-scrollbar >
               <el-button
@@ -1379,6 +1386,7 @@ import allMessage from "../../staic/allMessage.json";
 export default {
   data() {
     return {
+      search_group:'',     //搜索分组
       // 原单位本单位联动区分
       diagnosis1_normal:'',
       diagnosis2_normal:'',
@@ -2320,7 +2328,7 @@ export default {
     },
     // 获取选择分组
     groupList() {
-      const res = this.axios.get("group/list.php").then(res => {
+      const res = this.axios.get("group/list.php",{params:{group_name:this.search_group}}).then(res => {
         console.log(res);
         this.groupLists = res.data.data;
         // this.groupList.map( ( items ,index ) => {
@@ -2667,6 +2675,7 @@ export default {
         console.log(4);
         this.editForm.birthday = "";
       }
+      this.helper_diagnosis = this.editForm.helper_diagnosis;
       // this.editForm = Object.assign(res.data[0],res.data[1],res.data[2])
       // 表单对象
       console.log(this.editForm);
@@ -3415,7 +3424,7 @@ export default {
   .nei {
     border-radius: 5px;
     width: 550px;
-    height: 480px;
+    height: 520px;
     position: absolute;
     left: 0;
     bottom: 0;
@@ -3446,39 +3455,33 @@ export default {
           width: 100px;
         }
       }
-
       .cun {
-        margin-left: 30px;
-        margin-top: 10px;
+        margin-left: 20px;
+        margin-top: 5px;
 
         span {
           width: 100px;
         }
       }
-
       // 搜索
       .sousuo {
         margin: 20px 20px 10px 20px;
       }
-
       .groupList {
         width: 500px;
-        height: 300px;
+        height: 280px;
         border: 1px solid #DCDFE6;
         margin: 20px 20px;
         display: flex;
         flex-flow: column;
-        overflow: scroll;
-
+        overflow: auto;
         .el-button {
           font-size: 16px;
         }
       }
-
       .name {
         margin-left: 20px;
       }
-
       .button {
         float: right;
         margin-top: 10px;

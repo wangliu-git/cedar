@@ -628,7 +628,8 @@ export default {
       console.log('rowIndex',rowIndex,'this.getIndex',this.getIndex)
       if ((this.getIndex) === rowIndex ) {
         return {
-        "background-color": "#C1C1C1"
+        "background-color": "#61C5FF",
+        "opacity":"0.3"
         };
       }
     },
@@ -758,7 +759,6 @@ export default {
         );
         let datas = res.stat;
         console.log(datas)
-
         setEChart_pieWithTool({
           myChart: myChart,
           dataEcharts: datas,
@@ -771,12 +771,11 @@ export default {
         );
         let datas = res.stat;
         console.log(datas)
-
-         setEChart_pieWithTool({
-        myChart: myChart,
-        dataEcharts: datas,
-        title: "性别"
-      });
+        setEChart_pieWithTool({
+          myChart: myChart,
+          dataEcharts: datas,
+          title: "性别"
+        });
       }
       
      

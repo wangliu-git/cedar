@@ -124,7 +124,7 @@
             placeholder="请输入病理号"
             prefix-icon="el-icon-search"
             style="width:180px"
-            v-model="test_id"
+            v-model.trim="test_id"
             @keyup.enter.native="getTable()"
           ></el-input>
           <el-input
@@ -132,7 +132,7 @@
             placeholder="请输入姓名"
             prefix-icon="el-icon-search"
             style="width:180px"
-            v-model="name"
+            v-model.trim="name"
             @keyup.enter.native="getTable()"
           ></el-input>
           <el-button type="primary" size="mini" @click="getTable">确定</el-button>
@@ -823,11 +823,11 @@
                       <i class="iconfont icontubiaozhizuo-"></i>
                       分子检测:
                     </span>
-                    <div id="two" v-for="(fish,idx) in help_diagnosis.fish" :key="idx">
+                    <div id="two" v-for="(ihcItem,idx) in this.helper_diagnosis.fish" :key="idx">
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.key_fish.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="fish.mark">
+                          <el-select size="mini" style="width:100px" v-model="ihcItem.mark">
                             <el-option
                               v-for="(item,index) in FZ.key_fish.field_values"
                               :key="index"
@@ -841,7 +841,7 @@
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.value_fish.field_title}}：</span>
-                          <el-select size="mini" style="width:100px" v-model="fish.value">
+                          <el-select size="mini" style="width:100px" v-model="ihcItem.value">
                             <el-option
                               v-for="(item,index) in  FZ.value_fish.field_values"
                               :key="index"
@@ -854,7 +854,7 @@
                       </div>
                       <!-- 不同的地方可以调用一个方法，不需要额外写-->
                       <div class="handleBtnBox">
-                        <el-button
+                        <el-button v-if="idx==helper_diagnosis.fish.length-1"
                           @click="ihcAddData(help_diagnosis.fish,help_diagnosis.fish[idx])"
                         >
                           <i class="iconfont iconaddTodo-nav"></i>
@@ -1026,7 +1026,7 @@
             <div style="float:left">
               辅助诊断
               <span>免疫组化：</span>
-              <th v-for="(item,index) in this.helper_diagnosis.ihc" :key="index" :value="item">
+              <th  border v-for="(item,index) in this.helper_diagnosis.ihc" :key="index" :value="item">
                 <td>{{item.mark}}</td>
                 <td>{{item.value}}</td>
               </th> 
@@ -1322,6 +1322,14 @@ export default {
       );
       // console.log("getTableList",res);
       this.editForm = res.data;
+      if (this.editForm.application_date === "0000-00-00") {
+        console.log(44);
+        this.editForm.application_date = "";
+      }
+      if (this.editForm.birthday === "0000-00-00") {
+        console.log(4);
+        this.editForm.birthday = "";
+      }
       this.helper_diagnosis = this.editForm.helper_diagnosis;
     },
     // 点击病理号校验
@@ -1478,12 +1486,10 @@ export default {
           this.$message({
             type: "success",
             message: "通过成功!"
-          });
-         this.idss = []
-        this.getTableList2(this.row)    //获取病理号
-        this.getDataList();       //更新数据集校验数据
-        
-        
+          })
+          this.idss = []
+          this.getTableList2(this.row)    //获取病理号
+          this.getDataList();       //更新数据集校验数据      
       })
       .catch(() => {
         this.$message({

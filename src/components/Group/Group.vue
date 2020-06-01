@@ -18,7 +18,7 @@
           </div>
 
           <div class="right">
-            <el-input v-model="searchname" placeholder="搜索" size="small" class="input-with-select"  @keyup.enter.native="search()">
+            <el-input v-model.trim="searchname" placeholder="搜索" size="small" class="input-with-select"  @keyup.enter.native="search()">
               <el-button slot="append" class="iconfont iconsousuo" size="small" @click="search()"></el-button>
             </el-input>
           </div>
@@ -294,6 +294,11 @@
 export default {
   data() {
     return {
+      queryInfo: {
+        page: 1, //页数
+        pagerows: 10, //每页显示的条数
+        count: 0 //数据总数
+      },
       searchname:'',   //模糊搜索
       getIndex:"",
       peopleList:[],   //创建人数组
@@ -400,8 +405,9 @@ export default {
         this.row = row
          // console.log(row);
         let group_id = "";
+        console.log(this.queryInfo.page)
         const { data: res } = this.axios
-          .get("report/list.php", { params: { group_id: row.id,page: this.queryInfo.page} })
+          .get("report/list.php", { params: { group_id: row.id,page:this.queryInfo.page} })
           .then(res => {
             // console.log(res);
             this.tablelist = res.data.data;
@@ -414,6 +420,7 @@ export default {
       }
           
     },
+
     // 确认导出
     async sure() {                 
       // console.log(this.row.id);
@@ -486,7 +493,6 @@ export default {
         this.btnSendTem = false
       })
     },
- 
     // 点击导出
     async daoChu(row) {
       console.log(row.id);
@@ -513,8 +519,7 @@ export default {
       console.log(this.editForm);
     },
     // 分组删除
-    del(row) {
-      
+    del(row) {   
       this.$confirm("确定删除该数据？是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -530,10 +535,8 @@ export default {
           this.groupname = ''
           this.$message({
             type: "success",
-            message: "删除成功!"
-           
-          });
-          
+            message: "删除成功!"          
+          });        
         })
         .catch(() => {
           this.$message({
@@ -589,15 +592,16 @@ export default {
     },
     // 病理号删除
     async dele(row) {
+      let group_id
       const { data: res } = await this.axios.get("report/del.php", {
-        params: { id: row.id }
+        params: { id: row.id ,group_id:this.row.id}
       });
       console.log("getTableList", res);
-      this.tablelist = res.data;
-      console.log(res.data);
-      this.queryInfo.page = parseInt(res.page);
-      this.queryInfo.count = parseInt(res.count)  //总条数
-      this.queryInfo.pagerows = res.pagerows  //每页显示多少条
+      // this.tablelist = res.data;
+      // console.log(res.data);
+      // this.queryInfo.page = parseInt(res.page);
+      // this.queryInfo.count = parseInt(res.count)  //总条数
+      // this.queryInfo.pagerows = res.pagerows  //每页显示多少条
       this.handleSelectionChange(this.row)
     },
     // 点击数据查看

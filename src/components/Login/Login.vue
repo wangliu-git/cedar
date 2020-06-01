@@ -9,13 +9,13 @@
           <div class="title">病理标准化报告与数据智能管理平台</div>
           <!-- 用户名-->
           <el-form-item prop="username">
-            <el-input v-model="Form.username" @keyup.enter.native="onLogin()" prefix-icon="el-icon-user" placeholder="请输入用户名"></el-input>
+            <el-input v-model.trim="Form.username" @keyup.enter.native="onLogin()" prefix-icon="el-icon-user" placeholder="请输入用户名"></el-input>
           </el-form-item>
           <!-- 密码-->
           <el-form-item prop="password">
             <el-input
               type="password"
-              v-model="Form.pass" @keyup.enter.native="onLogin()"
+              v-model.trim="Form.pass" @keyup.enter.native="onLogin()"
               prefix-icon="iconfont iconmima"
               placeholder="请输入密码"
             ></el-input>

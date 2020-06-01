@@ -82,14 +82,14 @@
             placeholder="请输入病理号"
             prefix-icon="el-icon-search"
             style="width:180px"
-            v-model="test_id" @keyup.enter.native="getTable()"
+            v-model.trim="test_id" @keyup.enter.native="getTable()"
           ></el-input>
           <el-input
             size="mini"
             placeholder="请输入姓名"
             prefix-icon="el-icon-search"
             style="width:180px"
-            v-model="name" @keyup.enter.native="getTable()"
+            v-model.trim="name" @keyup.enter.native="getTable()"
           ></el-input>
           <el-button type="primary" size="mini" @click="getTable">确定</el-button>
           <el-button type="primary" size="mini" class="pass" @click="passList(idss)">

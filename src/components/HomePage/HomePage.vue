@@ -72,7 +72,8 @@
       <div class="zx">
         <div class="title">
           <i class="iconfont icontubiaozhizuo-">本单位病理报告量</i>
-          <span>详情</span>
+          <el-button @click="go_sx"><span  >详情</span></el-button>
+          
         </div>
         <div class="select">
           <el-date-picker
@@ -130,6 +131,9 @@ export default {
     },
     go_zh(){
       this.$router.replace('/unit')
+    },
+    go_sx(){
+      this.$router.replace('/shaix')
     },
     // echarts图
     async darwPie2() {

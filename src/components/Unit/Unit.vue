@@ -32,21 +32,21 @@
               placeholder="请输入病理号"
               prefix-icon="el-icon-search"
               style="width:180px"
-              v-model="test_id" @keyup.enter.native="getTable()"
+              v-model.trim="test_id" @keyup.enter.native="getTable()"
             ></el-input>
             <el-input
               size="mini"
               placeholder="请输入病人ID"
               prefix-icon="el-icon-search"
               style="width:180px"
-              v-model="patient_id" @keyup.enter.native="getTable()"
+              v-model.trim="patient_id" @keyup.enter.native="getTable()"
             ></el-input>
             <el-input
               size="mini"
               placeholder="请输入姓名"
               prefix-icon="el-icon-search"
               style="width:180px"
-              v-model="name" @keyup.enter.native="getTable()"
+              v-model.trim="name" @keyup.enter.native="getTable()"
             ></el-input>
             <el-button type="primary" size="mini" @click="getTable">确定</el-button>
           </div>
@@ -84,12 +84,6 @@
                   v-if="scope.row.attached == 0"
                 >添加</el-button>
                 <div v-else>
-                  <el-button
-                  type="text"
-                  size="small"
-                  @click="look(scope.row)"
-            
-                ><span style="margin-left:5px">查看</span></el-button>
                 <el-button
                   type="text"
                   size="small"
@@ -591,52 +585,6 @@ export default {
         type: "warning",
         center: true
       });
-    },
-    // 点击查看--显示某个信息
-    async look(row) { 
-      this.zhezhao = true;
-      console.log(row);
-      // let report_id 
-      const { data: res } = await this.axios.get("diagnosis_origin/one.php",{params:{id:row.id}
-      })
-      console.log(res);   
-      this.rowAdd = row  
-      if(res != null){
-        this.editForm = res;
-        if(this.editForm.report_date === '0000-00-00'){
-          this.editForm.report_date = ''
-        } 
-        if(this.editForm.application_date === '0000-00-00'){
-          this.editForm.application_date = ''
-        } 
-        // console.log(this.editForm);
-        this.jilian = []
-        if(this.editForm.diagnosis1 !=  ''){
-          this.jilian.push(this.editForm.diagnosis1)
-        }
-        if(this.editForm.diagnosis2 != ''){
-          this.jilian.push(this.editForm.diagnosis2)
-        }
-        if(this.editForm.diagnosis3 != ''){
-          this.jilian.push(this.editForm.diagnosis3)
-        }    
-        // this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2)
-         this.editForm.jilian = this.jilian  
-        if(this.editForm.img){
-          this.editForm.img.map( (item,index) =>{
-           this.img.push(item)
-          })
-          console.log(this.img[0])
-          this.src = 'http://106.13.49.232/cedar/' + this.img[0]
-          console.log(this.src)
-        }
-        
-      }  else{
-        this.editForm = {};
-        return
-      }     
-           
-      return
     },
     // 点击删除
     async del(row) {
