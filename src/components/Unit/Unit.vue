@@ -439,8 +439,9 @@
           :before-upload="handleBeforeUpload"
           :on-progress="handleProgress"
           :on-preview="handlePictureCardPreview"
-          :on-remove="handleRemove">                
-          <i class="el-icon-plus"></i>
+          :on-remove="handleRemove">    
+          <img  :src="this.src" v-show="this.editForm.pics != ''" >            
+          <i  v-show="this.editForm.pics  == ''" class="el-icon-plus"></i>
         </el-upload>     
           <el-dialog :visible.sync="dialogVisible">     
             <img width="100%" :src="img">      
@@ -626,6 +627,8 @@ export default {
       this.attached = this.rowAdd.attached;
       // this.getTableList()
       this.editForm = {}
+      this.src = ''
+      
     },
     // 点击原单位编辑
     async bianji(row){
@@ -660,20 +663,20 @@ export default {
         }    
         // this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2)
          this.editForm.jilian = this.jilian  
-        // if(this.editForm.img){
-        //   this.editForm.img.map( (item,index) =>{
-        //    this.img.push(item)
-        //   })
-        //   // console.log(this.img[0])
-        // }
+        if(this.editForm.img){
+          this.editForm.img.map( (item,index) =>{
+           this.img.push(item)
+          })
+          // console.log(this.img[0])
+        }
        
-        // if(this.img[0]){
-        //   this.src = 'http://106.13.49.232/cedar/' + this.img[0]
-        //   console.log(this.src)
-        // }else{
-        //   this.src = ''
-        //   console.log(this.src)
-        // }
+        if(this.img[0]){
+          this.src = 'http://106.13.49.232/cedar/' + this.img[0]
+          console.log(this.src)
+        }else{
+          this.src = ''
+          console.log(this.src)
+        }
         
       }  else{
         this.editForm = {};
@@ -1449,13 +1452,9 @@ export default {
 img{
   display inline-block
   border none
-  width 400px
-  height 280px
-  margin-left 20px
-  img{
-    width 100%
-    height 100%
-  }
+  width 148px
+  height 148px
+ 
 }
   .iconOCRshibieyichangjilu{
     color blue

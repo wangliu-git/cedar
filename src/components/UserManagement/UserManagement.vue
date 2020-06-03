@@ -26,12 +26,18 @@
           <el-table-column prop="memo" label="备注" width="280"></el-table-column>
           <el-table-column fixed="right" label="操作" width="280">
             <template slot-scope="scope">
+            <div v-if="roleid >1">
               <el-button type="text" size="small">
                 <span @click="chakan(scope.row)">修改</span>
               </el-button>
               <el-button type="text" size="small">
                 <span @click="del(scope.row)">删除</span>
               </el-button>
+            </div >
+              <el-button type="text" size="small"  v-else>
+                <span >- - - - - </span>
+              </el-button>
+            
             </template>
           </el-table-column>
         </el-table>
@@ -57,8 +63,8 @@
             <i class="iconfont iconx"></i>
           </span>
         </div>
-        <div class="Down">
-          <el-form :model="userData" :rules="rules" label-width="100px" class="demo-ruleForm">
+        <div class="Down"  >
+          <el-form :model="userData"  label-width="100px" class="demo-ruleForm">
             <el-form-item label="用户名" prop="username">
               <el-input v-model="userData.username" style="width:300px" size="mini"></el-input>
             </el-form-item>
@@ -106,6 +112,7 @@
               <el-button plain @click="bianji('ruleForm',userData)">确定</el-button>
             </el-form-item>
           </el-form>
+          
         </div>
       </div>
     </div>
@@ -120,7 +127,7 @@
           </span>
         </div>
         <div class="Down">
-          <el-form :rules="rules" :model="addUserList" label-width="100px" class="demo-ruleForm">
+          <el-form  :model="addUserList" label-width="100px" class="demo-ruleForm">
             <el-form-item label="用户名" prop="username">
               <el-input v-model="addUserList.username" style="width:300px" size="mini"></el-input>
             </el-form-item>
@@ -174,20 +181,22 @@
   </div>
 </template>
 
+
 <script type="text/ecmascript-6">
 export default {
   data() {
     return {
       idss:[],
+      roleid:'',
       searchname:'',    //搜索
       ruleForm: {
        role_id:'',
       },
-      rules:{
-       role_id: [        
-          { required: true, message: '请选择用户权限', trigger: 'change' }        
-        ]
-      },
+      // rules:{
+      //  role_id: [        
+      //     { required: true, message: '请选择用户权限', trigger: 'change' }        
+      //   ]
+      // },
       Add: false,
       // 修改用户信息
       userData: {
@@ -230,20 +239,20 @@ export default {
         desc: ""
       },
       userlist: [],
-      rules: {
-        username: [
-          {
-            required: true,
-            message: "用户名一旦修改不能更改",
-            trigger: "blur"
-          },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
-        ],
-        region: [{ required: true, message: "请选择权限", trigger: "change" },
-         { min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur" }],
-        pass: [{ required: true, message: "输入密码", trigger: "blur" }],
-        memo: [{ required: true, message: "请填写备注", trigger: "blur" }]
-      }
+      // rules: {
+      //   username: [
+      //     {
+      //       required: true,
+      //       message: "用户名一旦修改不能更改",
+      //       trigger: "blur"
+      //     },
+      //     { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
+      //   ],
+      //   region: [{ required: true, message: "请选择权限", trigger: "change" },
+      //    { min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur" }],
+      //   pass: [{ required: true, message: "输入密码", trigger: "blur" }],
+      //   memo: [{ required: true, message: "请填写备注", trigger: "blur" }]
+      // }
     };
   },
   methods: {
@@ -275,8 +284,7 @@ export default {
         this.$message({
           type: "success",
           message: "删除成功!"
-        });
-       
+        }); 
       })
       .catch(() => {
         this.$message({
@@ -325,26 +333,61 @@ export default {
       this.Add = true;
     },
     // 点击添加弹框确定
-    async tianjia() {
-      this.Add = false;
+    async tianjia() { 
       console.log(this.addUserList);
-      const res = await this.axios.get("user/add.php", {
-        params: {
-          username: this.addUserList.username,
-          password: this.addUserList.password,
-          role_id: this.addUserList.role_id,
-          memo: this.addUserList.memo
-        }
-      });
-      this.addUserList = {}
-      console.log(res.data);
-      this.getUserList();
+       if(this.addUserList.username == ''){
+        this.$alert('用户名不能为空，请填入并仔细检查其他选项', '标题名称', {
+          confirmButtonText: '确定',
+          type: "warning",       
+        });
+      }else if(this.addUserList.password == ''){
+        this.$alert('密码不能为空，请填入并仔细检查其他选项', '标题名称', {
+          confirmButtonText: '确定',
+          type: "warning",       
+        });
+      }else if(this.addUserList.role_id == ''){
+        this.$alert('用不权限不能为空，请填入并仔细检查其他选项', '标题名称', {
+          confirmButtonText: '确定',
+          type: "warning",       
+        });
+      }else{
+        const res = await this.axios.get("user/add.php", {
+          params: {
+            username: this.addUserList.username,
+            password: this.addUserList.password,
+            role_id: this.addUserList.role_id,
+            memo: this.addUserList.memo
+          }
+        });
+        this.addUserList = {}
+        console.log(res.data);
+        this.getUserList();
+        this.Add = false;
+      }
+     
+    
     },
     // 点击修改弹窗的确定
     async bianji(id) {
       console.log(this.id);
-      this.group = false;
-      const res = await this.axios
+
+      if(this.userData.username == ''){
+        this.$alert('用户名不能为空，请填入并仔细检查其他选项', '标题名称', {
+          confirmButtonText: '确定',
+          type: "warning",       
+        });
+      }else if(this.userData.password == ''){
+        this.$alert('密码不能为空，请填入并仔细检查其他选项', '标题名称', {
+          confirmButtonText: '确定',
+          type: "warning",       
+        });
+      }else if(this.userData.role_id == ''){
+        this.$alert('用不权限不能为空，请填入并仔细检查其他选项', '标题名称', {
+          confirmButtonText: '确定',
+          type: "warning",       
+        });
+      }else{
+       const res = await this.axios
         .get("user/edit.php", {
           params: {
             id: this.id,
@@ -354,10 +397,11 @@ export default {
             memo: this.userData.memo
           }
         })
-        .then(res => {
-          console.log(res);
-        });
+        this.group = false;
+    
       this.getUserList();
+      }
+      
     },
     // 切换每页显示多少条
     handleSizeChange(newSize) {
@@ -406,11 +450,18 @@ export default {
   },
   mounted() {
     this.getUserList();
+    this.roleid = window.sessionStorage.role_id;
+    console.log(this.roleid)
   }
 };
 </script>
 
-<style scoped lang="stylus" rel="stylesheet/stylus" >
+<style scoped lang="stylus" rel="stylesheet/stylus">
+.iconxinghao1{
+  color red  !important
+  font-size 8px !important
+  margin-right 3px
+}
 .el-form-item {
   margin-left: 0;
 }
@@ -525,6 +576,7 @@ a {
           color: white;
         }
       }
+      
     }
   }
 }

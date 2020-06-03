@@ -445,7 +445,7 @@
             </div>        
           </div>
 
-          <div class="zhenD" v-for="(ihcitem,idx) in this.ihcArrs.ihcArr" :key="idx">
+          <div class="zhenD" v-for="(ihcitem,idx) in this.ihcArr" :key="idx">
             <div class="duan">
               <span>标志物:</span>
               <el-select             
@@ -458,7 +458,7 @@
                   v-for="(item,index) in markList"
                   :key="index"
                   :value="item"
-                >{{item}}</el-option>
+                ></el-option>
               </el-select>
             </div>
 
@@ -476,10 +476,10 @@
             </div>
           
             <div>
-              <button style="margin-right: 5px;margin-left: 5px;" v-if="idx==ihcArrs.ihcArr.length-1" @click="ihcAdd(ihcArrs.ihcArr,ihcArrs.ihcArr[idx])">
+              <button style="margin-right: 5px;margin-left: 5px;" v-if="idx==ihcArr.length-1" @click="ihcAdd(ihcArr,ihcArr[idx])">
                 <i class="iconfont iconic_join_dialing_norm"></i>
               </button>
-              <button style="margin-right: 5px;" @click="ihcDelete(ihcArrs.ihcArr)">
+              <button style="margin-right: 5px;" @click="ihcDelete(ihcArr)">
                 <i class="iconfont iconjianhao1"></i>
               </button>
             </div>
@@ -1368,7 +1368,9 @@ import allMessage from "../../staic/allMessage.json";
 export default {
   data() {
     return {
-      // ihcitem:'',
+      ihcitem:[],
+      mark:'',
+      value:'',
       search_group:'',     //搜索分组
       // 原单位本单位联动区分
       diagnosis1_normal:'',
@@ -1379,20 +1381,18 @@ export default {
       diagnosis3_Ynormal:'',
       Ylevel: "",
       level:"",
-      levelList: ["1", "2", "3a", "3b"],
+      levelList:['1','2','3A','3B','1-2','3'],
       // 级联数据数组
       onechoose: [],
       twochoose: [],
       threechoose: [],
-      location: "", //分组
-      ihcArrs:{
-        ihcArr:[
-          {
-            mark:'',
-            result:''
-          }
-        ]
-      }, //免疫组化数组
+      location: "", //分组  
+      ihcArr:[
+        {
+          mark:'',
+          result:''
+        }
+      ], //免疫组化数组
       whole: "", //全文检索
       ids: [], //ID 们
       groupName: "", //创建的分组名
@@ -2248,7 +2248,7 @@ export default {
       this.options.map((item, index) => {
         this.onechoose.push(item.value);
       });
-      console.log(this.onechoose);
+      // console.log(this.onechoose);
     },
     get2() {
       this.options.map((item, index) => {
@@ -2260,7 +2260,7 @@ export default {
           });
         }
       });
-      console.log(this.twochoose);
+      // console.log(this.twochoose);
     },
     get3() {
       this.options.map((item, index) => {
@@ -2275,14 +2275,14 @@ export default {
           });
         }
       });
-      console.log(this.threechoose);
+      // console.log(this.threechoose);
     },
     // 获取送检科室
     getDepart() {
       const res = this.axios
         .get("report/option.php?name=department&table=ly_report")
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.department = res.data.option;
         });
     },
@@ -2296,9 +2296,9 @@ export default {
       const res = await this.axios
         .get("report/option.php?table=ly_helper_diagnosis&name=mark")
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.markList = res.data.option;
-          console.log(this.markList)
+          // console.log(this.markList)
         });
     },
     async getresult() {
@@ -2306,7 +2306,7 @@ export default {
       const res = await this.axios
         .get("report/option.php?table=ly_helper_diagnosis&name=value")
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.valueList = res.data.option;
           // console.log(this.result)
         });
@@ -2314,12 +2314,12 @@ export default {
     // 获取选择分组
     groupList() {
       const res = this.axios.get("group/list.php",{params:{group_name:this.search_group}}).then(res => {
-        console.log(res);
+        // console.log(res);
         this.groupLists = res.data.data;
         // this.groupList.map( ( items ,index ) => {
         //   console.log(items)
         // })
-        console.log(res.data.data);
+        // console.log(res.data.data);
       });
     },
     // 保存
@@ -2338,10 +2338,10 @@ export default {
       if (data) {
         // console.log(data)
         this.axios.post("report/edit.php", data).then(res => {
-          console.log("res:", res);
-          console.log(data);
+          // console.log("res:", res);
+          // console.log(data);
           var result = res.data; //JSON.parse(res.body);
-          console.log(result.result);
+          // console.log(result.result);
           if (result.result) {
             this.$alert("提交成功", "提交结果", {
               confirmButtonText: "确定",
@@ -2532,8 +2532,11 @@ export default {
     // 点击筛选
     async shaixuan(edit,ihcitem) {
       console.log(this.edit);
-      console.log(this.ihcitem.mark)
-      // console.log(ihcitem.value)
+      console.log(this.mark)
+      
+      // this.ihcArr.map( (item,indx) =>{
+      //   console.log(item)
+      // })
       let group_id = "";
       let kw = "";
       const { data: res } = await this.axios.get("report/list.php", {
@@ -2556,7 +2559,10 @@ export default {
           report_Ydate: this.edit.report_Ydate, //报告日期  ***
           organization: this.edit.organization, //机构名称
           test_Yid: this.edit.test_Yid, //病理号  **
-          Yjilian: this.edit.Yjilian, //病理类型  **
+          diagnosis1_Ynormal:this.edit.diagnosis1_Ynormal,
+          diagnosis2_Ynormal:this.edit.diagnosis2_Ynormal,
+          diagnosis3_Ynormal:this.edit.diagnosis3_Ynormal,
+          Ylevel:this.edit.Ylevel,
           report_quality: this.edit.report_quality, //报告质量
 
           //本医疗
@@ -2566,9 +2572,12 @@ export default {
           report_date: this.edit.report_date, //报告日期
           diagnosis_type: this.edit.diagnosis_type, //就诊类型
           sample_location: this.edit.sample_location, //取材部位
-          diagnosis2: this.edit.diagnosis2, //病理类型
-          mark: ihcitem.mark, //标志物
-          value: ihcitem.value, //检测结果
+          diagnosis1_normal:this.edit.diagnosis1_normal,
+          diagnosis2_normal:this.edit.diagnosis2_normal,
+          diagnosis3_normal:this.edit.diagnosis3_normal,
+          level:this.edit.level,
+          mark: this.ihcitem.mark, //标志物
+          value: this.ihcitem.value, //检测结果
           dataform: this.edit.dataform, //数据来源
           Integrate: this.edit.Integrate //整合信息
         }
@@ -2716,7 +2725,8 @@ export default {
             
         });
       }
-      console.log(this.ihcArr);
+      console.log(ihcitem);
+      // console.log(this.ihcArrs);
       // console.log(this.edit.mark)
       // console.log(this.edit.value)
     },

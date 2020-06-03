@@ -604,7 +604,6 @@
                 {{diagnosis_2_info.name}}
               </template>
               <div class="reportdown">
-
                 <div class="sickIH">
                   <!--报告信息 -->
                   <div class="title">
@@ -662,8 +661,7 @@
                     </el-select>
                   </div>
                 </div>
-
-
+                
                 <div class="sickIH">
                   <!--取材信息 <div class="sickItem">
                     <span>{{tMInstitution.sample_location.field_title}}:</span>
@@ -695,7 +693,7 @@
                   </div>
 
                   <div class="sickItem">
-                    <span></i>取材部位</span>
+                    <span>取材部位</span>
                     <el-input
                       type="text"
                       v-model="editForm.sample_location"
@@ -1893,6 +1891,16 @@ export default {
       // console.log(file)
       // that.datalist.map( (item,index) =>{
       //   console.log(item)
+      // this.datalist.map( (item,index) =>{
+      //   console.log(item)
+      //   if(file.name === item.file_name){
+      //     that.$message({
+      //       type: "error",
+      //       showClose: true,
+      //       duration: 3000,
+      //       message: "不能重复上传同一文件!"
+      //     });
+      //   }      
       // })
       if (that.$refs.upload.$children[0].fileList.length == 1 ) {
         that.$refs.upload.submit();
@@ -1933,6 +1941,8 @@ export default {
         });
         return false;
       }
+    
+     
       //读取文件大小
       var fileSize = file.size;
       console.log(fileSize);
@@ -2002,7 +2012,7 @@ export default {
       CK:true,   //查看
       // WLR:'',     //未校验的数据
       level:'',   
-      levelList:['1','2','3a','3b'],
+      levelList:['1','2','3A','3B','1-2','3'],
       ihcItem:[],    //免疫组化增减数组
       labelPosition:'left',
       search_group:'',        //搜索分组名
