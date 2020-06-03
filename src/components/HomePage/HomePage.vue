@@ -5,21 +5,21 @@
         <div class="BD">
           <span
             style="font-size:36px;font-weight:400;color:rgba(255,255,255,1);"
-          >{{tongjiList1.total}}</span>
+          >{{tongjiList2.total}}</span>
           <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">本单位数据导入量</span>
           <span
             style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);"
-          >（待校验 {{tongjiList1.not_ok}}：已校验 {{tongjiList1.ok}}）</span>
+          >（待校验 {{tongjiList2.not_ok}}：已校验 {{tongjiList2.ok}}）</span>
         </div>
         <div class="jiao">
           <span
             style="font-size:16px;font-family:Microsoft YaHei;font-weight:bold;color:rgba(255,255,255,1)"
           >
             <img src="./img/rise.png" alt />
-            <span>{{tongjiList1.up_degree}}%</span>
+            <span>{{tongjiList2.up_degree}}%</span>
           </span>
           <el-button
-            round
+            round v-show="this.role_id > 1"
             style="font-size:16px;font-family:Microsoft YaHei;font-weight:400;color:rgba(23,163,209,1);"  @click="go_jy"
           >去校验</el-button>
         </div>
@@ -29,15 +29,13 @@
         <div class="BL">
           <span
             style="font-size:36px;font-weight:400;color:rgba(255,255,255,1);"
-          >{{tongjiList2.total}}</span>
+          >{{tongjiList1.total}}</span>
           <span style="font-size:14px;font-weight:400;color:rgba(255,255,255,1);">本单位数据录入量</span>
         </div>
         <div class="luru">
-          <span
-            style="font-size:16px;font-family:Microsoft YaHei;font-weight:bold;color:rgba(255,255,255,1)"
-          >
+          <span style="font-size:16px;font-family:Microsoft YaHei;font-weight:bold;color:rgba(255,255,255,1)">
             <img src="./img/rise.png" alt />
-            <span>{{tongjiList2.up_degree}}%</span>
+            <span>{{tongjiList1.up_degree}}%</span>
           </span>
           <el-button
             round
@@ -120,6 +118,8 @@ export default {
       this.reportList();
       this.darwPie2();
       this.darwPie3();
+      this.role_id = window.sessionStorage.role_id;
+ 
     });
   },
   methods: {
@@ -462,6 +462,8 @@ export default {
   },
   data() {
     return {
+      username:'',
+      role_id:'',
       // 报告量统计
       reportLists: [],
       // 统计数据
@@ -614,7 +616,7 @@ export default {
       }
 
       span {
-        margin-right: 10px;
+        
         color: #1CA5FF;
       }
     }

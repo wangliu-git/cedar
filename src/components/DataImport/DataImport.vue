@@ -177,11 +177,11 @@
           <div class="ZD">
             <button>本单位诊断信息</button>
             <div>
-              <span>取材部位：</span>
+              取材部位：
               {{editForm.sample_location}}
             </div>
             <div >
-              <span>标本类型：</span>
+              标本类型：
               {{editForm.sample_type}}
             </div>
             <div>诊断结论<span> 病理类型：</span>{{editForm.diagnosis}}</div>
@@ -3063,7 +3063,8 @@ a {
                 
               }
               div{
-                display inline-block               
+                display inline-block 
+                margin-top 10px                
               }
               button{
                 position absolute
@@ -3081,7 +3082,7 @@ a {
               span{
                 display inline-block              
                 margin-left 10px
-                margin-top 15px
+         
                 font-size:14px;
                 font-family:Microsoft YaHei;
                 font-weight:400;

@@ -2,8 +2,8 @@
   <div class="container">
     <div class="content">
       <div class="up">
-        <el-input placeholder="搜索" size="small" class="input-with-select" v-model="searchname" @keyup.enter.native="search()">
-          <el-button slot="append" class="iconfont iconsousuo" size="small"  @click="search()"></el-button>
+        <el-input placeholder="搜索" size="small" class="input-with-select" v-model="searchname" @keyup.enter.native="getUserList()">
+          <el-button slot="append" class="iconfont iconsousuo" size="small"  @click="getUserList()"></el-button>
         </el-input>
         <el-button class="iconfont iconic_join_dialing_norm" size="small" @click="add()">添加</el-button>
         <el-button class="iconfont iconpiliangshanchu" size="small" @click="dels()">批量删除</el-button>
@@ -286,22 +286,22 @@ export default {
       });
     },
     // 搜索模糊
-    async search(){
-      let username
-      const res = await this.axios.get('user/list.php',{params:{username:this.searchname}}).then( res => {
-        console.log(res)
-        this.userlist = res.data.data;
-        this.queryInfo.page = parseInt(res.data.page);
-        this.queryInfo.count = parseInt(res.data.count); //总条数
-        this.queryInfo.pagerows = res.data.pagerows; //每页显示多少条
-        console.log(this.queryInfo.count)
-      })
-    },
+    // async search(){
+    //   let username
+    //   const res = await this.axios.get('user/list.php',{params:{username:this.searchname,page:this.queryInfo.page}}).then( res => {
+    //     console.log(res)
+    //     this.userlist = res.data.data;
+    //     this.queryInfo.page = parseInt(res.data.page);
+    //     this.queryInfo.count = parseInt(res.data.count); //总条数
+    //     this.queryInfo.pagerows = res.data.pagerows; //每页显示多少条
+    //     console.log(this.queryInfo.count)
+    //   })
+    // },
     // 获取用户列表
     async getUserList() {
       // alert(1)
       const { data: res } = await this.axios.get("user/list.php", {
-        params: { page: this.queryInfo.page }
+        params: { page: this.queryInfo.page ,username:this.searchname}
       });
       this.userlist = res.data;
       console.log(this.userlist);

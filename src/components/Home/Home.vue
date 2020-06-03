@@ -16,14 +16,14 @@
             <span slot="title">首页</span>
           </el-menu-item>
 
-          <el-menu-item index="dataentry"  >
+          <el-menu-item index="dataentry">
             <template slot="title">
               <i class="iconfont iconshujuluru"></i>
               <span>数据录入</span>
             </template>
           </el-menu-item>
 
-          <el-menu-item index="dataimport"  >
+          <el-menu-item index="dataimport" v-show="this.role_id > 1">
             <i class="iconfont iconshujudaoru"></i>数据导入
           </el-menu-item>
 
@@ -104,9 +104,10 @@ export default {
   methods: {
     // 点击刷新页面
     goto(){
-      if(this.$route.path == this.$route.path){
-         location.reload()  //强制刷新页面
+      if(this.$route.path == '/dataentry'){
+         location.reload()  //强制刷新页面     
       }
+      // this.$router.go('/dataentry')
     },
     // 退出登录
     async loginout() {
@@ -124,15 +125,14 @@ export default {
   },
   data() {
     return {
-      username: ""
+      username: "",
+      role_id:''
+
     };
   },
   mounted() {
     this.username = window.sessionStorage.username;
-    // console.log(username)
-    // this.username = window.sessionStorage.username
-    // return this.username
-    // console.log(this.username)
+    this.role_id = window.sessionStorage.role_id;
   }
 };
 </script>

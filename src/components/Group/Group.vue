@@ -244,15 +244,15 @@
           <div class="ZD">
             <button>本单位诊断信息</button>
             <div >
-              <span>取材部位：</span>
+              取材部位：
               {{editForm.sample_location}}
             </div>
-            <div style="float:left">
-              <span>标本类型：</span>
+            <div >
+              标本类型：
               {{editForm.sample_type}}
             </div>
             <div>
-              <span>淋巴细胞来源：</span>
+              淋巴细胞来源：
               {{editForm.type}}
             </div>
             <div>
@@ -261,7 +261,7 @@
               {{editForm.diagnosis2}}
             </div>
             
-            <div style="float:left">
+            <div >
               辅助诊断
               <span>免疫组化：</span>
               <th  v-for="(item,index) in this.helper_diagnosis.ihc" :key="index" :value="item">
@@ -390,7 +390,7 @@ export default {
     selectedstyle ({row, rowIndex}) {
       if ((this.getIndex) === rowIndex ) {
         return {
-        "background-color": "#C1C1C1"
+        "background-color": "#E7F5FF"
         };
       }
     },
@@ -960,6 +960,7 @@ a{
         margin: 20px 30px;
         display: flex;
         flex-flow: column;
+      
         th {
           display: inline-block;
           line-height: 11px;
@@ -968,6 +969,8 @@ a{
 
         div {
           display: inline-block;
+          margin-top 10px
+         
         }
 
         button {
@@ -987,7 +990,6 @@ a{
         span {
           display: inline-block;
           margin-left: 10px;
-          margin-top: 15px;
           font-size: 14px;
           font-family: Microsoft YaHei;
           font-weight: 400;

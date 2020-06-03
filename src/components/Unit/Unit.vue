@@ -1,5 +1,5 @@
 <template>
-  <div class="outest">
+  <div class="outest" id="dataImport">
     <div class="sContainer">
       <span>选择分组 :</span>
       <el-select size="mini" style="width:250px" placeholder="请选择分组" v-model="it" @change="group_id()">
@@ -429,12 +429,11 @@
           <el-button size="small" type="primary">点击上传</el-button>
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload>http://106.13.49.232/cedar/ -->
-        
+
         <el-upload   v-model="editForm.img"
-          action="http://106.13.49.232/cedar/api/upload_file/add2.php"
-          :show-file-list="true"
+          action="http://106.13.49.232/cedar/api/upload_file/add2.php"         
           :accept="'image/*'"        
-           list-type="picture-card" 
+          list-type="picture-card" 
           :on-success="handleSuccess"
           :on-error="handleError"
           :before-upload="handleBeforeUpload"
@@ -442,17 +441,14 @@
           :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove">                
           <i class="el-icon-plus"></i>
-        </el-upload>    
-        </el-collapse>
-        <el-dialog :visible.sync="dialogVisible">     
-          <img width="100%" :src="img" >      
-        </el-dialog>    
-        <div class="image" >
-          <img  :src="this.src" >  
-        </div>     
-        <div class="foot">
-          <el-button style="margin-right:10px"><i class="iconfont iconOCRshibieyichangjilu"></i></el-button>
-          <el-button style="margin-right:10px" @click="qingkong()">清空</el-button>
+        </el-upload>     
+          <el-dialog :visible.sync="dialogVisible">     
+            <img width="100%" :src="img">      
+          </el-dialog>  
+        </el-collapse>                
+        <!-- <img  :src="this.src" v-show="this.editForm.pics != ''">   -->        
+        <div class="foot">     
+          <el-button style="margin-right:10px" @click="handleRemove()">清空</el-button>
           <el-button @click="baocun(editForm)">保存</el-button>
         </div>
       </div>
@@ -509,7 +505,6 @@
 <script type="text/ecmascript-6">
 import uuid from "uuid";
 import allMessage from "../../staic/allMessage.json";
-
 export default {
   created() {  
     // this.getTableList();
@@ -522,6 +517,7 @@ export default {
       console.log(file.raw)
       console.log(file)
       console.log(file.response.id)
+      console.log(this)
       this.pics.push(file.response.id)     
       // this.img = file.url
       // console.log(this.img)
@@ -548,12 +544,9 @@ export default {
     handleRemove(file) {
       // console.log(file, fileList);
       console.log(file.response.id)
-      this.pics.splice(file.response.id)
+      this.pics = ''
       console.log(this.pics)
     },
-    // handlePreview() {
-    //   console.log(file);
-    // },
     handlePictureCardPreview(file) {
       // console.log(file)
       this.img = file.url;
@@ -667,13 +660,20 @@ export default {
         }    
         // this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2)
          this.editForm.jilian = this.jilian  
-        if(this.editForm.img){
-          this.editForm.img.map( (item,index) =>{
-           this.img.push(item)
-          })
-          console.log(this.img[0])
-        }
-        this.src = 'http://106.13.49.232/cedar/' + this.img[0]
+        // if(this.editForm.img){
+        //   this.editForm.img.map( (item,index) =>{
+        //    this.img.push(item)
+        //   })
+        //   // console.log(this.img[0])
+        // }
+       
+        // if(this.img[0]){
+        //   this.src = 'http://106.13.49.232/cedar/' + this.img[0]
+        //   console.log(this.src)
+        // }else{
+        //   this.src = ''
+        //   console.log(this.src)
+        // }
         
       }  else{
         this.editForm = {};
@@ -696,13 +696,16 @@ export default {
       // this.rowAdd = row  
     },
     // 清空
-    qingkong() {
+    handleRemove() {
       // this.zhezhao = !this.zhezhao;
       const res = this.axios.get('upload_file/del.php',{params:{id:this.editForm.pics}}).then( res=>{
         console.log(res)
       })
       this.src = ''
       this.editForm = {}
+      this.pics = ''
+      this.editForm.pics = ''
+      console.log(this.src)
       console.log(this.editForm)  
     },
     // 保存
@@ -1432,8 +1435,18 @@ export default {
 </script>
 
 
-<style scoped lang="stylus" rel="stylesheet/stylus" >
-.image{
+<style scoped lang="stylus" rel="stylesheet/stylus" >、
+.el-upload--picture-card {
+    background-color: #fbfdff;
+    border: 1px dashed #c0ccda;
+    border-radius: 6px;
+    box-sizing: border-box;
+    /* width: 148px; */
+    /* height: 148px; */
+    line-height: 146px;
+    vertical-align: top;
+}
+img{
   display inline-block
   border none
   width 400px

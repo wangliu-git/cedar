@@ -628,8 +628,8 @@ export default {
       console.log('rowIndex',rowIndex,'this.getIndex',this.getIndex)
       if ((this.getIndex) === rowIndex ) {
         return {
-        "background-color": "#61C5FF",
-        "opacity":"0.3"
+        "background-color": "#E7F5FF",
+        
         };
       }
     },

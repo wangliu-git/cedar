@@ -123,26 +123,10 @@
             <div class="ji">
               <span>{{showInfo.address_prov.field_title}}:</span>
               <el-select
-                placeholder="请选择"
+                placeholder="请选择居住地"
                 size="mini"
-                style="width:100px"
+                style="width:200px"
                 v-model="edit.address_prov"
-                multiple
-                @change="shaixuan()"
-              >
-                <el-option
-                  v-for="(provinces) in showInfo.birthplace.field_values"
-                  :key="provinces"
-                  :value="provinces"
-                >
-                  <span>{{provinces}}</span>
-                </el-option>
-              </el-select>
-              <el-select
-                placeholder="请选择"
-                size="mini"
-                style="width:100px"
-                v-model="edit.address_city"
                 multiple
                 @change="shaixuan()"
               >
@@ -350,7 +334,6 @@
 
             <div class="zhen">
               <span>{{tMInstitution.diagnosis_type.field_title}}：</span>
-
               <el-select
                 name="diagnosis_type"
                 v-model="edit.diagnosis_type"
@@ -462,12 +445,11 @@
             </div>        
           </div>
 
-          <div class="zhenD" v-for="(item,idx) in this.ihcArr" :key="idx">
+          <div class="zhenD" v-for="(ihcitem,idx) in this.ihcArrs.ihcArr" :key="idx">
             <div class="duan">
               <span>标志物:</span>
-              <el-select   
-                multiple           
-                v-model="edit.mark"
+              <el-select             
+                v-model="ihcitem.mark"
                 placeholder="请选择"
                 size="mini"
                 style="width:200px"
@@ -484,7 +466,7 @@
               <span>检测结果 ：</span>
               <el-select   
                 multiple          
-                v-model="edit.value"
+                v-model="ihcitem.value"
                 placeholder="请选择"
                 size="mini"
                 style="width:200px"
@@ -494,10 +476,10 @@
             </div>
           
             <div>
-              <button style="margin-right: 5px;margin-left: 5px;" @click="ihcAdd(mark,value)">
+              <button style="margin-right: 5px;margin-left: 5px;" v-if="idx==ihcArrs.ihcArr.length-1" @click="ihcAdd(ihcArrs.ihcArr,ihcArrs.ihcArr[idx])">
                 <i class="iconfont iconic_join_dialing_norm"></i>
               </button>
-              <button style="margin-right: 5px;" @click="ihcDelete(mark,value)">
+              <button style="margin-right: 5px;" @click="ihcDelete(ihcArrs.ihcArr)">
                 <i class="iconfont iconjianhao1"></i>
               </button>
             </div>
@@ -524,8 +506,7 @@
           stripe
           ref="table"
           @selection-change="checkTable"
-          :header-cell-style="{color:'#333333'}"
-        >
+          :header-cell-style="{color:'#333333'}">
           <el-table-column width="50" type="selection"></el-table-column>
           <el-table-column prop="test_id" label="病理号" width="200" sortable></el-table-column>
           <el-table-column prop="name" label="姓名" width="200" sortable></el-table-column>
@@ -561,6 +542,7 @@
               :total="count"                            共多少条           
               layout="total, sizes, prev, pager, next, jumper"
         -->
+        <el-checkbox style="margin-top:20px">全选</el-checkbox>
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -646,11 +628,11 @@
           <div class="ZD">
             <button>本单位诊断信息</button>
             <div>
-              <span>取材部位：</span>
+              取材部位：
               {{editForm.sample_location}}
             </div>
-            <div style="float:left">
-              <span>标本类型：</span>
+            <div>
+              标本类型：
               {{editForm.sample_type}}
             </div>
             <div>
@@ -712,7 +694,7 @@
           </div>
           <div class="name">
             <span>新建项目名称 ：</span>
-            <el-input placeholder="请输入项目名称..." style="width:380px" v-model="groupName">
+            <el-input placeholder="请输入项目名称..." style="width:380px" v-model.trim="groupName">
               <el-button slot="append" style="background:#DCDCDC;color:black" plain @click="addGroup(groupName)">保存</el-button>
             </el-input>
           </div>
@@ -1386,6 +1368,7 @@ import allMessage from "../../staic/allMessage.json";
 export default {
   data() {
     return {
+      // ihcitem:'',
       search_group:'',     //搜索分组
       // 原单位本单位联动区分
       diagnosis1_normal:'',
@@ -1402,12 +1385,14 @@ export default {
       twochoose: [],
       threechoose: [],
       location: "", //分组
-      ihcArr: [
-        {
-          mark: [],
-          value:[]
-        }
-      ], //免疫组化数组
+      ihcArrs:{
+        ihcArr:[
+          {
+            mark:'',
+            result:''
+          }
+        ]
+      }, //免疫组化数组
       whole: "", //全文检索
       ids: [], //ID 们
       groupName: "", //创建的分组名
@@ -2406,8 +2391,7 @@ export default {
         } else {
           this.seen1 = false;
         }
-      }
-      
+      }     
     },
     // 编辑按钮
     async bianji(row) {
@@ -2452,15 +2436,16 @@ export default {
     async addGroup(groupName) {
       console.log(groupName);
       // console.log(window.sessionStorage.username);
-    
-      if(this.groupName.trim()){
+      // this.groupLists.map( (item,index) =>{
+      //   console.log(this.item)
+      // })
+      if(groupName){
         let group_name ; 
         const res = await this.axios
         .post("group/add.php", {
           params: {
             group_name: groupName,
-            userid: window.sessionStorage.uid,
-            
+            userid: window.sessionStorage.uid,         
             username: window.sessionStorage.username
           }
         })
@@ -2489,7 +2474,7 @@ export default {
         });
       // console.log(data)   
       }else{
-        this.$alert('项目名称不能为空', '标题名称', {
+        this.$alert('项目名称已存在，请重新编辑', '标题名称', {
           confirmButtonText: '确定',
           callback: action => {
             
@@ -2518,7 +2503,7 @@ export default {
           }
         }).then(res => {
           console.log(res);
-          this.groupLists.push(res.data.data.params);
+          // this.groupLists.push(res.data.data.params);
           console.log(this.groupLists);
           var result = res.data; //JSON.parse(res.body);
           if (result.result) {
@@ -2545,12 +2530,15 @@ export default {
       this.group = false;
     },
     // 点击筛选
-    async shaixuan(edit) {
+    async shaixuan(edit,ihcitem) {
       console.log(this.edit);
+      console.log(this.ihcitem.mark)
+      // console.log(ihcitem.value)
       let group_id = "";
       let kw = "";
       const { data: res } = await this.axios.get("report/list.php", {
         params: {
+          page:this.queryInfo.page,
           kw: this.whole,
           // group_id: 1,
           // 患者信息
@@ -2579,8 +2567,8 @@ export default {
           diagnosis_type: this.edit.diagnosis_type, //就诊类型
           sample_location: this.edit.sample_location, //取材部位
           diagnosis2: this.edit.diagnosis2, //病理类型
-          mark: this.edit.mark, //标志物
-          value: this.edit.value, //检测结果
+          mark: ihcitem.mark, //标志物
+          value: ihcitem.value, //检测结果
           dataform: this.edit.dataform, //数据来源
           Integrate: this.edit.Integrate //整合信息
         }
@@ -2601,7 +2589,7 @@ export default {
         center: true
       })
         .then(async () => {
-          const { data: res } = await this.axios.get("report/del.php ", {
+          const { data: res } = await this.axios.get("report/del.php", {
             params: { id: row.id }
           });
           console.log(res);
@@ -2621,13 +2609,13 @@ export default {
     // 切换每页显示多少条
     handleSizeChange(newSize) {
       this.queryInfo.pagerows = newSize;
-      this.getTableList();
+      this.shaixuan();
     },
     // 点击页数
     handleCurrentChange(newPage) {
       this.queryInfo.page = newPage;
       console.log(this.queryInfo.page);
-      this.getTableList();
+      this.shaixuan();
     },
     // // 获取病理号
     async getTableList() {
@@ -2712,15 +2700,15 @@ export default {
       }
     },
     // 筛选免疫租化增删
-    ihcAdd() {
-      if ( this.edit.mark ||  this.edit.value) {
+    ihcAdd(ihcitem, value) {
+      if ( value.mark ||  value.value) {
         //验证通过 添加新的一条
         var newValue = {
-          mark: this.edit.mark,
-          value: this.edit.value
+          mark: '',
+          value: ''
         };
         //  this.ihcArr.push(this.edit.mark,this.edit.value);
-        this.ihcArr.push(newValue);
+        ihcitem.push(newValue);
       } else {
         this.$alert("请检查输入是否正确", "提交结果", {
           confirmButtonText: "确定",
@@ -2732,9 +2720,9 @@ export default {
       // console.log(this.edit.mark)
       // console.log(this.edit.value)
     },
-    ihcDelete(mark, idx) {
-      if (this.ihcArr.length > 1) {
-        this.ihcArr.splice(idx, 1);
+    ihcDelete(ihcitem, idx) {
+      if (ihcitem.length > 1) {
+        ihcitem.splice(idx, 1);
       } else {
         this.$alert("至少保留一个", "提交结果", {
           confirmButtonText: "确定",
@@ -2742,7 +2730,7 @@ export default {
             
         });
       }
-      console.log(this.ihcArr);
+      console.log(this.ihcitem);
     },
   },
   mounted() {
@@ -3369,6 +3357,7 @@ export default {
 
         div {
           display: inline-block;
+          margin-top 10px
         }
 
         button {
@@ -3388,7 +3377,7 @@ export default {
         span {
           display: inline-block;
           margin-left: 10px;
-          margin-top: 15px;
+
           font-size: 14px;
           font-family: Microsoft YaHei;
           font-weight: 400;

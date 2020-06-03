@@ -46,7 +46,8 @@ export default {
       // 登录表单的数据绑定对象
       Form: {
         username: "",
-        pass: ""
+        pass: "",
+        role_id:''
       },
       rules: {
         username: [
@@ -73,7 +74,7 @@ export default {
           });
           console.log(res);
           // 判断登录成功失败
-          if ((res.uid = res.uid)) {
+          if ((res.uid != 0)) {
             this.$message({
               message: "登录成功",
               type: "success"
@@ -82,6 +83,7 @@ export default {
             window.sessionStorage.setItem("token", res.token);
             window.sessionStorage.setItem("uid", res.uid);
             window.sessionStorage.setItem("username", res.post.username);
+            window.sessionStorage.setItem("role_id", res.role_id);
             this.$router.push("/homepage");
           } else {
             this.$message({
