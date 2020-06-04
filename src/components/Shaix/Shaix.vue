@@ -10,7 +10,7 @@
           size="small"
           class="input-with-select"
           v-model.trim="whole"
-          @keyup.enter.native="shaixuan()">
+          @keyup.enter.native="shaixuan(whole)">
           <el-button slot="append" class="iconfont iconsousuo" size="small" @click="shaixuan"></el-button>
         </el-input>
       </div>
@@ -28,7 +28,7 @@
               <el-input
                 placeholder="请输入姓名"
                 size="mini"
-                @keyup.enter.native="shaixuan()"
+                @keyup.enter.native="shaixuan(edit.name)"
                 style="width:200px"
                 v-model.trim="edit.name"
               ></el-input>
@@ -541,12 +541,12 @@
               :total="count"                            共多少条           
               layout="total, sizes, prev, pager, next, jumper"
         -->
-        <el-checkbox style="margin-top:20px">全选</el-checkbox>
+        <!-- <el-checkbox style="margin-top:20px">全选</el-checkbox> -->
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="queryInfo.page"
-          :page-sizes="[10]"
+          :page-sizes="[10,50,100,500]"
           :page-size="queryInfo.pagerows"
           layout="total, sizes, prev, pager, next, jumper"
           :total="queryInfo.count"
@@ -1270,10 +1270,6 @@
                       >
                         <el-checkbox style="margin-left=10px" label="免疫组化"></el-checkbox>
                         <el-checkbox label="分子检测"></el-checkbox>
-                        <!-- <el-checkbox label="淋巴瘤克隆性基因重排检测"></el-checkbox>
-                        <el-checkbox label="原位杂交"></el-checkbox>
-                        <el-checkbox label="流式细胞检测"></el-checkbox>
-                        <el-checkbox label="ngs检测"></el-checkbox>-->
                       </el-checkbox-group>
                     </div>
                   </div>
@@ -1367,6 +1363,7 @@ import allMessage from "../../staic/allMessage.json";
 export default {
   data() {
     return {
+      val:'',
       ihcitem:[],
       mark:'',
       value:'',
@@ -2532,8 +2529,7 @@ export default {
     async shaixuan(mark,idx) {
       // console.log(mark);
       // console.log(this.mark)
-      // console.log(ihcitem.mark)
-      
+      // console.log(ihcitem.mark)      
       // this.ihcArr.map( (item,indx) =>{
       //   console.log(item)
       // })
@@ -2579,8 +2575,8 @@ export default {
           diagnosis2_normal:this.edit.diagnosis2_normal,
           diagnosis3_normal:this.edit.diagnosis3_normal,
           level:this.edit.level,
-          // mark: this.ihcArr[idx].mark, //标志物
-          // value: this.ihcArr[idx].value, //检测结果
+          mark: this.ihcArr[idx].mark, //标志物
+          value: this.ihcArr[idx].value, //检测结果
           dataform: this.edit.dataform, //数据来源
           Integrate: this.edit.Integrate //整合信息
         }
@@ -2619,8 +2615,8 @@ export default {
         });
     },
     // 切换每页显示多少条
-    handleSizeChange(newSize) {
-      this.queryInfo.pagerows = newSize;
+    handleSizeChange(val) {
+      // this.queryInfo.pagerows = newSize;
       this.shaixuan();
     },
     // 点击页数

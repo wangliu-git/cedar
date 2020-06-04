@@ -532,7 +532,7 @@ export default {
           });
           console.log(res);
           this.getDataList();
-          this.groupname = ''
+          this.group_name = ''
           this.$message({
             type: "success",
             message: "删除成功!"          

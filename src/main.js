@@ -37,8 +37,15 @@ import axios from 'axios'
 Vue.prototype.axios= axios
 // Vue.prototype.$http= axios
 
+var baseURLStr = window.g.ApiUrl
+// 创建axios实例
+const service = axios.create({
+  baseURL: baseURLStr, // api的base_url
+  timeout: 5000 // 请求超时时间
+})
+
 // axios.defaults.headers.post['content-Type'] = 'application/x-www-form-urlencoded'
-axios.defaults.baseURL = 'http://106.13.49.232/cedar/api/'
+axios.defaults.baseURL = baseURLStr
 
 // axios.defaults.baseURL = 'http://106.13.49.232/cedar/api/'
 // axios.defaults.baseURL = 'http://106.13.49.232/cedar/api/'

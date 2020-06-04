@@ -23,8 +23,9 @@
             </template>
           </el-menu-item>
 
-          <el-menu-item index="dataimport" v-show="this.role_id > 1">
-            <i class="iconfont iconshujudaoru"></i>数据导入
+          <el-menu-item index="dataimport" v-show="this.role_id > 1"> 
+            <i class="iconfont iconshujudaoru"></i>
+           数据导入
           </el-menu-item>
 
           <el-submenu index="1">
@@ -100,7 +101,9 @@
 </template>
 
 <script type="text/ecmascript-6">
+
 export default {
+
   methods: {
     // 点击刷新页面
     goto(){

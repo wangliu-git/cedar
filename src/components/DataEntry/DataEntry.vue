@@ -60,6 +60,7 @@
           v-loading="loading"
           element-loading-text="拼命加载中"
           element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0.8)"
  
           
         >
@@ -79,7 +80,7 @@
                 <span>查看</span>
               </el-button>
 
-              <el-button type="text"  @click="dele(scope.row)" >
+              <el-button type="text"  @click="dele(scope.row)" v-if="scope.row.status = 1">
                 <span>删除</span>
               </el-button>
 
@@ -1285,15 +1286,15 @@ export default {
       // alert(1)
       const { data: res } = this.axios.get("group/list.php",{params:{group_name:this.search_group}}).then(res => {
         console.log(res);
-        this.groupList = res.data.data
-        // res.data.data.map( (item,index) =>{
-        //   console.log(item)
-        //   // if(item.group_name != ''){
-        //   //   this.groupList.push(item)           
-        //   // }
-        // })
-        // this.groupList = [...new Set(this.groupList)] 
-        // console.log(this.groupList);
+        this.groupList = []
+        res.data.data.map( (item,index) =>{
+          console.log(item)
+          if(item.group_name != ''){
+            this.groupList.push(item)           
+          }
+        })
+        this.groupList = [...new Set(this.groupList)] 
+        console.log(this.groupList);
      
       });
     },
@@ -1316,15 +1317,17 @@ export default {
     // 点击添加分组保存
     async addGroup(location, id) {
       console.log(location)
-      let zu
-      this.groupList.map( (item,index) =>{
-        this.zu = item.group_name
-        console.log(item)
-      })
+      // let zu = []
+      // this.groupList.map( (item,index) =>{
+      //   // this.zu = item.group_name
+      //   // console.log(item)
+      //   // this.zu.push(item.group_name)
+      // })
+      // this.zu = [...new Set(this.zu)]
       // console.log(window.sessionStorage.uid)
 
       // 判断新建分组名是否存在
-     if(location){
+     if(location ){
         let group_name ; 
       const res = await this.axios
         .post("group/add.php", {
@@ -1581,11 +1584,10 @@ export default {
       // this.search =! this.search
       // alert("gt2"+this.sousuo);
       // console.log(row.id)
-      // console.log(this.queryInfo.page)     
-      const { data: res } = await this.axios.get("excel_data/list.php", {
-        params: { id: row.id, page: this.queryInfo.page }
-      });
-      //console.log(row.id)
+      // console.log(this.queryInfo.page)   
+      let pagerows  
+      const { data: res } = await this.axios.get("excel_data/list.php",{params: { id: row.id, page: this.queryInfo.page}});
+      // console.log(this.val)
       this.tablelist = res.data;
       console.log(res.data);
       // console.log("getTableList",res);
@@ -1739,38 +1741,6 @@ export default {
           this.seen1 = false;
         }
       }
-      for (var i = 0; i < this.checkList.length; i++) {
-        if (this.checkList[i] == "淋巴瘤克隆性基因重排检测") {
-          this.seen2 = true;
-          break;
-        } else {
-          this.seen2 = false;
-        }
-      }
-      for (var i = 0; i < this.checkList.length; i++) {
-        if (this.checkList[i] == "原位杂交") {
-          this.seen3 = true;
-          break;
-        } else {
-          this.seen3 = false;
-        }
-      }
-      for (var i = 0; i < this.checkList.length; i++) {
-        if (this.checkList[i] == "流式细胞检测") {
-          this.seen4 = true;
-          break;
-        } else {
-          this.seen4 = false;
-        }
-      }
-      for (var i = 0; i < this.checkList.length; i++) {
-        if (this.checkList[i] == "ngs检测") {
-          this.seen5 = true;
-          break;
-        } else {
-          this.seen5 = false;
-        }
-      }
     },
     // 表单提交
     submit(ruleForm) {
@@ -1814,30 +1784,6 @@ export default {
     
       // console.log(this)
     },
-    // // 免疫租化增删
-    // ihcAddData( ihcItem,value) {
-    //   //判断当前数组的对象是否有数据
-    //   console.log(ihcItem);
-    //     if (value.mark || value.value){
-    //       //验证通过 添加新的一条
-    //       var value = {
-    //         mark: "",
-    //         value: ""
-    //       };
-    //      ihcItem.push(value);
-    //     } else {
-    //       alert("请检查输入是否正确");
-    //     }
-      
-    // },
-    // // 免疫组化删除
-    // ihcDeleteData(ihcItem) {
-    //   if (ihcItem.length > 1) {
-    //     ihcItem.splice(ihcItem.length - 1, 1);
-    //   } else {
-    //     alert("最少保留一个");
-    //   }
-    // },
     // 免疫租化增删
     ihcAddData(ihcItem, value) {
       //判断当前数组的对象是否有数据
@@ -1863,8 +1809,7 @@ export default {
       } else {
         this.$alert("至少保留一个", "提交结果", {
             confirmButtonText: "确定",
-            type: "warning",
-            
+            type: "warning",          
         });
       }
     },
@@ -2098,6 +2043,7 @@ export default {
   },
   data() {
     return {
+      val:'',
       diagnosis1_normal:'',
       diagnosis2_normal:'',
       diagnosis3_normal:'',
