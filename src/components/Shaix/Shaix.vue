@@ -453,7 +453,7 @@
                 placeholder="请选择"
                 size="mini"
                 style="width:200px"
-                @change="shaixuan()">
+                @change="shaixuan(ihcitem.mark,idx)">
                 <el-option
                   v-for="(item,index) in markList"
                   :key="index"
@@ -470,11 +470,10 @@
                 placeholder="请选择"
                 size="mini"
                 style="width:200px"
-                @change="shaixuan()">
+                @change="shaixuan(ihcitem.value,idx)">
                 <el-option v-for="(item,index) in valueList" :key="index" :value="item"></el-option>
               </el-select>
-            </div>
-          
+            </div>         
             <div>
               <button style="margin-right: 5px;margin-left: 5px;" v-if="idx==ihcArr.length-1" @click="ihcAdd(ihcArr,ihcArr[idx])">
                 <i class="iconfont iconic_join_dialing_norm"></i>
@@ -1390,7 +1389,7 @@ export default {
       ihcArr:[
         {
           mark:'',
-          result:''
+          value:''
         }
       ], //免疫组化数组
       whole: "", //全文检索
@@ -2530,15 +2529,19 @@ export default {
       this.group = false;
     },
     // 点击筛选
-    async shaixuan(edit,ihcitem) {
-      console.log(this.edit);
-      console.log(this.mark)
+    async shaixuan(mark,idx) {
+      // console.log(mark);
+      // console.log(this.mark)
+      // console.log(ihcitem.mark)
       
       // this.ihcArr.map( (item,indx) =>{
       //   console.log(item)
       // })
+      //this.ihcArr
+      //for mark
       let group_id = "";
       let kw = "";
+      //alert(length);
       const { data: res } = await this.axios.get("report/list.php", {
         params: {
           page:this.queryInfo.page,
@@ -2576,8 +2579,8 @@ export default {
           diagnosis2_normal:this.edit.diagnosis2_normal,
           diagnosis3_normal:this.edit.diagnosis3_normal,
           level:this.edit.level,
-          mark: this.ihcitem.mark, //标志物
-          value: this.ihcitem.value, //检测结果
+          // mark: this.ihcArr[idx].mark, //标志物
+          // value: this.ihcArr[idx].value, //检测结果
           dataform: this.edit.dataform, //数据来源
           Integrate: this.edit.Integrate //整合信息
         }
@@ -2725,8 +2728,8 @@ export default {
             
         });
       }
-      console.log(ihcitem);
-      // console.log(this.ihcArrs);
+      // console.log(ihcitem);
+      console.log(this.ihcArr);
       // console.log(this.edit.mark)
       // console.log(this.edit.value)
     },
@@ -3073,7 +3076,6 @@ export default {
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus" >
-
 #dataImport .el-collapse-item__header {
   border-left: 5px #1CA5FF solid;
   margin: 10px;
@@ -3242,7 +3244,7 @@ export default {
 .zhezhao {
   background: #CCCBCE;
   position: relative;
-  bottom: 200px;
+  bottom: 20px;
   z-index: 9999;
 
   .look {

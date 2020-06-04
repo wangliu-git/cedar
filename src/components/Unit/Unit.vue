@@ -545,7 +545,7 @@ export default {
     handleRemove(file) {
       // console.log(file, fileList);
       console.log(file.response.id)
-      this.pics = ''
+      this.pics = []
       console.log(this.pics)
     },
     handlePictureCardPreview(file) {
@@ -706,8 +706,8 @@ export default {
       })
       this.src = ''
       this.editForm = {}
-      this.pics = ''
-      this.editForm.pics = ''
+      this.pics = []
+      this.editForm.pics = []
       console.log(this.src)
       console.log(this.editForm)  
     },

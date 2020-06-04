@@ -5,8 +5,8 @@
         <el-input placeholder="搜索" size="small" class="input-with-select" v-model="searchname" @keyup.enter.native="getUserList()">
           <el-button slot="append" class="iconfont iconsousuo" size="small"  @click="getUserList()"></el-button>
         </el-input>
-        <el-button class="iconfont iconic_join_dialing_norm" size="small" @click="add()">添加</el-button>
-        <el-button class="iconfont iconpiliangshanchu" size="small" @click="dels()">批量删除</el-button>
+        <el-button class="iconfont iconic_join_dialing_norm" size="small" @click="add()" v-if="roleid >1">添加</el-button>
+        <el-button class="iconfont iconpiliangshanchu" size="small" @click="dels()" v-if="roleid >1">批量删除</el-button>
       </div>
 
       <div class="down" style="width:96%">
@@ -27,7 +27,7 @@
           <el-table-column fixed="right" label="操作" width="280">
             <template slot-scope="scope">
             <div v-if="roleid >1">
-              <el-button type="text" size="small">
+              <el-button type="text" size="small" >
                 <span @click="chakan(scope.row)">修改</span>
               </el-button>
               <el-button type="text" size="small">
