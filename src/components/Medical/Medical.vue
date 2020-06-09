@@ -12,9 +12,9 @@
             <span>创建人 ：</span>
             <el-select placeholder="请选择" size="small" v-model="group_name" @change="getName()" clearable>
               <el-option
-                v-for="(item,index) in this.peopleList"
+                v-for="(item,index) in this.nameList"
                 :key="index"
-                :value="item.group_username"
+                :value="item"
               ></el-option>
             </el-select>
           </div>
@@ -39,12 +39,11 @@
                 :row-style="selectedstyle"
                 :header-cell-style="{color:'#333333'}"
                 @current-change="handleSelectionChange">
-                <el-table-column prop="id" label="项目编号" width="250"></el-table-column>
-                <el-table-column prop="group_name" label="项目名称" width="250"></el-table-column>
-                <el-table-column prop="group_logic" label="筛选逻辑" width="300"></el-table-column>
-                <el-table-column prop="group_time" label="创建时间" width="250"></el-table-column>
-                <el-table-column prop="group_username" label="创建人" width="250"></el-table-column>
-                <el-table-column fixed="right" label="操作" width="250">
+                <el-table-column prop="id" label="项目编号" width="300"></el-table-column>
+                <el-table-column prop="group_name" label="项目名称" width="300"></el-table-column>
+                <el-table-column prop="group_time" label="创建时间" width="300"></el-table-column>
+                <el-table-column prop="group_username" label="创建人" width="300"></el-table-column>
+                <el-table-column fixed="right" label="操作" width="350">
                   <template slot-scope="scope">
                     <el-button type="text" size="small" @click.stop="del(scope.row)">删除</el-button>
                   </template>
@@ -159,6 +158,7 @@ import "./js/util";
 export default {
   data() {
     return {
+      nameList:[],
       searchname: "", //模糊搜索
       getIndex: "", //点击列表行
       //控制按钮显示隐藏-----
@@ -905,6 +905,10 @@ export default {
       // console.log(this.datalist )
       this.peopleList = this.datalist;
       console.log(this.peopleList);
+      this.peopleList.map( (item,index) =>{
+        this.nameList.push(item.group_username)
+      })
+      this.nameList = [...new Set(this.nameList)]
       this.queryInfo.page = parseInt(res.page);
       this.queryInfo.count = parseInt(res.count); //总条数
       this.queryInfo.pagerows = res.pagerows; //每页显示多少条

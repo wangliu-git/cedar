@@ -13,7 +13,7 @@
           <div class="left">
             <span>创建人 ：</span>
             <el-select placeholder="请选择" size="small" v-model="groupname" @change="creator" clearable>
-              <el-option v-for="(item,index) in this.peopleList" :key="index" :value="item.group_username" ></el-option> 
+              <el-option v-for="(item,index) in this.nameList" :key="index" :value="item" ></el-option> 
             </el-select>
           </div>
 
@@ -32,12 +32,12 @@
                 :row-class-name="tableRowClassName"
 	              :row-style="selectedstyle"
                 :header-cell-style="{color:'#333333'}"  @current-change="handleSelectionChange">
-                <el-table-column prop="id" label="项目编号" width="250"></el-table-column>
-                <el-table-column prop="group_name" label="项目名称" width="250"></el-table-column>
-                <el-table-column prop="group_logic" label="筛选逻辑" width="300"></el-table-column>
-                <el-table-column prop="group_time" label="创建时间" width="250"></el-table-column>
-                <el-table-column prop="group_username" label="创建人" width="250"></el-table-column>
-                <el-table-column fixed="right" label="操作" width="250">
+                <el-table-column prop="id" label="项目编号" width="300"></el-table-column>
+                <el-table-column prop="group_name" label="项目名称" width="300"></el-table-column>
+             
+                <el-table-column prop="group_time" label="创建时间" width="300"></el-table-column>
+                <el-table-column prop="group_username" label="创建人" width="300"></el-table-column>
+                <el-table-column fixed="right" label="操作" width="350">
                   <template slot-scope="scope">
                     <el-button type="text" size="small" @click="daoChu(scope.row)">
                       <span>脱敏导出</span>
@@ -293,6 +293,7 @@
 export default {
   data() {
     return {
+      nameList:[],
       queryInfo: {
         page: 1, //页数
         pagerows: 10, //每页显示的条数
@@ -561,8 +562,10 @@ export default {
       const { data: res } = await this.axios.get("group/list.php",{params:{page:this.shuInfo.page}});
       this.datalist = res.data;
       this.peopleList = this.datalist 
-      //  this.peopleList = [...new Set(this.peopleList)];  
-      console.log(this.datalist);
+       this.peopleList.map( (item,index) =>{
+        this.nameList.push(item.group_username)
+      })
+      this.nameList = [...new Set(this.nameList)]
       this.shuInfo.page = parseInt(res.page);
       this.shuInfo.count = parseInt(res.count); //总条数
       this.shuInfo.pagerows = res.pagerows; //每页显示多少条
