@@ -32,12 +32,12 @@
                 :row-class-name="tableRowClassName"
 	              :row-style="selectedstyle"
                 :header-cell-style="{color:'#333333'}"  @current-change="handleSelectionChange">
-                <el-table-column prop="id" label="项目编号" width="300"></el-table-column>
-                <el-table-column prop="group_name" label="项目名称" width="300"></el-table-column>
+                <el-table-column prop="id" label="项目编号"></el-table-column>
+                <el-table-column prop="group_name" label="项目名称"></el-table-column>
              
-                <el-table-column prop="group_time" label="创建时间" width="300"></el-table-column>
-                <el-table-column prop="group_username" label="创建人" width="300"></el-table-column>
-                <el-table-column fixed="right" label="操作" width="350">
+                <el-table-column prop="group_time" label="创建时间"></el-table-column>
+                <el-table-column prop="group_username" label="创建人"></el-table-column>
+                <el-table-column fixed="right" label="操作">
                   <template slot-scope="scope">
                     <el-button type="text" size="small" @click="daoChu(scope.row)">
                       <span>脱敏导出</span>
@@ -81,11 +81,11 @@
         <div class="down">
           <el-table :data="tablelist" tooltip-effect="dark" style="width: 100%" border stripe  highlight-current-row>
             <el-table-column type="selection" width="40"></el-table-column>
-            <el-table-column prop="test_id" label="病理号" width="190" sortable></el-table-column>
-            <el-table-column prop="name" label="姓名" width="190" sortable></el-table-column>
-            <el-table-column prop="diagnosis2" label="病理亚型" width="320" sortable></el-table-column>
-            <el-table-column prop="sex" label="性别" width="190" sortable></el-table-column>
-            <el-table-column prop="age" label="年龄" width="190" sortable></el-table-column>
+            <el-table-column prop="test_id" label="病理号" sortable></el-table-column>
+            <el-table-column prop="name" label="姓名" sortable></el-table-column>
+            <el-table-column prop="diagnosis2" label="病理亚型" sortable></el-table-column>
+            <el-table-column prop="sex" label="性别" sortable></el-table-column>
+            <el-table-column prop="age" label="年龄" sortable></el-table-column>
             <el-table-column
               prop="report_date"
               label="报告时间"
@@ -93,7 +93,7 @@
               width="190"
               sortable
             ></el-table-column>
-            <el-table-column fixed="right" label="操作" width="190">
+            <el-table-column fixed="right" label="操作">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="look(scope.row)">
                   <span>查看</span>

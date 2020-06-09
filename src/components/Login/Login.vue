@@ -69,7 +69,7 @@ export default {
         // 验证成功
         if (valid) {
           // 结构赋值
-          const { data: res } = await this.axios.post("https://cedar.genowis.com/cedar/api/user/login.php", {
+          const { data: res } = await this.axios.post("user/login.php", {
             params: { username: this.Form.username, pass: this.Form.pass }
           });
           console.log(res);
