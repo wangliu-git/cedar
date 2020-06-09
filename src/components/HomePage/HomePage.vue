@@ -99,7 +99,7 @@
         </div>
         <div id="wang">
         </div>
-        <div class="zi"></div>
+
       </div>
     </div>
   </div>
@@ -300,8 +300,8 @@ export default {
         },
         grid: {
           //直角坐标系内绘图网格
-          top: "15%",
-          left: "20%",
+          top: "10%",
+          left: "5%",
           right: "5%",
           bottom: "0%",
           containLabel: true //grid是否包含刻度标签
@@ -517,9 +517,11 @@ export default {
 
 .up {
   display: flex;
+  justify-content space-between
 
   .green {
     background-image: url('./img/green-bg.png');
+    background-repeat: no-repeat;
     width: 550px;
     height: 200px;
     display: flex;
@@ -539,11 +541,13 @@ export default {
       flex-flow: column;
       justify-content: center;
       align-items: center;
+      width: 20%;
     }
   }
 
   .orange {
     background-image: url('./img/orange-bg.png');
+    background-repeat: no-repeat;
     width: 550px;
     height: 200px;
     display: flex;
@@ -568,6 +572,7 @@ export default {
 
   .blue {
     background-image: url('./img/blue-bg.png');
+    background-repeat: no-repeat;
     width: 550px;
     height: 200px;
     display: flex;
@@ -592,16 +597,16 @@ export default {
 }
 
 .down {
+  display flex
+  justify-content space-between
   .zx {
-    width: 1080px;
+    width: 65%;
     height: 620px;
     margin-top: 10px;
     margin-left: 10px;
     background: rgba(255, 255, 255, 1);
     box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
     border-radius: 8px;
-    float: left;
-
     .title {
       display: flex;
       background: #FAFAFA;
@@ -646,14 +651,12 @@ export default {
   }
 
   .sx {
-    width: 530px;
+    width: 33%;
     height: 620px;
     background: rgba(255, 255, 255, 1);
     box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
     border-radius: 8px;
-    float: right;
     margin-top: 10px;
-
     .title {
       background: #fafafa;
       height: 36px;
@@ -665,6 +668,7 @@ export default {
     #wang {
       width: 430px;
       height: 492px;
+      margin auto
     }
 
     .zi {

@@ -2,12 +2,9 @@
   <div id="dataImport">
     <el-container style="height:100vh">
       <!-- 左侧边栏 -->
-      <el-aside :width="IScollapse? '60px' : '240px'" >
-        <div class="fold" @click="ISfold()">...</div>
+      <el-aside width="240px">
         <!-- 侧边栏菜单区域 -->
         <el-menu
-          :collapse-transition="false"
-          :collapse="IScollapse"
           :default-openeds="openeds" 
           text-color="#FFFFFF"
           active-text-color="#1E7DFE"
@@ -20,13 +17,15 @@
           </el-menu-item>
 
           <el-menu-item index="dataentry" :class="{sr_active: $route.path === '/dataentry'}">
-            <i class="iconfont iconshujuluru"></i>
-            <span>数据录入</span>
+            <template slot="title">
+              <i class="iconfont iconshujuluru"></i>
+              <span>数据录入</span>
+            </template>
           </el-menu-item>
 
           <el-menu-item index="dataimport" v-show="this.role_id > 1" :class="{sr_active: $route.path === '/dataimport'}"> 
             <i class="iconfont iconshujudaoru"></i>
-            <span>数据导入</span>
+           数据导入
           </el-menu-item>
 
           <el-submenu index="1">
@@ -72,11 +71,11 @@
           -->
 
           <el-menu-item index="usermanagement" :class="{sr_active: $route.path === '/usermanagement'}">
-            <i class="iconfont iconyonghuguanli"></i><span>用户管理</span>
+            <i class="iconfont iconyonghuguanli"></i>用户管理
           </el-menu-item>
 
           <el-menu-item index="ocr" v-show="this.role_id > 1" :class="{sr_active: $route.path === '/ocr'}">
-            <i class="iconfont iconyonghuguanli"></i><span>OCR识别</span>
+            <i class="iconfont iconyonghuguanli"></i>OCR识别
           </el-menu-item>
 
         </el-menu>
@@ -111,10 +110,6 @@
 export default {
 
   methods: {
-    // 点击折叠
-    ISfold(){
-      this.IScollapse = !this.IScollapse
-    },
     // 点击刷新页面
     // goto(){
     //   if(this.$route.path == '/dataentry'){
@@ -138,7 +133,6 @@ export default {
   },
   data() {
     return {
-      IScollapse:false,
       username: "",
       role_id:'',
       openeds:['1','2','3']
@@ -193,12 +187,7 @@ el-button el-button--default {
 .el-aside {
   height: 100%;
   background: linear-gradient(180deg, rgba(30, 118, 254, 1), rgba(27, 196, 255, 1));
-  .fold{
-    height 30px
-    line-height 30px
-    text-align center
-    color white
-  }
+
   .el-menu {
     height: 100%;
   }

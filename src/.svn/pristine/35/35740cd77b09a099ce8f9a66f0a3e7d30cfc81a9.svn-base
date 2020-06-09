@@ -13,7 +13,7 @@
                 <el-col :span="22">
                   <el-upload class="upload-demo"
                     ref="upload"
-                    action="http://192.168.75.58/cedar/api/upload_file/add.php"
+                    action="http://localhost/cedar/api/upload_file/add.php"
                     :accept="acceptFileType"
                     :limit="1"
                     :on-exceed="handleExceed"
@@ -958,14 +958,7 @@ export default {
   methods:{
     // 初始化
     chushi(){
-      this.axios.get('report/clear.php').then( () =>{
-        this.$alert("初始化成功", "提交结果", {
-          confirmButtonText: "确定",
-          type: "success",
-          callback: action => {
-          }
-        });
-      })
+
     },
     // 获取级联菜单
     get2(){

@@ -61,20 +61,20 @@
             :header-cell-style="{color:'#333333'}" 
           >
             <el-table-column type="selection" width="40"></el-table-column>
-            <el-table-column prop="patient_id" label="病人ID"  sortable></el-table-column>
-            <el-table-column prop="test_id" label="病理号"  sortable></el-table-column>
-            <el-table-column prop="name" label="姓名"  sortable></el-table-column>
-            <el-table-column prop="diagnosis_type" label="就诊类型"  sortable></el-table-column>
-            <el-table-column prop="sex" label="性别"  sortable></el-table-column>
-            <el-table-column prop="age" label="年龄" wsortable></el-table-column>
+            <el-table-column prop="patient_id" label="病人ID" width="200" sortable></el-table-column>
+            <el-table-column prop="test_id" label="病理号" width="200" sortable></el-table-column>
+            <el-table-column prop="name" label="姓名" width="180" sortable></el-table-column>
+            <el-table-column prop="diagnosis_type" label="就诊类型" width="200" sortable></el-table-column>
+            <el-table-column prop="sex" label="性别" width="160" sortable></el-table-column>
+            <el-table-column prop="age" label="年龄" width="160" sortable></el-table-column>
             <el-table-column
               prop="diagnosis_origin"
               label="原单位诊断"
               show-overflow-tooltip
-              
+              width="200"
               sortable
             ></el-table-column>
-            <el-table-column fixed="right" label="操作" >
+            <el-table-column fixed="right" label="操作" width="180">
               <template slot-scope="scope" >
                 <el-button
                   type="text"
@@ -420,17 +420,17 @@
           <!--上传图片 -->
           
         <!--<el-upload   
-          action="http://192.168.75.58/cedar/api/diagnosis_origin/add.php"
+          action="http://localhost/cedar/api/diagnosis_origin/add.php"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           :file-list="fileList"
            list-type="picture">
           <el-button size="small" type="primary">点击上传</el-button>
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-        </el-upload>http://192.168.75.58/cedar/ -->
+        </el-upload>http://localhost/cedar/ -->
 
         <el-upload   v-model="editForm.img"
-          action="http://192.168.75.58/cedar/api/upload_file/add2.php"         
+          action="http://localhost/cedar/api/upload_file/add2.php"         
           :accept="'image/*'"        
           list-type="picture-card" 
           :on-success="handleSuccess"
@@ -666,7 +666,7 @@ export default {
         }
        
         if(this.img[0]){
-          this.src = 'http://192.168.75.58/cedar/' + this.img[0]
+          this.src = 'http://localhost/cedar/' + this.img[0]
           console.log(this.src)
         }else{
           this.src = ''
@@ -817,7 +817,7 @@ export default {
       it:'',
       groupList:[],
       photo: "",
-      // upLoadUrl: "http://192.168.75.58/cedar/api/diagnosis_origin/add.php",
+      // upLoadUrl: "http://localhost/cedar/api/diagnosis_origin/add.php",
       jilian: "",
       jilian: [],
       item: "",

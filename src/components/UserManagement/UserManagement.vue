@@ -20,11 +20,11 @@
           @selection-change="checkTable"
           :header-cell-style="{color:'#333333'}">
           <el-table-column type="selection" width="50"></el-table-column>
-          <el-table-column prop="username" label="用户名" width="280"></el-table-column>
-          <el-table-column prop="role_id" label="权限" width="280"></el-table-column>
-          <el-table-column prop="last_time" label="录入时间" width="280"></el-table-column>
-          <el-table-column prop="memo" label="备注" width="280"></el-table-column>
-          <el-table-column fixed="right" label="操作" width="280">
+          <el-table-column prop="username" label="用户名" ></el-table-column>
+          <el-table-column prop="role_id" label="权限" ></el-table-column>
+          <el-table-column prop="last_time" label="录入时间" ></el-table-column>
+          <el-table-column prop="memo" label="备注" ></el-table-column>
+          <el-table-column fixed="right" label="操作" >
             <template slot-scope="scope">
             <div v-if="roleid >1">
               <el-button type="text" size="small" >
@@ -482,7 +482,6 @@ a {
   }
 
   .content {
-    width: 1630px;
     background: rgba(255, 255, 255, 1);
     box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
     border-radius: 4px 4px 4px 4px;

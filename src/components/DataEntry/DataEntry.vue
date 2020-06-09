@@ -67,15 +67,15 @@
           element-loading-text="拼命加载中"
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(0, 0, 0, 0.8)">
-          <el-table-column prop="file_name" label="文件名称" width="300"></el-table-column>
-          <el-table-column prop="upload_time" label="上传时间" width="300"></el-table-column>      
+          <el-table-column prop="file_name" label="文件名称" ></el-table-column>
+          <el-table-column prop="upload_time" label="上传时间" ></el-table-column>      
           <el-table-column label="已校验:未校验" width="300">
             <template
               slot-scope="scope"
             >{{ scope.row.exec_line}} : {{(scope.row.total_line)-(scope.row.exec_line)}}</template>
           </el-table-column>
-          <el-table-column prop="location" label="研究项目" width="300"></el-table-column>
-          <el-table-column fixed="right" label="操作" width="300">
+          <el-table-column prop="location" label="研究项目" ></el-table-column>
+          <el-table-column fixed="right" label="操作" >
             <template slot-scope="scope">
              <el-button
                 class="jiexi"
@@ -104,8 +104,6 @@
               <el-button type="text" @click="dele(scope.row)" >
                 <span>删除</span>
               </el-button>
-
-             
             </template>
           </el-table-column>
         </el-table>
@@ -160,35 +158,35 @@
             @selection-change="checkTable"
           >
             <el-table-column width="40" type="selection"></el-table-column>
-            <el-table-column prop="test_id" label="病理号" width="170" sortable></el-table-column>
-            <el-table-column prop="name" label="姓名" width="170" sortable></el-table-column>
-            <el-table-column label="病理类型" width="200" sortable>
+            <el-table-column prop="test_id" label="病理号"  sortable></el-table-column>
+            <el-table-column prop="name" label="姓名"  sortable></el-table-column>
+            <el-table-column label="病理类型"  sortable>
               <template
                 slot-scope="scope"
               >{{scope.row.diagnosis1_normal}}  {{scope.row.diagnosis2_normal}}</template>
             </el-table-column>
-            <el-table-column prop="sex" label="性别" width="150" sortable></el-table-column>
-            <el-table-column prop="age" label="年龄" width="150" sortable></el-table-column>
+            <el-table-column prop="sex" label="性别"  sortable></el-table-column>
+            <el-table-column prop="age" label="年龄"  sortable></el-table-column>
             <el-table-column
               prop="report_time"
               label="报告时间"
               show-overflow-tooltip
-              width="170"
+              
               sortable
             ></el-table-column>
             <el-table-column
               prop="entry_status"
               label="校验状态"
-              width="170"
+              
               sortable
             ></el-table-column>
             <el-table-column
               prop="complete_degree"
               label="完整度"
-              width="170"
+             
               sortable
             ></el-table-column>
-            <el-table-column fixed="right" label="操作" width="170">
+            <el-table-column fixed="right" label="操作">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="check(scope.row)">
                   <span>查看</span>

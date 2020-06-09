@@ -488,23 +488,23 @@
 
           :header-cell-style="{color:'#333333'}">
           <el-table-column width="50" type="selection"></el-table-column>
-          <el-table-column prop="test_id" label="病理号" width="200" sortable></el-table-column>
-          <el-table-column prop="name" label="姓名" width="200" sortable></el-table-column>
-          <el-table-column label="病种亚型" width="250" sortable>
+          <el-table-column prop="test_id" label="病理号"  sortable></el-table-column>
+          <el-table-column prop="name" label="姓名"  sortable></el-table-column>
+          <el-table-column label="病种亚型"  sortable>
               <template
                 slot-scope="scope"
               >{{scope.row.diagnosis1_normal}}  {{scope.row.diagnosis2_normal}}</template>
             </el-table-column>
-          <el-table-column prop="sex" label="性别" width="200" sortable></el-table-column>
-          <el-table-column prop="age" label="年龄" width="200" sortable></el-table-column>
+          <el-table-column prop="sex" label="性别"  sortable></el-table-column>
+          <el-table-column prop="age" label="年龄"  sortable></el-table-column>
           <el-table-column
             prop="report_date"
             label="报告时间"
             show-overflow-tooltip
-            width="200"
+            
             sortable
           ></el-table-column>
-          <el-table-column fixed="right" label="操作" width="200">
+          <el-table-column fixed="right" label="操作" >
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="look(scope.row)">
                 <span>查看</span>
@@ -3089,7 +3089,6 @@ export default {
   backgroud red
 }
 .shaixu {
-  width: 1630px;
   background: rgba(255, 255, 255, 1);
   box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
   border-radius: 4px;
@@ -3122,7 +3121,8 @@ export default {
   .jiben {
     display: flex;
     flex-wrap: wrap;
-
+    width 1700px
+    margin auto
     .ji {
       width: 300px;
       display: flex;
@@ -3141,6 +3141,8 @@ export default {
   .baogao {
     display: flex;
     flex-wrap: wrap;
+    width 1700px
+    margin auto
 
     .bao {
       width: 300px;
@@ -3161,6 +3163,8 @@ export default {
   .zhenduan {
     display: flex;
     flex-wrap: wrap;
+    width 1700px
+    margin auto
 
     .zhen {
       width: 300px;
@@ -3203,11 +3207,11 @@ export default {
   .zhenD {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 20px;
-
+    width 1700px
+    margin auto
     .duan {
       margin-left: 30px;
-
+      margin-top 20px
       span {
         display: inline-block;
         width: 80px;
