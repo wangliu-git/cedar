@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<style>body{background-color:white;}</style>
+<script src="lib/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<script src="lib/echarts4r-4.3.2/echarts.min.js"></script>
+<script src="lib/echarts4r-4.3.2/ecStat.min.js"></script>
+<script src="lib/echarts4r-4.3.2/themes/macarons.js"></script>
+<script src="lib/echarts4r-4.3.2/custom/renderers.js"></script>
+<script src="lib/echarts4r-binding-0.2.3/echarts4r.js"></script>
+
+</head>
+<body>
+<div id="htmlwidget_container">
+  <div id="htmlwidget-4453f9b8c59ef6877868" style="width:100%;height:500px;" class="echarts4r html-widget"></div>
+</div>
+<script type="application/json" data-for="htmlwidget-4453f9b8c59ef6877868">{"x":{"theme":"macarons","tl":false,"draw":true,"renderer":"canvas","events":[{"data":{"type":"legendSelect"}}],"buttons":[],"opts":{"yAxis":[{"show":true}],"xAxis":[{"data":["≤30","(30,40]","(40,50]","(50,60]","(60,70]",">70"],"type":"category","boundaryGap":true}],"legend":{"data":["类癌","大细胞神经内分泌癌","肉瘤样癌","腺鳞癌","小细胞肺癌","肺鳞癌","肺腺癌"],"show":true,"type":"plain","right":true,"top":"15%","orient":"vertical","width":1},"series":[{"data":[{"value":["≤30","0.08"]},{"value":["(30,40]","0.02"]},{"value":["(40,50]","0.01"]},{"value":["(50,60]","0.01"]},{"value":["(60,70]","0.01"]},{"value":[">70","0.01"]}],"name":"类癌","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d"},{"data":[{"value":["≤30","0.01"]},{"value":["(30,40]","0.00"]},{"value":["(40,50]","0.01"]},{"value":["(50,60]","0.00"]},{"value":["(60,70]","0.01"]},{"value":[">70","0.00"]}],"name":"大细胞神经内分泌癌","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d"},{"data":[{"value":["≤30","0.010"]},{"value":["(30,40]","0.010"]},{"value":["(40,50]","0.010"]},{"value":["(50,60]","0.010"]},{"value":["(60,70]","0.010"]},{"value":[">70","0.015"]}],"name":"肉瘤样癌","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d"},{"data":[{"value":["≤30","0.01"]},{"value":["(30,40]","0.02"]},{"value":["(40,50]","0.01"]},{"value":["(50,60]","0.01"]},{"value":["(60,70]","0.02"]},{"value":[">70","0.02"]}],"name":"腺鳞癌","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d"},{"data":[{"value":["≤30","0.04"]},{"value":["(30,40]","0.02"]},{"value":["(40,50]","0.02"]},{"value":["(50,60]","0.02"]},{"value":["(60,70]","0.03"]},{"value":[">70","0.03"]}],"name":"小细胞肺癌","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d"},{"data":[{"value":["≤30","0.03"]},{"value":["(30,40]","0.05"]},{"value":["(40,50]","0.10"]},{"value":["(50,60]","0.13"]},{"value":["(60,70]","0.16"]},{"value":[">70","0.15"]}],"name":"肺鳞癌","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d"},{"data":[{"value":["≤30","0.820"]},{"value":["(30,40]","0.880"]},{"value":["(40,50]","0.840"]},{"value":["(50,60]","0.820"]},{"value":["(60,70]","0.760"]},{"value":[">70","0.775"]}],"name":"肺腺癌","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d"}],"toolbox":{"feature":{"magicType":{"type":["line","bar","stack"],"title":{"line":"线图展示","bar":"柱图展示","stack":"堆积图展示"}},"saveAsImage":{"title":"保存图片","name":"EIR_graph"},"dataView":{"title":"原始数据","lang":["原始数据（可编辑）","关闭表格","刷新图形"]},"restore":{"title":"还原"}}},"tooltip":{"trigger":"axis","axisPointer":{"type":"shadow"}},"dataZoom":[[]]},"dispose":true},"evals":[],"jsHooks":[]}</script>
+<script type="application/htmlwidget-sizing" data-for="htmlwidget-4453f9b8c59ef6877868">{"viewer":{"width":"100%","height":350,"padding":0,"fill":true},"browser":{"width":"100%","height":500,"padding":0,"fill":true}}</script>
+</body>
+</html>

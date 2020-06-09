@@ -1,0 +1,65 @@
+<template>
+  <div>
+    <el-upload
+      action="http://106.13.49.232/cedar/api/diagnosis_origin/add2.php"
+      :show-file-list="false"
+      :accept="'image/*'"
+      :on-success="handleSuccess"
+      :on-error="handleError"
+      :before-upload="handleBeforeUpload"
+      :on-progress="handleProgress">
+      <el-button type="primary" size="medium">上传图片</el-button>
+    </el-upload>
+    <div>
+      <img src="" alt="">
+    </div>
+    <!--
+      action: 图片上传的地址
+      show-file-list: 是否显示文件上传列表
+      accept: 可接受的上传类型，image/*为图片
+      headers: 头部信息
+      on-success: 上传成功事件
+      on-error: 上传失败事件
+      before-upload: 上传前处理事件，返回一个值，值为false将阻止上传
+      on-progress: 上传中事件
+      -->
+  </div>
+</template>
+
+<script type="text/ecmascript-6">
+  export default {
+    data(){
+        return{
+           
+        }
+    },
+    methods:{
+     /*----- 以下为常用处理代码 ------*/
+      handleSuccess(response, file, fileList) {
+        this.$success("上传成功");
+      },
+      handleError() {
+        this.$error("上传失败,请重新上传图片!");
+      },
+      handleBeforeUpload(file) {
+        const isImage = file.type.includes("image");
+        if (!isImage) {
+          this.$message.error("上传文件类型必须是图片!");
+        }
+        // const isLt2M = file.size / 1024 / 1024 < 2;
+        // if (!isLt2M) {
+        //   this.$message.error("上传图片大小不能超过 2MB!");
+        // }
+        // return isImage && isLt2M;
+      },
+      handleProgress(event, file, fileList) {
+        this.loading = true;  //  上传时执行loading事件
+      }      
+    }
+  }
+</script>
+
+<style scoped lang="stylus" rel="stylesheet/stylus" >
+
+ 
+</style>

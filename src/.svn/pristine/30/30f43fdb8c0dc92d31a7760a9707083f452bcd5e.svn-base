@@ -1,0 +1,121 @@
+[
+  {
+    "patient": {
+      "patient_id": "1478555",
+      "name": "王刚",
+      "sex": "男",
+      "birthday": "1950-01-01",
+      "nation": "汉族",
+      "birthplace": "山东",
+      "cardid": "100101195001010003",
+      "phone": "13911234578",
+      "address_prov": "山东省",
+      "address_city": "泰安市"
+    },
+    "diagnosis_origin": {
+      "organization": "北大肿瘤医院",
+      "test_id": "1481024",
+      "application_date": "2019-04-01",
+      "report_date": "2019-0503",
+      "diagnosis": "前驱淋巴性肿瘤",
+      "type": "B淋巴母细胞白血病/淋巴瘤，非特殊类型",
+      "report_quality": "一类报告",
+      "he_number": "9",
+      "he_quality": "可以进行诊断",
+      "ihc_number": "2",
+      "ihc_quality": "可以进行诊断",
+      "problem_slice": "否",
+      "patient_info": "是",
+      "history_info": "否",
+      "sample_info": "是",
+      "record": "有",
+      "helper_report": "无",
+      "diagnosis_txt": "原文文本内容"
+    },
+    "ly_report": {
+      "test_id": "1472019",
+      "department": "科室名称",
+      "application_date": "2019-06-03",
+      "report_date": "2019-07-04",
+      "sample_type": "淋巴结活检",
+      "sample_location": "颈部淋巴结",
+      "sample_morphology": "细胞形态倾向于淋巴瘤",
+      "diagnosis": "前驱淋巴性肿瘤",
+      "type": "B淋巴母细胞白血病/淋巴瘤，非特殊类型",
+      "helper_diagnosis": [
+        {
+          "name": "免疫组化",
+          "values": [
+            {
+              "mark": "ALK",
+              "value": "+"
+            },
+            {
+              "mark": "CD43",
+              "value": "+"
+            }
+          ]
+        },
+        {
+          "name": "荧光原位杂交",
+          "values": [
+            {
+              "mark": "CD43",
+              "value": "+"
+            },
+            {
+              "mark": "Her2",
+              "value": "+"
+            }
+          ]
+        },
+        {
+          "name": "淋巴瘤克隆性基因重排检测",
+          "values": [
+            {
+              "mark": "ALK-1",
+              "value": "+"
+            }
+          ]
+        },
+        {
+          "name": "原位杂交",
+          "values": [
+            {
+              "mark": "Her2",
+              "value": "++"
+            }
+          ]
+        },
+        {
+          "name": "流式细胞检测",
+          "values": [
+            {
+              "mark": "CD17",
+              "value": "++"
+            },
+            {
+              "mark": "ALK",
+              "value": "++"
+            }
+          ]
+        },
+        {
+          "name": "NGS检测",
+          "values": [
+            {
+              "mark": "ALK",
+              "value": "++"
+            },
+            {
+              "mark": "CD34",
+              "value": "+"
+            }
+          ]
+        }
+      ],
+      "diagnosis_txt": "原文内容",
+      "diagnosis_type": "会诊"
+    }
+  }
+]

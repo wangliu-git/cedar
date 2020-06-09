@@ -1,0 +1,57 @@
+[
+    {
+      "id": "9",
+      "upload_file_id": "1",
+      "file_name": "结直肠癌2014-2018",
+      "upload_time": "2019-11-12",
+      "total_line": "212",
+      "exec_line": "12",
+      "location": "未分组2",
+      "status": "1",
+      "percent": "12: 200"
+    },
+    {
+      "id": "7",
+      "upload_file_id": "0",
+      "file_name": "结直肠癌2014-2018",
+      "upload_time": "2019-11-12",
+      "total_line": "212",
+      "exec_line": "17",
+      "location": "未分组",
+      "status": "1",
+      "percent": "17: 195"
+    },
+    {
+      "id": "6",
+      "upload_file_id": "0",
+      "file_name": "结直肠癌2014-2018",
+      "upload_time": "2019-11-12",
+      "total_line": "212",
+      "exec_line": "16",
+      "location": "未分组",
+      "status": "1",
+      "percent": "16: 196"
+    },
+    {
+      "id": "5",
+      "upload_file_id": "0",
+      "file_name": "结直肠癌2014-2018",
+      "upload_time": "2019-11-12",
+      "total_line": "212",
+      "exec_line": "15",
+      "location": "未分组",
+      "status": "1",
+      "percent": "15: 197"
+    },
+    {
+      "id": "4",
+      "upload_file_id": "0",
+      "file_name": "结直肠癌2014-2018",
+      "upload_time": "2019-11-12",
+      "total_line": "212",
+      "exec_line": "14",
+      "location": "未分组",
+      "status": "1",
+      "percent": "14: 198"
+    }
+  ]

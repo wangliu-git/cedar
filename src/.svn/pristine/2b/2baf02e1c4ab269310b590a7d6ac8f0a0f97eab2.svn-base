@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<script src="lib/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<script src="lib/echarts4r-4.3.2/echarts.min.js"></script>
+<script src="lib/echarts4r-4.3.2/ecStat.min.js"></script>
+<script src="lib/echarts4r-4.3.2/themes/macarons.js"></script>
+<script src="lib/echarts4r-4.3.2/custom/renderers.js"></script>
+<script src="lib/echarts4r-binding-0.2.3/echarts4r.js"></script>
+
+</head>
+<body>
+<div id="htmlwidget_container">
+  <div id="htmlwidget-400363f8c398e6af824c" style="width:100%;height:500px;" class="echarts4r html-widget"></div>
+</div>
+<script type="application/json" data-for="htmlwidget-400363f8c398e6af824c">{"x":{"theme":"macarons","tl":false,"draw":true,"renderer":"canvas","events":[{"data":{"type":"legendSelect"}}],"buttons":[],"opts":{"legend":{"data":[3,2,6,7,1,4,5],"show":true,"type":"plain","right":true,"top":"15%","orient":"vertical","width":1},"series":[{"name":"freq","type":"pie","data":[{"value":10,"name":"肺腺癌"},{"value":2,"name":"肺鳞癌"},{"value":0.2,"name":"腺鳞癌"},{"value":0.4,"name":"小细胞肺癌"},{"value":0.3,"name":"大细胞神经内分泌癌"},{"value":0.1,"name":"类癌"},{"value":0.2,"name":"肉瘤样癌"}]}],"toolbox":{"feature":{"magicType":{"type":["line","bar","stack"],"title":{"line":"线图展示","bar":"柱图展示","stack":"堆积图展示"}},"saveAsImage":{"title":"保存图片","name":"EIR_graph"},"dataView":{"title":"原始数据","lang":["原始数据（可编辑）","关闭表格","刷新图形"]},"restore":{"title":"还原"}}},"tooltip":{"trigger":"item"}},"dispose":true},"evals":[],"jsHooks":[]}</script>
+<script type="application/htmlwidget-sizing" data-for="htmlwidget-400363f8c398e6af824c">{"viewer":{"width":"100%","height":350,"padding":0,"fill":true},"browser":{"width":"100%","height":500,"padding":0,"fill":true}}</script>
+</body>
+</html>
