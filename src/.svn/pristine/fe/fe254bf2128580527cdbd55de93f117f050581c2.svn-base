@@ -420,17 +420,17 @@
           <!--上传图片 -->
           
         <!--<el-upload   
-          action="http://192.168.75.58/cedar/api/diagnosis_origin/add.php"
+          action="http://localhost/cedar/api/diagnosis_origin/add.php"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           :file-list="fileList"
            list-type="picture">
           <el-button size="small" type="primary">点击上传</el-button>
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-        </el-upload>http://192.168.75.58/cedar/ -->
+        </el-upload>http://localhost/cedar/ -->
 
         <el-upload   v-model="editForm.img"
-          action="http://192.168.75.58/cedar/api/upload_file/add2.php"         
+          action="http://localhost/cedar/api/upload_file/add2.php"         
           :accept="'image/*'"        
           list-type="picture-card" 
           :on-success="handleSuccess"
@@ -637,7 +637,7 @@ export default {
       console.log(res);
       this.editForm = res;
       console.log(this.editForm);
-      // this.jilian = []
+      this.jilian = []
       if(res != null){
         this.editForm = res;
         if(this.editForm.report_date === '0000-00-00'){
@@ -648,16 +648,15 @@ export default {
         } 
         // console.log(this.editForm);
         this.jilian = []
-        if(this.editForm.diagnosis1 !=  null && this.editForm.diagnosis1 !=  ''){
+        if(this.editForm.diagnosis1 !=  ''){
           this.jilian.push(this.editForm.diagnosis1)
         }
-        if(this.editForm.diagnosis2 != null && this.editForm.diagnosis2 !=  ''){
+        if(this.editForm.diagnosis2 != ''){
           this.jilian.push(this.editForm.diagnosis2)
         }
-        if(this.editForm.diagnosis3 != null && this.editForm.diagnosis3 !=  ''){
+        if(this.editForm.diagnosis3 != ''){
           this.jilian.push(this.editForm.diagnosis3)
         }    
-        console.log(this.jilian)
         // this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2)
          this.editForm.jilian = this.jilian  
         if(this.editForm.img){     
@@ -666,7 +665,7 @@ export default {
         }
        
         if(this.img[0]){
-          this.src = 'http://192.168.75.58/cedar/' + this.img[0]
+          this.src = 'http://localhost/cedar/' + this.img[0]
           console.log(this.src)
         }else{
           this.src = ''
@@ -677,10 +676,25 @@ export default {
         this.editForm = {};
         return
       }    
-
+      
+      //  this.editForm.helper_diagnosis =  this.helper_diagnosis 
+      // console.log(this.helper_diagnosis);    
+      // if(this.editForm.diagnosis1 !=  ''){
+      //   this.jilian.push(this.editForm.diagnosis1)
+      // }
+      // if(this.editForm.diagnosis2 != ''){
+      //   this.jilian.push(this.editForm.diagnosis2)
+      // }
+      // if(this.editForm.diagnosis3 != ''){
+      //   this.jilian.push(this.editForm.diagnosis3)
+      // }
+      // this.editForm.jilian = this.jilian          
+      // this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2)       
+      // this.rowAdd = row  
     },
     // 清空
     handleRemove() {
+      // this.zhezhao = !this.zhezhao;
       const res = this.axios.get('upload_file/del.php',{params:{id:this.editForm.pics}}).then( res=>{
         console.log(res)
       })
@@ -817,7 +831,7 @@ export default {
       it:'',
       groupList:[],
       photo: "",
-      // upLoadUrl: "http://192.168.75.58/cedar/api/diagnosis_origin/add.php",
+      // upLoadUrl: "http://localhost/cedar/api/diagnosis_origin/add.php",
       jilian: "",
       jilian: [],
       item: "",

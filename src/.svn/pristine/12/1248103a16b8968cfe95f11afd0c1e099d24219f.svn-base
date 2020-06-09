@@ -13,7 +13,7 @@
                 <el-col :span="22">
                   <el-upload class="upload-demo"
                     ref="upload"
-                    action="http://192.168.75.58/cedar/api/upload_file/add.php"
+                    action="http://localhost/cedar/api/upload_file/add.php"
                     :accept="acceptFileType"
                     :limit="1"
                     :on-exceed="handleExceed"
@@ -32,7 +32,6 @@
                   <el-button @click="uploadTemplateDialog=false" size="mini">取消</el-button>
                 </span>
             </el-dialog>
-             <el-button class="chu" type="primary" size="mini" @click="chushi()">初始化</el-button>
           </div>         
         </div>
       </div>
@@ -956,10 +955,6 @@ export default {
     this.get3()         
   },
   methods:{
-    // 初始化
-    chushi(){
-
-    },
     // 获取级联菜单
     get2(){
       this.options.map((item, index) => {
@@ -1110,7 +1105,7 @@ export default {
       this.tablelist = res.data
       this.queryInfo.page = parseInt(res.page);     
       this.queryInfo.count = parseInt(res.count)  //总条数
-      this.queryInfo.pagerows = parseInt(res.pagerows)  //每页显示多少条 
+      this.queryInfo.pagerows = res.pagerows  //每页显示多少条 
       this.id = row.id  
       this.Row = row
 
@@ -1164,6 +1159,7 @@ export default {
               confirmButtonText: '确定',
               type: 'success',
               callback: action => {
+                row.status = 0
                 this.chakan =true
                 this.axios.get("dataset/list.php?id=", + row.id)
               },
@@ -1420,7 +1416,7 @@ export default {
         this.datalist = res.data;  
         this.shuInfo.page = parseInt(res.page);     
         this.shuInfo.count = parseInt(res.count)  //总条数
-        this.shuInfo.pagerows = parseInt(res.pagerows)  //每页显示多少条
+        this.shuInfo.pagerows = res.pagerows  //每页显示多少条
         // console.log(res)
     },
     // 获取病理号
@@ -2827,12 +2823,7 @@ export default {
 }
 </script>
 
-<style scoped lang="stylus" rel="stylesheet/stylus">
-.chu{
-  float right 
-  margin-right 40px
-  margin-top 15px
-}
+<style scoped lang="stylus" rel="stylesheet/stylus" >
 .iconxinghao1{
   color red  !important
   font-size 8px !important
