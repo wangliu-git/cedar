@@ -1007,16 +1007,29 @@
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">标志物：</span>
-                          <el-input size="mini" style="width:100px" v-model="ihcItem.mark">
-      
-                          </el-input>
+                          <el-select size="mini" style="width:100px" v-model="ihcItem.mark">
+                            <el-option
+                              v-for="(item,index) in FZ.key_fish.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
                         </div>
                       </div>
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.value_fish.field_title}}：</span>
-                          <el-input size="mini" style="width:100px" v-model="ihcItem.value">    
-                          </el-input>
+                          <el-select size="mini" style="width:100px" v-model="ihcItem.value">
+                            <el-option
+                              v-for="(item,index) in  FZ.value_fish.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
                         </div>
                       </div>
                    

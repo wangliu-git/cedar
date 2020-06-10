@@ -256,7 +256,7 @@
                     maxlength="10"
                     show-word-limit
                     v-model="editForm.patient_id"
-                  
+                    @focus="highlight(editForm.patient_id)"
                     name="patient_id"
                     size="mini"
                     placeholder="请输入住院号/门诊号"
@@ -270,6 +270,7 @@
                     type="text"
                     size="mini"
                     v-model="editForm.name"
+                    @focus="highlight(editForm.name)"
                     name="name"
                     placeholder="请输入姓名"
                     style="width:200px"
@@ -284,7 +285,7 @@
                     type="text"
                     size="mini"
                     v-model="editForm.age"
-                  
+                    @focus="highlight(editForm.age)"
                     name="age"
                     placeholder="请输入年龄"
                     style="width:200px"
@@ -1007,22 +1008,34 @@
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">标志物：</span>
-                          <el-input size="mini" style="width:100px" v-model="ihcItem.mark">
-      
-                          </el-input>
+                          <el-select size="mini" style="width:100px" v-model="ihcItem.mark">
+                            <el-option
+                              v-for="(item,index) in FZ.key_fish.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
                         </div>
                       </div>
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.value_fish.field_title}}：</span>
-                          <el-input size="mini" style="width:100px" v-model="ihcItem.value">    
-                          </el-input>
+                          <el-select size="mini" style="width:100px" v-model="ihcItem.value">
+                            <el-option
+                              v-for="(item,index) in  FZ.value_fish.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>
                         </div>
                       </div>
                    
                       <div class="handleBtnBox">
                         <el-button v-if="idx==helper_diagnosis.fish.length-1"
-                          style="margin-right: 5px;"
                           @click="ihcAddData(helper_diagnosis.fish,helper_diagnosis.fish[idx])"
                         >
                           <i class="iconfont iconaddTodo-nav"></i>
@@ -1047,7 +1060,7 @@
         <div class="text">
           <span>原始文本</span>
           <div class="content">
-            <span >{{editForm.diagnosis_txt}}</span>
+            <span v-html="msg">{{editForm.diagnosis_txt}}</span>
           </div>
         </div>
       </div>
@@ -1268,17 +1281,17 @@ export default {
   },
   methods: {
     // 高亮
-    // highlight(input) {
-    //   let key = input;
-    //   console.log(key);      
-    //   let rep = new RegExp(key, "gm");
-    //   let line = this.txt;
-    //   let keywrap = "<span style='color:red'>"+key+"</span>";     
-    //   let restr = line.replace(rep,keywrap);// 高亮关键字文本
-    //   console.log(restr);
-    //   this.msg = restr;
+    highlight(input) {
+      let key = input;
+      console.log(key);      
+      let rep = new RegExp(key, "gm");
+      let line = this.txt;
+      let keywrap = "<span style='color:red'>"+key+"</span>";     
+      let restr = line.replace(rep,keywrap);// 高亮关键字文本
+      console.log(restr);
+      this.msg = restr;
       
-    // },
+    },
     // 一级
     getJilian() {
       // console.log(this.editForm.diagnosis1_normal);
@@ -1611,7 +1624,7 @@ export default {
     },
     // 点击病理号校验
     async look(row) {
-      // this.msg = this.editForm.diagnosis_txt
+      this.msg = this.editForm.diagnosis_txt
       this.CK = true;
       // console.log(this.editForm.jilian)
       this.wenjian = false;
@@ -1838,7 +1851,7 @@ export default {
       }
       // this.jilian = []
       this.helper_diagnosis = this.editForm.helper_diagnosis;
-      // this.msg = this.editForm.diagnosis_txt;
+      this.msg = this.editForm.diagnosis_txt;
       // 将ID赋值下一个ID
       this.id = res.id;
       this.xiayige = false;
@@ -2017,7 +2030,7 @@ export default {
                 this.getTableList2(this.row);
                 this.fou();
                 this.getDataList();
-                // this.msg = this.editForm.diagnosis_txt
+                this.msg = this.editForm.diagnosis_txt
               }
             });
           } else {
