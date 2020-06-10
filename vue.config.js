@@ -31,15 +31,23 @@ module.exports = {
       // '/api': 'http://192.168.75.58:4000'
       '/api': {
         target: 'http://192.168.75.58:8080', // 转发的目标地址
-        // target: 'https://cedar.genowis.com', // 转发的目标地址
+        // target: 'http://cedar.genowis.com', // 转发的目标地址
         pathRewrite: {
           '^/api' : ''  // 转发请求时去除路径前面的/api
         },
-        secure: true,
-        changeOrigin: true, // 支持跨域, 如果协议/主机也不相同, 必须加上
+
+        // changeOrigin: true, // 支持跨域, 如果协议/主机也不相同, 必须加上
+        secure: false,
+        https:true,
+        port:443
+        // headers: {
+        //   Referer: 'https://cedar.genowis.com'
+        // }
+
       }
     },
-    historyApiFallback: true,
+    // historyApiFallback: true,
+    
   },
 
   publicPath: '/cedar/'

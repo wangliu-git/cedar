@@ -1,34 +1,21 @@
 <template>
   <div class="container">
     <div>
-      <el-input v-model="input1"  @focus="highlight(input1)" placeholder="请输入内容"></el-input>
+      <el-input v-model="editForm.name"  @focus="highlight(name)" placeholder="请输入内容"></el-input>
     </div>
     <div class="home_box">{{editForm.diagnosis_txt}}</div>
   </div>
 </template>
 <script>
-export default {  
+export default {
   data() {
     return {
-      input1: "高亮",
-      input2: "字符串",
       editForm:{},
-      txt:"这是一段的字符串,里面有些需要高亮key的词语, 高亮key,其他字符串1",
-      msg:"这是一段的字符串,里面有些需要高亮key的词语, 高亮key,其他字符串1",
+      name: "",
+      txt:""
     };
   },
   methods: {
-    highlight(input) {
-      let key = input;
-      console.log(key);      
-      let rep = new RegExp(key, "gm");
-      let line = this.txt;
-      let keywrap = "<span style='color:red'>"+key+"</span>";     
-      let restr = line.replace(rep,keywrap);// 高亮关键字文本
-      console.log(restr);
-      this.msg = restr;
-      
-    },
     async look(){        
       let id = ''       
       const { data :res} = await this.axios.get(
@@ -41,6 +28,25 @@ export default {
       //  this.editForm.diagnosis_txt = this.editForm.diagnosis_txt.split("。")
       // console.log(this.editForm.diagnosis_txt)
     },
+
+    highlight(name) {
+      
+        this.name = this.editForm.name
+        let key = this.name;
+        console.log(key);   
+        let rep = new RegExp(key, "gm")
+        let line = this.txt;
+        console.log(line)
+        // /[{{this.key}}]/gm
+        let keywrap = "<span style='color:red'>"+key+"</span>";
+      
+        
+        let restr = line.replace(rep,keywrap);// 高亮关键字文本
+        console.log(restr);
+        this.txt = restr;
+     
+      
+    }
   },
   mounted(){
     this.look()
@@ -48,11 +54,8 @@ export default {
 };
 </script>
 
-<style  scoped>
-.container {
-  background-color: #2b4b6b;
-  height: 100%;
-}
+<style lang="stylus" rel="stylesheet/stylus" scoped>
+
 .home_box {
   width: 450px;
   height: 300px;

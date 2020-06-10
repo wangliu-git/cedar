@@ -256,7 +256,6 @@
                     maxlength="10"
                     show-word-limit
                     v-model="editForm.patient_id"
-                    @focus="highlight(editForm.patient_id)"
                     name="patient_id"
                     size="mini"
                     placeholder="请输入住院号/门诊号"
@@ -270,7 +269,6 @@
                     type="text"
                     size="mini"
                     v-model="editForm.name"
-                    @focus="highlight(editForm.name)"
                     name="name"
                     placeholder="请输入姓名"
                     style="width:200px"
@@ -285,7 +283,6 @@
                     type="text"
                     size="mini"
                     v-model="editForm.age"
-                    @focus="highlight(editForm.age)"
                     name="age"
                     placeholder="请输入年龄"
                     style="width:200px"
@@ -999,7 +996,7 @@
                     </div>
                   </div>
 
-                  <div v-show="seen1">
+                  <!-- <div v-show="seen1">
                     <span class="titl">
                       <i class="iconfont icontubiaozhizuo-"></i>
                       分子检测:
@@ -1007,7 +1004,7 @@
                     <div id="two" v-for="(ihcItem,idx) in this.helper_diagnosis.fish" :key="idx">
                       <div class="sickI">
                         <div class="sickIt">
-                          <span class="name">标志物：</span>
+                          <span class="name">{{FZ.key_fish.field_title}}：</span>
                           <el-select size="mini" style="width:100px" v-model="ihcItem.mark">
                             <el-option
                               v-for="(item,index) in FZ.key_fish.field_values"
@@ -1036,19 +1033,68 @@
                    
                       <div class="handleBtnBox">
                         <el-button v-if="idx==helper_diagnosis.fish.length-1"
-                          @click="ihcAddData(helper_diagnosis.fish,helper_diagnosis.fish[idx])"
+                          @click="ihcAddData(help_diagnosis.fish,help_diagnosis.fish[idx])"
                         >
                           <i class="iconfont iconaddTodo-nav"></i>
                         </el-button>
-                        <el-button @click="ihcDeleteData(helper_diagnosis.fish)">
+                        <el-button @click="ihcDeleteData(help_diagnosis.fish)">
                           <i class="iconfont iconjianhao1"></i>
                         </el-button>
                       </div>
                     </div>  
+                  </div>-->
+
+                  <div v-show="seen1">
+                    <span class="titl">
+                      <i class="iconfont icontubiaozhizuo-"></i>
+                      分子检测
+                    </span>
+                    <div id="two" v-for="(fish,idx) in help_diagnosis.fish" :key="idx">
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.key_fish.field_title}}：</span>
+                          <!--<el-select size="mini" style="width:100px" v-model="fish.mark">
+                            <el-option
+                              v-for="(item,index) in FZ.key_fish.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>-->
+                          <el-input v-model="fish.mark" style="width:80px" size="mini"></el-input>
+                        </div>
+                      </div>
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.value_fish.field_title}}：</span>
+                          <!--<el-select size="mini" style="width:100px" v-model="fish.value">
+                            <el-option
+                              v-for="(item,index) in  FZ.value_fish.field_values"
+                              :key="index"
+                              :value="item"
+                            >
+                              <span>{{item}}</span>
+                            </el-option>
+                          </el-select>-->
+                          <el-input v-model="fish.value" style="width:130px" size="mini"></el-input>
+                        </div>
+                      </div>
+                      <!-- 不同的地方可以调用一个方法，不需要额外写-->
+                      <div class="handleBtnBox">
+                        <el-button
+                          v-if="idx==help_diagnosis.fish.length-1"
+                          style="margin-right: 5px;"
+                          @click="ihcAddData(help_diagnosis.fish,help_diagnosis.fish[idx])"
+                        >
+                          <i class="iconfont iconaddTodo-nav"></i>
+                        </el-button>
+                        <el-button @click="ihcDeleteData(help_diagnosis.fish)">
+                          <i class="iconfont iconjianhao1"></i>
+                        </el-button>
+                      </div>
+                    </div>
                   </div>
-
-                  
-
                 </div>
               </div>
             </el-collapse-item>
@@ -1060,7 +1106,7 @@
         <div class="text">
           <span>原始文本</span>
           <div class="content">
-            <span v-html="msg">{{editForm.diagnosis_txt}}</span>
+            <span>{{editForm.diagnosis_txt}}</span>
           </div>
         </div>
       </div>
@@ -1215,22 +1261,11 @@
             </div>
             <div style="float:left" class="fz">
               辅助诊断
-              <div class="mianyi">
-                <span>免疫组化：</span>
-                <th  v-for="(item,index) in this.helper_diagnosis.ihc" :key="index" :value="item">
-                  <td>{{item.mark}}</td>
-                  <td>{{item.value}}</td>
-                </th>
-              </div>
-
-              <div class="mianyi">
-                <span>分子检测：</span>
-                <th  v-for="(item,index) in this.helper_diagnosis.fish" :key="index" :value="item">
-                  <td>{{item.mark}}</td>
-                  <td>{{item.value}}</td>
-                </th>
-              </div>
-
+              <span>免疫组化：</span>
+              <th  v-for="(item,index) in this.helper_diagnosis.ihc" :key="index" :value="item">
+                <td>{{item.mark}}</td>
+                <td>{{item.value}}</td>
+              </th>
             </div>
           </div>
         </div>
@@ -1280,18 +1315,6 @@ export default {
     this.getJilian();
   },
   methods: {
-    // 高亮
-    highlight(input) {
-      let key = input;
-      console.log(key);      
-      let rep = new RegExp(key, "gm");
-      let line = this.txt;
-      let keywrap = "<span style='color:red'>"+key+"</span>";     
-      let restr = line.replace(rep,keywrap);// 高亮关键字文本
-      console.log(restr);
-      this.msg = restr;
-      
-    },
     // 一级
     getJilian() {
       // console.log(this.editForm.diagnosis1_normal);
@@ -1600,6 +1623,7 @@ export default {
       //     this.datalist = [];
       //     this.getDataList();
       //   });
+
       // console.log(res)
     },
     // 点击病理号查看
@@ -1624,7 +1648,6 @@ export default {
     },
     // 点击病理号校验
     async look(row) {
-      this.msg = this.editForm.diagnosis_txt
       this.CK = true;
       // console.log(this.editForm.jilian)
       this.wenjian = false;
@@ -1667,7 +1690,6 @@ export default {
       // this.editForm.jilian = this.jilian
       // console.log(this.jilian)
       console.log(this.editForm);
-      this.txt = this.editForm.diagnosis_txt
       return;
     },
     // 获取数据集列表
@@ -2179,8 +2201,7 @@ export default {
   },
   data() {
     return {
-      txt:"这是一段的字符串,里面有些需要高亮key的词语, 高亮key,其他字符串1",
-      msg:"这是一段的字符串,里面有些需要高亮key的词语, 高亮key,其他字符串1",
+      
       diagnosis1_normal: "",
       actionURL:this.baseURLStr + 'upload_file/add.php',
       diagnosis2_normal: "",
@@ -4250,12 +4271,13 @@ a {
           display: inline-block;
           margin-top: 10px;
         }
+
         th {
           display: inline-block;
           line-height: 11px;
           margin-left: 20px;
-          margin-top 10px
         }
+
         button {
           position: absolute;
           left: 50%;
