@@ -1,0 +1,240 @@
+<template>
+  <div>   
+    <el-upload
+      class="upload-demo"
+      :action="actionURL"
+      list-type="picture-card"
+      :on-success="handleSuccess"
+      :on-error="handleError">
+       <i  class="el-icon-plus"></i>
+    </el-upload>    
+    <div class="image">
+      <img :src='ImageUrl' alt="">
+    </div>
+    <el-button class="btn" type="primary" plain @click="OCR()">OCR</el-button>
+      <!--
+      action: 图片上传的地址
+      show-file-list: 是否显示文件上传列表
+      accept: 可接受的上传类型，image/*为图片
+      headers: 头部信息
+      on-success: 上传成功事件
+      on-error: 上传失败事件
+      before-upload: 上传前处理事件，返回一个值，值为false将阻止上传
+      on-progress: 上传中事件
+      -->
+      <div class="text">
+        <div class="json">{{this.dataLists}}</div>
+        <div class="one">
+          <div class="title">基本信息</div>
+          <div class="ItemList">
+            <div class="Item">
+              <span>年龄：</span>
+              <el-input v-model="this.basic.age"  style="width:100px" size="mini"></el-input>
+  
+            </div>
+            <div class="Item">
+              <span>姓名：</span>
+              <el-input v-model="this.basic.name"  style="width:100px" size="mini"></el-input>
+            </div>
+            <div class="Item">
+              <span>性别：</span>
+              <el-input v-model="this.basic.sex"  style="width:100px" size="mini"></el-input>
+            </div>
+            <div class="Item">
+              <span>病人ID：</span>
+              <el-input  v-model="this.basic.test_id" style="width:100px" size="mini"></el-input>
+            </div>
+          </div>
+        </div>
+
+        <div class="two">
+          <div class="title">本医疗信息</div>
+          <div class="ItemList">
+            <div class="Item">
+              <span>申请日期：</span>
+              <el-input v-model="this.diagnosis_current.application_date" style="width:100px" size="mini"></el-input>
+            </div>
+            <div class="Item">
+              <span>会诊科室：</span>
+              <el-input v-model="this.diagnosis_current.department" style="width:100px" size="mini"></el-input>
+            </div>
+            <div class="Item">
+              <span>辅助诊断：</span>
+              <el-input v-model="this.diagnosis_current.helper_diagnosis" style="width:100px" size="mini"></el-input>
+            </div >
+            <div class="Item">
+              <span>报告日期：</span>
+              <el-input v-model="this.diagnosis_current.report_date" style="width:100px" size="mini"></el-input>
+            </div>
+            <div class="Item">
+              <span>病人ID：</span>
+              <el-input v-model="this.diagnosis_current.test_id" style="width:100px" size="mini"></el-input>
+            </div>
+            <div class="Item">
+              <span>病理亚型：</span>
+              <el-input v-model="this.diagnosis_current.diagnosis1_normal" style="width:100px" size="mini"></el-input>
+            </div>
+          </div>
+        </div>
+
+        <div class="three">
+          <div class="Item">
+            <div class="title">病理类型原文：</div>
+            <div>{{this.diagnosis_txt}}</div>
+          </div>
+        </div>
+       
+      </div>
+  </div>
+</template>
+
+<script type="text/ecmascript-6">
+  export default {
+    data() {
+      return {
+        actionURL:this.axios.defaults.baseURL + 'upload_file/add2.php',
+        pic_id:'',
+        ImageUrl:'',
+        dataLists:'',
+        items:{},
+        response:'',
+        basic:{},
+        diagnosis_current:{},
+        diagnosis_txt:'',
+        age:'',
+        name:'',
+        sex:'',
+        test_id:''
+        // action:this.baseURL+'upload_file/add2.php'
+      };
+    },
+    mounted(){
+      console.log(this.axios.defaults.baseURL)
+    },
+    methods: {
+      handleSuccess(response, file, fileList) {
+        this.$message("上传成功");
+        // console.log(this.editForm.imageUrl)
+        console.log(file.raw)
+         this.ImageUrl = file.url;
+        console.log(file) 
+        console.log(file.response.id)
+        this.pic_id = file.response.id
+        console.log(this.pic_id)
+            
+      },
+      handleError() {
+        this.$error("上传失败,请重新上传图片!");
+        console.log(action)
+      },
+      OCR(){
+        let id 
+        const res = this.axios.get('diagnosis_origin/ocr.php?id=' + this.pic_id).then( res=>{
+          res = JSON.stringify(res);
+          res = JSON.parse(res);
+          console.log(res)
+          this.response = res
+          this.dataLists = res.data
+          console.log('this.dataLists',this.dataLists)
+          this.dataLists.map( (item,index) =>{
+            console.log(item)
+            // this.items = item 
+            // console.log(this.items.basic)
+            this.basic = item.basic
+            this.diagnosis_current = item.diagnosis_current
+            this.diagnosis_txt = item.diagnosis_txt
+            console.log(this.diagnosis_current)
+            console.log(this.diagnosis_txt)         
+          })
+        })
+      }
+    }
+  }
+</script>
+
+<style scoped lang="stylus" rel="stylesheet/stylus">
+
+.image{
+  width 820px
+  height 500px
+  float left 
+  img{
+    width 800px
+
+  }
+}
+.text{
+  width 700px
+  height 700px
+  float right 
+  margin-right 20px
+  border 1px solid gray
+  .one{
+    display flex
+    flex-flow column
+    .title{
+      text-align center
+      margin 20px
+      font-size 18px
+      color #1CA5FF
+    }
+    .ItemList{   
+      display flex
+      flex-wrap wrap
+      .Item{
+        margin-left 20px
+        margin-top 20px
+        display inline-block
+        width 200px    
+        span{
+          display inline-block
+          width 80px
+        }
+      }
+    }
+  }
+  .two{
+    display flex
+    flex-flow column
+    .title{
+      text-align center
+      margin 20px
+      font-size 18px
+      color #1CA5FF
+    }
+    .ItemList{   
+      display flex
+      flex-wrap wrap
+      .Item{
+        margin-left 20px
+        margin-top 20px
+        display inline-block
+        width 200px    
+        span{
+          display inline-block
+          width 80px
+        }
+      }
+    }
+  }
+  .three{
+    .title{
+      text-align center
+      margin 20px
+      font-size 18px
+      color #1CA5FF
+    }
+    .Item{
+      margin-left 20px
+      margin-top 20px
+      display inline-block  
+      span{
+        display inline-block
+        width 120px
+        margin-bottom 20px
+      }
+    }
+  }
+
+}
+</style>
