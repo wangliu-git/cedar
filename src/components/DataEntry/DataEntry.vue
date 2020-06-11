@@ -1013,14 +1013,14 @@
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">标志物：</span>
-                          <el-input size="mini" style="width:100px" v-model="ihcItem.mark">
+                          <el-input size="mini" style="width:100px" v-model="ihcItem.mark" @focus="highlight(ihcItem.mark)">
                           </el-input>
                         </div>
                       </div>
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.value_fish.field_title}}：</span>
-                          <el-input size="mini" style="width:100px" v-model="ihcItem.value">
+                          <el-input size="mini" style="width:100px" v-model="ihcItem.value" @focus="highlight(ihcItem.value)">
                           </el-input>
                         </div>
                       </div>
