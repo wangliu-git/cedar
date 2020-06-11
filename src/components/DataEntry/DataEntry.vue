@@ -256,7 +256,7 @@
                     maxlength="10"
                     show-word-limit
                     v-model="editForm.patient_id"
-                  
+                    @focus="highlight(editForm.patient_id)"
                     name="patient_id"
                     size="mini"
                     placeholder="请输入住院号/门诊号"
@@ -270,6 +270,7 @@
                     type="text"
                     size="mini"
                     v-model="editForm.name"
+                    @focus="highlight(editForm.name)"
                     name="name"
                     placeholder="请输入姓名"
                     style="width:200px"
@@ -284,7 +285,7 @@
                     type="text"
                     size="mini"
                     v-model="editForm.age"
-                  
+                    @focus="highlight(editForm.age)"
                     name="age"
                     placeholder="请输入年龄"
                     style="width:200px"
@@ -717,6 +718,7 @@
                       {{tMInstitution.test_id.field_title}}:
                     </span>
                     <el-input
+                      @focus="highlight(editForm.test_id)"
                       type="text"
                       v-model="editForm.test_id"
                       placeholder="请输入病理号"
@@ -733,6 +735,7 @@
                       placeholder="请输入机构名称"
                       size="mini"
                       style="width:200px"
+                      @focus="highlight(editForm.department)"
                     ></el-input>
                   </div>
 
@@ -813,6 +816,7 @@
                       placeholder="请输入标本类型"
                       size="mini"
                       style="width:200px"
+                      @focus="highlight(editForm.sample_type)"
                     ></el-input>
                     <!-- <el-select
                       name="sample_type"
@@ -839,6 +843,7 @@
                       placeholder="请输入取材部位"
                       size="mini"
                       style="width:200px"
+                      @focus="highlight(editForm.sample_location)"
                     ></el-input>
                   </div>
                 </div>
@@ -865,6 +870,7 @@
                     <el-input
                       size="mini"
                       v-model="editForm.diagnosis_txt2"
+                      @focus="highlight(editForm.diagnosis_txt2)"
                       clearable
                       style="width:550px"
                     ></el-input>
@@ -971,13 +977,13 @@
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.key_ihc.field_title}}：</span>
-                          <el-input v-model="ihcItem.mark" style="width:80px" size="mini"></el-input>
+                          <el-input v-model="ihcItem.mark" style="width:80px" size="mini" @focus="highlight(ihcItem.mark)"></el-input>
                         </div>
                       </div>
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.value_ihc.field_title}}：</span>
-                          <el-input v-model="ihcItem.value" style="width:130px" size="mini"></el-input>
+                          <el-input v-model="ihcItem.value" style="width:130px" size="mini"  @focus="highlight(ihcItem.value)"></el-input>
                         </div>
                       </div>
                       <!-- + - 操作只需要传入当前循环的数组 -->
@@ -1008,21 +1014,19 @@
                         <div class="sickIt">
                           <span class="name">标志物：</span>
                           <el-input size="mini" style="width:100px" v-model="ihcItem.mark">
-      
                           </el-input>
                         </div>
                       </div>
                       <div class="sickI">
                         <div class="sickIt">
                           <span class="name">{{FZ.value_fish.field_title}}：</span>
-                          <el-input size="mini" style="width:100px" v-model="ihcItem.value">    
+                          <el-input size="mini" style="width:100px" v-model="ihcItem.value">
                           </el-input>
                         </div>
                       </div>
                    
                       <div class="handleBtnBox">
                         <el-button v-if="idx==helper_diagnosis.fish.length-1"
-                          style="margin-right: 5px;"
                           @click="ihcAddData(helper_diagnosis.fish,helper_diagnosis.fish[idx])"
                         >
                           <i class="iconfont iconaddTodo-nav"></i>
@@ -1047,7 +1051,7 @@
         <div class="text">
           <span>原始文本</span>
           <div class="content">
-            <span >{{editForm.diagnosis_txt}}</span>
+            <span v-html="msg">{{editForm.diagnosis_txt}}</span>
           </div>
         </div>
       </div>
@@ -1268,17 +1272,17 @@ export default {
   },
   methods: {
     // 高亮
-    // highlight(input) {
-    //   let key = input;
-    //   console.log(key);      
-    //   let rep = new RegExp(key, "gm");
-    //   let line = this.txt;
-    //   let keywrap = "<span style='color:red'>"+key+"</span>";     
-    //   let restr = line.replace(rep,keywrap);// 高亮关键字文本
-    //   console.log(restr);
-    //   this.msg = restr;
+    highlight(input) {
+      let key = input;
+      console.log(key);      
+      let rep = new RegExp(key, "gm");
+      let line = this.txt;
+      let keywrap = "<span style='color:red;font-size:18px'>"+key+"</span>";     
+      let restr = line.replace(rep,keywrap);// 高亮关键字文本
+      console.log(restr);
+      this.msg = restr;
       
-    // },
+    },
     // 一级
     getJilian() {
       // console.log(this.editForm.diagnosis1_normal);
@@ -1611,7 +1615,7 @@ export default {
     },
     // 点击病理号校验
     async look(row) {
-      // this.msg = this.editForm.diagnosis_txt
+      this.msg = this.editForm.diagnosis_txt
       this.CK = true;
       // console.log(this.editForm.jilian)
       this.wenjian = false;
@@ -1838,7 +1842,8 @@ export default {
       }
       // this.jilian = []
       this.helper_diagnosis = this.editForm.helper_diagnosis;
-      // this.msg = this.editForm.diagnosis_txt;
+      this.msg = this.editForm.diagnosis_txt;
+      this.txt = this.editForm.diagnosis_txt;
       // 将ID赋值下一个ID
       this.id = res.id;
       this.xiayige = false;
@@ -2017,7 +2022,7 @@ export default {
                 this.getTableList2(this.row);
                 this.fou();
                 this.getDataList();
-                // this.msg = this.editForm.diagnosis_txt
+                this.msg = this.editForm.diagnosis_txt
               }
             });
           } else {
@@ -4091,7 +4096,6 @@ a {
       span {
         height: 30px;
         display: block;
-        margin-bottom: 8px;
       }
 
       .content {
