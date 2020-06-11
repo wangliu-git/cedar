@@ -23,11 +23,10 @@ export default {
       console.log(key);      
       let rep = new RegExp(key, "gm");
       let line = this.txt;
-      let keywrap = "<span style='color:red'>"+key+"</span>";     
+      let keywrap = "<span style='color:red';backgroud:yellow>"+key+"</span>";     
       let restr = line.replace(rep,keywrap);// 高亮关键字文本
       console.log(restr);
-      this.msg = restr;
-      
+      this.msg = restr;    
     },
     async look(){        
       let id = ''       

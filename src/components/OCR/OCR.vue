@@ -92,7 +92,7 @@
   export default {
     data() {
       return {
-        actionURL:this.baseURLStr + 'upload_file/add2.php',
+        actionURL:this.axios.defaults.baseURL + 'upload_file/add2.php',
         pic_id:'',
         ImageUrl:'',
         dataLists:'',
@@ -109,7 +109,7 @@
       };
     },
     mounted(){
-      // console.log(this.baseURL)
+      console.log(this.axios.defaults.baseURL)
     },
     methods: {
       handleSuccess(response, file, fileList) {
@@ -143,12 +143,9 @@
             this.basic = item.basic
             this.diagnosis_current = item.diagnosis_current
             this.diagnosis_txt = item.diagnosis_txt
-            console.log(this.items.diagnosis_current)
-            console.log(this.items.diagnosis_txt)
-
-            
+            console.log(this.diagnosis_current)
+            console.log(this.diagnosis_txt)         
           })
-
         })
       }
     }

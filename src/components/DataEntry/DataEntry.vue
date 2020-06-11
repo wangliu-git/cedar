@@ -1277,7 +1277,7 @@ export default {
       console.log(key);      
       let rep = new RegExp(key, "gm");
       let line = this.txt;
-      let keywrap = "<span style='color:red;font-size:18px'>"+key+"</span>";     
+      let keywrap = "<span style='background:yellow'>"+key+"</span>";     
       let restr = line.replace(rep,keywrap);// 高亮关键字文本
       console.log(restr);
       this.msg = restr;
@@ -1615,7 +1615,7 @@ export default {
     },
     // 点击病理号校验
     async look(row) {
-      this.msg = this.editForm.diagnosis_txt
+      
       this.CK = true;
       // console.log(this.editForm.jilian)
       this.wenjian = false;
@@ -1642,6 +1642,11 @@ export default {
         this.editForm.birthday = "";
       }
       // this.jilian = []
+      console.log(this.editForm.diagnosis_txt)
+      this.txt = this.editForm.diagnosis_txt
+      this.msg  = this.editForm.diagnosis_txt
+      console.log(this.txt)
+      console.log(this.msg)
       this.helper_diagnosis = this.editForm.helper_diagnosis;
       console.log(this.helper_diagnosis);
       // // console.log(this.helper_diagnosis);
@@ -2162,8 +2167,8 @@ export default {
   },
   data() {
     return {
-      txt:"这是一段的字符串,里面有些需要高亮key的词语, 高亮key,其他字符串1",
-      msg:"这是一段的字符串,里面有些需要高亮key的词语, 高亮key,其他字符串1",
+      txt:"",
+      msg:"",
       diagnosis1_normal: "",
       actionURL:this.baseURLStr + 'upload_file/add.php',
       diagnosis2_normal: "",
