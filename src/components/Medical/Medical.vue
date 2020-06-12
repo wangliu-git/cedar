@@ -1005,7 +1005,6 @@ export default {
           value: item.value
         });
       }
-
       // console.log("饼图数据处理：", result);
       let option = {
         title: {
@@ -1340,7 +1339,6 @@ export default {
             }
           }
         }
-
         var that = this
         let option = {
           title: {
@@ -1633,7 +1631,6 @@ export default {
         });
       } else {
         const { data: res } = await this.axios.get(
-          // "group/stat.php?group_id=1&field=birthplace"
           "group/stat.php",
           {
             params: {
@@ -1769,7 +1766,7 @@ export default {
                   show: true //省份名称
                 },
                 emphasis: {
-                  show: false
+                  show: false 
                 }
               },
               data: getEchartsNameMap(result) //数据
@@ -1790,16 +1787,15 @@ export default {
         let maxVal = parseInt(data[0].value);
         for (let i = 0; i < data.length; i++) {
           maxVal =
-            parseInt(data[i].value) > maxVal ? parseInt(data[i].value) : maxVal;
+          parseInt(data[i].value) > maxVal ? parseInt(data[i].value) : maxVal;
         }
         return maxVal;
       }
-
       /**
        * @description 获取Echarts地图的地名映射，根据传入的值返回符合Echarts地名的数据，并将无数据的省份添加value：0防止NaN的产生
        * @param {Array} data 对象数组，对象格式为：{name:'省份名',value:'number'}
        * @returns {Array} Echarts地图所需数据
-       */
+      */
       function getEchartsNameMap(data) {
         //Echarts城市名称映射
         var ruleArray = [
@@ -1873,8 +1869,7 @@ export default {
     // 居住地--地图
     async drawLineAddress_prov(address_prov, id) {
       this.buttonsShowCon();
-      this.address_provShow = true;
-
+      this.address_provShow = true; 
       // myChart.showLoading(); myChart.hideLoading();  //等待效果
       // 基于准备好的dom，初始化echarts实例
       // console.log(document.getElementById('tu'))   样式
@@ -2053,8 +2048,7 @@ export default {
        * @param {Array} data 对象数组，对象格式为：{name:'省份名',value:'number'}
        * @returns {number} 省份数据中的最大值
        */
-      function getMapSplitData(data) {
-        
+      function getMapSplitData(data) {    
         console.log(data); 
         if(!data||data.length==0) return 0;
         let maxVal = parseInt(data[0].value);

@@ -9,6 +9,7 @@ import DataImport from '@/components/DataImport/DataImport.vue'
 import DataIntergration from '@/components/DataIntergration/DataIntergration.vue'
 import Unit from '@/components/Unit/Unit.vue'
 
+
 import DataManage from '@/components/DataManage/DataManage.vue'
 import Shaix from '@/components/Shaix/Shaix.vue'
 import Group from '@/components/Group/Group.vue'
@@ -17,13 +18,11 @@ import Medical from '@/components/Medical/Medical.vue'
 import OCR from '@/components/OCR/OCR.vue'
 
 
-
 // import Try from '@/components/Try/Try.vue'
 import UserManagement from '@/components/UserManagement/UserManagement.vue'
 
 
 export default [
-
     {
         path:'/login',
         component:Login,
@@ -36,39 +35,17 @@ export default [
             {
                 path:'/homepage',
                 component:HomePage,
-                // children:[
-                //     {
-                //         path:'/homepage',
-                //         component:HomePage,
-                //     }
-                // ]  
             },
             
             // 数据录入
             {
                 path:'/dataentry',
-                component:DataEntry,
-                // 原单位报告
-                // children:[
-                //     {
-                //         path:'/dataentry',
-                //         component:DataEntry,
-                //     }
-                // ] 
-        
+                component:DataEntry,       
             },
             // 数据导入
             {
                 path:'/dataimport',
-                component:DataImport,
-                // 原单位报告
-                // children:[
-                //     {
-                //         path:'/dataimport',
-                //         component:DataImport,
-                //     }
-                // ] 
-        
+                component:DataImport,      
             },
             // 数据整合
             {
@@ -96,8 +73,7 @@ export default [
                         path:'/group',
                         component:Group,
                     }
-                ]
-        
+                ]     
             },
             // 数据分析
             {
@@ -108,8 +84,7 @@ export default [
                         path:'/medical',
                         component:Medical,
                     }
-                ]
-        
+                ]      
             },
             // // 模拟试用
             // {
@@ -126,8 +101,7 @@ export default [
                 component:OCR     
             },
         ]
-    },
-    
+    },   
     {
         path:'/',
         redirect:'/login'

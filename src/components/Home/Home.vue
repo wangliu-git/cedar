@@ -64,7 +64,8 @@
           <!--
 
               <el-menu-item index="try" :class="{sr_active: $route.path === '/try'}"><i class="iconfont icondian"></i>模拟试用</el-menu-item>         
-          -->
+          --> 
+     
           <el-menu-item index="usermanagement" :class="{sr_active: $route.path === '/usermanagement'}">
             <i class="iconfont iconyonghuguanli"></i><span>用户管理</span>
           </el-menu-item>

@@ -5,14 +5,12 @@ module.exports = {
 
   // 关闭EsLint的规则
   lintOnSave: false,
-
   css: { loaderOptions: {
       postcss: {
         plugins: []
       }
     }
   },
-
   configureWebpack:{
     resolve: {
       extensions: ['.js', '.vue', '.json'], // 可以省略的后缀名
@@ -23,7 +21,6 @@ module.exports = {
       }
     }
   },
-
   devServer: {
     open: true, // 自动打开浏览器
     proxy: {
