@@ -88,12 +88,12 @@
 
             <div>
               <span>标志物：</span>
-              <el-input style="width:120px" size="mini" v-model="item.mark_normal"></el-input>
+              <el-input style="width:100px" size="mini" v-model="item.mark"></el-input>
             </div>
 
             <div>
               <span>检测结果：</span>
-              <el-input style="width:80px" size="mini" v-model="item.value"></el-input>
+              <el-input style="width:100px" size="mini" v-model="item.value"></el-input>
             </div>
           </div>
         </div>
@@ -117,7 +117,7 @@
         actionURL:this.axios.defaults.baseURL + 'upload_file/add2.php',
         pic_id:'',
         ImageUrl:'',
-        dataLists:'',
+        dataLists:[],
         basic:{},
         diagnosis_current:{},
         diagnosis_txt:'',
@@ -165,7 +165,6 @@
                 console.log(res)
                 console.log(typeof res)
                 // this.response = res
-                this.dataLists = []
                 this.dataLists = res.data
                 // this.dataLists = JSON.stringify(this.dataLists)
                 console.log('this.dataLists',this.dataLists)

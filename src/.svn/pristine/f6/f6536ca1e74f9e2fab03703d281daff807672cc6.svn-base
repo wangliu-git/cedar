@@ -468,7 +468,6 @@
 
                   <div class="sickItem">
                     <span>病理类型标准：</span>
-                    
                     <el-select
                       v-model="editForm.diagnosis1_Ynormal"
                       size="mini"
@@ -923,9 +922,9 @@
                         <span>{{item.name}}</span>
                       </el-option>
                     </el-select>
-                       </div>
+                  </div>
 
-                  <div class="sickItem" v-if="this.editForm.diagnosis2_normal != '' && this.editForm.diagnosis2_normal != '其他'">
+                  <div class="sickItem" v-if="this.editForm.diagnosis2_normal != ''">
                     <span>病理亚型：</span>
                     <el-select
                       v-model="editForm.diagnosis3_normal"
@@ -943,15 +942,12 @@
                         <span>{{item.name}}</span>
                       </el-option>
                     </el-select>
-
-                     <el-input size='mini' @focus="getJilian2" style="width:300px" v-if="this.editForm.diagnosis2_normal == '其他'"  v-model="editForm.diagnosis3_normal"></el-input>
-              
                   </div>
 
                   <div class="sickItem">
                     级别：
                     <el-select v-model="editForm.level" size="mini" style="width:300px" clearable filterable
-                      >
+                      @focus="highlight(editForm.level)">
                       <el-option v-for="(item,index) in  this.levelList" :key="index" :value="item">
                         <span>{{item}}</span>
                       </el-option>
@@ -1288,7 +1284,6 @@ export default {
     this.getJilian();
   },
   methods: {
-   
     // 高亮
     highlight(input) {
       let key = input;
@@ -1306,9 +1301,7 @@ export default {
       // console.log(this.editForm.diagnosis1_normal);
       const res = this.axios.get("report/jilian.php").then(res => {
         console.log(res);
-        
-        this.onechoose = res.data.option
-        console.log(this.onechoose)
+        this.onechoose = res.data.option;
       });
     },
     getJilian1() {
@@ -1331,7 +1324,7 @@ export default {
           params: { name: this.editForm.diagnosis2_normal }
         })
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.threechoose = res.data.option;
         });
       this.editForm.diagnosis3_normal = "";

@@ -20,7 +20,6 @@ require('echarts/lib/component/tooltip')
 require('echarts/lib/component/title')
 
 
-
 // 导入全局文件
 import './assets/css/global.css'
 

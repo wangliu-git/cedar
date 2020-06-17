@@ -350,8 +350,7 @@
                 <el-option
                   v-for="(item,index) in  tMInstitution.diagnosis_type.field_values"
                   :key="index"
-                  :value="item"
-                >
+                  :value="item">
                   <span>{{item}}</span>
                 </el-option>
               </el-select>
@@ -371,8 +370,7 @@
                 <el-option
                   v-for="(item,index) in  tMInstitution.sample_location.field_values"
                   :key="index"
-                  :value="item"
-                >
+                  :value="item">
                   <span>{{item}}</span>
                 </el-option>
               </el-select>
