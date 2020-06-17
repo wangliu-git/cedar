@@ -3,7 +3,6 @@
     <el-upload
       class="upload-demo"
       :action="actionURL"
-      :accept="'image/*'" 
       list-type="picture-card"
       :on-success="handleSuccess"
       :on-error="handleError">
@@ -24,7 +23,7 @@
       on-progress: 上传中事件
       -->
       <div class="text">
-        <!--<div class="json" v-if="this.dataLists != []">{{this.dataLists}}</div>-->
+        <div class="json" v-if="this.dataLists != []">{{this.dataLists}}</div>
         <div class="one">
           <div class="title">基本信息</div>
           <div class="ItemList">
@@ -161,8 +160,10 @@
               type: 'success',
               callback: action => {
                 this.uploadLoading = false;
-                var jsonstr = JSON.stringify(res);
-                console.log('json文本',jsonstr)
+                res = JSON.stringify(res);
+                res = JSON.parse(res);
+                console.log(res)
+                console.log(typeof res)
                 // this.response = res
                 this.dataLists = []
                 this.dataLists = res.data

@@ -376,54 +376,6 @@
               </el-select>
             </div>
 
-            <div class="zhen">
-              <span>标本类型:</span>
-              <el-select
-                name="sample_location"
-                v-model="edit.sample_type"
-                size="mini"
-                placeholder="请选择标本类型"
-                multiple
-                style="width:200px"
-                @change="shaixuan()"
-              >
-                <el-option
-                  v-for="(item,index) in  this.sample_type"
-                  :key="index"
-                  :value="item">
-                  <span>{{item}}</span>
-                </el-option>
-              </el-select>
-            </div>
-
-            <div class="zhen">
-              <span>数据来源:</span>
-                <el-select
-                  v-model="edit.dataform"
-                  placeholder="请选择"
-                  size="mini"
-                  style="width:200px"
-                  multiple
-                  @change="shaixuan()"
-                >
-                  <el-option v-for="(item,index) in dataForm" :key="index" :value="item"></el-option>
-                </el-select>
-            </div>
-
-            <div class="zhen">
-              <span>整合信息:</span>
-                <el-select
-                  v-model="edit.Integrate"
-                  placeholder="请选择"
-                  size="mini"
-                  style="width:200px"
-                  multiple
-                  @change="shaixuan()"
-                >
-                  <el-option v-for="(item,index) in Integrate" :key="index" :value="item"></el-option>
-                </el-select>
-            </div>
-
             <div class="types">
               <div class="type">
                 <span>病理类型:</span>
@@ -467,7 +419,7 @@
               </div>
             </div>
 
-            <!--<div class="yuan">
+            <div class="yuan">
               <div class="lai" style="width:280px">
                 <span>数据来源 ：</span>
                 <el-select
@@ -495,7 +447,7 @@
                   <el-option v-for="(item,index) in Integrate" :key="index" :value="item"></el-option>
                 </el-select>
               </div>
-            </div>  -->      
+            </div>        
           </div>
 
           <div class="zhenD" >
@@ -547,7 +499,7 @@
           <el-table-column label="病种亚型"  sortable>
               <template
                 slot-scope="scope"
-              >{{scope.row.diagnosis1_normal}}  {{scope.row.diagnosis2_normal}} {{scope.row.diagnosis3_normal}}</template>
+              >{{scope.row.diagnosis1_normal}}  {{scope.row.diagnosis2_normal}}</template>
             </el-table-column>
           <el-table-column prop="sex" label="性别"  sortable></el-table-column>
           <el-table-column prop="age" label="年龄"  sortable></el-table-column>
@@ -1467,10 +1419,6 @@ export default {
               label: "B淋巴母细胞白血病/淋巴瘤，非特殊类型"
             },
             {
-              value: "其他",
-              label: "其他"
-            },
-            {
               value: "B淋巴母细胞白血病/淋巴瘤伴重现性遗传学异常",
               label: "B淋巴母细胞白血病/淋巴瘤伴重现性遗传学异常",
               children: [
@@ -2051,7 +1999,7 @@ export default {
       department: [], //送检科室
       application_date: "", //申请日期
       report_date: "", //报告日期
-      sample_type: [], //标本类型
+      sample_type: "", //标本类型
       sample_location: "", //取材部位
       mark: "",
       value: "",
@@ -2293,7 +2241,6 @@ export default {
     this.get1();
     this.get2();
     this.get3();
-    this.getsample_type()
   },
   methods: {
     get1() {
@@ -2334,17 +2281,8 @@ export default {
       const res = this.axios
         .get("report/option.php?name=department&table=ly_report")
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.department = res.data.option;
-        });
-    },
-    // 获取标本类型
-    getsample_type() {
-      const res = this.axios
-        .get("report/option.php?name=sample_type&table=ly_report")
-        .then(res => {
-          console.log(res);
-          this.sample_type = res.data.option;
         });
     },
     // 变动筛选
@@ -2540,7 +2478,15 @@ export default {
                 message: "已取消"
               });
             });
-
+            // this.$alert("新建项目名称成功，是否继续加入此分组", "提交结果", {
+            //   confirmButtonText: "确定",
+            //   confirmButtonText: "确定",
+            //   type: "success",
+            //   callback: action => {
+            //     // this.groupLists = [];
+            //     this.group_id(this.end);              
+            //   }
+            // });
           }else {
             this.$alert("添加失败", "提交结果", {
               confirmButtonText: "确定",
@@ -2654,8 +2600,7 @@ export default {
           level:this.edit.level,
           mark:this.edit.mark, //标志物
           dataform: this.edit.dataform, //数据来源
-          Integrate: this.edit.Integrate, //整合信息
-          sample_type:this.edit.sample_type    //标本类型
+          Integrate: this.edit.Integrate //整合信息
         }
       });
       console.log(res);
@@ -3245,7 +3190,7 @@ export default {
   .types{
     display flex
     .type{
-      margin-left 25px
+      margin-left 20px
       margin-top 20px
     }
   }
@@ -3314,18 +3259,13 @@ export default {
 }
 
 .zhezhao {
-  background-color: rgba(200, 200, 200, 0.7);
-  position: fixed;
-  left: 0;
-  bottom: 0;
+  background: #CCCBCE;
+  position: relative;
+  bottom: 20px;
   z-index: 9999;
-  right: 0;
-  top: 0;
-  z-index: 9999;
+
   .look {
     width: 666px;
-    max-height 900px
-    overflow-y auto
     background: #FAFAFC;
     box-shadow: 0px 4px 20px 0px rgba(121, 121, 121, 0.75);
     border-radius: 0px 0px 4px 4px;

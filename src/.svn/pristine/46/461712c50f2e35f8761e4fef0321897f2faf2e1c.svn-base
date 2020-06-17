@@ -70,7 +70,7 @@
             <el-table-column
               prop="diagnosis_origin"
               label="原单位诊断"
-              show-overflow-tooltip           
+              show-overflow-tooltip            
               sortable
             ></el-table-column>
             <el-table-column fixed="right" label="操作" >
@@ -185,8 +185,28 @@
                   <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
                   {{reportResult.name}}:
                 </div>
-
-                <!--<div class="sickItem">
+                <!-- 
+                <div class="sickItem">
+                  <span>{{fMInstitution.diagnosis.field_title}} :</span>
+                  <el-select placeholder="请选择" name="diagnosis" v-model="editForm.diagnosis" size="mini" style="width:180px">
+                    <el-option
+                      v-for="(item,index) in fMInstitution.diagnosis.field_values"
+                      :key="index"
+                      :value="item"
+                    >
+                      <span>{{item}}</span>
+                    </el-option>
+                  </el-select>
+                </div>
+                <div class="sickItem">
+                  <span>{{fMInstitution.type.field_title}} ：</span>
+                  <el-select placeholder="请选择" name="type" v-model="editForm.type" size="mini" style="width:180px"> 
+                    <el-option
+                      :value="fMInstitution.type.field_values"
+                    >{{fMInstitution.type.field_values == ""? "无数据" : fMInstitution.type.field_values}}</el-option>
+                  </el-select>
+                </div>-->
+                <div class="sickItem">
                   <span>病理类型:</span>
                   <el-cascader
                     v-model="editForm.jilian"
@@ -195,64 +215,7 @@
                     :props="{ checkStrictly: true }"
                     clearable style="width:700px"
                   ></el-cascader>
-                </div>-->
-
-                <div class="sickItem">
-                    <span>
-                      病理类型：
-                    </span>
-                    <el-select
-                      v-model="editForm.diagnosis1"
-                      size="mini"
-                      style="width:300px"
-                      clearable
-                      @change="getJilian1"
-                      filterable>
-                      <el-option
-                        v-for="(item,index) in  this.onechoose"
-                        :key="index"
-                        :value="item.name">
-                        <span>{{item.name}}</span>
-                      </el-option>
-                    </el-select>
-
-                    <el-select
-                      v-model="editForm.diagnosis2"
-                      size="mini"
-                      style="width:300px"
-                      clearable
-                      @change="getJilian2"
-                      filterable>
-                      <el-option
-                        v-for="(item,index) in  this.twochoose"
-                        :key="index"
-                        :value="item.name">
-                        <span>{{item.name}}</span>
-                      </el-option>
-                    </el-select>
-                  </div>
-
-                  <div class="sickItem" v-if="this.editForm.diagnosis2 != ''">
-                    <span>病理亚型：</span>
-                    <el-select
-                      v-if="this.editForm.diagnosis2 != '' && this.editForm.diagnosis2 != '其他'"
-                      v-model="editForm.diagnosis3"
-                      size="mini"
-                      style="width:300px"
-                      clearable
-                      @change="no()"
-                      filterable>
-                      <el-option
-                        v-for="(item,index) in  this.threechoose"
-                        :key="index"
-                        :value="item.name">
-                        <span>{{item.name}}</span>
-                      </el-option>
-                    </el-select>
-
-                     <el-input size='mini' @input="no()" v-if="this.editForm.diagnosis2 == '其他'" style="width:300px"   v-model="editForm.diagnosis3"></el-input>
-              
-                  </div>
+                </div>
               </div>
 
               <!--报告质量  可折叠-->
@@ -260,8 +223,10 @@
                 <template slot="title" style="background-color:rgba(172,172,172,0.19)">
                   <div class="title" >
                   <i class="iconfont icontubiaozhizuo-"></i>
-                      <!-- <i class="iconfont icontubiaozhizuo-"></i>  {{reportMass.name}}:  style="margin-left:50px"-->                      
-                      <span                       
+                      <!-- <i class="iconfont icontubiaozhizuo-"></i>  {{reportMass.name}}:  style="margin-left:50px"-->
+                      
+                      <span
+                        
                       >{{fMInstitution.report_quality.field_title}} :</span>
                       <el-select
                         placeholder="请选择"
@@ -544,49 +509,8 @@ export default {
   created() {  
     this.getTableList();
     this.getgroupList();
-    this.getJilian();
   },
   methods: {
-    // 病理类型
-    getJilian() {
-      // console.log(this.editForm.diagnosis1_normal);
-      const res = this.axios.get("report/jilian.php").then(res => {
-        console.log(res);
-        
-        this.onechoose = res.data.option
-        console.log(this.onechoose)
-      });
-    },
-    getJilian1() {
-      // console.log(this.editForm.diagnosis1_normal);
-      const res = this.axios
-        .get("report/jilian.php", {
-          params: { name: this.editForm.diagnosis1 }
-        })
-        .then(res => {
-          console.log(res);
-          this.twochoose = res.data.option;
-        });
-      this.editForm.diagnosis2 = "";
-      this.editForm.diagnosis3 = "";
-    },
-    getJilian2() {
-      console.log(this.editForm.diagnosis2);
-      const res = this.axios
-        .get("report/jilian.php", {
-          params: { name: this.editForm.diagnosis2 }
-        })
-        .then(res => {
-          console.log(res);
-          this.threechoose = res.data.option;
-        });
-      this.editForm.diagnosis3 = "";
-      this.$forceUpdate()
-    },
-    no(){
-      this.$forceUpdate()
-    },
-    // 上传图片
     handleSuccess(response, file, fileList) {
       this.$message("上传成功");
       // console.log(this.editForm.imageUrl)
@@ -713,9 +637,7 @@ export default {
       this.editForm = res;
       console.log(this.editForm);
       // this.jilian = []
-      
       if(res != null){
-        this.img = []
         this.editForm = res;
         if(this.editForm.report_date === '0000-00-00'){
           this.editForm.report_date = ''
@@ -724,19 +646,19 @@ export default {
           this.editForm.application_date = ''
         } 
         // console.log(this.editForm);
-        // this.jilian = []
-        // if(this.editForm.diagnosis1 !=  null && this.editForm.diagnosis1 !=  ''){
-        //   this.jilian.push(this.editForm.diagnosis1)
-        // }
-        // if(this.editForm.diagnosis2 != null && this.editForm.diagnosis2 !=  ''){
-        //   this.jilian.push(this.editForm.diagnosis2)
-        // }
-        // if(this.editForm.diagnosis3 != null && this.editForm.diagnosis3 !=  ''){
-        //   this.jilian.push(this.editForm.diagnosis3)
-        // }    
-        // console.log(this.jilian)
+        this.jilian = []
+        if(this.editForm.diagnosis1 !=  null && this.editForm.diagnosis1 !=  ''){
+          this.jilian.push(this.editForm.diagnosis1)
+        }
+        if(this.editForm.diagnosis2 != null && this.editForm.diagnosis2 !=  ''){
+          this.jilian.push(this.editForm.diagnosis2)
+        }
+        if(this.editForm.diagnosis3 != null && this.editForm.diagnosis3 !=  ''){
+          this.jilian.push(this.editForm.diagnosis3)
+        }    
+        console.log(this.jilian)
         // this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2)
-        //  this.editForm.jilian = this.jilian  
+         this.editForm.jilian = this.jilian  
         if(this.editForm.img){     
           this.img.push(this.editForm.img[0])    
           // console.log(this.img[0])
@@ -777,7 +699,7 @@ export default {
       this.zhezhao = !this.zhezhao;      
       console.log(this.rowAdd)
       console.log(this.rowAdd.attached)
-      // this.jilian = this.editForm.jilian;
+      this.jilian = this.editForm.jilian;
       this.editForm.detail_type = "淋巴瘤";
       console.log(this.editForm);
         this.axios.post("diagnosis_origin/add.php",{params:{id:this.rowAdd.id,data:this.editForm}}).then(res => {
@@ -880,15 +802,7 @@ export default {
   },
   data() {
     return {
-      // actionURL:this.baseURLStr + 'upload_file/add.php',
       actionURL:this.axios.defaults.baseURL + 'upload_file/add2.php',
-      diagnosis1: "",    
-
-      diagnosis2: "",
-      diagnosis3: "",
-      onechoose: [],
-      twochoose: [],
-      threechoose: [],
       src:'',    //获取图片路径
       img:[],    //图片
       // dialogImageUrl: '',

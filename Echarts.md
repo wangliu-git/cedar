@@ -1,3 +1,6 @@
+
+
+
 1.npm install echarts --save
 2.引入 import echarts from "echarts";
 

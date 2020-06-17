@@ -925,26 +925,26 @@
                     </el-select>
                   </div>
 
-                  <div class="sickItem" v-if="this.editForm.diagnosis2_normal != ''">
+                  <div class="sickItem" v-if="this.editForm.diagnosis2_normal != '' && this.editForm.diagnosis2_normal != '其他'">
                     <span>病理亚型：</span>
                     <el-select
-                      v-if="this.editForm.diagnosis2_normal != '' && this.editForm.diagnosis2_normal != '其他'"
                       v-model="editForm.diagnosis3_normal"
                       size="mini"
                       style="width:300px"
                       clearable
                       filterable
-                      placeholder="请选择"
-                      @focus="highlight(editForm.diagnosis3_normal)">
+                      @focus="highlight(editForm.diagnosis3_normal)"
+                    >
                       <el-option
                         v-for="(item,index) in  this.threechoose"
                         :key="index"
-                        :value="item.name">
+                        :value="item.name"
+                      >
                         <span>{{item.name}}</span>
                       </el-option>
                     </el-select>
 
-                    <el-input size='mini' placeholder="请输入" style="width:300px" v-if="this.editForm.diagnosis2_normal === '其他'"  v-model="editForm.diagnosis3_normal"></el-input>
+                     <el-input size='mini' @focus="getJilian2" style="width:300px" v-if="this.editForm.diagnosis2_normal == '其他'"  v-model="editForm.diagnosis3_normal"></el-input>
               
                   </div>
 
@@ -1043,7 +1043,7 @@
                       </div>
                    
                       <div class="handleBtnBox">
-                        <el-button style="margin-right: 5px;" v-if="idx==helper_diagnosis.fish.length-1"
+                        <el-button v-if="idx==helper_diagnosis.fish.length-1"
                           @click="ihcAddData(helper_diagnosis.fish,helper_diagnosis.fish[idx])"
                         >
                           <i class="iconfont iconaddTodo-nav"></i>
@@ -4045,23 +4045,17 @@ a {
 
 .zhezhao {
   background-color: rgba(200, 200, 200, 0.7);
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  z-index: 9999;
-  right: 0;
-  top: 0;
+  position: relative;
+  bottom: 20px;
   z-index: 9999;
 
   .look {
     width: 666px;
-    max-height 900px
-    overflow-y auto
     background: #FAFAFC;
     box-shadow: 0px 4px 20px 0px rgba(121, 121, 121, 0.75);
     border-radius: 0px 0px 4px 4px;
     position: absolute;
-    top 10px
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
 
