@@ -950,7 +950,7 @@
 
                   <div class="sickItem">
                     级别：
-                    <el-select v-model="editForm.level" size="mini" style="width:300px" clearable filterable
+                    <el-select v-model="editForm.grade" size="mini" style="width:300px" clearable filterable
                       >
                       <el-option v-for="(item,index) in  this.levelList" :key="index" :value="item">
                         <span>{{item}}</span>
@@ -1604,18 +1604,14 @@ export default {
       if (this.editForm.birthday === "0000-00-00") {
         this.editForm.birthday = "";
       }
-      if (this.editForm.birthday === "0000-00-00") {
-        this.editForm.birthday = "";
-      }
+
       // this.jilian = []
       // console.log(this.editForm.diagnosis_txt)
       this.txt = this.editForm.diagnosis_txt
       this.msg  = this.editForm.diagnosis_txt
-      // console.log(this.txt)
-      // console.log(this.msg)
+
       this.helper_diagnosis = this.editForm.helper_diagnosis;
-      // console.log(this.helper_diagnosis);
-      // console.log(this.editForm);
+
       this.txt = this.editForm.diagnosis_txt
       return;
     },
@@ -2108,7 +2104,7 @@ export default {
       diagnosis2_Ynormal: "",
       diagnosis3_Ynormal: "",
       Ylevel: "",
-      level: "",
+      grade: "",
       loading: false,
       CK: true, //查看
       // WLR:'',     //未校验的数据
@@ -2701,9 +2697,6 @@ export default {
         // mark: "",
         // value: ""
       },
-      diagnosis1_normal: "",
-      diagnosis2_normal: "",
-      diagnosis3_normal: "",
       groupList: [], //分组列表
       // 数据集列表
       data: [],

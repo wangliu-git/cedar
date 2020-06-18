@@ -974,7 +974,7 @@
 
                   <div class="sickItem">
                     级别：
-                    <el-select v-model="editForm.grade" size="mini" style="width:300px" clearable filterable
+                    <el-select v-model="editForm.level" size="mini" style="width:300px" clearable filterable
                       >
                       <el-option v-for="(item,index) in  this.levelList" :key="index" :value="item">
                         <span>{{item}}</span>
@@ -1093,7 +1093,7 @@
         <div class="text">
           <span>原始文本</span>
           <div class="content">
-            <span v-html="msg">{{editForm.diagnosis_txt}}</span>
+            <span>{{editForm.diagnosis_txt}}</span>
           </div>
         </div>
       </div>
@@ -2061,7 +2061,7 @@ export default {
       txt:"",
       msg:"",
       actionURL:this.axios.defaults.baseURL + 'upload_file/add.php',
-      grade:'',
+      level:'',
       levelList: ["1", "2", "3A", "3B", "1-2", "3"],
       labelPosition:'left',
       it:'',
