@@ -80,7 +80,6 @@
         <!--全部创建者的数据 -->
         <div class="down">
           <el-table :data="tablelist" tooltip-effect="dark" style="width: 100%" border stripe  highlight-current-row>
-            <el-table-column type="selection" width="40"></el-table-column>
             <el-table-column prop="test_id" label="病理号" sortable></el-table-column>
             <el-table-column prop="name" label="姓名" sortable></el-table-column>
             <el-table-column prop="diagnosis2" label="病理亚型" sortable></el-table-column>

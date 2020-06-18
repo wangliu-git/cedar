@@ -3579,8 +3579,15 @@ export default {
       if (this.type == 0) {
         const { data: res } = await this.axios.get(
           // "group/stat.php?group_id=1&field=diff_day"
-          "group/stat.php?group_id=1&field=mark&type=1&table=ly_helper_diagnosis&field2=result_normal"
-          // "group/stat.php",{params:{group_id:this.id,field:this.diff_day}}
+          // "group/stat.php?group_id=1&field=mark&type=1&table=ly_helper_diagnosis&field2=result_normal"
+          "group/stat.php?field2=result_normal",{
+            params: {
+              group_id: this.id,
+              field: this.mark,
+              type: this.type + 1,
+              table: this.ly_helper_diagnosis,
+            }
+          }
         );
         console.log(res);
         let datas = res.stat;
@@ -3592,11 +3599,21 @@ export default {
           total:total
         });
       } else {
+        // let result_noraml
+        let field2
         const { data: res } = await this.axios.get(
           // "group/stat.php?group_id=1&field=diff_day"
-          "group/stat.php?group_id=1&field=mark&table=ly_helper_diagnosis&field2=result_normal",
-          { params: { dignosis: this.dignosis, type: this.type + 1 } }
-          // "group/stat.php",{params:{group_id:this.id,field:this.diff_day}}
+          // "group/stat.php?group_id=1&field=mark&table=ly_helper_diagnosis&field2=result_normal",
+          // { params: { dignosis: this.dignosis, type: this.type + 1 } }
+          "group/stat.php?field2=result_normal",{
+            params: {
+              group_id: this.id,
+              field: this.mark,
+              type: this.type + 1,
+              table: this.ly_helper_diagnosis,
+              dignosis: this.dignosis,
+            }
+          }
         );
         console.log(res);
         let datas = res.stat;

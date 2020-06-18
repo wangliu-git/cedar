@@ -104,8 +104,7 @@
             style="width: 100%"           
             border           
             stripe :header-cell-style="{color:'#333333'}"    
-            @selection-change="checkTable"     
-          >
+            @selection-change="checkTable" >
             <el-table-column type="selection" width="40"></el-table-column>           
             <el-table-column prop="test_id" label="病理号" width="170"></el-table-column>
             <el-table-column prop="name" label="姓名" width="170" sortable></el-table-column>
@@ -138,7 +137,7 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="queryInfo.page"
-            :page-sizes="[10]"
+            :page-sizes="[10,50,100,5000]"
             :page-size="queryInfo.pagerows" 
             layout="total, sizes, prev, pager, next, jumper"
             :total="queryInfo.count"
@@ -1084,7 +1083,7 @@
                 </div>
               </div>
             </el-collapse-item>
-            <el-button type="primary" @click="submit()" class="commit" style="width:100%">提交</el-button>
+            <el-button type="primary" @click="submit(editForm)" class="commit" style="width:100%">提交</el-button>
            
           </el-collapse>
         </div>
@@ -1481,6 +1480,7 @@ export default {
       this.luru = true
       this.ji = false 
       this.chakan = false
+      this.id = row.id
       const { data :res} = await this.axios.get(
         "excel_data/onedata.php" ,{params:{id:row.id}}
       );
@@ -1517,126 +1517,99 @@ export default {
     },
     // 校验通过
     pass(editForm,id){
-       const {data:res} = this.axios.get('excel_data/check.php',{params:{id:this.id}}).then( res =>{       
-        this.editForm = res.data;
-        // console.log(this.editForm)
-        this.zhezhao = false  
-        var result = res.data;//JSON.parse(res.body);
-        if(result.result ){
-            this.$alert("校验成功", '提交结果', {
-              confirmButtonText: '确定',
-              type: 'success',
-              callback: action => {               
-                this.axios.get("dataset/list.php?id=",{params:{id:this.id}})
-              },
-            });           
-        }else{
-          this.$alert("校验失败", '提交结果', {
-            confirmButtonText: '确定',
-            type: 'warning',
-            callback: action => {
-            },
-          });
-        }        
-      })
-    },
-    // 表单提交
-    submit(editForm) {
-      // this.zhezhao = false
-      this.id = this.id
-      // console.log(this.id)   
-      this.editForm = this.editForm
-      // console.log(this.editForm)
-      this.jilian = this.editForm.jilian
-      this.editForm.help_diagnosis = this.help_diagnosis;
-      // const sicksList = JSON.stringify(sicksArr)      
-      if(this.editForm.patient_id == ''){
-        this.$alert('病人ID不能为空，请填入并仔细检查其他选项', '标题名称', {
-          confirmButtonText: '确定',
-          type: "warning",       
-        });
-      }else if(this.editForm.age == ''){
-        this.$alert('年龄不能为空，请填入并仔细检查其他选项', '标题名称', {
-          confirmButtonText: '确定',
-          type: "warning",       
-        });
-      }else if(this.editForm.sex == ''){
-        this.$alert('性别不能为空，请填入并仔细检查其他选项', '标题名称', {
-          confirmButtonText: '确定',
-          type: "warning",       
-        });
-      }else if(this.editForm.test_id == ''){
-        this.$alert('病理号不能为空，请填入并仔细检查其他选项', '标题名称', {
-          confirmButtonText: '确定',
-          type: "warning",       
-        });
-      }else if(this.editForm.diagnosis_type == ''){
-        this.$alert('就诊类型不能为空，请填入并仔细检查其他选项', '标题名称', {
-          confirmButtonText: '确定',
-          type: "warning",       
-        });
-      }else if(this.editForm.diagnosis1_normal == ''){
-        this.$alert('病理类型不能为空，请填入并仔细检查其他选项', '标题名称', {
-          confirmButtonText: '确定',
-          type: "warning",       
-        });
-      }else{
-          let data={
-        "id":this.id,
-        "data":this.editForm
-      }
-      //data = qs.stringify(data);     
-      // console.log("data:",data);
-      if(data){
-      // console.log(data)
-        this.axios.post('report/add.php',data).then(res => {
-          // console.log('res:',res); 
-          var result = res.data;//JSON.parse(res.body);
-          if(result.result=='done'){
-            this.getTableList2(this.row); 
-            this.$alert("提交成功", '提交结果', {
-              confirmButtonText: '确定',
-              type: 'success',             
-              callback: action => {                
-              },
-            });
-          }
-          else{
-            this.$alert("提交失败", '提交结果', {
-              confirmButtonText: '确定',
-              type: 'warning',
+      this.zhezhao = false;
+      // this.id = this.id;
+      console.log(this.id);
+      // this.editForm = this.editForm;
+      // const sicksList = JSON.stringify(sicksArr)
+      let data = {
+        id: this.id,
+        data: editForm
+      };
+      //data = qs.stringify(data);
+      console.log("data:",data);
+      if (data) {
+        // console.log(data)
+        this.axios.post("report/add.php", data).then(res => {
+          console.log('res:',res);
+          var result = res.data; //JSON.parse(res.body);
+          if (result.result == "done") {
+            this.$alert("提交成功", "提交结果", {
+              confirmButtonText: "确定",
+              type: "success",
               callback: action => {
-              },
+                this.tablelist = [];
+                this.getTableList2(this.row);
+                this.fou();
+                this.getDataList();
+                this.msg = this.editForm.diagnosis_txt
+              }
+            });
+          } else {
+            this.$alert("提交失败", "提交结果", {
+              confirmButtonText: "确定",
+              type: "warning",
+              callback: action => {}
             });
           }
-        })
-      }else {      
+        });
+      } else {
+        // console.log("error submit!!");
         return false;
-      }   
       }
-       
-   
-    }, 
+      // this.fou();
+      return;
+    },
+  
+    submit(editForm) {
+      // this.jilian = this.editForm.jilian;
+      console.log(this.editForm);
+      if (this.editForm.patient_id == "") {
+        this.$alert("病人ID不能为空，请填入并仔细检查其他选项", "标题名称", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+      } else if (this.editForm.age == "") {
+        this.$alert("年龄不能为空，请填入并仔细检查其他选项", "标题名称", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+      } else if (this.editForm.sex == "") {
+        this.$alert("性别不能为空，请填入并仔细检查其他选项", "标题名称", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+      } else if (this.editForm.test_id == "") {
+        this.$alert("病理号不能为空，请填入并仔细检查其他选项", "标题名称", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+      }  else if (this.editForm.diagnosis1_normal == "") {
+        this.$alert("病理类型不能为空，请填入并仔细检查其他选项", "标题名称", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+      } else if (this.editForm.diagnosis_type == "") {
+        this.$alert("就诊类型不能为空，请填入并仔细检查其他选项", "标题名称", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+      } else {
+        this.zhezhao = true;
+      }
+
+      // console.log(this)
+    },
+    
     // 点击下一个
-    next(){
+    next(id){
       this.id = this.id    
       this.xiayige = true     
       // console.log(this.id)   
     },
     // 是
     shi(){
-      // const { data :res} = await this.axios.get(
-      // "excel_data/nextonedata.php?id=" + this.id);      
-      // if(res.ok ==0){
-      //   return this.$message.error('已经是最后一个了')
-      // }
-      // // console.log("getTableList",res);
-      // this.editForm = res.data;
-      // // 将ID赋值下一个ID
-      // this.id= res.id
-      // this.xiayige = false
-      // // this.editForm = Object.assign(res.data[0],res.data[1],res.data[2])
-      this.addFormList()
+      this.pass()
       this.xiayige = false
     },
     // 否
@@ -1649,6 +1622,7 @@ export default {
           type: "success"
         });
       }
+      this.editForm = res.data;
       if (this.editForm.application_date === "0000-00-00") {
         this.editForm.application_date = "";
       }
@@ -1666,7 +1640,6 @@ export default {
       this.msg = this.editForm.diagnosis_txt;
       this.txt = this.editForm.diagnosis_txt;
       // console.log("getTableList",res);
-      this.editForm = res.data;
       // 将ID赋值下一个ID
       this.id= res.id
       this.xiayige = false
@@ -1705,7 +1678,7 @@ export default {
       // console.log(this.Row.id)
       // console.log(this.queryInfo.page)
       const { data: res } = await this.axios.get(     
-      "excel_data/list.php" , {params:{page:this.queryInfo.page,id:this.Row.id}});
+      "excel_data/list.php" , {params:{page:this.queryInfo.page,id:this.Row.id,pagerows: this.queryInfo.pagerows}});
       //console.log(row.id)
       this.tablelist = res.data
       //console.log(res.data)
@@ -1784,10 +1757,10 @@ export default {
     },
     // 查看患者信息
     async addFormList(editForm){
-        this.zhezhao = true
+        this.zhezhao = false
          this.id = this.id
         //  console.log(this.id)
-        this.editForm.help_diagnosis = this.help_diagnosis;
+        this.editForm.helper_diagnosis = this.helper_diagnosis;
         // const sicksList = JSON.stringify(sicksArr)      
         let data={
           "id":this.id,
@@ -1805,7 +1778,7 @@ export default {
                   type: 'success',
                   callback: action => {
                     this.tablelist = []
-                this.getTableList2(this.row);  
+                    this.getTableList2(this.row);  
                   },
                 });
             }
@@ -2721,44 +2694,44 @@ export default {
       fcm: {}, //流式细胞检测
       ngs: {}, //ngs检测
       //测试数据
-      help_diagnosis: {
-        ihc: [
-          {
-            mark: "", //标志物
-            value: "" //检测结果
-          }
-        ], //免疫组化的数组
-        fish: [
-          {
-            mark: "",
-            value: ""
-          }
-        ], //荧光数组
-        rearrangement: [
-          {
-            mark: "",
-            value: ""
-          }
-        ], //基因数组
-        ish: [
-          {
-            mark: "",
-            value: ""
-          }
-        ], //原位杂交数组
-        fcm: [
-          {
-            mark: "",
-            value: ""
-          }
-        ], //流式细胞数组
-        ngs: [
-          {
-            mark: "",
-            value: ""
-          }
-        ] //ngs数组
-      },
+      // help_diagnosis: {
+      //   ihc: [
+      //     {
+      //       mark: "", //标志物
+      //       value: "" //检测结果
+      //     }
+      //   ], //免疫组化的数组
+      //   fish: [
+      //     {
+      //       mark: "",
+      //       value: ""
+      //     }
+      //   ], //荧光数组
+      //   rearrangement: [
+      //     {
+      //       mark: "",
+      //       value: ""
+      //     }
+      //   ], //基因数组
+      //   ish: [
+      //     {
+      //       mark: "",
+      //       value: ""
+      //     }
+      //   ], //原位杂交数组
+      //   fcm: [
+      //     {
+      //       mark: "",
+      //       value: ""
+      //     }
+      //   ], //流式细胞数组
+      //   ngs: [
+      //     {
+      //       mark: "",
+      //       value: ""
+      //     }
+      //   ] //ngs数组
+      // },
 
     };
       
@@ -3837,6 +3810,7 @@ a {
   }
   .textCon {
     margin-left: -20px;
+    width: 100%;
     position: fixed;
     bottom: 0px;
     z-index: 9;      

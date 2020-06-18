@@ -4012,6 +4012,7 @@ a {
   .textCon {
     margin-left: -20px;
     position: fixed;
+    width: 100%;
     bottom: 0px;
     z-index: 9;
     background: rgba(255, 255, 255, 1);
