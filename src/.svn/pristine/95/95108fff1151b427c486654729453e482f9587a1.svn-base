@@ -507,7 +507,7 @@ export default {
     // 点击病理号查看
     async look(row) {
       this.zhezhao = true; //不能没
-      const { data: res } = await this.axios.get("report/onedata.php", {
+      const { data: res } = await this.axios.get("report/onedata.php ", {
         params: { id: row.id }
       });
       this.editForm = res.data;
