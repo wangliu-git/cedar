@@ -105,16 +105,16 @@
             border           
             stripe :header-cell-style="{color:'#333333'}"    
             @selection-change="checkTable" >
-            <el-table-column type="selection" ></el-table-column>           
-            <el-table-column prop="test_id" label="病理号" ></el-table-column>
-            <el-table-column prop="name" label="姓名"  sortable></el-table-column>
-            <el-table-column prop="diagnosis2" label="病理类型"  sortable></el-table-column>
-            <el-table-column prop="sex" label="性别"  sortable></el-table-column>
-            <el-table-column prop="age" label="年龄"  sortable></el-table-column>
-            <el-table-column prop="report_time" label="报告时间" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="entry_status" label="校验状态" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column prop="complete_degree" label="完整度" show-overflow-tooltip  sortable></el-table-column>
-            <el-table-column fixed="right" label="操作" >             
+            <el-table-column type="selection" width="40"></el-table-column>           
+            <el-table-column prop="test_id" label="病理号" width="170"></el-table-column>
+            <el-table-column prop="name" label="姓名" width="170" sortable></el-table-column>
+            <el-table-column prop="diagnosis2" label="病理类型" width="200" sortable></el-table-column>
+            <el-table-column prop="sex" label="性别" width="150" sortable></el-table-column>
+            <el-table-column prop="age" label="年龄" width="150" sortable></el-table-column>
+            <el-table-column prop="report_time" label="报告时间" show-overflow-tooltip width="170" sortable></el-table-column>
+            <el-table-column prop="entry_status" label="校验状态" show-overflow-tooltip width="170" sortable></el-table-column>
+            <el-table-column prop="complete_degree" label="完整度" show-overflow-tooltip width="170" sortable></el-table-column>
+            <el-table-column fixed="right" label="操作" width="170">             
               <template  slot-scope="scope">                 
                 <el-button type="text" size="small" @click="jiaoyan(scope.row)"><span>查看</span></el-button>
                 <el-button type="text" size="small" @click="look(scope.row) "><span>校验</span></el-button>                  
@@ -998,11 +998,12 @@
                       style="display: initial;"
                     >
                       <el-checkbox style="margin-left=10px" label="免疫组化"></el-checkbox>
-                      <el-checkbox label="荧光原位杂交"></el-checkbox>
+                      <el-checkbox style="margin-left=10px" label="分子检测"></el-checkbox>
+                      <!--  <el-checkbox label="荧光原位杂交"></el-checkbox>
                       <el-checkbox label="淋巴瘤克隆性基因重排检测"></el-checkbox>
                       <el-checkbox label="原位杂交"></el-checkbox>
                       <el-checkbox label="流式细胞检测"></el-checkbox>
-                      <el-checkbox label="ngs检测"></el-checkbox>
+                      <el-checkbox label="ngs检测"></el-checkbox>-->
                     </el-checkbox-group>
                   </div>
                 </div>
@@ -1014,37 +1015,34 @@
                       <i class="iconfont icontubiaozhizuo-"></i>
                       {{ihc.name}}
                     </span>
-                    <div class="oneDown">
-                      <div id="one" v-for="(ihcItem,idx) in this.helper_diagnosis.ihc" :key="idx">
-                        <!-- 循环myzh这个数组，来动态 + - 操作 -->
-                        <div class="sickI">
-                          <div class="sickIt">
-                            <span class="name">{{FZ.key_ihc.field_title}}：</span>
-                            <el-input v-model="ihcItem.mark" style="width:80px" size="mini" @focus="highlight(ihcItem.mark)"></el-input>
-                          </div>
+                    <div id="one" v-for="(ihcItem,idx) in this.helper_diagnosis.ihc" :key="idx">
+                      <!-- 循环myzh这个数组，来动态 + - 操作 -->
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.key_ihc.field_title}}：</span>
+                          <el-input v-model="ihcItem.mark" style="width:80px" size="mini" @focus="highlight(ihcItem.mark)"></el-input>
                         </div>
-                        <div class="sickI">
-                          <div class="sickIt">
-                            <span class="name">{{FZ.value_ihc.field_title}}：</span>
-                            <el-input v-model="ihcItem.value" style="width:130px" size="mini"  @focus="highlight(ihcItem.value)"></el-input>
-                          </div>
+                      </div>
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.value_ihc.field_title}}：</span>
+                          <el-input v-model="ihcItem.value" style="width:130px" size="mini"  @focus="highlight(ihcItem.value)"></el-input>
                         </div>
-                        <!-- + - 操作只需要传入当前循环的数组 -->
-                        <!-- 判断 必须是最后一条，才可以显示操作按钮 -->
-                        <div class="handleBtnBox">
-                          <!-- el-button: v-if="idx==testFZ.ihc.length-1" -->
-                          <el-button
-                            size="mini"
-                            style="margin-right: 5px;"
-                            v-if="idx==helper_diagnosis.ihc.length-1"
-                            @click="ihcAddData(helper_diagnosis.ihc,helper_diagnosis.ihc[idx])"
-                          >
-                            <i class="iconfont iconaddTodo-nav"></i>
-                          </el-button>
-                          <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.ihc,idx)">
-                            <i class="iconfont iconjianhao1"></i>
-                          </el-button>
-                        </div>
+                      </div>
+                      <!-- + - 操作只需要传入当前循环的数组 -->
+                      <!-- 判断 必须是最后一条，才可以显示操作按钮 -->
+                      <div class="handleBtnBox">
+                        <!-- el-button: v-if="idx==testFZ.ihc.length-1" -->
+                        <el-button
+                          style="margin-right: 5px;"
+                          v-if="idx==helper_diagnosis.ihc.length-1"
+                          @click="ihcAddData(helper_diagnosis.ihc,helper_diagnosis.ihc[idx])"
+                        >
+                          <i class="iconfont iconaddTodo-nav"></i>
+                        </el-button>
+                        <el-button @click="ihcDeleteData(helper_diagnosis.ihc,idx)">
+                          <i class="iconfont iconjianhao1"></i>
+                        </el-button>
                       </div>
                     </div>
                   </div>
@@ -1052,188 +1050,38 @@
                   <div v-show="seen1">
                     <span class="titl">
                       <i class="iconfont icontubiaozhizuo-"></i>
-                      荧光原位杂交:
+                      分子检测:
                     </span>
-                    <div class="twoDown">
-                      <div id="two" v-for="(ihcItem,idx) in this.helper_diagnosis.fish" :key="idx">
-                        <div class="sickI">
-                          <div class="sickIt">
-                            <span class="name">标志物：</span>
-                            <el-input size="mini" style="width:100px" v-model="ihcItem.mark" @focus="highlight(ihcItem.mark)">
-                            </el-input>
-                          </div>
-                        </div>
-                        <div class="sickI">
-                          <div class="sickIt">
-                            <span class="name">检测结果：</span>
-                            <el-input size="mini" style="width:100px" v-model="ihcItem.value" @focus="highlight(ihcItem.value)">
-                            </el-input>
-                          </div>
-                        </div>
-                    
-                        <div class="handleBtnBox">
-                          <el-button size="mini" style="margin-right: 5px;" v-if="idx==helper_diagnosis.fish.length-1"
-                            @click="ihcAddData(helper_diagnosis.fish,helper_diagnosis.fish[idx])"
-                          >
-                            <i class="iconfont iconaddTodo-nav"></i>
-                          </el-button>
-                          <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.fish)">
-                            <i class="iconfont iconjianhao1"></i>
-                          </el-button>
-                        </div>
-                      </div> 
-                    </div>                    
-                  </div>
-
-                  <div v-show="seen2">
-                    <span class="titl">
-                      <i class="iconfont icontubiaozhizuo-"></i>
-                      {{rearrangement.name}}
-                    </span>
-                    <div class="threeDown">
-                      <div id="three" v-for="(ihcItem,idx) in this.helper_diagnosis.rearrangement" :key="idx">
-                        <div class="sickI">
-                          <div class="sickIt">
-                            <span class="name">标志物：</span>
-                            <el-input size="mini" style="width:100px" v-model="ihcItem.mark" @focus="highlight(ihcItem.mark)">
-                            </el-input>
-                          </div>
-                        </div>
-                        <div class="sickI">
-                          <div class="sickIt">
-                            <span class="name">检测结果：</span>
-                            <el-input size="mini" style="width:100px" v-model="ihcItem.value" @focus="highlight(ihcItem.value)">
-                            </el-input>
-                          </div>
-                        </div>
-
-                        <div class="handleBtnBox">
-                          <el-button size="mini" style="margin-right: 5px;" v-if="idx==helper_diagnosis.rearrangement.length-1"
-                            @click="ihcAddData(helper_diagnosis.rearrangement,helper_diagnosis.rearrangement[idx])"
-                          >
-                            <i class="iconfont iconaddTodo-nav"></i>
-                          </el-button>
-                          <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.rearrangement)">
-                            <i class="iconfont iconjianhao1"></i>
-                          </el-button>
-                        </div>
-
-                      </div>
-                    </div>
-                  </div>
-
-                  <div v-show="seen3">
-                    <span class="titl">
-                      <i class="iconfont icontubiaozhizuo-"></i>
-                      {{ish.name}}
-                    </span>
-
-                    <div class="fourDown">
-                      <div id="four" v-for="(ihcItem,idx) in this.helper_diagnosis.ish" :key="idx">
-                        <div class="sickI">
-                          <div class="sickIt">
-                            <span class="name">标志物：</span>
-                            <el-input size="mini" style="width:100px" v-model="ihcItem.mark" @focus="highlight(ihcItem.mark)">
-                            </el-input>
-                          </div>
-                        </div>
-                        <div class="sickI">
-                          <div class="sickIt">
-                            <span class="name">检测结果：</span>
-                            <el-input size="mini" style="width:100px" v-model="ihcItem.value" @focus="highlight(ihcItem.value)">
-                            </el-input>
-                          </div>
-                        </div>
-
-                        <div class="handleBtnBox">
-                          <el-button size="mini" style="margin-right: 5px;" v-if="idx==helper_diagnosis.ish.length-1"
-                            @click="ihcAddData(helper_diagnosis.ish,helper_diagnosis.ish[idx])"
-                          >
-                            <i class="iconfont iconaddTodo-nav"></i>
-                          </el-button>
-                          <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.ish)">
-                            <i class="iconfont iconjianhao1"></i>
-                          </el-button>
+                    <div id="two" v-for="(ihcItem,idx) in this.helper_diagnosis.fish" :key="idx">
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">标志物：</span>
+                          <el-input size="mini" style="width:100px" v-model="ihcItem.mark" @focus="highlight(ihcItem.mark)">
+                          </el-input>
                         </div>
                       </div>
-                    </div>
-                  </div>
-
-                  <div v-show="seen4">
-                    <span class="titl">
-                      <i class="iconfont icontubiaozhizuo-"></i>
-                      {{fcm.name}}
-                    </span>
-                    <div class="fiveDown">
-                      <div id="five" v-for="(ihcItem,idx) in this.helper_diagnosis.fcm" :key="idx">
-                        <div class="sickI">
-                          <div class="sickIt">
-                            <span class="name">标志物：</span>
-                            <el-input size="mini" style="width:100px" v-model="ihcItem.mark" @focus="highlight(ihcItem.mark)">
-                            </el-input>
-                          </div>
+                      <div class="sickI">
+                        <div class="sickIt">
+                          <span class="name">{{FZ.value_fish.field_title}}：</span>
+                          <el-input size="mini" style="width:100px" v-model="ihcItem.value" @focus="highlight(ihcItem.value)">
+                          </el-input>
                         </div>
-                        <div class="sickI">
-                          <div class="sickIt">
-                            <span class="name">检测结果：</span>
-                            <el-input size="mini" style="width:100px" v-model="ihcItem.value" @focus="highlight(ihcItem.value)">
-                            </el-input>
-                          </div>
-                        </div>
-
-                        <div class="handleBtnBox">
-                          <el-button size="mini" style="margin-right: 5px;" v-if="idx==helper_diagnosis.fcm.length-1"
-                            @click="ihcAddData(helper_diagnosis.fcm,helper_diagnosis.fcm[idx])"
-                          >
-                            <i class="iconfont iconaddTodo-nav"></i>
-                          </el-button>
-                          <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.fcm)">
-                            <i class="iconfont iconjianhao1"></i>
-                          </el-button>
-                        </div>
-
                       </div>
-                    </div>
-
-                    
-                  </div>
-
-                  <div v-show="seen5">
-                    <span class="titl">
-                      <i class="iconfont icontubiaozhizuo-"></i>
-                      {{ngs.name}}
-                    </span>
-                    <div class="sixDown">
-                      <div id="six" v-for="(ihcItem,idx) in this.helper_diagnosis.ngs" :key="idx">
-                        <div class="sickI">
-                          <div class="sickIt">
-                            <span class="name">标志物：</span>
-                            <el-input size="mini" style="width:100px" v-model="ihcItem.mark" @focus="highlight(ihcItem.mark)">
-                            </el-input>
-                          </div>
-                        </div>
-                        <div class="sickI">
-                          <div class="sickIt">
-                            <span class="name">检测结果：</span>
-                            <el-input size="mini" style="width:100px" v-model="ihcItem.value" @focus="highlight(ihcItem.value)">
-                            </el-input>
-                          </div>
-                        </div>
-
-                        <div class="handleBtnBox">
-                          <el-button size="mini" style="margin-right: 5px;" v-if="idx==helper_diagnosis.ngs.length-1"
-                            @click="ihcAddData(helper_diagnosis.ngs,helper_diagnosis.ngs[idx])"
-                          >
-                            <i class="iconfont iconaddTodo-nav"></i>
-                          </el-button>
-                          <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.ngs)">
-                            <i class="iconfont iconjianhao1"></i>
-                          </el-button>
-                        </div>
-
+                   
+                      <div class="handleBtnBox">
+                        <el-button style="margin-right: 5px;" v-if="idx==helper_diagnosis.fish.length-1"
+                          @click="ihcAddData(helper_diagnosis.fish,helper_diagnosis.fish[idx])"
+                        >
+                          <i class="iconfont iconaddTodo-nav"></i>
+                        </el-button>
+                        <el-button @click="ihcDeleteData(helper_diagnosis.fish)">
+                          <i class="iconfont iconjianhao1"></i>
+                        </el-button>
                       </div>
-                    </div>
+                    </div>  
                   </div>
+
+                  
 
                 </div>
               </div>
@@ -1971,7 +1819,7 @@ export default {
         }
       }
       for (var i = 0; i < this.checkList.length; i++) {
-        if (this.checkList[i] == "荧光原位杂交") {
+        if (this.checkList[i] == "分子检测") {
           this.seen1 = true;
           break;
         } else {
@@ -2678,12 +2526,12 @@ export default {
       editForm:{},
       info: false,
       seen: true,
-      seen1: false,
-      seen2: false,
-      seen3: false,
-      seen4: false,
-      seen5: false,
-      checkList: ["免疫组化"],
+      seen1: true,
+      seen2: true,
+      seen3: true,
+      seen4: true,
+      seen5: true,
+      checkList: ["免疫组化","分子检测"],
       // 大数组
       sicksArr: [],
       // 表单提交信息      
@@ -3812,172 +3660,148 @@ a {
             display: inline;
             display: flex;
             flex-flow: row;
-            flex-wrap: wrap;         
+            flex-wrap: wrap;
             .titl {
-              margin: 10px 40px;
+              margin: 10px 80px;
               background-color: #EFEEF1;
               height: 40px;
               line-height: 40px;
             }
-            .oneDown{
-              display flex
-              flex-wrap wrap     
-              #one {
-                width: 420px;
-                background: rgba(249, 249, 249, 1);
-                border: 1px solid rgba(229, 229, 229, 1);
-                border-radius: 4px;
-                margin: 0 40px;
-                padding-bottom: 10px;
-                .sickI {
-                  display: inline-block;
-                  .sickIt {
-                    margin: 0 10px;
-                    .name {
-                      display: inline-block;
-                      width: 70px;
-                    }
-                  }
-                }
-                position: relative;
-                display: flex;
-                align-items: center;
-                padding-top: 10px;
-              }
-            }
-            .twoDown{
-              display flex
-              flex-wrap wrap            
-              #two {
-                width: 420px;
-                background: rgba(249, 249, 249, 1);
-                border: 1px solid rgba(229, 229, 229, 1);
-                border-radius: 4px;
-                margin: 0 40px;
-                padding-bottom: 10px;
-                position: relative;
-                display: flex;
-                align-items: center;
-                padding-top: 10px;
-                .sickI {
-                  display: inline-block;
-                  .sickIt {
-                    margin: 0 10px;
-                    .name {
-                      display: inline-block;
-                      width: 70px;
-                    }
-                  }
-                }             
-              }
-            }
-            .threeDown{
-              display flex
-              flex-wrap wrap
-              #three {
-                width: 420px;
-                background: rgba(249, 249, 249, 1);
-                border: 1px solid rgba(229, 229, 229, 1);
-                border-radius: 4px;
-                margin: 0 40px;
-                padding-bottom: 10px;                            
-                position: relative;
-                display: flex;
-                align-items: center;
-                padding-top: 10px;
-                .sickI {
-                  display: inline-block;
-                  .sickIt {
-                    margin: 0 10px;
-                    .name {
-                      display: inline-block;
-                      width: 70px;
-                    }
+            #one {
+              width: 420px;
+              background: rgba(249, 249, 249, 1);
+              border: 1px solid rgba(229, 229, 229, 1);
+              border-radius: 4px;
+              margin: 0 80px;
+              padding-bottom: 20px;
+              .sickI {
+                display: inline-block;
+                .sickIt {
+                  margin: 0 10px;
+                  .name {
+                    display: inline-block;
+                    width: 70px;
                   }
                 }
               }
-            }      
-            .fourDown{
-              display flex
-              flex-wrap wrap
-              #four {
-                width: 420px;
-                background: rgba(249, 249, 249, 1);
-                border: 1px solid rgba(229, 229, 229, 1);
-                border-radius: 4px;
-                margin: 0 40px;
-                padding-bottom: 10px;
-                position: relative;
-                display: flex;
-                align-items: center;
-                padding-top: 10px;
-                .sickI {
-                  display: inline-block;
-                  .sickIt {
-                    margin: 0 10px;
-                    .name {
-                      display: inline-block;
-                      width: 70px;
-                    }
+              position: relative;
+              display: flex;
+              align-items: center;
+              padding-top: 20px;
+            }
+            #two {
+              width: 420px;
+              background: rgba(249, 249, 249, 1);
+              border: 1px solid rgba(229, 229, 229, 1);
+              border-radius: 4px;
+              margin: 0 80px;
+              padding-bottom: 20px;
+              position: relative;
+              display: flex;
+              align-items: center;
+              padding-top: 20px;
+              .sickI {
+                display: inline-block;
+                .sickIt {
+                  margin: 0 10px;
+                  .name {
+                    display: inline-block;
+                    width: 70px;
                   }
                 }
-              
-              }
+              }             
             }
-            .fiveDown{
-              display flex
-              flex-wrap wrap
-              #five {
-                width: 420px;
-                background: rgba(249, 249, 249, 1);
-                border: 1px solid rgba(229, 229, 229, 1);
-                border-radius: 4px;
-                margin: 0 40px;
-                padding-bottom: 10px;
-                position: relative;
-                display: flex;
-                align-items: center;
-                padding-top: 10px;
-                .sickI {
-                  display: inline-block;
-                  .sickIt {
-                    margin: 0 10px;
-                    .name {
-                      display: inline-block;
-                      width: 70px;
-                    }
-                  }
-                }             
-              }
-            }
-            .sixDown{
-              display flex
-              flex-wrap wrap
-              #six {
-                width: 420px;
-                background: rgba(249, 249, 249, 1);
-                border: 1px solid rgba(229, 229, 229, 1);
-                border-radius: 4px;
-                margin: 0 40px;
-                padding-bottom: 10px;
-                position: relative;
-                display: flex;
-                align-items: center;
-                padding-top: 10px;
-                .sickI {
-                  display: inline-block;
-                  .sickIt {
-                    margin: 0 10px;
-                    .name {
-                      display: inline-block;
-                      width: 70px;
-                    }
+            #three {
+              width: 420px;
+              background: rgba(249, 249, 249, 1);
+              border: 1px solid rgba(229, 229, 229, 1);
+              border-radius: 4px;
+              margin: 0 80px;
+              padding-bottom: 20px;                            
+              position: relative;
+              display: flex;
+              align-items: center;
+              padding-top: 20px;
+              .sickI {
+                display: inline-block;
+                .sickIt {
+                  margin: 0 10px;
+                  .name {
+                    display: inline-block;
+                    width: 70px;
                   }
                 }
-              
               }
             }
-          }
+            #four {
+              width: 420px;
+              background: rgba(249, 249, 249, 1);
+              border: 1px solid rgba(229, 229, 229, 1);
+              border-radius: 4px;
+              margin: 0 80px;
+              padding-bottom: 20px;
+              position: relative;
+              display: flex;
+              align-items: center;
+              padding-top: 20px;
+              .sickI {
+                display: inline-block;
+                .sickIt {
+                  margin: 0 10px;
+                  .name {
+                    display: inline-block;
+                    width: 70px;
+                  }
+                }
+              }
+            
+            }
+            #five {
+              width: 420px;
+              background: rgba(249, 249, 249, 1);
+              border: 1px solid rgba(229, 229, 229, 1);
+              border-radius: 4px;
+              margin: 0 80px;
+              padding-bottom: 20px;
+              position: relative;
+              display: flex;
+              align-items: center;
+              padding-top: 20px;
+              .sickI {
+                display: inline-block;
+                .sickIt {
+                  margin: 0 10px;
+                  .name {
+                    display: inline-block;
+                    width: 70px;
+                  }
+                }
+              }             
+            }
+            #six {
+              width: 420px;
+              background: rgba(249, 249, 249, 1);
+              border: 1px solid rgba(229, 229, 229, 1);
+              border-radius: 4px;
+              margin: 0 80px;
+              padding-bottom: 20px;
+              position: relative;
+              display: flex;
+              align-items: center;
+              padding-top: 20px;
+              .sickI {
+                display: inline-block;
+                .sickIt {
+                  margin: 0 10px;
+                  .name {
+                    display: inline-block;
+                    width: 70px;
+                  }
+                }
+              }
+            
+            }
+            }
         }
       }
       .el-button {
