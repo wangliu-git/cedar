@@ -90,13 +90,11 @@
                 multiple
                 style="width:200px"
                 @change="shaixuan()"
-                filterable
-              >
+                filterable>
                 <el-option
                   v-for="(provinces) in showInfo.birthplace.field_values"
                   :key="provinces"
-                  :value="provinces"
-                >
+                  :value="provinces">
                   <span>{{provinces}}</span>
                 </el-option>
               </el-select>
@@ -113,8 +111,7 @@
                 multiple
                 style="width:200px"
                 @change="shaixuan()"
-                filterable
-              >
+                filterable>
                 <el-option v-for="(item) in showInfo.nation.field_values" :key="item" :value="item">
                   <span>{{item}}</span>
                 </el-option>
@@ -131,13 +128,11 @@
                 v-model="edit.address_prov"
                 multiple
                 @change="shaixuan()"
-                filterable
-              >
+                filterable>
                 <el-option
                   v-for="(provinces) in showInfo.birthplace.field_values"
                   :key="provinces"
-                  :value="provinces"
-                >
+                  :value="provinces">
                   <span>{{provinces}}</span>
                 </el-option>
               </el-select>
@@ -219,8 +214,7 @@
                 <el-option
                   v-for="(item,index) in fMInstitution.report_quality.field_values"
                   :key="index"
-                  :value="item"
-                >
+                  :value="item">
                   <span>{{item}}</span>
                 </el-option>
               </el-select>
@@ -243,8 +237,7 @@
                   @change="shaixuan()"
                   filterable
                   clearable
-                  placeholder="请输入或选择病理类型"
-                >
+                  placeholder="请输入或选择病理类型">
                   <el-option v-for="(item,index) in  this.twochoose" :key="index" :value="item">
                     <span>{{item}}</span>
                   </el-option>
@@ -298,8 +291,7 @@
                 size="mini"
                 multiple
                 style="width:200px"
-                @change="shaixuan()"
-              >
+                @change="shaixuan()">
                 <el-option v-for="(item,index) in  this.department" :key="index" :value="item">
                   <span>{{item}}</span>
                 </el-option>

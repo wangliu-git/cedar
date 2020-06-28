@@ -2,7 +2,7 @@
   <div class="container">
     <div class="content">
       <div class="up">
-        <el-input placeholder="搜索" size="small" class="input-with-select" v-model="searchname" @keyup.enter.native="getUserList()">
+        <el-input placeholder="搜索用户名" size="small" class="input-with-select" v-model="searchname" @keyup.enter.native="getUserList()">
           <el-button slot="append" class="iconfont iconsousuo" size="small"  @click="getUserList()"></el-button>
         </el-input>
         <el-button class="iconfont iconic_join_dialing_norm" size="small" @click="add()" v-if="roleid >1">添加</el-button>
@@ -36,8 +36,7 @@
             </div >
               <el-button type="text" size="small"  v-else>
                 <span >- - - - - </span>
-              </el-button>
-            
+              </el-button>          
             </template>
           </el-table-column>
         </el-table>
@@ -335,7 +334,6 @@ export default {
         this.Add = false;
       }
      
-    
     },
     // 点击修改弹窗的确定
     async bianji(id) {

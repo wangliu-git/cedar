@@ -214,13 +214,11 @@
                 size="mini"
                 multiple
                 style="width:200px"
-                @change="shaixuan()"
-              >
+                @change="shaixuan()">
                 <el-option
                   v-for="(item,index) in fMInstitution.report_quality.field_values"
                   :key="index"
-                  :value="item"
-                >
+                  :value="item">
                   <span>{{item}}</span>
                 </el-option>
               </el-select>
@@ -243,8 +241,7 @@
                   @change="shaixuan()"
                   filterable
                   clearable
-                  placeholder="请输入或选择病理类型"
-                >
+                  placeholder="请输入或选择病理类型">
                   <el-option v-for="(item,index) in  this.twochoose" :key="index" :value="item">
                     <span>{{item}}</span>
                   </el-option>
@@ -298,8 +295,7 @@
                 size="mini"
                 multiple
                 style="width:200px"
-                @change="shaixuan()"
-              >
+                @change="shaixuan()">
                 <el-option v-for="(item,index) in  this.department" :key="index" :value="item">
                   <span>{{item}}</span>
                 </el-option>
@@ -346,8 +342,7 @@
                 size="mini"
                 multiple
                 style="width:200px"
-                @change="shaixuan()"
-              >
+                @change="shaixuan()">
                 <el-option
                   v-for="(item,index) in  tMInstitution.diagnosis_type.field_values"
                   :key="index"
@@ -366,8 +361,7 @@
                 placeholder="请选择取材部位"
                 multiple
                 style="width:200px"
-                @change="shaixuan()"
-              >
+                @change="shaixuan()">
                 <el-option
                   v-for="(item,index) in  tMInstitution.sample_location.field_values"
                   :key="index"
@@ -387,8 +381,7 @@
                 multiple
                 clearable
                 style="width:200px"
-                @change="shaixuan()"
-              >
+                @change="shaixuan()">
                 <el-option
                   v-for="(item,index) in  this.sample_type"
                   :key="index"
@@ -407,8 +400,7 @@
                   clearable
                   style="width:200px"
                   multiple
-                  @change="shaixuan()"
-                >
+                  @change="shaixuan()">
                   <el-option v-for="(item,index) in dataForm" :key="index" :value="item"></el-option>
                 </el-select>
             </div>
@@ -422,8 +414,7 @@
                   size="mini"
                   style="width:200px"
                   multiple
-                  @change="shaixuan()"
-                >
+                  @change="shaixuan()">
                   <el-option v-for="(item,index) in Integrate" :key="index" :value="item"></el-option>
                 </el-select>
             </div>
@@ -445,8 +436,7 @@
                   style="width:300px"
                   @change="shaixuan()"
                   filterable
-                  placeholder="请输入或选择病理类型"
-                >
+                  placeholder="请输入或选择病理类型">
                   <el-option v-for="(item,index) in  this.twochoose" :key="index" :value="item">
                     <span>{{item}}</span>
                   </el-option>
@@ -515,23 +505,19 @@
           stripe
           ref="table"
           @selection-change="checkTable"
-
           :header-cell-style="{color:'#333333'}">
           <el-table-column width="50" type="selection"></el-table-column>
           <el-table-column prop="test_id" label="病理号"  sortable></el-table-column>
           <el-table-column prop="name" label="姓名"  sortable></el-table-column>
           <el-table-column label="病种亚型"  sortable>
-              <template
-                slot-scope="scope"
-              >{{scope.row.diagnosis1_normal}}  {{scope.row.diagnosis2_normal}} {{scope.row.diagnosis3_normal}}</template>
+              <template slot-scope="scope">{{scope.row.diagnosis1_normal}}  {{scope.row.diagnosis2_normal}} {{scope.row.diagnosis3_normal}}</template>
             </el-table-column>
           <el-table-column prop="sex" label="性别"  sortable></el-table-column>
           <el-table-column prop="age" label="年龄"  sortable></el-table-column>
           <el-table-column
             prop="report_date"
             label="报告时间"
-            show-overflow-tooltip
-            
+            show-overflow-tooltip       
             sortable
           ></el-table-column>
           <el-table-column fixed="right" label="操作" >
@@ -548,15 +534,6 @@
             </template>
           </el-table-column>
         </el-table>
-        <!--    :current-page="count"                      当前显示的页数
-              :page-sizes="[10]"                        切换每页显示的条数
-              :page-size="pagerows"                    当前每页显示的条数
-              @size-change="handleSizeChange"           点击切换每页显示多少条
-              @current-change="handleCurrentChange"     页码值发生了切换
-              :total="count"                            共多少条           
-              layout="total, sizes, prev, pager, next, jumper"
-        -->
-        <!-- <el-checkbox style="margin-top:20px">全选</el-checkbox> -->
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -652,7 +629,7 @@
             <div>
               诊断结论
               <span>病理类型：</span>
-              {{editForm.diagnosis1_normal}} ; {{editForm.diagnosis2_normal}}
+              {{editForm.diagnosis1_normal}}&nbsp;&nbsp;&nbsp; {{editForm.diagnosis2_normal}}
             </div>
 
             <div style="float:left"  class="fz">辅助诊断
@@ -778,9 +755,7 @@
                       <el-option
                         v-for="item in showInfo.sex.field_values"
                         :key="item"
-                        :value="item"
-                        
-                      >
+                        :value="item">
                         <span>{{item}}</span>
                       </el-option>
                     </el-select>
@@ -818,13 +793,11 @@
                       name="nation"
                       v-model="editForm.nation"
                       style="width:200px"
-                      size="mini"
-                    >
+                      size="mini">
                       <el-option
                         v-for="(item) in showInfo.nation.field_values"
                         :key="item"
-                        :value="item"
-                      >
+                        :value="item">
                         <span>{{item}}</span>
                       </el-option>
                     </el-select>
@@ -837,13 +810,11 @@
                       name="birthplace"
                       v-model="editForm.birthplace"
                       style="width:200px"
-                      size="mini"
-                    >
+                      size="mini">
                       <el-option
                         v-for="(provinces) in showInfo.birthplace.field_values"
                         :key="provinces"
-                        :value="provinces"
-                      >
+                        :value="provinces">
                         <span>{{provinces}}</span>
                       </el-option>
                     </el-select>
@@ -856,13 +827,11 @@
                       name="birthplace"
                       v-model="editForm.address_prov"
                       style="width:200px"
-                      size="mini"
-                    >
+                      size="mini">
                       <el-option
                         v-for="(provinces) in showInfo.birthplace.field_values"
                         :key="provinces"
-                        :value="provinces"
-                      >
+                        :value="provinces">
                         <span>{{provinces}}</span>
                       </el-option>
                     </el-select>
@@ -938,7 +907,7 @@
                       <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
                       {{reportResult.name}}:
                     </div>
-                    <div class="sickItem">
+                     <div class="sickItem">
                       <span>病理类型:</span>
                       <el-cascader
                         size="mini"
@@ -948,7 +917,7 @@
                         clearable
                         style="width:500px"
                       ></el-cascader>
-                    </div>
+                    </div> 
                   </div>
                   <!--报告质量  可折叠-->
                   <div class="sickIH">
@@ -963,13 +932,11 @@
                         name="report_quality"
                         v-model="editForm.report_quality"
                         style="width:200px"
-                        size="mini"
-                      >
+                        size="mini">
                         <el-option
                           v-for="(item,index) in fMInstitution.report_quality.field_values"
                           :key="index"
-                          :value="item"
-                        >
+                          :value="item">
                           <span>{{item}}</span>
                         </el-option>
                       </el-select>
@@ -994,13 +961,11 @@
                             name="he_quality"
                             v-model="editForm.he_quality"
                             size="mini"
-                            style="width:90px"
-                          >
+                            style="width:90px">
                             <el-option
                               v-for="(item,index) in fMInstitution.he_quality.field_values"
                               :key="index"
-                              :value="item"
-                            >
+                              :value="item">
                               <span>{{item}}</span>
                             </el-option>
                           </el-select>
@@ -1021,13 +986,11 @@
                             name="ihc_quality"
                             v-model="editForm.ihc_quality"
                             size="mini"
-                            style="width:90px"
-                          >
+                            style="width:90px">
                             <el-option
                               v-for="(item,index) in fMInstitution.ihc_quality.field_values"
                               :key="index"
-                              :value="item"
-                            >
+                              :value="item">
                               <span>{{item}}</span>
                             </el-option>
                           </el-select>
@@ -1038,13 +1001,11 @@
                             name="problem_slice"
                             v-model="editForm.problem_slice"
                             size="mini"
-                            style="width:90px"
-                          >
+                            style="width:90px">
                             <el-option
                               v-for="(item,index) in fMInstitution.problem_slice.field_values"
                               :key="index"
-                              :value="item"
-                            >
+                              :value="item">
                               <span>{{item}}</span>
                             </el-option>
                           </el-select>
@@ -1058,13 +1019,11 @@
                             name="patient_info"
                             v-model="editForm.patient_info"
                             size="mini"
-                            style="width:90px"
-                          >
+                            style="width:90px">
                             <el-option
                               v-for="(item,index) in fMInstitution.patient_info.field_values"
                               :key="index"
-                              :value="item"
-                            >
+                              :value="item">
                               <span>{{item}}</span>
                             </el-option>
                           </el-select>
@@ -1075,13 +1034,11 @@
                             name="history_info"
                             v-model="editForm.history_info"
                             size="mini"
-                            style="width:90px"
-                          >
+                            style="width:90px">
                             <el-option
                               v-for="(item,index) in fMInstitution.history_info.field_values"
                               :key="index"
-                              :value="item"
-                            >
+                              :value="item">
                               <span>{{item}}</span>
                             </el-option>
                           </el-select>
@@ -1092,13 +1049,11 @@
                             name="sample_info"
                             v-model="editForm.sample_info"
                             size="mini"
-                            style="width:90px"
-                          >
+                            style="width:90px">
                             <el-option
                               v-for="(item,index) in fMInstitution.sample_info.field_values"
                               :key="index"
-                              :value="item"
-                            >
+                              :value="item">
                               <span>{{item}}</span>
                             </el-option>
                           </el-select>
@@ -1112,13 +1067,11 @@
                             name="record"
                             v-model="editForm.record"
                             size="mini"
-                            style="width:90px"
-                          >
+                            style="width:90px">
                             <el-option
                               v-for="(item,index) in fMInstitution.record.field_values"
                               :key="index"
-                              :value="item"
-                            >
+                              :value="item">
                               <span>{{item}}</span>
                             </el-option>
                           </el-select>
@@ -1129,8 +1082,7 @@
                             name="helper_report"
                             v-model="editForm.helper_report"
                             size="mini"
-                            style="width:90px"
-                          >
+                            style="width:90px">
                             <el-option
                               v-for="(item,index) in fMInstitution.helper_report.field_values"
                               :key="index"
@@ -1210,13 +1162,11 @@
                         name="diagnosis_type"
                         v-model="editForm.diagnosis_type"
                         style="width:200px"
-                        size="mini"
-                      >
+                        size="mini">
                         <el-option
                           v-for="(item,index) in  tMInstitution.diagnosis_type.field_values"
                           :key="index"
-                          :value="item"
-                        >
+                          :value="item">
                           <span>{{item}}</span>
                         </el-option>
                       </el-select>
@@ -1235,8 +1185,7 @@
                           v-for="(item,index) in  tMInstitution.sample_type.field_values"
                           :key="index"
                           :value="item"
-                          style="width:200px"
-                        >
+                          style="width:200px">
                           <span>{{item}}</span>
                         </el-option>
                       </el-select>
@@ -1253,7 +1202,6 @@
                       ></el-input>
                     </div>
                   </div>
-
                   <div class="sickIH">
                     <!--就诊结论 -->
                     <div class="title">
@@ -1261,29 +1209,82 @@
                       {{reportResult.name}}:
                     </div>
                     <div class="sickItem">
-                      <span>病理类型:</span>
-                      <el-cascader
+                      <span>
+                        病理类型：
+                      </span>
+                      <el-select
+                        v-model="editForm.diagnosis1_normal"
                         size="mini"
-                        v-model="editForm.jilian"
-                        :options="options"
-                        :props="{ checkStrictly: true }"
+                        style="width:300px"
                         clearable
-                        style="width:500px"
-                      ></el-cascader>
+                        @change="getJilian1"
+                        filterable>
+                        <el-option
+                          v-for="(item,index) in  this.oneChoose"
+                          :key="index"
+                          :value="item.name">
+                          <span>{{item.name}}</span>
+                        </el-option>
+                      </el-select>
+                      <el-select
+                        name="sample_type"
+                        v-model="editForm.diagnosis2_normal"
+                        size="mini"
+                        style="width:300px"
+                        clearable
+                        @change="getJilian2"
+                        filterable>
+                        <el-option
+                          v-for="(item,index) in  this.twoChoose"
+                          :key="index"
+                          :value="item.name">
+                          <span>{{item.name}}</span>
+                        </el-option>
+                      </el-select>
+                    </div>
+
+                    <div class="sickItem" v-if="this.editForm.diagnosis2_normal === '其他'">
+                      其他类型 :
+                      <el-input size='mini' placeholder="请输入其他类型" style="width:300px"   v-model="editForm.other"></el-input>
+                    </div>
+
+                    <div class="sickItem" v-if="this.editForm.diagnosis2_normal != ''">
+                      <span>病理亚型：</span>
+                      <el-select                  
+                        v-model="editForm.diagnosis3_normal"
+                        size="mini"
+                        style="width:300px"
+                        clearable
+                        filterable
+                        placeholder="请选择">
+                        <el-option
+                          v-for="(item,index) in  this.threeChoose"
+                          :key="index"
+                          :value="item.name">
+                          <span>{{item.name}}</span>
+                        </el-option>
+                      </el-select>               
+                    </div>
+
+                    <div class="sickItem">
+                      级别：
+                      <el-select v-model="editForm.grade" size="mini" style="width:300px" clearable filterable>
+                        <el-option v-for="(item,index) in  this.levelList" :key="index" :value="item">
+                          <span>{{item}}</span>
+                        </el-option>
+                      </el-select>
                     </div>
                   </div>
                   <!--辅助诊断 -->
                   <div class="sickIH">
                     <div class="title">
                       <span>
-                        <!-- <i class="iconfont icontubiaozhizuo-"></i> {{helper_diagnosis.name}}-->
                         辅助诊断:
                       </span>
                       <el-checkbox-group
                         v-model="checkList"
                         @change="func1"
-                        style="display: initial;"
-                      >
+                        style="display: initial;">
                         <el-checkbox style="margin-left=10px" label="免疫组化"></el-checkbox>  
                         <el-checkbox label="荧光原位杂交"></el-checkbox>
                         <el-checkbox label="淋巴瘤克隆性基因重排检测"></el-checkbox>
@@ -1293,7 +1294,6 @@
                       </el-checkbox-group>
                     </div>
                   </div>
-
                   <div class="ihc">
                     <!-- 遍历患者已有的免疫组化v-for="(item,idx) in editForm.helper_diagnosis.ihc" :key="idx" -->
                     <div v-show="seen">
@@ -1324,8 +1324,7 @@
                               size="mini"
                               style="margin-right: 5px;"
                               v-if="idx==helper_diagnosis.ihc.length-1"
-                              @click="ihcAddData(helper_diagnosis.ihc,helper_diagnosis.ihc[idx])"
-                            >
+                              @click="ihcAddData(helper_diagnosis.ihc,helper_diagnosis.ihc[idx])">
                               <i class="iconfont iconaddTodo-nav"></i>
                             </el-button>
                             <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.ihc,idx)">
@@ -1335,7 +1334,6 @@
                         </div>
                       </div>
                     </div>
-
                     <div v-show="seen1">
                       <span class="titl">
                         <i class="iconfont icontubiaozhizuo-"></i>
@@ -1356,12 +1354,10 @@
                               <el-input size="mini" style="width:100px" v-model="ihcItem.value" @focus="highlight(ihcItem.value)">
                               </el-input>
                             </div>
-                          </div>
-                      
+                          </div>                      
                           <div class="handleBtnBox">
                             <el-button size="mini" style="margin-right: 5px;" v-if="idx==helper_diagnosis.fish.length-1"
-                              @click="ihcAddData(helper_diagnosis.fish,helper_diagnosis.fish[idx])"
-                            >
+                              @click="ihcAddData(helper_diagnosis.fish,helper_diagnosis.fish[idx])">
                               <i class="iconfont iconaddTodo-nav"></i>
                             </el-button>
                             <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.fish)">
@@ -1371,7 +1367,6 @@
                         </div> 
                       </div>                    
                     </div>
-
                     <div v-show="seen2">
                       <span class="titl">
                         <i class="iconfont icontubiaozhizuo-"></i>
@@ -1393,11 +1388,9 @@
                               </el-input>
                             </div>
                           </div>
-
                           <div class="handleBtnBox">
                             <el-button size="mini" style="margin-right: 5px;" v-if="idx==helper_diagnosis.rearrangement.length-1"
-                              @click="ihcAddData(helper_diagnosis.rearrangement,helper_diagnosis.rearrangement[idx])"
-                            >
+                              @click="ihcAddData(helper_diagnosis.rearrangement,helper_diagnosis.rearrangement[idx])">
                               <i class="iconfont iconaddTodo-nav"></i>
                             </el-button>
                             <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.rearrangement)">
@@ -1408,13 +1401,11 @@
                         </div>
                       </div>
                     </div>
-
                     <div v-show="seen3">
                       <span class="titl">
                         <i class="iconfont icontubiaozhizuo-"></i>
                         {{ish.name}}
                       </span>
-
                       <div class="fourDown">
                         <div id="four" v-for="(ihcItem,idx) in this.helper_diagnosis.ish" :key="idx">
                           <div class="sickI">
@@ -1431,11 +1422,9 @@
                               </el-input>
                             </div>
                           </div>
-
                           <div class="handleBtnBox">
                             <el-button size="mini" style="margin-right: 5px;" v-if="idx==helper_diagnosis.ish.length-1"
-                              @click="ihcAddData(helper_diagnosis.ish,helper_diagnosis.ish[idx])"
-                            >
+                              @click="ihcAddData(helper_diagnosis.ish,helper_diagnosis.ish[idx])">
                               <i class="iconfont iconaddTodo-nav"></i>
                             </el-button>
                             <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.ish)">
@@ -1445,7 +1434,6 @@
                         </div>
                       </div>
                     </div>
-
                     <div v-show="seen4">
                       <span class="titl">
                         <i class="iconfont icontubiaozhizuo-"></i>
@@ -1467,24 +1455,18 @@
                               </el-input>
                             </div>
                           </div>
-
                           <div class="handleBtnBox">
                             <el-button size="mini" style="margin-right: 5px;" v-if="idx==helper_diagnosis.fcm.length-1"
-                              @click="ihcAddData(helper_diagnosis.fcm,helper_diagnosis.fcm[idx])"
-                            >
+                              @click="ihcAddData(helper_diagnosis.fcm,helper_diagnosis.fcm[idx])">
                               <i class="iconfont iconaddTodo-nav"></i>
                             </el-button>
                             <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.fcm)">
                               <i class="iconfont iconjianhao1"></i>
                             </el-button>
                           </div>
-
                         </div>
-                      </div>
-
-                      
+                      </div>                     
                     </div>
-
                     <div v-show="seen5">
                       <span class="titl">
                         <i class="iconfont icontubiaozhizuo-"></i>
@@ -1509,8 +1491,7 @@
 
                           <div class="handleBtnBox">
                             <el-button size="mini" style="margin-right: 5px;" v-if="idx==helper_diagnosis.ngs.length-1"
-                              @click="ihcAddData(helper_diagnosis.ngs,helper_diagnosis.ngs[idx])"
-                            >
+                              @click="ihcAddData(helper_diagnosis.ngs,helper_diagnosis.ngs[idx])">
                               <i class="iconfont iconaddTodo-nav"></i>
                             </el-button>
                             <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.ngs)">
@@ -1522,7 +1503,6 @@
                       </div>
                     </div>
                   </div>
-
                 </div>
               </el-collapse-item>
               <div class="btn">
@@ -1547,13 +1527,7 @@ export default {
       mark:'',
       value:'',
       search_group:'',     //搜索分组
-      // 原单位本单位联动区分
-      diagnosis1_normal:'',
-      diagnosis2_normal:'',
-      diagnosis3_normal:'',
-      diagnosis1_Ynormal:'',
-      diagnosis2_Ynormal:'',
-      diagnosis3_Ynormal:'',
+      grade:'',   //级别
       Ylevel: "",
       level:"",
       levelList:['1','2','3A','3B','1-2','3'],
@@ -1561,6 +1535,10 @@ export default {
       onechoose: [],
       twochoose: [],
       threechoose: [],
+      // 表单级联数组
+      oneChoose: [],
+      twoChoose: [],
+      threeChoose: [],
       location: "", //分组  
       whole: "", //全文检索
       ids: [], //ID 们
@@ -1572,11 +1550,9 @@ export default {
       seen2: false,
       seen3: false,
       seen4: false,
-      seen5: false,
-      // 大表单
-      luru: false,
-      // 分组名称
-      group: false,
+      seen5: false,  
+      luru: false,     // 大表单  
+      group: false,    // 分组名称
       // 级联选择器
       options: [
         {
@@ -2150,8 +2126,14 @@ export default {
       // 数据集列表
       data: [],
       edit: {},
-      // 筛选条件名
-      diagnosis2: "", //病理类型
+      //、、、、、 筛选条件名
+      // 原单位本单位联动区分
+      diagnosis1_normal:'',
+      diagnosis2_normal:'',
+      diagnosis3_normal:'',
+      diagnosis1_Ynormal:'',
+      diagnosis2_Ynormal:'',
+      diagnosis3_Ynormal:'',
       name: "", //姓名
       sex: [], //性别
       birthday: "", //出生日期
@@ -2182,8 +2164,6 @@ export default {
       Integrate: ["有原单位报告", "无原单位报告"],
       jilian: [],
       Yjilian: [],
-      dataform: "", //数据来源
-      // Integrate: '',           //整合信息
       tablelist: [], //病理号数组
       zhezhao: false,
       id: "", //列表参数
@@ -2371,17 +2351,57 @@ export default {
     this.getmark();
     this.getresult();
     this.getDepart();
+    // 筛选下拉级联
     this.get1();
     this.get2();
     this.get3();
     this.getsample_type()
+    // 表单级联一
+    this.getJilian()
   },
   methods: {
+    // 表单级联数组
+    // 一级
+    getJilian() {
+      // console.log(this.editForm.diagnosis1_normal);
+      const res = this.axios.get("report/jilian.php").then(res => {
+        console.log(res);
+        
+        this.oneChoose = res.data.option
+        console.log(this.oneChoose)
+      });
+    },
+    getJilian1() {
+      // console.log(this.editForm.diagnosis1_normal);
+      const res = this.axios
+        .get("report/jilian.php", {
+          params: { name: this.editForm.diagnosis1_normal }
+        })
+        .then(res => {
+          // console.log(res);
+          this.twoChoose = res.data.option;
+        });
+      this.editForm.diagnosis2_normal = "";
+      this.editForm.diagnosis3_normal = "";
+    },
+    getJilian2() {
+      console.log(this.editForm.diagnosis2_normal);
+      const res = this.axios
+        .get("report/jilian.php", {
+          params: { name: this.editForm.diagnosis2_normal }
+        })
+        .then(res => {
+          console.log(res);
+          this.threeChoose = res.data.option;
+        });
+      this.editForm.diagnosis3_normal = "";
+    },
+    // 筛选级联数组
     get1() {
       this.options.map((item, index) => {
         this.onechoose.push(item.value);
       });
-      // console.log(this.onechoose);
+      console.log(this.onechoose);
     },
     get2() {
       this.options.map((item, index) => {
@@ -2476,7 +2496,7 @@ export default {
         // console.log(data)
         this.axios.post("report/edit.php", data).then(res => {
           // console.log("res:", res);
-          // console.log(data);
+          console.log(data);
           var result = res.data; //JSON.parse(res.body);
           // console.log(result.result);
           if (result.result) {
@@ -2582,21 +2602,22 @@ export default {
       }
       console.log(this.editForm);
       this.id = row.id;
-      this.jilian = [];
+      // this.jilian = [];
       this.helper_diagnosis = this.editForm.helper_diagnosis;
-      console.log(this.helper_diagnosis);
-       if(this.editForm.diagnosis1_normal !=  ''){
-        this.jilian.push(this.editForm.diagnosis1_normal)
-      }
-      if(this.editForm.diagnosis2_normal != ''){
-        this.jilian.push(this.editForm.diagnosis2_normal)
-      }
-      if(this.editForm.diagnosis3_normal != ''){
-        this.jilian.push(this.editForm.diagnosis3_normal)
-      }    
+      // console.log(this.helper_diagnosis);
+      //  if(this.editForm.diagnosis1 !=  ''){
+      //   this.jilian.push(this.editForm.diagnosis1)
+      // }
+      // if(this.editForm.diagnosis2 != ''){
+      //   this.jilian.push(this.editForm.diagnosis2)
+      // }
+      // if(this.editForm.diagnosis3 != ''){
+      //   this.jilian.push(this.editForm.diagnosis3)
+      // }    
       // this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2)
-      this.editForm.jilian = this.jilian     
-      console.log(this.jilian)
+      // this.editForm.jilian = this.jilian     
+      // console.log(this.jilian)
+      // console.log(this.editForm.jilian)
       
     },
     // 筛选重置按钮

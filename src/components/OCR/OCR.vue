@@ -143,8 +143,7 @@
         console.log(file) 
         console.log(file.response.id)
         this.pic_id = file.response.id
-        console.log(this.pic_id)
-            
+        console.log(this.pic_id)         
       },
       handleError() {
         this.$error("上传失败,请重新上传图片!");

@@ -84,6 +84,8 @@
             start-placeholder="请选择开始时间"
             end-placeholder="请选择结束时间"
             @change="darwPie2"
+            value-format=" yyyy-MM-dd"
+            format="yyyy-MM-dd"
           ></el-date-picker>
         </div>
 

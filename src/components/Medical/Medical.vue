@@ -22,7 +22,7 @@
             <el-input
               v-model="searchname"
               @keyup.enter.native="search()"
-              placeholder="搜索"
+              placeholder="搜索项目名称"
               size="small"
               class="input-with-select">
               <el-button slot="append" @click="search()" class="iconfont iconsousuo" size="small"></el-button>
@@ -77,7 +77,7 @@
             <i class="iconfont iconbuzhou-icon"></i>
             <span>选择分析 ：</span>
             <el-select
-              placeholder="请选择"
+              placeholder="请选择分析内容"
               size="small"
               v-model="type"
               style="width:300px"
@@ -1066,7 +1066,8 @@ export default {
           }
         ]
       };
-      // if (showLog) console.log('option:', option);
+      // if (showLog) 
+      console.log('option:', option);
       // 使用刚指定的配置项和数据显示图表。
       myChart.clear();
       myChart.setOption(option, { notMerge: true });
@@ -1595,7 +1596,8 @@ export default {
           }
         ]
       };
-      // if (showLog) console.log('option:', option);
+      // if (showLog) 
+      console.log('option:', option);
       // 使用刚指定的配置项和数据显示图表。
       myChart.clear();
       myChart.setOption(option, { notMerge: true });

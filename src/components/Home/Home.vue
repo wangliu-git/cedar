@@ -21,28 +21,28 @@
 
           <el-menu-item index="dataentry" :class="{sr_active: $route.path === '/dataentry'}">
             <i class="iconfont iconshujuluru"></i>
-            <span>数据录入</span>
+            <span slot="title">数据录入</span>
           </el-menu-item>
 
           <el-menu-item index="dataimport" v-show="this.role_id > 1" :class="{sr_active: $route.path === '/dataimport'}"> 
             <i class="iconfont iconshujudaoru"></i>
-            <span>数据导入</span>
+            <span slot="title">数据导入</span>
           </el-menu-item>
 
           <el-submenu index="1">
             <template slot="title">
               <i class="iconfont icondashujuzhenghe"></i>
-              <span>数据整合</span>
+              <span slot="title">数据整合</span>
             </template>
             <el-menu-item index="unit" :class="{sr_active: $route.path === '/unit'}">
-              <i class="iconfont icondian"></i> 原单位报告
+              <i class="iconfont icondian"></i>  原单位报告
             </el-menu-item>
           </el-submenu>
 
           <el-submenu index="2">
             <template slot="title">
               <i class="iconfont iconshujuguanli"></i>
-              <span>数据管理</span>
+              <span slot="title">数据管理</span>
             </template>
             <el-menu-item index="shaix" :class="{sr_active: $route.path === '/shaix'}">
               <i class="iconfont icondian"></i> 数据筛选
@@ -55,7 +55,7 @@
           <el-submenu index="3">
             <template slot="title">
               <i class="iconfont icondataAnalysis"></i>
-              <span>数据分析</span>
+              <span slot="title">数据分析</span>
             </template>
             <el-menu-item index="medical" :class="{sr_active: $route.path === '/medical'}">
               <i class="iconfont icondian"></i> 医学统计
@@ -65,11 +65,11 @@
               <el-menu-item index="try" :class="{sr_active: $route.path === '/try'}"><i class="iconfont icondian"></i>模拟试用</el-menu-item>         
           -->  
           <el-menu-item index="usermanagement" :class="{sr_active: $route.path === '/usermanagement'}">
-            <i class="iconfont iconyonghuguanli"></i><span>用户管理</span>
+            <i class="iconfont iconyonghuguanli"></i><span slot="title">用户管理</span>
           </el-menu-item>
 
           <el-menu-item index="ocr" v-show="this.role_id > 1" :class="{sr_active: $route.path === '/ocr'}">
-            <i class="iconfont iconOCRshibieyichangjilu"></i><span>OCR识别</span>
+            <i class="iconfont iconOCRshibieyichangjilu"></i><span slot="title">OCR识别</span>
           </el-menu-item>
 
         </el-menu>
