@@ -259,30 +259,25 @@
               {{editForm.diagnosis2}}
             </div>
             
-            <div >
-              辅助诊断
-              <span>免疫组化：</span>
-              <th  v-for="(item,index) in this.helper_diagnosis.ihc" :key="index" :value="item">
-                <td>{{item.mark}}</td>
-                <td>{{item.value}}</td>
-              </th>
-              <!--               
-                <el-button-group>
-                  <el-button v-for="(item,index) in editForm.helper_diagnosis.ihc" :key="index" :value="item">{{item.mark}}</el-button>
-                  <el-button v-for="(item,index) in editForm.helper_diagnosis.ihc" :key="index" :value="item">{{item.value}}</el-button>                  
-                </el-button-group> 
-                {{editForm.helper_diagnosis.ihc.mark}} {{editForm.helper_diagnosis.ihc.value}}
-              -->
+            <div style="float:left"  class="fz">辅助诊断
+              <div class="mianyi">
+                <span>免疫组化：</span>
+                <th  v-for="(item,index) in this.helper_diagnosis.ihc" :key="index" :value="item">
+                  <td>{{item.mark}}</td>
+                  <td>{{item.value}}</td>
+                </th>
+              </div>
+
+              <div class="mianyi">
+                <span>荧光原位杂交：</span>
+                <th  v-for="(item,index) in this.helper_diagnosis.fish" :key="index" :value="item">
+                  <td>{{item.mark}}</td>
+                  <td>{{item.value}}</td>
+                </th>
+              </div>
             </div>
           </div>
         </div>
-
-        <!-- <div class="footer">
-          <div class="btn">
-            <el-button plain @click="zhezhao = false">返回</el-button>
-            <el-button plain @click="addFormList(editForm)">确认校验通过</el-button>
-          </div>
-        </div> -->
       </div>
     </div>
   </div>

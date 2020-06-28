@@ -87,7 +87,7 @@
             <img src="./img/head-portrait.png" alt />
             <span :model="username">您好，{{this.username}}</span>
             <div class="shu"></div>
-            <el-button @click="loginout">
+            <el-button @click="loginout" class="tuichu">
               <i class="iconfont icontuichu"></i>退出
             </el-button>
           </div>
@@ -232,7 +232,10 @@ el-button el-button--default {
 
   .logo {
     display: flex;
-
+    .tuichu{
+      border none
+      
+    }
     img {
       width: 31px;
       height: 31px;
@@ -268,7 +271,9 @@ el-button el-button--default {
 .icontuichu {
   width: 1px;
   height: 20px;
-  color: rgba(210, 210, 210, 1);
+  color: #858585;
+  margin-right: 10px;
+
 }
 
 .el-menu {

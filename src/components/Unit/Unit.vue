@@ -2,7 +2,7 @@
   <div class="outest" id="dataImport">
     <div class="sContainer">
       <span>选择分组 :</span>
-      <el-select size="mini" style="width:250px" placeholder="请选择分组" v-model="it" @change="group_id()" clearable>
+      <el-select size="mini" style="width:300px" placeholder="请选择分组" v-model="it" @change="group_id()" clearable>
         <el-option
           v-for="(gl,index) in this.groupList"
           :key="index"  
@@ -18,7 +18,7 @@
         <div class="up">
           <div class="left">
             <span>原单位诊断信息 :</span>
-            <el-select size="mini" style="width:100px;margin-left:10px" placeholder="全部" v-model="attached" @change="getInfo">
+            <el-select size="mini" style="width:100px;margin-left:10px" placeholder="全部" v-model="attached_id" @change="getInfo">
               <el-option v-for="(item,index) in this.attachedList" :key="index" :value="item">
                 {{item}}
               </el-option>
@@ -114,7 +114,8 @@
     </div>
     <!--遮罩 -->
     <div class="YCon" v-if="zhezhao" :model="editForm">
-      <div class="out">
+      <div class="out" v-loading="loading"  element-loading-text="正在识别中，请稍后"
+          element-loading-spinner="el-icon-loading">
         <div class="header">
           <span>编辑</span>
           <span>
@@ -467,7 +468,7 @@
         <!--<el-upload   
       
           :on-preview="handlePreview"
-          :on-remove="handleRemove"
+          :on-remove="handleRemovefile"
           :file-list="fileList"
            list-type="picture">
           <el-button size="small" type="primary">点击上传</el-button>
@@ -481,45 +482,40 @@
           :on-success="handleSuccess"
           :on-error="handleError"
           :before-upload="handleBeforeUpload"
-          :on-progress="handleProgress"
-          :on-preview="handlePictureCardPreview">    
-          <img  :src="this.src" v-show="this.src != ''" >               
+          :on-progress="handleProgress">    
+          <img  :src="this.src" v-show="this.src != ''" width="900px">               
           <i  v-show="this.src  == ''" class="el-icon-plus"></i>
 
-    <div slot="file" slot-scope="{file}">
-      <img
-        class="el-upload-list__item-thumbnail"
-        :src="file.url" alt=""
-      >
-      <span class="el-upload-list__item-actions">
-        <span
-          class="el-upload-list__item-preview"
-          @click="handlePictureCardPreview(file)"
-        >
-          <i class="el-icon-zoom-in"></i>
-        </span>
-        <span
-          
-          class="el-upload-list__item-delete"
-          
-        >
-          <i class="iconfont iconOCRshibieyichangjilu"></i>
-        </span>
-        <span      
-          class="el-upload-list__item-delete"
-          @click="handleRemove(file)"
-        >
-          <i class="el-icon-delete"></i>
-        </span>
-      </span>
-    </div>
+        <div slot="file" slot-scope="{file}">
+          <img
+            class="el-upload-list__item-thumbnail"
+            :src="file.url" alt=""
+          >
+          <span class="el-upload-list__item-actions">
+            <span
+              class="el-upload-list__item-preview"
+              @click="handlePictureCardPreview(file)">
+              <i class="el-icon-zoom-in"></i>
+            </span>
+            <span
+              class="el-upload-list__item-delete"
+              @click="OCR(file)">
+              <i class="iconfont iconOCRshibieyichangjilu"></i>
+            </span>
+            <span      
+              class="el-upload-list__item-delete"
+              @click="handleRemovefile(file)">
+              <i class="el-icon-delete"></i>
+            </span>
+          </span>
+        </div>
 
         </el-upload>     
           <el-dialog :visible.sync="dialogVisible">     
-            <img width="100%" :src="img">      
+            <img  :src="img" width="1000px">      
           </el-dialog>  
         </el-collapse>                
-        <!-- <img  :src="this.src" v-show="this.editForm.pics != ''">   -->        
+         <!--<img  :src="this.src" v-show="this.editForm.pics != ''">   -->     
         <div class="foot">     
           <el-button style="margin-right:10px" @click="handleRemove()">清空</el-button>
           <el-button @click="baocun(editForm)">保存</el-button>
@@ -622,6 +618,7 @@ export default {
       this.$forceUpdate()
     },
     no(){
+      // 强制刷新值
       this.$forceUpdate()
     },
     // 上传图片
@@ -631,8 +628,9 @@ export default {
       console.log(file.raw)
       console.log(file) 
       console.log(file.response.id)
+      this.pic_id = file.response.id
       console.log(this)
-      this.pics.push(file.response.id)     
+      this.pics = file.response.id   
       // this.img = file.url
       // console.log(this.img)
       console.log(this.pics)      
@@ -653,17 +651,60 @@ export default {
       // return isImage && isLt2M;
     },
     handleProgress(event, file, fileList) {
-      this.loading = true;  //  上传时执行loading事件
+      // this.loading = true;  //  上传时执行loading事件
     },
-    handleRemove(file) {
-      console.log(file.response.id)    
-      console.log(this.pics)
-    },
+    // 点击加号查看图片
     handlePictureCardPreview(file) {
       this.img = file.url;
       this.dialogVisible = true;     
     },
- 
+    // OCR识别
+    OCR(file){
+        let id 
+        this.loading = true;
+        const res = this.axios.get('diagnosis_origin/ocr.php?id=' + file.response.id).then( res=>{
+          if(res.statusText = 'ok'){
+             this.$alert('识别成功', '标题名称', {
+              confirmButtonText: '确定',
+              type: 'success',
+              callback: action => {
+                this.loading = false;
+                var jsonstr = JSON.stringify(res);
+                console.log('json文本',jsonstr)
+                // this.response = res
+                this.dataLists = []
+                this.dataLists = res.data
+                // this.dataLists = JSON.stringify(this.dataLists)
+                console.log('this.dataLists',this.dataLists)
+                this.dataLists.map( (item,index) =>{
+                  console.log(item)
+                  this.editForm = {}
+                  this.editForm.application_date = item.basic.application_date
+                  this.editForm.test_id = item.basic.test_id
+                  this.editForm.report_date = item.basic.report_date                  
+                  this.diagnosis_current = item.diagnosis_current
+                  this.diagnosis_current.conclusion.map( (item,index) =>{
+                    console.log(item)
+                    this.editForm.diagnosis1 = item.diagnosis1_normal
+                    this.editForm.diagnosis2 = item.diagnosis2_normal
+                  })
+                  console.log(this.editForm)
+                  this.diagnosis_txt = item.diagnosis_txt
+                  console.log(this.diagnosis_current)
+                  console.log(this.diagnosis_txt)         
+                })
+              }
+            });
+           
+          }else{
+             this.$alert('识别失败', '标题名称', {
+              confirmButtonText: '确定',
+              type: 'error',             
+            });
+          }
+         
+        })
+      },
     // 获取分组
     getgroupList() {
       const { data: res } = this.axios.get("group/list.php").then(res => {
@@ -737,7 +778,8 @@ export default {
       this.attached = this.rowAdd.attached;
       // this.getTableList()
       this.editForm = {}
-      // this.src = ''     
+      this.src = ''   
+      this.img = []  
     },
     // 点击原单位编辑
     async bianji(row){
@@ -749,11 +791,9 @@ export default {
       console.log(row.id);
       console.log(res);
       this.editForm = res;
-      console.log(this.editForm);
-      // this.jilian = []
-      
+      console.log(this.editForm);    
       if(res != null){
-        this.img = []
+        this.img = ''
         this.editForm = res;
         if(this.editForm.report_date === '0000-00-00'){
           this.editForm.report_date = ''
@@ -776,24 +816,25 @@ export default {
         // this.jilian.push(this.editForm.diagnosis1,this.editForm.diagnosis2)
         //  this.editForm.jilian = this.jilian  
         if(this.editForm.img){     
-          this.img.push(this.editForm.img[0])    
+          this.img = this.editForm.img   
           // console.log(this.img[0])
         }
        console.log(this.axios.defaults.geturl)
-        if(this.img[0]){
-          this.src = this.axios.defaults.geturl + this.img[0]
+        if(this.img){
+          this.src = this.axios.defaults.geturl + this.img
           console.log(this.src)
         }else{
           this.src = ''
           console.log(this.src)
-        }
-        
+        }       
       }  else{
         this.editForm = {};
         return
       }    
-
     },
+    handleRemovefile(file, fileList) {
+        console.log(file, fileList);
+      },
     // 清空
     handleRemove() {
       const res = this.axios.get('upload_file/del.php',{params:{id:this.editForm.pics}}).then( res=>{
@@ -801,16 +842,16 @@ export default {
       })
       this.src = ''
       this.editForm = {}
-      this.pics = []
+      this.pics = ''
       this.img = ''
-      this.editForm.pics = []
+      this.editForm.pics = ''
       console.log(this.src)
       console.log(this.editForm)  
     },
     // 保存
     baocun(editForm) {
       // console.log(this)
-       this.editForm.pics = this.pics 
+      this.editForm.pics = this.pics 
       // console.log(this.editForm.uid)
       this.zhezhao = !this.zhezhao;      
       console.log(this.rowAdd)
@@ -877,7 +918,7 @@ export default {
       let group_id = "";
       let attached = "";
       const { data: res } = await this.axios.get("diagnosis_origin/list.php", {
-        params: { page: this.queryInfo.page, group_id:this.it,attached:this.attached}
+        params: { page: this.queryInfo.page, group_id:this.it,attached:this.attached_id}
       });
       console.log("getTableList",res);
       this.tablelist = res.data;
@@ -918,6 +959,8 @@ export default {
   },
   data() {
     return {
+      loading : false,
+      pic_id:'',
       levelList: ["1", "2", "3A", "3B", "1-2", "3"],
       // actionURL:this.baseURLStr + 'upload_file/add.php',
       actionURL:this.axios.defaults.baseURL + 'upload_file/add2.php',
@@ -929,11 +972,12 @@ export default {
       onechoose: [],
       twochoose: [],
       threechoose: [],
+      attached_id:'',         //下拉选择
       src:'',    //获取图片路径
-      img:[],    //图片
+      img:'',    //图片
       // dialogImageUrl: '',
       dialogVisible: false,
-      pics:[],    //  上传图片的数组
+      pics:'',    //  上传图片的数组
       imageUrl: '',
       pic:'',
       rowAdd:'',   //点击添加获取的row
@@ -942,9 +986,6 @@ export default {
       attachedList:['有','无','全部'],   //原单位下拉
       it:'',
       groupList:[],
-      photo: "",
-      jilian: "",
-      jilian: [],
       item: "",
       // 折叠面板默认打开
       activeNames: ["1"],
@@ -1558,7 +1599,7 @@ export default {
 </script>
 
 
-<style scoped lang="stylus" rel="stylesheet/stylus" >、
+<style scoped lang="stylus" rel="stylesheet/stylus">
 .el-upload--picture-card {
     background-color: #fbfdff;
     border: 1px dashed #c0ccda;
@@ -1576,9 +1617,6 @@ export default {
 img{
   display inline-block
   border none
-  width 148px
-  height 148px
- 
 }
 
 
@@ -1670,7 +1708,8 @@ img{
       top: 0;
       margin: auto;
       width: 1122px;
-      height: 100%;
+      min-height: 900px;
+      overflow-y: auto;
       background: rgba(250, 250, 250, 1);
       box-shadow: 0px 4px 20px 0px rgba(121, 121, 121, 0.75);
       border-radius: 0px 0px 4px 4px;

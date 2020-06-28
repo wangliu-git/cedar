@@ -49,15 +49,16 @@
           <el-table-column prop="location" label="研究项目" width="300"></el-table-column>
           <el-table-column fixed="right" label="操作" width="300">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="bianji(scope.row)"><span>编辑</span></el-button>
-              <el-button type="text" size="small" @click="chakanj(scope.row)"><span>查看</span></el-button>
-              <el-button type="text" size="small" @click="dele(scope.row)"><span>删除</span></el-button>            
-             <el-button class="jiexi" size="mini" v-if="scope.row.status == 1"  @click="jiexi(scope.row)">
+            <el-button class="jiexi" size="mini" v-if="scope.row.status == 1"  @click="jiexi(scope.row)">
                 <i class="iconfont iconxiazai" >开始解析</i>
               </el-button>
               <el-button class="jiexi" size="mini" v-else style="background:#26bc99">
                 <i class="iconfont iconxiazai">解析成功</i>
               </el-button>
+              <el-button type="text" size="small" @click="bianji(scope.row)"><span>编辑</span></el-button>
+              <el-button type="text" size="small" @click="chakanj(scope.row)"><span>查看</span></el-button>
+              <el-button type="text" size="small" @click="dele(scope.row)"><span>删除</span></el-button>            
+             
             </template>
           </el-table-column>
         </el-table>
@@ -179,23 +180,34 @@
             <div>
               取材部位：
               {{editForm.sample_location}}
-            </div>
+          </div>
             <div >
               标本类型：
               {{editForm.sample_type}}
             </div>
             <div>诊断结论<span> 病理类型：</span>{{editForm.diagnosis}}</div>
             <!-- <div><span>淋巴细胞来源：</span>{{editForm.type}}</div> -->
-            <div style="float:left">辅助诊断<span> 免疫组化：</span>
-              <th  v-for="(item,index) in this.helper_diagnosis.ihc" :key="index" :value="item">
-                <td>{{item.mark}}</td>
-                <td>{{item.value}}</td>
-              </th>                
+            <div style="float:left"  class="fz">辅助诊断
+              <div class="mianyi">
+                <span>免疫组化：</span>
+                <th  v-for="(item,index) in this.helper_diagnosis.ihc" :key="index" :value="item">
+                  <td>{{item.mark}}</td>
+                  <td>{{item.value}}</td>
+                </th>
+              </div>
+
+              <div class="mianyi">
+                <span>荧光原位杂交：</span>
+                <th  v-for="(item,index) in this.helper_diagnosis.fish" :key="index" :value="item">
+                  <td>{{item.mark}}</td>
+                  <td>{{item.value}}</td>
+                </th>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="footer">
+        <div class="footer" v-if="CK">
           <div class="btn">
             <el-button plain @click="zhezhao = false">返回</el-button>
             <el-button plain @click="pass(editForm)">确认校验通过</el-button> 
@@ -1274,6 +1286,7 @@
   </div>
 </template>
 
+
 <script type="text/ecmascript-6">
 import uuid from "uuid";
 import allMessage from "../../staic/allMessage.json";
@@ -1631,6 +1644,7 @@ export default {
     },
     // 点击病理号校验
     async look(row){  
+      this.CK = true;
       this.wenjian = false       
       this.luru = true
       this.ji = false 
@@ -1660,6 +1674,7 @@ export default {
     //点击病理号查看
     async jiaoyan(row){
       // console.log(row.id)
+      this.CK = false;
       this.zhezhao = true    
       this.id  = row.id
       const { data :res} = await this.axios.get(
@@ -2189,6 +2204,7 @@ export default {
       loading: false,
       txt:"",
       msg:"",
+      CK:true,
       actionURL:this.axios.defaults.baseURL + 'upload_file/add.php',
       grade:'',
       levelList: ["1", "2", "3A", "3B", "1-2", "3"],
@@ -3602,7 +3618,7 @@ a {
     box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
     border-radius: 4px;
     position: relative;
-    margin-bottom 120px
+    margin-bottom 180px
     // 按钮
     .header {
       border-bottom: 1px solid rgba(232, 232, 232, 1);
@@ -3920,8 +3936,7 @@ a {
                       width: 70px;
                     }
                   }
-                }
-              
+                }              
               }
             }
             .fiveDown{
@@ -3973,8 +3988,7 @@ a {
                       width: 70px;
                     }
                   }
-                }
-              
+                }              
               }
             }
           }
@@ -3990,14 +4004,13 @@ a {
   }
   .textCon {
     margin-left: -20px;
-    width: 100%;
     position: fixed;
     bottom: 0px;
     z-index: 9;      
     background: rgba(255, 255, 255, 1);
     box-shadow: 0px 1px 10px 0px rgba(179, 179, 179, 0.75);
     border-radius: 4px;
-    height 140px
+    height 200px
     .text {
       font-size 20px
       margin: 6px 30px 0;  

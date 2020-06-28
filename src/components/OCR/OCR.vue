@@ -128,7 +128,6 @@
         test_id:'',
         qucai:'',
         bingli:''
-
         // action:this.baseURL+'upload_file/add2.php'
       };
     },
@@ -171,26 +170,20 @@
                 this.dataLists.map( (item,index) =>{
                   console.log(item)
                   this.basic = item.basic
-
                   this.diagnosis_current = item.diagnosis_current
                   this.diagnosis_current.conclusion.map( (item,index) =>{
                     console.log(item)
                     this.qucai = item.sample_location
                     this.bingli = item.diagnosis1_normal
                   })
-
                   this.diagnosis_txt = item.diagnosis_txt
-
-                 
-
                   console.log(this.diagnosis_current)
                   console.log(this.diagnosis_txt)         
                 })
               }
-            });
-           
+            });         
           }else{
-             this.$alert('识别失败', '标题名称', {
+            this.$alert('识别失败', '标题名称', {
               confirmButtonText: '确定',
               type: 'error',             
             });

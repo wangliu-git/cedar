@@ -87,19 +87,20 @@
               <el-button
                 class="jiexi"
                 size="mini"
+                v-if="scope.row.status == 2 "
                 style="background:#26bc99"
-                v-if="scope.row.status == 2 ">
+                >
                 <i class="iconfont iconxiazai">解析成功</i>
               </el-button>
               <el-button type="text" @click="bianji(scope.row)">
                 <span>编辑</span>
               </el-button>
 
-              <el-button type="text" @click="chakan(scope.row,scope.$index)">
+              <el-button type="text"  @click="chakan(scope.row,scope.$index)">
                 <span>查看</span>
               </el-button>
               <!-- v-if="scope.row.status != 2" -->
-              <el-button type="text" @click="dele(scope.row)" >
+              <el-button type="text" @click="dele(scope.row)">
                 <span>删除</span>
               </el-button>
             </template>
@@ -952,9 +953,6 @@
                     
               
                   </div>
-
-                  
-
                   <div class="sickItem">
                     级别：
                     <el-select v-model="editForm.grade" size="mini" style="width:300px" clearable filterable
@@ -965,7 +963,6 @@
                     </el-select>
                   </div>
                 </div>
-
                 <!--辅助诊断 -->
                 <div class="sickIH">
                   <div class="title">
@@ -1243,16 +1240,6 @@
           </span>
         </div>
         <div class="mian">
-          <!--
-            <div class="ming">
-              <span>文件名称：</span>
-              <el-input style="width:420px" size="small" v-model="data.file_name"></el-input>
-            </div>
-            <div class="cun">
-              <span>项目名称：</span>
-              <el-input style="width:420px" size="small" v-model="data.location"></el-input>
-            </div>
-          -->
           <div class="sousuo">
             <el-input
               placeholder="请输入关键词..."
@@ -1391,7 +1378,7 @@
               </div>
 
               <div class="mianyi">
-                <span>分子检测：</span>
+                <span>荧光原位杂交：</span>
                 <th  v-for="(item,index) in this.helper_diagnosis.fish" :key="index" :value="item">
                   <td>{{item.mark}}</td>
                   <td>{{item.value}}</td>
@@ -1514,6 +1501,7 @@ export default {
     },
     // 点击数据集查看
     async chakan(row) {
+      console.log(row)
       this.sousuo = true;
       console.log(row.id);
       console.log(row);
@@ -1739,8 +1727,7 @@ export default {
       this.helper_diagnosis = this.editForm.helper_diagnosis;
     },
     // 点击病理号校验
-    async look(row) {
-      
+    async look(row) {   
       this.CK = true;
       // console.log(this.editForm.jilian)
       this.wenjian = false;
@@ -3471,9 +3458,11 @@ export default {
   border-radius: 4px;
   color: white;
 }
+
 #dataImport .form .formList .ihc .el-button :hover {
-  background: #1ca5ff;
+  background: #1ca5ff !important; 
 }
+
 #dataImport .icontubiaozhizuo-:before {
   color: #1ca5ff;
 }
@@ -3740,7 +3729,7 @@ a {
     box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
     border-radius: 4px;
     position: relative;
-    margin-bottom: 120px;
+    margin-bottom: 180px;
 
     // 按钮
     .header {
@@ -3986,7 +3975,6 @@ a {
               }
             }
           }
-
           .ihc {
             display: inline;
             display: flex;
@@ -4171,23 +4159,19 @@ a {
   .textCon {
     margin-left: -20px;
     position: fixed;
-    width: 100%;
     bottom: 0px;
     z-index: 9;
     background: rgba(255, 255, 255, 1);
     box-shadow: 0px 1px 10px 0px rgba(179, 179, 179, 0.75);
     border-radius: 4px;
-    height: 140px;
-
+    height: 200px;
     .text {
       font-size: 20px;
       margin: 6px 30px 0;
-
       span {
         height: 30px;
         display: block;
       }
-
       .content {
         font-size: 16px;
         height: 60px;

@@ -22,8 +22,8 @@
           </el-form-item>
           <!-- 操作-->
           <el-form-item class="opearation">
-            <el-checkbox v-model="checked">记住账号</el-checkbox>
-            <el-button type="text" @click="forget">忘记密码？</el-button>
+            <el-checkbox  v-model="checked">记住账号</el-checkbox>
+            <el-button type="text" @click="forget"><u >忘记密码？</u></el-button>
           </el-form-item>
           <!-- 按钮-->
           <el-form-item>
@@ -102,7 +102,8 @@ export default {
     // 忘记密码
     forget() {
       this.$alert("请联系平台管理员重置密码！", "忘记密码？", {
-        confirmButtonText: "确定"
+        confirmButtonText: "知道了",
+        type: "warning",
         // 点击确认后显示信息框
         // callback: action => {
         //     this.$message({
@@ -154,6 +155,8 @@ export default {
       .opearation {
         display: flex;
         flex-flow: row;
+
+       
       }
 
       .title {
@@ -176,6 +179,8 @@ export default {
 
         .btn {
           width: 400px;
+          background:linear-gradient(90deg,rgba(59,165,252,1),rgba(103,231,247,1));
+          border none
         }
 
         .el-checkbox {
