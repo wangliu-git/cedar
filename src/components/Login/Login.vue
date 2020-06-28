@@ -3,8 +3,6 @@
     <div class="login">
       <div class="left"></div>
       <div class="right">
-        <!-- :model="Form"表单数据绑定对象  (data)-->
-        <!-- :rules="rules"表单验证规则 (data)-->
         <el-form :model="Form" :rules="rules" ref="LoginFormRef">
           <div class="title">肿瘤病理数据智能系统</div>
           <!-- 用户名-->
@@ -104,13 +102,6 @@ export default {
       this.$alert("请联系平台管理员重置密码！", "忘记密码？", {
         confirmButtonText: "知道了",
         type: "warning",
-        // 点击确认后显示信息框
-        // callback: action => {
-        //     this.$message({
-        //     type: 'info',
-        //     // message: `action: ${ action }`
-        //     });
-        // }
       });
     }
   }
@@ -118,86 +109,5 @@ export default {
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus" >
-.container {
-  background-color: skyblue;
-  height: 100%;
-  position: relative;
-  background-image: url('./img/bg.png');
-
-  .login {
-    width: 1400px;
-    height: 700px;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 0;
-    margin: auto;
-    background-image: url('./img/sign.png');
-    background-repeat: no-repeat;
-
-    .left {
-      width: 700px;
-      height: 100%;
-      float: left;
-
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-
-    .right {
-      width: 700px;
-      margin-top: 50px;
-      float: right;
-
-      .opearation {
-        display: flex;
-        flex-flow: row;
-
-       
-      }
-
-      .title {
-        font-size: 25px;
-        color: #38A7FE;
-        margin: 30px;
-      }
-
-      .el-form {
-        display: flex;
-        flex-flow: column;
-        justify-content: center;
-        align-items: center;
-        margin: 80px auto 0;
-
-        .el-input {
-          width: 400px;
-          margin-top: 20px;
-        }
-
-        .btn {
-          width: 400px;
-          background:linear-gradient(90deg,rgba(59,165,252,1),rgba(103,231,247,1));
-          border none
-        }
-
-        .el-checkbox {
-          margin-right: 250px;
-        }
-      }
-    }
-  }
-  .logo{
-    position fixed
-    left 50%
-    bottom 20px
-    color #737373
-    font-size 14px
-    transform translateX(-50%)
-
-
-  }
-}
+@import 'login.styl'
 </style>

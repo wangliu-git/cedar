@@ -62,10 +62,8 @@
             </el-menu-item>
           </el-submenu>
           <!--
-
               <el-menu-item index="try" :class="{sr_active: $route.path === '/try'}"><i class="iconfont icondian"></i>模拟试用</el-menu-item>         
-          --> 
-     
+          -->  
           <el-menu-item index="usermanagement" :class="{sr_active: $route.path === '/usermanagement'}">
             <i class="iconfont iconyonghuguanli"></i><span>用户管理</span>
           </el-menu-item>
@@ -110,13 +108,6 @@ export default {
     ISfold(){
       this.IScollapse = !this.IScollapse
     },
-    // 点击刷新页面
-    // goto(){
-    //   if(this.$route.path == '/dataentry'){
-    //      location.reload()  //强制刷新页面     
-    //   }
-    //   // this.$router.go('/dataentry')
-    // },
     // 退出登录
     async loginout() {
       const { data: res } = await this.axios.get("user/logout.php");
@@ -133,10 +124,10 @@ export default {
   },
   data() {
     return {
-      IScollapse:false,
+      IScollapse:false,   //是否折叠
       username: "",
       role_id:'',
-      openeds:['1','2','3']
+      openeds:['1','2','3']     //默认打开的侧边栏
     };
   },
   mounted() {
@@ -162,121 +153,5 @@ export default {
 }
 </style>
 <style scoped lang="stylus" rel="stylesheet/stylus" >
-.el-menu-item.is-hover {
-  outline: 0 !important;
-  color: #0850C1 !important;
-  background: #FAFAFA !important;
-}
-
-.el-menu-item.is-active {
-  color: white !important;
-}
-
-el-button el-button--default {
-  border: none;
-}
-
-.icontuichu:before {
-  font-size: 20px;
-  display: inline;
-}
-
-.el-container {
-  width: 1920px;
-}
-
-.el-aside {
-  height: 100%;
-  background: linear-gradient(180deg, rgba(30, 118, 254, 1), rgba(27, 196, 255, 1));
-  .fold{
-    height 30px
-    line-height 30px
-    text-align center
-    color white
-  }
-  .el-menu {
-    height: 100%;
-  }
-}
-
-.mian {
-  width: 1680px;
-}
-
-.el-main {
-  background-color: #F5F7FB;
-  width: 100%;
-  height: 100%;
-  overflow auto
-}
-
-.el-footer {
-  background-color: #F5F7FB;
-  height 400px
-
-}
-
-.el-header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding-left: 20px;
-  align-items: center;
-  background-color: #FFFFFF;
-
-  img {
-    width: 73px;
-    height: 46px;
-    
-  }
-
-  .logo {
-    display: flex;
-    .tuichu{
-      border none
-      
-    }
-    img {
-      width: 31px;
-      height: 31px;
-      margin-top: 10px;
-    }
-
-    .shu {
-      width: 1px;
-      height: 20px;
-      background: rgba(210, 210, 210, 1);
-      margin-top: 15px;
-      margin-right: 10px;
-    }
-
-    span {
-      margin-top: 14px;
-      margin-left: 10px;
-      padding-right: 20px;
-      font-size: 14px;
-      font-family: Microsoft YaHei;
-      font-weight: 400;
-      color: rgba(28, 165, 255, 1);
-    }
-  }
-}
-
-.iconfont {
-  color: white;
-  margin-right: 20px;
-  font-size: 18px;
-}
-
-.icontuichu {
-  width: 1px;
-  height: 20px;
-  color: #858585;
-  margin-right: 10px;
-
-}
-
-.el-menu {
-  border-right: none;
-}
+@import 'home.styl'
 </style>

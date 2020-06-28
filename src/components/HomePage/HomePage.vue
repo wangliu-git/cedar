@@ -107,7 +107,6 @@
 
 <script type="text/ecmascript-6">
 import echarts from "echarts";
-
 export default {
   mounted() {
     this.$nextTick(function() {
@@ -119,7 +118,6 @@ export default {
       this.darwPie2();
       this.darwPie3();
       this.role_id = window.sessionStorage.role_id;
- 
     });
   },
   methods: {
@@ -225,13 +223,6 @@ export default {
             }
           },
           legend: {
-            //图例组件
-            // data: ['人数']
-            // itemGap: 5,
-            // formatter: 'Legend',
-            // selected:{
-            //     "Legend":false
-            // }
           },
           grid: {
             //直角坐标系内绘图网格
@@ -334,90 +325,7 @@ export default {
       myChart.setOption(option, { notMerge: true });
     },
 
-    // async darwPie2(){
-    //   let type =''
-    //   let startdate =''
-    //   let enddate =''
-    //   console.log(this.value)
-    //   if(this.value != '' ){
-    //     const res = await this.axios.get("report/stat_day.php",{params:{type:1,startdate:this.value[0],enddate:this.value[1]}});
-    //     console.log(res);
-    //     let myChart = this.$echarts.init(
-    //       document.getElementById("liu"),
-    //       "macarons"
-    //     );
-    //     let datas = res.data.stat;
-    //     console.log(datas)
-    //     return datas
-        
-    //   }else{
-    //     const res = await this.axios.get("report/stat_day.php",{params:{type:1}});
-    //     console.log(res);
-    //     let myChart = this.$echarts.init(
-    //       document.getElementById("liu"),
-    //       "macarons"
-    //     );
-    //     let datas = res.data.stat;
-    //     console.log(datas)
-    //     return datas
-        
-    //   }
-    //   let option = {
-    //       color: ['#3398DB'],
-    //      title: {
-    //       left: "center",
-    //       top: "10px",
-    //       textAlign: "center"
-    //     },
-    //     tooltip: {
-    //       //提示框组件
-    //       trigger: "axis", //触发类型：axis-坐标轴触发
-
-    //       axisPointer: {
-    //         //坐标轴指示器配置项
-    //         type: "cross", //十字准星指示器
-    //         label: {
-    //           //指示器文本
-    //           show: true,
-    //           precision: 0 //精确度，小数点后零位，即整数
-    //         }
-    //       }
-    //     },
-    //     grid: {
-    //       //直角坐标系内绘图网格
-    //       top: "15%",
-    //       left: "20%",
-    //       right: "5%",
-    //       bottom: "0%",
-    //       containLabel: true //grid是否包含刻度标签
-    //     },
-    //       xAxis: [
-    //           {
-    //               type: 'category',
-    //               data: datas.map(  r=> r.report_date),
-    //               axisTick: {
-    //                   alignWithLabel: true
-    //               }
-    //           }
-    //       ],
-    //       yAxis: [
-    //           {
-    //               type: 'value',
-    //               data: datas.map(  r=> r.daycount) 
-    //           }
-    //       ],
-    //       series: [
-    //           {
-    //               name: '直接访问',
-    //               type: 'line',
-    //               // barWidth: '60%',
-                 
-    //           }
-    //       ]
-    //   };
-    //   console.log("option:", option);
-    //   myChart.setOption(option)
-    // },
+   
     // 统计数据1
     async tongji1() {
       let type = "";
@@ -426,8 +334,6 @@ export default {
       });
       // console.log(res)
       this.tongjiList1 = res;
-      // this.percent1 = parseFloat((this.tongjiList1.ok / this.tongjiList1.total) *100).toFixed(1)
-      // console.log(this.percent1)
     },
     // 统计数据2
     async tongji2() {
@@ -437,8 +343,6 @@ export default {
       });
       // console.log(res)
       this.tongjiList2 = res;
-      // this.percent2 = parseFloat((this.tongjiList2.ok / this.tongjiList2.total) *100).toFixed(1)
-      // console.log(this.percent2)
     },
     // 统计数据3
     async tongji3() {
@@ -446,18 +350,12 @@ export default {
       const { data: res } = await this.axios.get("diagnosis_origin/stat.php");
       // console.log(res)
       this.tongjiList3 = res;
-      // this.percent3 = parseFloat((this.tongjiList2.ok / this.tongjiList2.total) *100).toFixed(1)
-      // console.log(this.percent2)
     },
     // 获取报告量详情
     async reportList() {
       const { data: res } = await this.axios.get("report/stat.php");
       // console.log(res)
       this.reportLists = res;
-      // console.log(this.reportLists.total1)
-      // let one = document.getElementsByClassName('one')
-      // console.log(one)
-      // one.style.backgroundColor  = 'red'
     }
   },
   data() {
@@ -470,8 +368,6 @@ export default {
       tongjiList1: [],
       tongjiList2: [],
       tongjiList3: [],
-      // percent1:'',   //导入百分比
-      // percent2:'',   //录入百分比
       value: "", //日期的值
       // 日期配置
       pickerOptions: {
@@ -511,171 +407,5 @@ export default {
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus" >
-.icontubiaozhizuo-:before {
-  color: #1CA5FF;
-}
-
-.up {
-  display: flex;
-  justify-content space-between
-
-  .green {
-    background-image: url('./img/green-bg.png');
-    background-repeat: no-repeat;
-    width: 550px;
-    height: 200px;
-    display: flex;
-    justify-content: space-evenly;
-
-    .BD {
-      display: flex;
-      flex-flow: column;
-      justify-content: center;
-      align-items: center;
-      width: 220px;
-      height: 200px;
-    }
-
-    .jiao {
-      display: flex;
-      flex-flow: column;
-      justify-content: center;
-      align-items: center;
-      width: 20%;
-    }
-  }
-
-  .orange {
-    background-image: url('./img/orange-bg.png');
-    background-repeat: no-repeat;
-    width: 550px;
-    height: 200px;
-    display: flex;
-    justify-content: space-evenly;
-
-    .BL {
-      display: flex;
-      flex-flow: column;
-      justify-content: center;
-      align-items: center;
-      width: 220px;
-      height: 200px;
-    }
-
-    .luru {
-      display: flex;
-      flex-flow: column;
-      justify-content: center;
-      align-items: center;
-    }
-  }
-
-  .blue {
-    background-image: url('./img/blue-bg.png');
-    background-repeat: no-repeat;
-    width: 550px;
-    height: 200px;
-    display: flex;
-    justify-content: space-evenly;
-
-    .YL {
-      display: flex;
-      flex-flow: column;
-      justify-content: center;
-      align-items: center;
-      width: 220px;
-      height: 200px;
-    }
-
-    .yuan {
-      display: flex;
-      flex-flow: column;
-      justify-content: center;
-      align-items: center;
-    }
-  }
-}
-
-.down {
-  display flex
-  justify-content space-between
-  .zx {
-    width: 65%;
-    height: 620px;
-    margin-top: 10px;
-    margin-left: 10px;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
-    border-radius: 8px;
-    .title {
-      display: flex;
-      background: #FAFAFA;
-      justify-content: space-between;
-      height: 36px;
-      line-height: 36px;
-      box-shadow: 0px 1px 0px 0px rgba(224, 224, 224, 0.75);
-      border-radius: 4px 4px 0px 0px;
-
-      i {
-        margin-left: 10px;
-      }
-
-      span {
-        
-        color: #1CA5FF;
-      }
-    }
-
-    .select {
-      width: 1020px;
-      height: 100px;
-      line-height: 100px;
-      border-bottom: 1px rgba(238, 238, 238, 1) solid;
-      margin-left: 20px;
-    }
-
-    .tu {
-      display: flex;
-      flex-flow: column;
-      align-items: center;
-      justify-content: space-around;
-      margin-top: 30px;
-      height: 400px;
-
-      // 图
-      #liu {
-        width: 800px;
-        height: 800px;
-      }
-    }
-  }
-
-  .sx {
-    width: 33%;
-    height: 620px;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
-    border-radius: 8px;
-    margin-top: 10px;
-    .title {
-      background: #fafafa;
-      height: 36px;
-      line-height: 36px;
-      box-shadow: 0px 1px 0px 0px rgba(224, 224, 224, 0.75);
-      border-radius: 4px 4px 0px 0px;
-    }
-
-    #wang {
-      width: 430px;
-      height: 492px;
-      margin auto
-    }
-
-    .zi {
-      display: flex;
-      justify-content: space-evenly;
-      margin-left: 30px;
-    }
-  }
-}
+@import 'homepage.styl'
 </style>

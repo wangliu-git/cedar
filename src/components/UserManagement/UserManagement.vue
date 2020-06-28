@@ -58,7 +58,7 @@
     <div class="zhezhao" v-if="group">
       <div class="message">
         <div class="up">
-          <span>修改</span>
+          <span>修改用户信息</span>
           <span @click="group =false">
             <i class="iconfont iconx"></i>
           </span>
@@ -121,7 +121,7 @@
     <div class="zhezhao" v-if="Add">
       <div class="message">
         <div class="up">
-          <span>添加</span>
+          <span>添加用户</span>
           <span @click="Add =false">
             <i class="iconfont iconx"></i>
           </span>
@@ -192,11 +192,6 @@ export default {
       ruleForm: {
        role_id:'',
       },
-      // rules:{
-      //  role_id: [        
-      //     { required: true, message: '请选择用户权限', trigger: 'change' }        
-      //   ]
-      // },
       Add: false,
       // 修改用户信息
       userData: {
@@ -239,24 +234,10 @@ export default {
         desc: ""
       },
       userlist: [],
-      // rules: {
-      //   username: [
-      //     {
-      //       required: true,
-      //       message: "用户名一旦修改不能更改",
-      //       trigger: "blur"
-      //     },
-      //     { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
-      //   ],
-      //   region: [{ required: true, message: "请选择权限", trigger: "change" },
-      //    { min: 6, max: 12, message: "长度在 6 到 12 个字符", trigger: "blur" }],
-      //   pass: [{ required: true, message: "输入密码", trigger: "blur" }],
-      //   memo: [{ required: true, message: "请填写备注", trigger: "blur" }]
-      // }
     };
   },
   methods: {
-    // 批量删除
+    // 复选框
     checkTable(rows){
       console.log(rows)
       rows.map( (item,index) =>{
@@ -266,6 +247,7 @@ export default {
       this.idss = [...new Set(this.idss)];       
       console.log(this.idss)   
     },
+    // 批量删除用户
     dels(){
       let ids 
       this.$confirm("确定批量删除这（个）些用户？, 是否继续?", "提示", {
@@ -293,19 +275,7 @@ export default {
         });
       });
     },
-    // 搜索模糊
-    // async search(){
-    //   let username
-    //   const res = await this.axios.get('user/list.php',{params:{username:this.searchname,page:this.queryInfo.page}}).then( res => {
-    //     console.log(res)
-    //     this.userlist = res.data.data;
-    //     this.queryInfo.page = parseInt(res.data.page);
-    //     this.queryInfo.count = parseInt(res.data.count); //总条数
-    //     this.queryInfo.pagerows = res.data.pagerows; //每页显示多少条
-    //     console.log(this.queryInfo.count)
-    //   })
-    // },
-    // 获取用户列表
+    // 获取用户列表  模糊搜索
     async getUserList() {
       // alert(1)
       const { data: res } = await this.axios.get("user/list.php", {
@@ -413,7 +383,7 @@ export default {
       this.queryInfo.page = newPage;
       this.getUserList();
     },
-    // 删除用户
+    // 删除一个用户
     async del(row) {
       console.log(row.id);
       // window.sessionStorage.clear();
@@ -457,126 +427,5 @@ export default {
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-.iconxinghao1{
-  color red  !important
-  font-size 8px !important
-  margin-right 3px
-}
-.el-form-item {
-  margin-left: 0;
-}
-
-a {
-  color: #1CB2FF;
-
-  &:hover {
-    color: #1ca5ff;
-  }
-}
-
-.container {
-  height: 100%;
-
-  .iconsousuo {
-    color: white;
-  }
-
-  .content {
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 1px 10px 0px rgba(204, 204, 204, 0.75);
-    border-radius: 4px 4px 4px 4px;
-
-    .up {
-      .el-input {
-        width: 280px;
-        margin: 30px 30px 10px;
-      }
-
-      .el-button {
-        background: rgba(28, 178, 255, 1);
-        border-radius: 0px 4px 3px 0px;
-      }
-
-      .iconpiliangshanchu {
-        background: rgba(246, 77, 77, 1);
-        border-radius: 4px;
-        font-size: 14px;
-        font-weight: 400;
-        color: rgba(255, 255, 255, 1);
-        float: right;
-        margin-top: 30px;
-        margin-right: 40px;
-      }
-
-      .iconic_join_dialing_norm {
-        background: rgba(28, 178, 255, 1);
-        border-radius: 4px;
-        font-size: 14px;
-        font-weight: 400;
-        color: rgba(255, 255, 255, 1);
-        margin-top: 30px;
-      }
-    }
-
-    .down {
-      padding-bottom: 0;
-      background: rgba(255, 255, 255, 1);
-      border-top: 3px solid rgba(28, 165, 255, 1);
-      margin: 10px 20px;
-      .el-pagination {
-        height: 50px;
-        margin-top: 10px;
-      }
-
-      span {
-        margin-left: 10px;
-      }
-    }
-  }
-
-  .zhezhao {
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(245, 247, 251, 0.7);
-    z-index: 9;
-
-    .message {
-      width: 450px;
-      height: 350px;
-      background: rgba(252, 252, 252, 1);
-      box-shadow: 0px 4px 20px 0px rgba(121, 121, 121, 0.75);
-      position: absolute;
-      border-radius: 6px;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      right: 0;
-      margin: auto;
-      z-index: 99;
-
-      .el-button {
-        float: right;
-        margin-right: 10px;
-      }
-
-      .up {
-        display: flex;
-        justify-content: space-between;
-        height: 40px;
-        line-height: 40px;
-        background: rgba(28, 177, 255, 1);
-        border-radius: 6px 6px 0px 0px;
-
-        span {
-          margin: 0 10px;
-          color: white;
-        }
-      }
-      
-    }
-  }
-}
+@import 'user.styl'
 </style>
