@@ -871,7 +871,6 @@ export default {
     },
     // 点击列表行
     handleSelectionChange(row) {    
-      
       if (row) {
         this.getIndex = row.index;
         this.id = row.id;

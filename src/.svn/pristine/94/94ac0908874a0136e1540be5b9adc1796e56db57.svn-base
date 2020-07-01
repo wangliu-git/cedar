@@ -58,7 +58,8 @@
             style="width: 100%"
             border
             stripe
-            :header-cell-style="{color:'#333333'}">
+            :header-cell-style="{color:'#333333'}" 
+          >
             <el-table-column prop="patient_id" label="病人ID"  sortable></el-table-column>
             <el-table-column prop="test_id" label="病理号"  sortable></el-table-column>
             <el-table-column prop="name" label="姓名"  sortable></el-table-column>
@@ -124,6 +125,7 @@
               <!--报告信息 -->
               <div class="sickIH">
                 <div class="title">
+                  <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
                   {{reportMessage.name}}:
                 </div>
                 <div class="sickItem">
@@ -172,6 +174,7 @@
               <!--诊断结论 -->
               <div class="sickIH">
                 <div class="title">
+                  <!-- <i class="iconfont icontubiaozhizuo-"></i> -->
                   {{reportResult.name}}:
                 </div>
                 <div class="sickItem">
@@ -214,7 +217,8 @@
                   </div>
                   <div class="sickItem" v-if="this.editForm.diagnosis2 != ''">
                     <span>病理亚型：</span>
-                    <el-select                      
+                    <el-select
+                      
                       v-model="editForm.diagnosis3"
                       size="mini"
                       style="width:300px"
@@ -227,12 +231,15 @@
                         :value="item.name">
                         <span>{{item.name}}</span>
                       </el-option>
-                    </el-select>                   
+                    </el-select>
+
+                    
                   </div>
 
                   <div class="sickItem">
                     级别：
-                    <el-select v-model="editForm.grade" size="mini" style="width:300px" clearable filterable>
+                    <el-select v-model="editForm.grade" size="mini" style="width:300px" clearable filterable
+                      >
                       <el-option v-for="(item,index) in  this.levelList" :key="index" :value="item">
                         <span>{{item}}</span>
                       </el-option>
@@ -246,16 +253,19 @@
                   <div class="title" >
                   <i class="iconfont icontubiaozhizuo-"></i>
                       <!-- <i class="iconfont icontubiaozhizuo-"></i>  {{reportMass.name}}:  style="margin-left:50px"-->                      
-                      <span >{{fMInstitution.report_quality.field_title}} :</span>
+                      <span                       
+                      >{{fMInstitution.report_quality.field_title}} :</span>
                       <el-select
                         placeholder="请选择"
                         name="report_quality"
                         v-model="editForm.report_quality"
-                        size="mini">
+                        size="mini"
+                      >
                         <el-option
                           v-for="(item,index) in fMInstitution.report_quality.field_values"
                           :key="index"
-                          :value="item">
+                          :value="item"
+                        >
                           <span>{{item}}</span>
                         </el-option>
                       </el-select>
@@ -282,11 +292,13 @@
                           name="he_quality"
                           v-model="editForm.he_quality"
                           size="mini"
-                          style="width:90px">
+                          style="width:90px"
+                        >
                           <el-option
                             v-for="(item,index) in fMInstitution.he_quality.field_values"
                             :key="index"
-                            :value="item">
+                            :value="item"
+                          >
                             <span>{{item}}</span>
                           </el-option>
                         </el-select>
@@ -307,11 +319,13 @@
                           name="ihc_quality"
                           v-model="editForm.ihc_quality"
                           size="mini"
-                          style="width:90px">
+                          style="width:90px"
+                        >
                           <el-option
                             v-for="(item,index) in fMInstitution.ihc_quality.field_values"
                             :key="index"
-                            :value="item">
+                            :value="item"
+                          >
                             <span>{{item}}</span>
                           </el-option>
                         </el-select>
@@ -322,11 +336,13 @@
                           name="problem_slice"
                           v-model="editForm.problem_slice"
                           size="mini"
-                          style="width:90px">
+                          style="width:90px"
+                        >
                           <el-option
                             v-for="(item,index) in fMInstitution.problem_slice.field_values"
                             :key="index"
-                            :value="item">
+                            :value="item"
+                          >
                             <span>{{item}}</span>
                           </el-option>
                         </el-select>
@@ -340,11 +356,13 @@
                           name="patient_info"
                           v-model="editForm.patient_info"
                           size="mini"
-                          style="width:90px">
+                          style="width:90px"
+                        >
                           <el-option
                             v-for="(item,index) in fMInstitution.patient_info.field_values"
                             :key="index"
-                            :value="item">
+                            :value="item"
+                          >
                             <span>{{item}}</span>
                           </el-option>
                         </el-select>
@@ -355,11 +373,13 @@
                           name="history_info"
                           v-model="editForm.history_info"
                           size="mini"
-                          style="width:90px">
+                          style="width:90px"
+                        >
                           <el-option
                             v-for="(item,index) in fMInstitution.history_info.field_values"
                             :key="index"
-                            :value="item">
+                            :value="item"
+                          >
                             <span>{{item}}</span>
                           </el-option>
                         </el-select>
@@ -370,11 +390,13 @@
                           name="sample_info"
                           v-model="editForm.sample_info"
                           size="mini"
-                          style="width:90px">
+                          style="width:90px"
+                        >
                           <el-option
                             v-for="(item,index) in fMInstitution.sample_info.field_values"
                             :key="index"
-                            :value="item">
+                            :value="item"
+                          >
                             <span>{{item}}</span>
                           </el-option>
                         </el-select>
@@ -388,11 +410,13 @@
                           name="record"
                           v-model="editForm.record"
                           size="mini"
-                          style="width:90px">
+                          style="width:90px"
+                        >
                           <el-option
                             v-for="(item,index) in fMInstitution.record.field_values"
                             :key="index"
-                            :value="item">
+                            :value="item"
+                          >
                             <span>{{item}}</span>
                           </el-option>
                         </el-select>
@@ -403,7 +427,8 @@
                           name="helper_report"
                           v-model="editForm.helper_report"
                           size="mini"
-                          style="width:90px">
+                          style="width:90px"
+                        >
                           <el-option
                             v-for="(item,index) in fMInstitution.helper_report.field_values"
                             :key="index"
@@ -444,7 +469,8 @@
         <div slot="file" slot-scope="{file}">
           <img
             class="el-upload-list__item-thumbnail"
-            :src="file.url" alt="">
+            :src="file.url" alt=""
+          >
           <span class="el-upload-list__item-actions">
             <span
               class="el-upload-list__item-preview"
@@ -539,9 +565,10 @@ export default {
     getJilian() {
       // console.log(this.editForm.diagnosis1_normal);
       const res = this.axios.get("report/jilian.php").then(res => {
-        // console.log(res);      
+        console.log(res);
+        
         this.onechoose = res.data.option
-        // console.log(this.onechoose)
+        console.log(this.onechoose)
       });
     },
     getJilian1() {
@@ -551,7 +578,7 @@ export default {
           params: { name: this.editForm.diagnosis1 }
         })
         .then(res => {
-          // console.log(res);
+          console.log(res);
           this.twochoose = res.data.option;
         });
       this.editForm.diagnosis2 = "";
@@ -578,11 +605,11 @@ export default {
     handleSuccess(response, file, fileList) {
       this.$message("上传成功");
       // console.log(this.editForm.imageUrl)
-      // console.log(file.raw)
-      // console.log(file) 
-      // console.log(file.response.id)
+      console.log(file.raw)
+      console.log(file) 
+      console.log(file.response.id)
       this.pic_id = file.response.id
-      // console.log(this)
+      console.log(this)
       this.pics = file.response.id   
       // this.img = file.url
       // console.log(this.img)
@@ -623,23 +650,23 @@ export default {
                 this.dataLists = []
                 this.dataLists = res.data
                 // this.dataLists = JSON.stringify(this.dataLists)
-                // console.log('this.dataLists',this.dataLists)
+                console.log('this.dataLists',this.dataLists)
                 this.dataLists.map( (item,index) =>{
-                  // console.log(item)
+                  console.log(item)
                   this.editForm = {}
                   this.editForm.application_date = item.basic.application_date
                   this.editForm.test_id = item.basic.test_id
                   this.editForm.report_date = item.basic.report_date                  
                   this.diagnosis_current = item.diagnosis_current
                   this.diagnosis_current.conclusion.map( (item,index) =>{
-                    // console.log(item)
+                    console.log(item)
                     this.editForm.diagnosis1 = item.diagnosis1_normal
                     this.editForm.diagnosis2 = item.diagnosis2_normal
                   })
-                  // console.log(this.editForm)
+                  console.log(this.editForm)
                   this.diagnosis_txt = item.diagnosis_txt
-                  // console.log(this.diagnosis_current)
-                  // console.log(this.diagnosis_txt)         
+                  console.log(this.diagnosis_current)
+                  console.log(this.diagnosis_txt)         
                 })
               }
             });
@@ -656,19 +683,19 @@ export default {
     // 获取分组
     getgroupList() {
       const { data: res } = this.axios.get("group/list.php").then(res => {
-        // console.log(res);
+        console.log(res);
         this.groupList = res.data.data
-        // console.log(res.data.data);
+        console.log(res.data.data);
       });
     },
     // 点击选择分组
     group_id() {       
-      // console.log(this.it)
+      console.log(this.it)
       this.getTableList()
     },
     // 获取诊断信getTableList息
     getInfo(){
-      // console.log(this.attached)
+      console.log(this.attached)
       this.getTableList2()
     },
     // 解析
@@ -681,8 +708,8 @@ export default {
     },
     // 点击删除
     async del(row) {
-      // console.log(row)
-      // console.log(row.id)
+      console.log(row)
+      console.log(row.id)
       let report_id= ''
       const  res  = await this.axios("diagnosis_origin/del.php", {
         params: {report_id:row.id }
@@ -698,7 +725,7 @@ export default {
               type: "success",
               message: "删除成功!"
             });
-            // console.log(res)
+            console.log(res)
             this.tablelist = []
             this.getTableList()
             // this.editForm = {}
@@ -715,7 +742,7 @@ export default {
     },
     // 点击添加
     async tianjia(row) {   
-      // console.log(row);
+      console.log(row);
       this.rowAdd = row
       this.zhezhao = true;
       this.id = this.rowAdd.id;
@@ -728,14 +755,14 @@ export default {
     // 点击原单位编辑
     async bianji(row){
       this.zhezhao = true;
-      // console.log(row);
+      console.log(row);
       this.rowAdd = row
       const { data: res } = await this.axios.get("diagnosis_origin/one.php",{params:{id:row.id }
       });
-      // console.log(row.id);
-      // console.log(res);
+      console.log(row.id);
+      console.log(res);
       this.editForm = res;
-      // console.log(this.editForm);    
+      console.log(this.editForm);    
       if(res != null){
         this.img = ''
         this.editForm = res;
@@ -752,10 +779,10 @@ export default {
        console.log(this.axios.defaults.geturl)
         if(this.img){
           this.src = this.axios.defaults.geturl + this.img
-          // console.log(this.src)
+          console.log(this.src)
         }else{
           this.src = ''
-          // console.log(this.src)
+          console.log(this.src)
         }       
       }  else{
         this.editForm = {};
@@ -763,20 +790,20 @@ export default {
       }    
     },
     handleRemovefile(file, fileList) {
-        // console.log(file, fileList);
+        console.log(file, fileList);
       },
     // 清空
     handleRemove() {
       const res = this.axios.get('upload_file/del.php',{params:{id:this.editForm.pics}}).then( res=>{
-        // console.log(res)
+        console.log(res)
       })
       this.src = ''
       this.editForm = {}
       this.pics = ''
       this.img = ''
       this.editForm.pics = ''
-      // console.log(this.src)
-      // console.log(this.editForm)  
+      console.log(this.src)
+      console.log(this.editForm)  
     },
     // 保存
     baocun(editForm) {
@@ -784,13 +811,13 @@ export default {
       this.editForm.pics = this.pics 
       // console.log(this.editForm.uid)
       this.zhezhao = !this.zhezhao;      
-      // console.log(this.rowAdd)
-      // console.log(this.rowAdd.attached)
+      console.log(this.rowAdd)
+      console.log(this.rowAdd.attached)
       // this.jilian = this.editForm.jilian;
       this.editForm.detail_type = "淋巴瘤";
-      // console.log(this.editForm);
+      console.log(this.editForm);
         this.axios.post("diagnosis_origin/add.php",{params:{id:this.rowAdd.id,data:this.editForm}}).then(res => {
-          // console.log("res:", res);
+          console.log("res:", res);
           // console.log(res.data)
           var result = res.data; //JSON.parse(res.body);
           if (result.result == "done") {
@@ -821,9 +848,9 @@ export default {
         const { data: res } = await this.axios.get("diagnosis_origin/list.php", {
           params: { page: this.queryInfo.page}
         });
-        // console.log("getTableList",res);
+        console.log("getTableList",res);
         this.tablelist = res.data;
-        // console.log(res.data);
+        console.log(res.data);
         this.queryInfo.page = parseInt(res.page);
         this.queryInfo.count = parseInt(res.count); //总条数
         this.queryInfo.pagerows = res.pagerows; //每页显示多少条
@@ -831,9 +858,9 @@ export default {
         const { data: res } = await this.axios.get("diagnosis_origin/list.php", {
           params: { page: this.queryInfo.page, group_id:this.it}
         });
-        // console.log("getTableList",res);
+        console.log("getTableList",res);
         this.tablelist = res.data;
-        // console.log(res.data);
+        console.log(res.data);
         this.queryInfo.page = parseInt(res.page);
         this.queryInfo.count = parseInt(res.count); //总条数
         this.queryInfo.pagerows = res.pagerows; //每页显示多少条
@@ -850,9 +877,9 @@ export default {
       const { data: res } = await this.axios.get("diagnosis_origin/list.php", {
         params: { page: this.queryInfo.page, group_id:this.it,attached:this.attached_id}
       });
-      // console.log("getTableList",res);
+      console.log("getTableList",res);
       this.tablelist = res.data;
-      // console.log(res.data);
+      console.log(res.data);
       this.queryInfo.page = parseInt(res.page);
       this.queryInfo.count = parseInt(res.count); //总条数
       this.queryInfo.pagerows = res.pagerows; //每页显示多少条
@@ -993,7 +1020,9 @@ export default {
       reportMass: {}, //报告质量
     };
   },
-  mounted() { 
+  mounted() {
+    // this.getTableList();
+  
     // 原医疗机构诊断
     allMessage.formdata.map((sickItems, index) => {
       if (sickItems.field_index == 1) {

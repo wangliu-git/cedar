@@ -65,7 +65,7 @@
           element-loading-text="拼命加载中"
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(0, 0, 0, 0.8)">
-          <el-table-column prop="file_name" label="文件名称"></el-table-column>
+          <el-table-column prop="file_name" label="文件名称" ></el-table-column>
           <el-table-column prop="upload_time" label="上传时间" ></el-table-column>      
           <el-table-column label="已校验:未校验" width="300">
             <template
@@ -73,13 +73,14 @@
             >{{ scope.row.exec_line}} : {{(scope.row.total_line)-(scope.row.exec_line)}}</template>
           </el-table-column>
           <el-table-column prop="location" label="研究项目" ></el-table-column>
-          <el-table-column fixed="right" label="操作">
+          <el-table-column fixed="right" label="操作" >
             <template slot-scope="scope">
              <el-button
                 class="jiexi"
                 size="mini"
                 v-if="scope.row.status != 2"
-                @click="jiexi(scope.row)">
+                @click="jiexi(scope.row)"
+              >
                 <i class="iconfont iconxiazai">开始解析</i>
               </el-button>
 
@@ -87,7 +88,8 @@
                 class="jiexi"
                 size="mini"
                 v-if="scope.row.status == 2 "
-                style="background:#26bc99">
+                style="background:#26bc99"
+                >
                 <i class="iconfont iconxiazai">解析成功</i>
               </el-button>
               <el-button type="text" @click="bianji(scope.row)">
@@ -1232,7 +1234,8 @@
               placeholder="请输入关键词..."
               style="width:500px"
               v-model.trim="search_group"
-              @keyup.enter.native="groupLists()">
+              @keyup.enter.native="groupLists()"
+            >
               <el-button style="background:#DCDCDC;color:black" slot="append" @click="groupLists">搜索</el-button>
             </el-input>
           </div>
@@ -1415,7 +1418,7 @@ import uuid from "uuid";
 import allMessage from "../../staic/allMessage.json";
 import qs from "qs"; //ulencode
 import axios from "axios";
-export default { 
+export default {
   created() {
     this.getDataList();
     this.getJilian();
@@ -1424,21 +1427,22 @@ export default {
     // 高亮
     highlight(input) {
       let key = input;
-      // console.log(key);      
+      console.log(key);      
       let rep = new RegExp(key, "gm");
       let line = this.txt;
       let keywrap = "<span style='background:yellow'>"+key+"</span>";     
       let restr = line.replace(rep,keywrap);// 高亮关键字文本
-      // console.log(restr);
+      console.log(restr);
       this.msg = restr;     
     },
     // 一级
     getJilian() {
       // console.log(this.editForm.diagnosis1_normal);
       const res = this.axios.get("report/jilian.php").then(res => {
-        // console.log(res);       
+        console.log(res);
+        
         this.onechoose = res.data.option
-        // console.log(this.onechoose)
+        console.log(this.onechoose)
       });
     },
     getJilian1() {
@@ -1455,13 +1459,13 @@ export default {
       this.editForm.diagnosis3_normal = "";
     },
     getJilian2() {
-      // console.log(this.editForm.diagnosis2_normal);
+      console.log(this.editForm.diagnosis2_normal);
       const res = this.axios
         .get("report/jilian.php", {
           params: { name: this.editForm.diagnosis2_normal }
         })
         .then(res => {
-          // console.log(res);
+          console.log(res);
           this.threechoose = res.data.option;
         });
       this.editForm.diagnosis3_normal = "";
@@ -1471,29 +1475,29 @@ export default {
       const { data: res } = this.axios
         .get("group/list.php", { params: { group_name: this.search_group } })
         .then(res => {
-          // console.log(res);
+          console.log(res);
           this.groupList = [];
           res.data.data.map((item, index) => {
-            // console.log(item);
+            console.log(item);
             if (item.group_name != "") {
               this.groupList.push(item);
             }
           });
           this.groupList = [...new Set(this.groupList)];
-          // console.log(this.groupList);
+          console.log(this.groupList);
         });
     },
     // 点击数据集查看
     async chakan(row) {
-      // console.log(row)
+      console.log(row)
       this.sousuo = true;
-      // console.log(row.id);
-      // console.log(row);
+      console.log(row.id);
+      console.log(row);
       this.row = row;
       const { data: res } = await this.axios.get("excel_data/list.php", {
         params: { id: row.id }
       });
-      // console.log(res);
+      console.log(res);
       // this.id = row.id;
       this.tablelist = res.data;
       this.queryInfo.page = parseInt(res.page);
@@ -1502,7 +1506,7 @@ export default {
     },
     // 点击添加分组保存
     async addGroup(location, id) {
-      // console.log(location);
+      console.log(location);
       // let zu = []
       this.groupList.map((item, index) => {
         if (location == item.group_name) {
@@ -1522,9 +1526,9 @@ export default {
             }
           })
           .then(res => {
-            // console.log(res);
+            console.log(res);
             this.groupList.push(res.data.data.params);
-            // console.log(this.groupList);
+            console.log(this.groupList);
             var result = res.data; //JSON.parse(res.body);
             if (result.result == 1) {
               this.$alert("新建分组成功", "提交结果", {
@@ -1561,10 +1565,10 @@ export default {
           location: this.it.group_name
         }
       });
-      // console.log(this.data);
+      console.log(this.data);
       // console.log(this.data.location);
-      // console.log(res);
-      // console.log(this.id);
+      console.log(res);
+      console.log(this.id);
       this.group = !this.group;
       this.getDataList();
     },
@@ -1575,18 +1579,18 @@ export default {
       const { data: res } = await this.axios.get(
         "dataset/one.php?id=" + row.id
       );
-      // console.log(res);
+      console.log(res);
       this.data = res;
       this.groupLists();
     },
     // 点击分组名
     location_name(it) {
       this.it = it;
-      // console.log(it);
+      console.log(it);
     },
     //点击数据集解析  将数据插入到列表中
     async jiexi(row) {
-      // console.log(row);
+      console.log(row);
       this.loading = true;
       // this.loading = true
       // 插入数据  excel_data/readjson.php
@@ -1594,7 +1598,7 @@ export default {
         .get("excel_data/readjson.php", { params: { id: row.id } })
         .then(res => {
           var result = res.data; //JSON.parse(res.body);
-          // console.log(res)
+          console.log(res)
           var repeat = res.data.repeat
           var set_id = res.data.dataset_id
           if (result.result == 1) {
@@ -1610,7 +1614,7 @@ export default {
           confirmButtonText: '更新覆盖',
           cancelButtonText: '全部跳过',
           callback: action => {  
-            if( action === 'confirm' ) {
+            if( action === 'confirm' )  {
               const res  = this.axios.get('excel_data/readjson2.php',{params:{id:set_id,a:action}}).then(()=>{
                 this.chakan(row)
                 this.sousuo = true;
