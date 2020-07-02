@@ -83,16 +83,68 @@
             size="mini"
             placeholder="请输入病理号"
             prefix-icon="el-icon-search"
-            style="width:180px"
-            v-model.trim="test_id" @keyup.enter.native="getTable()"
+            style="width:130px"
+            v-model.trim="test_id"
+            @keyup.enter.native="getTable()"
           ></el-input>
           <el-input
             size="mini"
             placeholder="请输入姓名"
             prefix-icon="el-icon-search"
-            style="width:180px"
-            v-model.trim="name" @keyup.enter.native="getTable()"
+            style="width:130px"
+            v-model.trim="name"
+            @keyup.enter.native="getTable()"
           ></el-input>
+          <el-input
+            size="mini"
+            placeholder="请输入校验状态"
+            prefix-icon="el-icon-search"
+            style="width:130px"
+            v-model.trim="entry_status"
+            @keyup.enter.native="getTable()"
+          ></el-input>
+          <el-select v-model="diagnosis1_normal" size="mini" style="width:180px;margin-left:5px" @change="getTable()" 
+           clearable filterable placeholder="请输入或选择病理大类">
+            <el-option v-for="(item,index) in  this.diasList1" :key="index" :value="item">
+              <span>{{item}}</span>
+            </el-option>
+          </el-select>
+
+          <el-select v-model="diagnosis2_normal" size="mini" style="width:180px;margin-left:5px" @change="getTable()" 
+           clearable filterable placeholder="请输入或选择详细类型">
+            <el-option v-for="(item,index) in  this.diasList2" :key="index" :value="item">
+              <span>{{item}}</span>
+            </el-option>
+          </el-select>
+          
+          <el-select       
+            v-model.trim="mark"
+            filterable
+            placeholder="请输入或选择标志物"
+            size="mini"
+            style="width:180px;margin-left:10px"
+            clearable
+            @change="getTable()">
+            <el-option
+              v-for="(item,index) in markList"
+              :key="index"
+              :value="item"
+            ></el-option>
+          </el-select>
+            <el-select         
+              v-model.trim="value"
+              filterable
+              placeholder="请输入或选择检测结果"
+              size="mini"
+              style="width:180px;margin-left:10px"
+              clearable
+              @change="getTable()">
+              <el-option
+                v-for="(item,index) in valueList"
+                :key="index"
+                :value="item"
+              ></el-option>
+            </el-select>
           <el-button type="primary" size="mini" @click="getTable">确定</el-button>
           <el-button type="primary" size="mini" class="pass" @click="passList(idss)">
             <i class="iconfont iconpiliangtongguno"></i> 批量通过
@@ -109,7 +161,8 @@
             <el-table-column type="selection" ></el-table-column>           
             <el-table-column prop="test_id" label="病理号" ></el-table-column>
             <el-table-column prop="name" label="姓名"  sortable></el-table-column>
-            <el-table-column prop="diagnosis2" label="病理类型"  sortable></el-table-column>
+            <el-table-column prop="diagnosis1_normal" label="病理大类"  sortable></el-table-column>
+            <el-table-column prop="diagnosis2_normal" label="详细类型"  sortable></el-table-column>
             <el-table-column prop="sex" label="性别"  sortable></el-table-column>
             <el-table-column prop="age" label="年龄"  sortable></el-table-column>
             <el-table-column prop="report_time" label="报告时间" show-overflow-tooltip sortable></el-table-column>
@@ -1284,9 +1337,40 @@ export default {
   created() {
     this.getDataList(); 
     this.getJilian()
+    this.getDia1()
+    this.getDia2()
+    this.getMark()
+    this.getValue()
           
   },
   methods:{
+    // 获取病理类型1
+    getDia1(){
+      const res = this.axios.get('report/option.php?table=ly_report&name=diagnosis1_normal').then( res =>{
+        console.log(res)
+        this.diasList1 = res.data.option
+      })
+    },
+    getDia2(){
+      const res = this.axios.get('report/option.php?table=ly_report&name=diagnosis2_normal').then( res =>{
+        console.log(res)
+        this.diasList2 = res.data.option
+      })
+    },
+    // 获取标志物
+    getMark(){
+      const res = this.axios.get('report/option.php?table=ly_helper_diagnosis&name=mark').then( res =>{
+        console.log(res)
+        this.markList = res.data.option
+      })
+    },
+    // 检测结果
+    getValue(){
+      const res = this.axios.get('report/option.php?table=ly_helper_diagnosis&name=value').then( res =>{
+        console.log(res)
+         this.valueList = res.data.option
+      })
+    },
     // 初始化
     chushi(){
       this.axios.get('report/clear.php').then( () =>{
@@ -1300,14 +1384,20 @@ export default {
     },
     // 高亮
     highlight(input) {
-      let key = input;
-      console.log(key);      
-      let rep = new RegExp(key, "gm");
-      let line = this.txt;
-      let keywrap = "<span style='background:yellow'>"+key+"</span>";     
-      let restr = line.replace(rep,keywrap);// 高亮关键字文本
-      console.log(restr);
-      this.msg = restr;     
+      // console.log(input)
+      if(input != ''  && input != undefined){
+        let key = input;
+        console.log(key);      
+        let rep = new RegExp(key, "gm");
+        let line = this.txt;
+        let keywrap = "<span style='background:yellow'>"+key+"</span>";     
+        let restr = line.replace(rep,keywrap);// 高亮关键字文本
+        console.log(restr);
+        this.msg = restr;     
+      }else{
+        // alert(1)
+        return
+      }
     },
     // 一级
     getJilian() {
@@ -1384,7 +1474,7 @@ export default {
               params: { ids: this.idss }
             }).then( () =>{
               this.idss = [];
-              this.getTableList(this.row); //获取病理号
+              this.getTableList2(this.Row); //获取病理号
               this.getDataList(); //更新数据集校验数据
             })
            
@@ -1464,7 +1554,7 @@ export default {
       this.idss = [...new Set(this.idss)];       
       // console.log(this.idss)      
 		},
-    // 点击查看数据集显示病理数据
+    // 点击数据集查看
     async chakanj(row){
       let type = ''
       this.chakan = true
@@ -1476,7 +1566,7 @@ export default {
       this.queryInfo.count = parseInt(res.count)  //总条数
       this.queryInfo.pagerows = parseInt(res.pagerows)  //每页显示多少条 
       this.id = row.id  
-      this.Row = row
+      this.Row = row        //数据集查看的Row
 
     },
     // 点击返回列表
@@ -1698,7 +1788,8 @@ export default {
               type: "success",
               callback: action => {
                 this.tablelist = [];
-                this.getTableList2(this.row);
+                // this.getTableList2(this.row);
+                this.getTableList()
                 this.fou();
                 this.getDataList();
                 this.msg = this.editForm.diagnosis_txt
@@ -1878,7 +1969,20 @@ export default {
     async getTable() {      
       // console.log(row.id)
       const { data: res } = await this.axios.get(
-      "excel_data/list.php" , {params:{id:this.id,name:this.name,test_id:this.test_id}});
+      "excel_data/list.php" , 
+      {params:
+          {id:this.Row.id,
+          page: this.queryInfo.page,
+          pagerows: this.queryInfo.pagerows,
+          name: this.name, 
+          test_id: this.test_id,
+          diagnosis1_normal:this.diagnosis1_normal,
+          diagnosis2_normal:this.diagnosis2_normal,
+          entry_status: this.entry_status,
+          mark:this.mark,
+          value:this.value
+        }
+      });
       // console.log(this.test_id)
       // console.log(this.id)
       // console.log(this.name)
@@ -1895,13 +1999,13 @@ export default {
     // 病理号切换每页显示多少条
     handleSizeChange(newSize) {
       this.queryInfo.pagerows = newSize;
-      this.getTableList();
+      this.getTable();
     },
     // 病理号点击页数
     handleCurrentChange(newPage) {
       this.queryInfo.page = newPage;
       // console.log(this.queryInfo.page)
-      this.getTableList();
+      this.getTable();
     },
     // 数据集切换每页显示多少条
     handleSizeChange1(newSize) {
@@ -1937,7 +2041,7 @@ export default {
                   type: 'success',
                   callback: action => {
                     this.tablelist = []
-                    this.getTableList2(this.row);  
+                    this.getTableList2(this.Row);  
                   },
                 });
             }
@@ -2189,13 +2293,21 @@ export default {
   },
   data() { 
     return { 
+      entry_status:'',    //校验状态
+      diagnosis1_normal: "",
+      diagnosis2_normal: "",
+      diagnosis3_normal: "",
+      diagnosis1_Ynormal: "",
+      diagnosis2_Ynormal: "",
+      diagnosis3_Ynormal: "",
+      Ylevel: "",
+      grade: "",
       other:'',   //其他
       loading: false,
       txt:"",
       msg:"",
       CK:true,
       actionURL:this.axios.defaults.baseURL + 'upload_file/add.php',
-      grade:'',
       levelList: ["1", "2", "3A", "3B", "1-2", "3"],
       labelPosition:'left',
       it:'',
@@ -2205,13 +2317,12 @@ export default {
       threechoose:[],
       search_group:'',     //搜索分组名
       idss:[],
-      row:'',
+      row:'',         //病理号查看的row
       Row:'',
       location:'',    //点击选中的分组名
       xiayige:false, 
       groupList:[],
       wenjian:true,
-      row:{},//缓存的row
       // 数据集分页器
       shuInfo:{
         page:1,         //页数
