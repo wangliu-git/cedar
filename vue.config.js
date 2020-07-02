@@ -47,5 +47,5 @@ module.exports = {
     
   },
 
-  publicPath: '/cedar/'
+  publicPath: './'
 }
