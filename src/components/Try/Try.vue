@@ -3,6 +3,26 @@
     <div id="wang" style="width:1400px;height:800px"></div>
     <div id="liu" style="width:1400px;height:800px"></div>
     <div id="map" style="width:1400px;height:800px"></div>
+
+    <el-table
+    :data="tableData"
+    @filter-change="handleFilterChange">
+
+
+<el-table-column
+    label="状态"
+    prop="status"
+    column-key="status"
+    :filters="tableStatus"
+    align="center">
+    <template slot-scope="scope">
+        <span :class="{red: scope.row.status === '异常', blue: ((scope.row.status === '补打卡') || (scope.row.status === '请假'))}">
+            {{scope.row.status}}
+        </span>
+    </template>
+</el-table-column>
+
+    </el-table>
   </div>
 </template>
 
@@ -554,6 +574,11 @@ export default {
           myChart.clear();
           myChart.setOption(option, { notMerge: true });
         });
+    }
+  },
+  data(){
+    return{
+      tableStatus: [{text: '异常', value: '异常' },{ text: '正常', value: '正常' },{ text: '请假', value: '请假' },{ text: '打卡', value: '打卡' }]
     }
   }
 };
