@@ -1961,15 +1961,20 @@ export default {
     // 获取选中数据
     checkTable(rows) {
       console.log("rows", rows);
-      rows.map((item, index) => {
-        console.log(item.id);
-        this.idss.push(item.id);
-      });
-      this.idss = [...new Set(this.idss)];
-      console.log(this.idss);
+      this.rowsList = rows
+       
+      // });
+      // this.idss = [...new Set(this.idss)];
+      // console.log(this.idss);
     },
     // 批量通过
-    passList(idss) {
+    passList() {
+      console.log(this.rowsList)
+      this.rowsList.map((item, index) => {
+        // 拿到点击的ID
+        console.log(item.id);    
+        this.idss.push(item.id);
+      })
       console.log(this.idss);
       let ids = "";
       this.$confirm(
@@ -1991,7 +1996,7 @@ export default {
           })
           .then(() => {
             const res = this.axios.get("excel_data/checkall.php", {
-              params: { ids: this.idss }
+              params: { ids: this.idss}
             }).then( () =>{
               this.idss = [];
               // this.getTableList2(this.row); //获取病理号
@@ -2448,6 +2453,7 @@ export default {
   },
   data() {
     return {
+      rowsList:[],
       er:false,
       id_array:[],
       entry_statusList:['未检验','已校验'],

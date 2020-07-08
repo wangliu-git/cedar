@@ -505,7 +505,7 @@
       </el-collapse>
 
       <div class="footer">
-        <el-button @click="inGroup(ids)">加入分组</el-button>
+        <el-button @click="inGroup()">加入分组</el-button>
         <el-button @click="reset()">重置</el-button>
         <el-button @click="shaixuan(edit)">筛选</el-button>
       </div>
@@ -1605,12 +1605,11 @@ export default {
       mark:'',
       value:'',
       search_group:'',     //搜索分组
-      // 表单级别
+      // 表单级别 筛选级别
       grade:'',   
       Ygrade:'',   
-      // 筛选级别
-      Ylevel: "",
-      level:"",
+      level:'',
+      Ylevel:'',
       levelList:['1','2','3A','3B','1-2','3'],
       // 级联数据数组
       onechoose: [],
@@ -1626,6 +1625,7 @@ export default {
       YthreeChoose: [],
       location: "", //分组  
       whole: "", //全文检索
+      idssList:[],
       ids: [], //ID 们
       groupName: "", //创建的分组名
       multiple: true, //多选
@@ -2236,13 +2236,20 @@ export default {
         });
       }      
     },
-    inGroup(ids) {
+    inGroup() {
       //console.log(this.ids)
       this.group = true;
       this.groupList();
     },
     // 点击拿到分组的ID
     async group_id(it) {
+      this.rowsList.map((item, index) => {
+        // 拿到点击的ID
+        console.log(item.id);    
+        this.ids.push(item.id);
+      })
+      console.log(this.ids);
+
       if(this.end !=  []){
          it = this.end
       }else{
@@ -2315,7 +2322,7 @@ export default {
           diagnosis1_Ynormal:this.edit.diagnosis1_Ynormal,
           diagnosis2_Ynormal:this.edit.diagnosis2_Ynormal,
           diagnosis3_Ynormal:this.edit.diagnosis3_Ynormal,
-          Ylevel:this.edit.Ylevel,
+          Ygrade:this.edit.Ylevel,
           report_quality: this.edit.report_quality, //报告质量
 
           //本医疗
@@ -2328,7 +2335,7 @@ export default {
           diagnosis1_normal:this.edit.diagnosis1_normal,
           diagnosis2_normal:this.edit.diagnosis2_normal,
           diagnosis3_normal:this.edit.diagnosis3_normal,
-          level:this.edit.level,
+          grade:this.edit.level,
           mark:this.edit.mark, //标志物
           dataform: this.edit.dataform, //数据来源
           Integrate: this.edit.Integrate, //整合信息
@@ -2392,12 +2399,13 @@ export default {
     },
     // 获取选中数据
     checkTable(rows) {
-      // console.log("rows", rows);
-      rows.map((item, index) => {
-        // console.log(item.id);
-        this.ids.push(item.id);
-      });
-      this.ids = [...new Set(this.ids)];
+      this.rowsList = rows
+      // // console.log("rows", rows);
+      // rows.map((item, index) => {
+      //   // console.log(item.id);
+      //   this.ids.push(item.id);
+      // });
+      // this.ids = [...new Set(this.ids)];
       // console.log(this.ids);
     },
     // 点击查看
