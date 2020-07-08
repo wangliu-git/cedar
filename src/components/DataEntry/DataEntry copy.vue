@@ -517,16 +517,16 @@
                   </div>
 
                   <div class="sickItem">
-                    <span>病理类型标准：</span>                   
+                    <span>病理类型标准：</span>
+                    
                     <el-select
                       v-model="editForm.diagnosis1_Ynormal"
                       size="mini"
                       style="width:300px"
                       clearable
-                      @change="YgetJilian1"
                     >
-                      <el-option v-for="(item,index) in  this.Yonechoose" :key="index" :value="item.name">
-                        <span>{{item.name}}</span>
+                      <el-option v-for="(item,index) in  this.onechoose" :key="index" :value="item">
+                        <span>{{item}}</span>
                       </el-option>
                     </el-select>
 
@@ -536,17 +536,11 @@
                       size="mini"
                       style="width:300px"
                       clearable
-                      @change="YgetJilian2"
                     >
-                      <el-option v-for="(item,index) in  this.Ytwochoose" :key="index" :value="item.name">
-                        <span>{{item.name}}</span>
+                      <el-option v-for="(item,index) in  this.twochoose" :key="index" :value="item">
+                        <span>{{item}}</span>
                       </el-option>
                     </el-select>
-                  </div>
-
-                  <div class="sickItem" v-if="this.editForm.diagnosis2_Ynormal === '其他'">
-                    其他类型 :
-                    <el-input size='mini' placeholder="请输入其他类型" style="width:300px"   v-model="editForm.Yother"></el-input>
                   </div>
 
                   <div class="sickItem">
@@ -555,22 +549,21 @@
                       v-model="editForm.diagnosis3_Ynormal"
                       size="mini"
                       style="width:300px"
-                      clearable     
-                      @change="no()"    
+                      clearable
                     >
                       <el-option
-                        v-for="(item,index) in  this.Ythreechoose"
+                        v-for="(item,index) in  this.threechoose"
                         :key="index"
-                        :value="item.name"
+                        :value="item"
                       >
-                        <span>{{item.name}}</span>
+                        <span>{{item}}</span>
                       </el-option>
                     </el-select>
                   </div>
 
                   <div class="sickItem">
                     级别：
-                    <el-select v-model="editForm.Ygrade" size="mini" style="width:300px" clearable>
+                    <el-select v-model="editForm.Ylevel" size="mini" style="width:300px" clearable>
                       <el-option v-for="(item,index) in  this.levelList" :key="index" :value="item">
                         <span>{{item}}</span>
                       </el-option>
@@ -830,7 +823,6 @@
                       style="width:200px"
                     ></el-date-picker>
                   </div>
-
                   <div class="sickItem">
                     <span>
                       <i class="iconfont iconxinghao1"></i>
@@ -979,7 +971,8 @@
 
                   <div class="sickItem" v-if="this.editForm.diagnosis2_normal != ''">
                     <span>病理亚型：</span>
-                    <el-select                  
+                    <el-select
+                      
                       v-model="editForm.diagnosis3_normal"
                       size="mini"
                       style="width:300px"
@@ -1037,7 +1030,7 @@
                       <i class="iconfont icontubiaozhizuo-"></i>
                       {{ihc.name}}
                     </span>
-                    <div class="oneDown">
+                    <div class="oneDown" v-if="this.er = false">
                       <div id="one" v-for="(ihcItem,idx) in this.helper_diagnosis.ihc" :key="idx" >
                         <!-- 循环myzh这个数组，来动态 + - 操作 -->
                         <div class="sickI">
@@ -1070,7 +1063,37 @@
                         </div>
                       </div>
                     </div>
+
+                    <div class="oneDown" v-else>
+                      <div id="one"  v-for="(ihc,idx) in this.help_diagnosis.ihc" :key="idx">
+                        <!-- 循环myzh这个数组，来动态 + - 操作 -->
+                        <div class="sickI">
+                          <div class="sickIt">
+                            <span class="name">{{FZ.key_ihc.field_title}}：</span>                       
+                            <el-input v-model="ihc.mark" style="width:100px"></el-input>
+                          </div>
+                        </div>
+                        <div class="sickI">
+                          <div class="sickIt">
+                            <span class="name">{{FZ.value_ihc.field_title}}：</span>
+                            <el-input v-model="ihc.value" style="width:100px"></el-input>
+                          </div>
+                        </div>
+                        <!-- + - 操作只需要传入当前循环的数组 -->
+                        <!-- 判断 必须是最后一条，才可以显示操作按钮 -->
+                        <div class="handleBtnBox">
+                          <!-- el-button: v-if="idx==testFZ.ihc.length-1" -->
+                          <el-button @click="ihcAddData1(help_diagnosis.ihc,help_diagnosis.ihc[idx])">
+                            <i class="iconfont iconaddTodo-nav"></i>
+                          </el-button>
+                          <el-button @click="ihcDeleteData(help_diagnosis.ihc)">
+                            <i class="iconfont iconjianhao1"></i>
+                          </el-button>
+                        </div>
+                      </div>
+                    </div>                
                   </div>
+
                   <div v-show="seen1">
                     <span class="titl">
                       <i class="iconfont icontubiaozhizuo-"></i>
@@ -1255,7 +1278,8 @@
 
                       </div>
                     </div>
-                  </div>            
+                  </div>
+
                 </div>
               </div>
             </el-collapse-item>
@@ -1475,7 +1499,6 @@ export default {
   created() {
     this.getDataList();
     this.getJilian();
-    this.YgetJilian();
     this.getDia1()
     this.getDia2()
     this.getMark()
@@ -1483,10 +1506,6 @@ export default {
     this.username = window.sessionStorage.username;
   },
   methods: {
-    no(){
-      // 强制刷新值
-      this.$forceUpdate()
-    },
     // 获取病理类型1
     getDia1(){
       const res = this.axios.get('report/option.php?table=ly_report&name=diagnosis1_normal').then( res =>{
@@ -1548,7 +1567,6 @@ export default {
         });
       this.editForm.diagnosis2_normal = "";
       this.editForm.diagnosis3_normal = "";
-      this.$forceUpdate()
     },
     getJilian2() {
       // console.log(this.editForm.diagnosis2_normal);
@@ -1561,42 +1579,6 @@ export default {
           this.threechoose = res.data.option;
         });
       this.editForm.diagnosis3_normal = "";
-    },
-
-    // 原单位一级
-    YgetJilian() {
-      // console.log(this.editForm.diagnosis1_normal);
-      const res = this.axios.get("report/jilian.php").then(res => {
-        console.log(res);       
-        this.Yonechoose = res.data.option
-        // console.log(this.onechoose)
-      });
-    },
-    YgetJilian1() {
-      // console.log(this.editForm.diagnosis1_normal);
-      const res = this.axios
-        .get("report/jilian.php", {
-          params: { name: this.editForm.diagnosis1_Ynormal }
-        })
-        .then(res => {
-          console.log(res);
-          this.Ytwochoose = res.data.option;
-        });
-      this.editForm.diagnosis2_Ynormal = "";
-      this.editForm.diagnosis3_Ynormal = "";
-      this.$forceUpdate()
-    },
-    YgetJilian2() {
-      // console.log(this.editForm.diagnosis2_normal);
-      const res = this.axios
-        .get("report/jilian.php", {
-          params: { name: this.editForm.diagnosis2_Ynormal }
-        })
-        .then(res => {
-          // console.log(res);
-          this.Ythreechoose = res.data.option;
-        });
-      this.editForm.diagnosis3_Ynormal = "";
     },
     // 获取选择分组
     groupLists() {
@@ -1879,6 +1861,12 @@ export default {
       this.msg  = this.editForm.diagnosis_txt
 
       this.helper_diagnosis = this.editForm.helper_diagnosis;
+      if(this.helper_diagnosis.ihc.length == 0){
+        alert(1)
+        this.er = true
+      }else{
+        this.er = false
+      }
 
       this.txt = this.editForm.diagnosis_txt
       return;
@@ -2016,27 +2004,26 @@ export default {
     },
     // 点击下一个
     next(id) {
-      
+      // 获取下一个id
+      for(var i = 0;i < this.id_array.length;i++){
+        if(this.id == this.id_array[i]){
+          i++
+          this.id = this.id_array[i]
+        }
+      }
       
       this.xiayige = true;
-      
+      console.log('下一个id',this.id);
     },
     // 是
     shi() {
-      // 多执行了
-      // // 获取下一个id
-      // for(var i = 0;i < this.id_array.length;i++){
-      //   if(this.id == this.id_array[i]){
-      //     i++
-      //     this.id = this.id_array[i]
-      //   }
-      // }
-      // console.log('下一个id',this.id);
       this.addFormList();
       this.xiayige = false;
     },
     // 否
     async fou(id) {
+
+
       for(var i = 0;i < this.id_array.length;i++){
         if(this.id == this.id_array[i]){
           i++
@@ -2071,7 +2058,12 @@ export default {
       }
       // this.jilian = []
       this.helper_diagnosis = this.editForm.helper_diagnosis;
-
+      if(this.helper_diagnosis.ihc.length == 0){
+        alert(1)
+        this.er = true
+      }else{
+        this.er = false
+      }
       this.msg = this.editForm.diagnosis_txt;
       this.txt = this.editForm.diagnosis_txt;
       // 将ID赋值下一个ID
@@ -2215,7 +2207,30 @@ export default {
         });
       }
     },
-
+    // 获取不到数据时情况
+    // 免疫租化增删
+    ihcAddData(array, value) {
+      //判断当前数组的对象是否有数据
+      console.log(array,value)
+      if (value.mark.trim() || value.value.trim()) {
+        //验证通过 添加新的一条
+        // var value = {
+        //   mark: "", 
+        //   value: ""
+        // };
+        array.push(value);
+      } else {
+        alert("请检查输入是否正确");
+      }
+    },
+    // 免疫组化删除
+    ihcDeleteData(array) {
+      if (array.length > 1) {
+        array.splice(array.length - 1, 1);
+      } else {
+        alert("最少保留一个");
+      }
+    }, 
     // 病理号切换每页显示多少条
     handleSizeChange(newSize) {
       this.queryInfo.pagerows = newSize;
@@ -2283,6 +2298,13 @@ export default {
     addFormList(editForm) {
       this.editForm.username = this.username
       // this.editForm.help_diagnosis = this.help_diagnosis;
+      this.editForm.helper_diagnosis = this.helper_diagnosis;
+      if(this.helper_diagnosis.ihc.length == 0){
+        alert(1)
+        this.er = true
+      }else{
+        this.er = false
+      }
       this.zhezhao = false;
       // this.id = this.id;
       console.log(this.id);
@@ -2462,8 +2484,8 @@ export default {
       diagnosis1_Ynormal: "",
       diagnosis2_Ynormal: "",
       diagnosis3_Ynormal: "",
+      Ylevel: "",
       grade: "",
-      Ygrade: "",
       loading: false,
       CK: true, //查看
       // WLR:'',     //未校验的数据
@@ -2475,9 +2497,6 @@ export default {
       onechoose: [],
       twochoose: [],
       threechoose: [],
-      Yonechoose: [],
-      Ytwochoose: [],
-      Ythreechoose: [],
       // 获取筛选列表数据
       diasList1:[],   //病理类型1数组
       diasList2:[],   //病理类型2数组
