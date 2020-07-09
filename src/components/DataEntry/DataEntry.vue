@@ -1099,7 +1099,7 @@
                           >
                             <i class="iconfont iconaddTodo-nav"></i>
                           </el-button>
-                          <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.fish)">
+                          <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.fish,idx)">
                             <i class="iconfont iconjianhao1"></i>
                           </el-button>
                         </div>
@@ -1135,7 +1135,7 @@
                           >
                             <i class="iconfont iconaddTodo-nav"></i>
                           </el-button>
-                          <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.rearrangement)">
+                          <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.rearrangement,idx)">
                             <i class="iconfont iconjianhao1"></i>
                           </el-button>
                         </div>

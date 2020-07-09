@@ -1435,7 +1435,7 @@
                               @click="ihcAddData(helper_diagnosis.fish,helper_diagnosis.fish[idx])">
                               <i class="iconfont iconaddTodo-nav"></i>
                             </el-button>
-                            <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.fish)">
+                            <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.fish,idx)">
                               <i class="iconfont iconjianhao1"></i>
                             </el-button>
                           </div>
@@ -1468,7 +1468,7 @@
                               @click="ihcAddData(helper_diagnosis.rearrangement,helper_diagnosis.rearrangement[idx])">
                               <i class="iconfont iconaddTodo-nav"></i>
                             </el-button>
-                            <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.rearrangement)">
+                            <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.rearrangement,idx)">
                               <i class="iconfont iconjianhao1"></i>
                             </el-button>
                           </div>
@@ -1502,7 +1502,7 @@
                               @click="ihcAddData(helper_diagnosis.ish,helper_diagnosis.ish[idx])">
                               <i class="iconfont iconaddTodo-nav"></i>
                             </el-button>
-                            <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.ish)">
+                            <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.ish,idx)">
                               <i class="iconfont iconjianhao1"></i>
                             </el-button>
                           </div>
@@ -1535,7 +1535,7 @@
                               @click="ihcAddData(helper_diagnosis.fcm,helper_diagnosis.fcm[idx])">
                               <i class="iconfont iconaddTodo-nav"></i>
                             </el-button>
-                            <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.fcm)">
+                            <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.fcm,idx)">
                               <i class="iconfont iconjianhao1"></i>
                             </el-button>
                           </div>
@@ -1569,7 +1569,7 @@
                               @click="ihcAddData(helper_diagnosis.ngs,helper_diagnosis.ngs[idx])">
                               <i class="iconfont iconaddTodo-nav"></i>
                             </el-button>
-                            <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.ngs)">
+                            <el-button size="mini" @click="ihcDeleteData(helper_diagnosis.ngs,idx)">
                               <i class="iconfont iconjianhao1"></i>
                             </el-button>
                           </div>
