@@ -69,10 +69,40 @@
     <!-- 数据分析-->
     <div class="fenxi">
       <div class="up">
-        <i class="iconfont icontubiaozhizuo-"></i>淋巴瘤整体临床特征相关分析
+        <i class="iconfont icontubiaozhizuo-"></i> 数据分析
       </div>
       <div class="down">
-        <div class="choose"></div>
+        <div class="choose">
+          <div>
+            <i class="iconfont iconbuzhou-icon"></i>
+            <span>选择分析 ：</span>
+            <el-select
+              placeholder="请选择分析内容"
+              size="small"
+              v-model="type"
+              style="width:300px"
+              @change="drawLineSex">
+              <el-option
+                v-for="(item,index)  in choose"
+                :key="index"
+                :value="index"
+                :label="item"
+              >{{item}}</el-option>
+            </el-select>
+          </div>
+          <div v-show="this.type == 1">
+            <i class="iconfont iconbuzhou-xian1"></i>
+            <span>选择淋巴瘤亚型 ：</span>
+            <el-select
+              placeholder="请选择"
+              size="small"
+              v-model="dignosis"
+              style="width:400px"
+            >
+              <el-option v-for="(item,index) in chooses" :key="index" :value="item">{{item}}</el-option>
+            </el-select>
+          </div>
+        </div>
         <div class="echarts">
           <div class="btns">
             <el-button :class="{showBtns:sexShow}" plain @click="drawLineSex(sex)">性别</el-button>
@@ -159,12 +189,582 @@ export default {
       mark: "mark",
       group_id: "", //分组id
       id: "", //分组ID
-
+      dignosis1: "",
+      dignosis2: "",
       // 选择分析选项
+      choose: [
+        "淋巴瘤整体临床病理特征相关分析",
+        "淋巴瘤各个病理类型临床病理特征相关分析"
+      ],
+      chooses: [],
       activeNames: ["1"],
       datalist: [], //数据集数组
       peopleList: [], //创建人数组
       chartsData: [], //图表数据
+      options: [
+        {
+          value: "前驱淋巴性肿瘤",
+          label: "前驱淋巴性肿瘤",
+          children: [
+            {
+              value: "B淋巴母细胞白血病/淋巴瘤，非特殊类型",
+              label: "B淋巴母细胞白血病/淋巴瘤，非特殊类型"
+            },
+            {
+              value: "B淋巴母细胞白血病/淋巴瘤伴重现性遗传学异常",
+              label: "B淋巴母细胞白血病/淋巴瘤伴重现性遗传学异常",
+              children: [
+                {
+                  value:
+                    "B淋巴母细胞白血病/淋巴瘤伴t（9；22）（q34.1；q11.2）；BCR-ABL1",
+                  label:
+                    "B淋巴母细胞白血病/淋巴瘤伴t（9；22）（q34.1；q11.2）；BCR-ABL1"
+                },
+                {
+                  value: "B淋巴母细胞白血病/淋巴瘤伴t（v；11q23.3）；KMT2A重排",
+                  label: "B淋巴母细胞白血病/淋巴瘤伴t（v；11q23.3）；KMT2A重排"
+                },
+                {
+                  value:
+                    "B淋巴母细胞白血病/淋巴瘤伴t（12；21）（p13.2；q22.1）；ETV6-RUNX1",
+                  label:
+                    "B淋巴母细胞白血病/淋巴瘤伴t（12；21）（p13.2；q22.1）；ETV6-RUNX1"
+                },
+                {
+                  value: "B淋巴母细胞白血病/淋巴瘤伴超二倍体",
+                  label: "B淋巴母细胞白血病/淋巴瘤伴超二倍体"
+                },
+                {
+                  value: "B淋巴母细胞白血病/淋巴瘤伴亚二倍体",
+                  label: "B淋巴母细胞白血病/淋巴瘤伴亚二倍体"
+                },
+                {
+                  value:
+                    "B淋巴母细胞白血病/淋巴瘤伴t（5；14）（q31.1；q32.3）；IL3-IGH",
+                  label:
+                    "B淋巴母细胞白血病/淋巴瘤伴t（5；14）（q31.1；q32.3）；IL3-IGH"
+                },
+                {
+                  value:
+                    "B淋巴母细胞白血病/淋巴瘤伴t（1；19）（q23；p13.3）；TCF3-PBX1",
+                  label:
+                    "B淋巴母细胞白血病/淋巴瘤伴t（1；19）（q23；p13.3）；TCF3-PBX1"
+                },
+                {
+                  value: "B淋巴母细胞白血病/淋巴瘤，BCR-ABL1样",
+                  label: "B淋巴母细胞白血病/淋巴瘤，BCR-ABL1样"
+                },
+                {
+                  value: "B淋巴母细胞白血病/淋巴瘤伴iAMP21",
+                  label: "B淋巴母细胞白血病/淋巴瘤伴iAMP21"
+                }
+              ]
+            },
+            {
+              value: "T淋巴母细胞白血病/淋巴瘤",
+              label: "T淋巴母细胞白血病/淋巴瘤",
+              children: [
+                {
+                  value: "早期T细胞前驱淋巴母细胞白血病",
+                  label: "早期T细胞前驱淋巴母细胞白血病"
+                }
+              ]
+            },
+            {
+              value: "NK淋巴母细胞白血病/淋巴瘤",
+              label: "NK淋巴母细胞白血病/淋巴瘤"
+            }
+          ]
+        },
+        {
+          value: "成熟B细胞淋巴瘤",
+          label: "成熟B细胞淋巴瘤",
+          children: [
+            {
+              value: "慢性淋巴细胞白血病/小淋巴细胞淋巴瘤",
+              label: "慢性淋巴细胞白血病/小淋巴细胞淋巴瘤",
+              children: [
+                {
+                  value: "单克隆B淋巴细胞增多症",
+                  label: "单克隆B淋巴细胞增多症"
+                }
+              ]
+            },
+            {
+              value: "B细胞前淋巴细胞白血病",
+              label: "B细胞前淋巴细胞白血病"
+            },
+            {
+              value: "脾边缘区细胞淋巴瘤",
+              label: "脾边缘区细胞淋巴瘤"
+            },
+            {
+              value: "毛细胞白血病",
+              label: "毛细胞白血病"
+            },
+            {
+              value: "脾B细胞淋巴瘤/白血病，不能分类",
+              label: "脾B细胞淋巴瘤/白血病，不能分类",
+              children: [
+                {
+                  value: "脾弥漫性红髓小B细胞淋巴瘤",
+                  label: "脾弥漫性红髓小B细胞淋巴瘤"
+                },
+                {
+                  value: "毛细胞白血病变异型",
+                  label: "毛细胞白血病变异型"
+                }
+              ]
+            },
+            {
+              value: "淋巴浆细胞淋巴瘤",
+              label: "淋巴浆细胞淋巴瘤"
+            },
+            {
+              value: "意义不明的单克隆丙种球蛋白病，IgM型",
+              label: "意义不明的单克隆丙种球蛋白病，IgM型"
+            },
+            {
+              value: "重链病",
+              label: "重链病",
+              children: [
+                {
+                  value: "μ重链病",
+                  label: "μ重链病"
+                },
+                {
+                  value: "γ重链病",
+                  label: "γ重链病"
+                },
+                {
+                  value: "α重链病",
+                  label: "α重链病"
+                }
+              ]
+            },
+            {
+              value: "浆细胞肿瘤",
+              label: "浆细胞肿瘤",
+              children: [
+                {
+                  value: "意义不明的单克隆丙种球蛋白病，非IgM型",
+                  label: "意义不明的单克隆丙种球蛋白病，非IgM型"
+                },
+                {
+                  value: "浆细胞骨髓瘤",
+                  label: "浆细胞骨髓瘤"
+                },
+                {
+                  value:
+                    "浆细胞骨髓瘤变异型（无症状型、非分泌型、浆细胞白血病）",
+                  label:
+                    "浆细胞骨髓瘤变异型（无症状型、非分泌型、浆细胞白血病）"
+                },
+                {
+                  value: "浆细胞瘤（骨孤立性浆细胞瘤、骨外浆细胞瘤）",
+                  label: "浆细胞瘤（骨孤立性浆细胞瘤、骨外浆细胞瘤）"
+                },
+                {
+                  value:
+                    "单克隆免疫球蛋白沉积症（原发性淀粉样变、轻链和重链沉积病）",
+                  label:
+                    "单克隆免疫球蛋白沉积症（原发性淀粉样变、轻链和重链沉积病）"
+                },
+                {
+                  value: "浆细胞肿瘤伴副肿瘤综合征（POEMS综合征、TEMPI综合征）",
+                  label: "浆细胞肿瘤伴副肿瘤综合征（POEMS综合征、TEMPI综合征）"
+                }
+              ]
+            },
+            {
+              value: "黏膜相关淋巴组织结外边缘区淋巴瘤",
+              label: "黏膜相关淋巴组织结外边缘区淋巴瘤"
+            },
+            {
+              value: "淋巴结边缘区淋巴瘤",
+              label: "淋巴结边缘区淋巴瘤",
+              children: [
+                {
+                  value: "儿童淋巴结边缘区淋巴瘤",
+                  label: "儿童淋巴结边缘区淋巴瘤"
+                }
+              ]
+            },
+            {
+              value: "滤泡性淋巴瘤",
+              label: "滤泡性淋巴瘤",
+              children: [
+                {
+                  value: "睾丸滤泡性淋巴瘤",
+                  label: "睾丸滤泡性淋巴瘤"
+                },
+                {
+                  value: "原位滤泡性肿瘤",
+                  label: "原位滤泡性肿瘤"
+                },
+                {
+                  value: "十二指肠型滤泡性淋巴瘤",
+                  label: "十二指肠型滤泡性淋巴瘤"
+                }
+              ]
+            },
+            {
+              value: "儿童型滤泡性淋巴瘤",
+              label: "儿童型滤泡性淋巴瘤"
+            },
+            {
+              value: "伴IRF4重排大B细胞淋巴瘤",
+              label: "伴IRF4重排大B细胞淋巴瘤"
+            },
+            {
+              value: "原发皮肤滤泡中心淋巴瘤",
+              label: "原发皮肤滤泡中心淋巴瘤"
+            },
+            {
+              value: "套细胞淋巴瘤",
+              label: "套细胞淋巴瘤",
+              children: [
+                {
+                  value: "白血病样非结节性套细胞淋巴瘤",
+                  label: "白血病样非结节性套细胞淋巴瘤"
+                },
+                {
+                  value: "原位套细胞肿瘤",
+                  label: "原位套细胞肿瘤"
+                }
+              ]
+            },
+            {
+              value: "弥漫性大B细胞淋巴瘤，非特指型",
+              label: "弥漫性大B细胞淋巴瘤，非特指型",
+              children: [
+                {
+                  value: "生发中心亚型",
+                  label: "生发中心亚型"
+                },
+                {
+                  value: "活化B细胞亚型",
+                  label: "活化B细胞亚型"
+                }
+              ]
+            },
+            {
+              value: "T细胞/组织细胞丰富的大B细胞淋巴瘤",
+              label: "T细胞/组织细胞丰富的大B细胞淋巴瘤"
+            },
+            {
+              value: "原发中枢神经系统弥漫性大B细胞淋巴瘤",
+              label: "原发中枢神经系统弥漫性大B细胞淋巴瘤"
+            },
+            {
+              value: "原发皮肤弥漫性大B细胞淋巴瘤，腿型",
+              label: "原发皮肤弥漫性大B细胞淋巴瘤，腿型"
+            },
+            {
+              value: "EBV阳性弥漫性大B细胞淋巴瘤，非特指型",
+              label: "EBV阳性弥漫性大B细胞淋巴瘤，非特指型"
+            },
+            {
+              value: "EBV阳性皮肤黏膜溃疡",
+              label: "EBV阳性皮肤黏膜溃疡"
+            },
+            {
+              value: "慢性炎症相关的弥漫性大B细胞淋巴瘤",
+              label: "慢性炎症相关的弥漫性大B细胞淋巴瘤",
+              children: [
+                {
+                  value: "纤维素相关弥漫性大B细胞淋巴瘤",
+                  label: "纤维素相关弥漫性大B细胞淋巴瘤"
+                }
+              ]
+            },
+            {
+              value: "淋巴瘤样肉芽肿",
+              label: "淋巴瘤样肉芽肿"
+            },
+            {
+              value: "原发性纵隔（胸腺）大B细胞淋巴瘤",
+              label: "原发性纵隔（胸腺）大B细胞淋巴瘤"
+            },
+            {
+              value: "血管内大B细胞淋巴瘤",
+              label: "血管内大B细胞淋巴瘤"
+            },
+            {
+              value: "ALK阳性大B细胞淋巴瘤",
+              label: "ALK阳性大B细胞淋巴瘤"
+            },
+            {
+              value: "浆母细胞性淋巴瘤",
+              label: "浆母细胞性淋巴瘤"
+            },
+            {
+              value: "原发渗出性淋巴瘤",
+              label: "原发渗出性淋巴瘤"
+            },
+            {
+              value: "HHV8相关淋巴组织增殖性疾病",
+              label: "HHV8相关淋巴组织增殖性疾病",
+              children: [
+                {
+                  value: "多中心Castleman病",
+                  label: "多中心Castleman病"
+                },
+                {
+                  value: "HHV8阳性弥漫性大B细胞淋巴瘤，非特指型",
+                  label: "HHV8阳性弥漫性大B细胞淋巴瘤，非特指型"
+                },
+                {
+                  value: "HHV8阳性亲生发中心淋巴组织增殖性疾病",
+                  label: "HHV8阳性亲生发中心淋巴组织增殖性疾病"
+                }
+              ]
+            },
+            {
+              value: "Burkitt淋巴瘤",
+              label: "Burkitt淋巴瘤"
+            },
+            {
+              value: "伴11q异常的Burkitt样淋巴瘤",
+              label: "伴11q异常的Burkitt样淋巴瘤"
+            },
+            {
+              value: "高级别B细胞淋巴瘤",
+              label: "高级别B细胞淋巴瘤",
+              children: [
+                {
+                  value: "高级别B细胞淋巴瘤，伴MYC和BCL2和（或）BCL6重排",
+                  label: "高级别B细胞淋巴瘤，伴MYC和BCL2和（或）BCL6重排"
+                },
+                {
+                  value: "高级别B细胞淋巴瘤，非特指型",
+                  label: "高级别B细胞淋巴瘤，非特指型"
+                }
+              ]
+            },
+            {
+              value:
+                "特征介于DLBCL和经典霍奇金淋巴瘤之间的不能分类的B细胞淋巴瘤",
+              label:
+                "特征介于DLBCL和经典霍奇金淋巴瘤之间的不能分类的B细胞淋巴瘤"
+            }
+          ]
+        },
+        {
+          value: "成熟T和NK细胞淋巴瘤",
+          label: "成熟T和NK细胞淋巴瘤",
+          children: [
+            {
+              value: "T细胞前淋巴细胞白血病",
+              label: "T细胞前淋巴细胞白血病"
+            },
+            {
+              value: "T细胞大颗粒淋巴细胞白血病",
+              label: "T细胞大颗粒淋巴细胞白血病"
+            },
+            {
+              value: "慢性NK细胞淋巴增殖性疾病",
+              label: "慢性NK细胞淋巴增殖性疾病"
+            },
+            {
+              value: "侵袭性NK细胞白血病",
+              label: "侵袭性NK细胞白血病"
+            },
+            {
+              value: "儿童EBV阳性T细胞和NK细胞淋巴组织增殖性疾病",
+              label: "儿童EBV阳性T细胞和NK细胞淋巴组织增殖性疾病",
+              children: [
+                {
+                  value: "儿童系统性EBV阳性T细胞淋巴瘤",
+                  label: "儿童系统性EBV阳性T细胞淋巴瘤"
+                },
+                {
+                  value: "系统性慢性活动性EBV感染，T细胞和NK细胞型",
+                  label: "系统性慢性活动性EBV感染，T细胞和NK细胞型"
+                },
+                {
+                  value: "种痘水疱病样淋巴组织增殖性疾病",
+                  label: "种痘水疱病样淋巴组织增殖性疾病"
+                },
+                {
+                  value: "严重蚊虫叮咬过敏症",
+                  label: "严重蚊虫叮咬过敏症"
+                }
+              ]
+            },
+            {
+              value: "成人T细胞白血病/淋巴瘤",
+              label: "成人T细胞白血病/淋巴瘤"
+            },
+            {
+              value: "结外NK/T细胞淋巴瘤，鼻型",
+              label: "结外NK/T细胞淋巴瘤，鼻型"
+            },
+            {
+              value: "肠道T细胞淋巴瘤",
+              label: "肠道T细胞淋巴瘤",
+              children: [
+                {
+                  value: "单形性亲上皮性肠道T细胞淋巴瘤",
+                  label: "单形性亲上皮性肠道T细胞淋巴瘤"
+                },
+                {
+                  value: "肠病相关性T细胞淋巴瘤",
+                  label: "肠病相关性T细胞淋巴瘤"
+                },
+                {
+                  value: "肠道T细胞淋巴瘤，非特指型",
+                  label: "肠道T细胞淋巴瘤，非特指型"
+                },
+                {
+                  value: "胃肠道惰性T细胞淋巴组织增殖性疾病",
+                  label: "胃肠道惰性T细胞淋巴组织增殖性疾病"
+                }
+              ]
+            },
+            {
+              value: "肝脾T细胞淋巴瘤",
+              label: "肝脾T细胞淋巴瘤"
+            },
+            {
+              value: "皮下脂膜炎样T细胞淋巴瘤",
+              label: "皮下脂膜炎样T细胞淋巴瘤"
+            },
+            {
+              value: "蕈样霉菌病",
+              label: "蕈样霉菌病"
+            },
+            {
+              value: "Sezary综合征",
+              label: "Sezary综合征"
+            },
+            {
+              value: "原发性皮肤CD30阳性T细胞淋巴组织增殖性疾病",
+              label: "原发性皮肤CD30阳性T细胞淋巴组织增殖性疾病",
+              children: [
+                {
+                  value: "淋巴瘤样丘疹病",
+                  label: "淋巴瘤样丘疹病"
+                },
+                {
+                  value: "原发性皮肤间变性大细胞淋巴瘤",
+                  label: "原发性皮肤间变性大细胞淋巴瘤"
+                }
+              ]
+            },
+            {
+              value: "原发性皮肤外周T细胞淋巴瘤罕见亚型",
+              label: "原发性皮肤外周T细胞淋巴瘤罕见亚型",
+              children: [
+                {
+                  value: "原发性皮肤γδT细胞淋巴瘤",
+                  label: "原发性皮肤γδT细胞淋巴瘤"
+                },
+                {
+                  value: "原发性皮肤CD8阳性侵袭性嗜表皮性细胞毒性T细胞淋巴瘤",
+                  label: "原发性皮肤CD8阳性侵袭性嗜表皮性细胞毒性T细胞淋巴瘤"
+                },
+                {
+                  value: "原发性皮肤肢端CD8阳性T细胞淋巴瘤",
+                  label: "原发性皮肤肢端CD8阳性T细胞淋巴瘤"
+                },
+                {
+                  value: "原发性皮肤CD4阳性小/中等大小T细胞淋巴组织增殖性疾病",
+                  label: "原发性皮肤CD4阳性小/中等大小T细胞淋巴组织增殖性疾病"
+                }
+              ]
+            },
+            {
+              value: "外周T细胞淋巴瘤，非特指型",
+              label: "外周T细胞淋巴瘤，非特指型"
+            },
+            {
+              value:
+                "血管免疫母细胞性T细胞淋巴瘤及其他淋巴结滤泡辅助T细胞来源的淋巴瘤",
+              label:
+                "血管免疫母细胞性T细胞淋巴瘤及其他淋巴结滤泡辅助T细胞来源的淋巴瘤",
+              children: [
+                {
+                  value: "血管免疫母细胞性T细胞淋巴瘤",
+                  label: "血管免疫母细胞性T细胞淋巴瘤"
+                },
+                {
+                  value: "滤泡T细胞淋巴瘤",
+                  label: "滤泡T细胞淋巴瘤"
+                },
+                {
+                  value: "淋巴结外周T细胞淋巴瘤伴滤泡辅助T细胞表型",
+                  label: "淋巴结外周T细胞淋巴瘤伴滤泡辅助T细胞表型"
+                }
+              ]
+            },
+            {
+              value: "间变性大细胞淋巴瘤，ALK阳性",
+              label: "间变性大细胞淋巴瘤，ALK阳性"
+            },
+            {
+              value: "间变性大细胞淋巴瘤，ALK阴性",
+              label: "间变性大细胞淋巴瘤，ALK阴性"
+            },
+            {
+              value: "乳房植入物相关的间变性大细胞淋巴瘤",
+              label: "乳房植入物相关的间变性大细胞淋巴瘤"
+            }
+          ]
+        },
+        {
+          value: "霍奇金淋巴瘤",
+          label: "霍奇金淋巴瘤",
+          children: [
+            {
+              value: "结节性淋巴细胞为主型霍奇金淋巴瘤",
+              label: "结节性淋巴细胞为主型霍奇金淋巴瘤"
+            },
+            {
+              value: "经典型霍奇金淋巴瘤",
+              label: "经典型霍奇金淋巴瘤",
+              children: [
+                {
+                  value: "结节硬化型",
+                  label: "结节硬化型"
+                },
+                {
+                  value: "富于淋巴细胞型",
+                  label: "富于淋巴细胞型"
+                },
+                {
+                  value: "混合细胞型",
+                  label: "混合细胞型"
+                },
+                {
+                  value: "淋巴细胞消减型",
+                  label: "淋巴细胞消减型"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          value: "淋巴瘤",
+          label: "淋巴瘤"
+        },
+        {
+          value: "非霍奇金淋巴瘤",
+          label: "非霍奇金淋巴瘤"
+        },
+        {
+          value: "非典型增生",
+          label: "非典型增生"
+        },
+        {
+          value: "其他恶性肿瘤",
+          label: "其他恶性肿瘤"
+        },
+        {
+          value: "无明确诊断结论",
+          label: "无明确诊断结论"
+        }
+      ],
       // 分页器
       queryInfo: {
         page: 1, //页数
@@ -176,6 +776,7 @@ export default {
   mounted() {
     this.$nextTick(function() {
       this.getDataList();
+      this.get();
     });
   },
   methods: {   
@@ -199,12 +800,11 @@ export default {
       if (this.getIndex === rowIndex) {
         return {
           "background-color": "#E7F5FF"
-        };   
+        };
       }
     },
     tableRowClassName({ row, rowIndex }) {
       row.index = rowIndex;
-      
     },
     //控制显示的公用方法
     buttonsShowCon() {
@@ -270,16 +870,31 @@ export default {
       this.getDataList();
     },
     // 点击列表行
-    handleSelectionChange(row) { 
-  
+    handleSelectionChange(row) {        
       if (row) {
         this.getIndex = row.index;
         this.id = row.id;
-        this.row = row;    
-        // 点击列表行图表默认显示性别 
-        this.drawLineSex() 
-      }  
-      
+        // console.log(row);
+        return this.id;
+        this.row = row;
+      }
+    },
+    // 点击编辑获取ID
+    chakan(row) {
+      // console.log(row.id)
+      let group_id = row.id;
+      // console.log(group_id);
+    },
+    get() {
+      this.options.map((item, index) => {
+        // console.log(item);
+        if (item.children) {
+          item.children.map((it, index) => {
+            // console.log(it);
+            this.chooses.push(it.value);
+          });
+        }
+      });
     },
     // 获取数据集列表
     async getDataList() {
@@ -315,20 +930,43 @@ export default {
         "macarons"
       );
       let field = "";
-      const { data: res } = await this.axios.get(
-        // "group/stat.php?group_id=1&field=sex"
-        "group/stat.php",
-        {
-          params: { group_id: this.id, field: this.sex}
-        }
-      );
-      let datas = res.stat;
-      console.log(datas);
-      this.sex_pieWithTool({
-        myChart: myChart,
-        dataEcharts: datas,
-        title: "性别"
-      });
+      if (this.type == 0) {
+        const { data: res } = await this.axios.get(
+          // "group/stat.php?group_id=1&field=sex"
+          "group/stat.php",
+          {
+            params: { group_id: this.id, field: this.sex, type: this.type + 1 }
+          }
+        );
+        let datas = res.stat;
+        console.log(datas);
+        this.sex_pieWithTool({
+          myChart: myChart,
+          dataEcharts: datas,
+          title: "性别"
+        });
+      } else {
+        const { data: res } = await this.axios.get(
+          // "group/stat.php?group_id=1&field=sex"
+          "group/stat.php",
+          {
+            params: {
+              group_id: this.id,
+              field: this.sex,
+              type: this.type + 1,
+              dignosis: this.dignosis
+            }
+          }
+        );
+        let datas = res.stat;
+        console.log(datas);
+        this.sex_pieWithTool({
+          myChart: myChart,
+          dataEcharts: datas,
+          title: "性别"
+        });
+      }
+
       /**
        * @description EChart -带有工具栏的饼状图，操作echarts对象更换图形
        * @param {object} param 参数列表
@@ -646,18 +1284,38 @@ export default {
         document.getElementById("tu"),
         "macarons"
       );
-      const { data: res } = await this.axios.get(
-        "group/stat.php",
-        {
-          params: { group_id: this.id, field: this.age}
-        }
-      );
-      let datas = res.stat;
-      this.age_barWithTool({
-        myChart: myChart,
-        dataEcharts: datas,
-        title: "年龄"
-      });   
+      if (this.type == 0) {
+        const { data: res } = await this.axios.get(
+          "group/stat.php",
+          {
+            params: { group_id: this.id, field: this.age, type: this.type + 1 }
+          }
+        );
+        let datas = res.stat;
+        this.age_barWithTool({
+          myChart: myChart,
+          dataEcharts: datas,
+          title: "年龄"
+        });
+      } else {
+        const { data: res } = await this.axios.get(
+          "group/stat.php",
+          {
+            params: {
+              group_id: this.id,
+              field: this.age,
+              dignosis: this.dignosis,
+              type: this.type + 1
+            }
+          }
+        );
+        let datas = res.stat;
+        this.age_barWithTool({
+          myChart: myChart,
+          dataEcharts: datas,
+          title: "年龄"
+        });
+      }     
     },
     age_barWithTool(param) {
         let myChart = param.myChart,
@@ -952,24 +1610,45 @@ export default {
         document.getElementById("tu"),
         "macarons"
       );
-      const { data: res } = await this.axios.get(
-        // "group/stat.php?group_id=1&field=birthplace"
-        "group/stat.php",
-        {
-          params: {
-            group_id: this.id,
-            field: this.birthplace,
-            type: this.type + 1
+      if (this.type == 0) {
+        const { data: res } = await this.axios.get(
+          // "group/stat.php?group_id=1&field=birthplace"
+          "group/stat.php",
+          {
+            params: {
+              group_id: this.id,
+              field: this.birthplace,
+              type: this.type + 1
+            }
           }
-        }
-      );
-      console.log(res);
-      let datas = res.stat;
-      setEChart_mapWithTool({
-        myChart: myChart,
-        dataEcharts: datas,
-        title: "籍贯"
-      });
+        );
+        console.log(res);
+        let datas = res.stat;
+        setEChart_mapWithTool({
+          myChart: myChart,
+          dataEcharts: datas,
+          title: "籍贯"
+        });
+      } else {
+        const { data: res } = await this.axios.get(
+          "group/stat.php",
+          {
+            params: {
+              group_id: this.id,
+              field: this.birthplace,
+              dignosis: this.dignosis,
+              type: this.type + 1
+            }
+          }
+        );
+        console.log(res);
+        let datas = res.stat;
+        setEChart_mapWithTool({
+          myChart: myChart,
+          dataEcharts: datas,
+          title: "籍贯"
+        });
+      }
 
       /**
        * @description EChart -带有工具栏的地图，操作echarts对象更换图形
@@ -1466,23 +2145,44 @@ export default {
         document.getElementById("tu"),
         "macarons"
       );
-      const { data: res } = await this.axios.get(
-        // "group/stat.php?group_id=1&field=sample_type"
-        "group/stat.php",
-        {
-          params: {
-            group_id: this.id,
-            field: this.sample_type,
-            type: this.type + 1
+      if (this.type == 0) {
+        const { data: res } = await this.axios.get(
+          // "group/stat.php?group_id=1&field=sample_type"
+          "group/stat.php",
+          {
+            params: {
+              group_id: this.id,
+              field: this.sample_type,
+              type: this.type + 1
+            }
           }
-        }
-      );
-      let datas = res.stat;
-      this.sample_type_pieWithTool({
-        myChart: myChart,
-        dataEcharts: datas,
-        title: "标本类型"
-      });
+        );
+        let datas = res.stat;
+        this.sample_type_pieWithTool({
+          myChart: myChart,
+          dataEcharts: datas,
+          title: "标本类型"
+        });
+      } else {
+        const { data: res } = await this.axios.get(
+          // "group/stat.php?group_id=1&field=sample_type"
+          "group/stat.php",
+          {
+            params: {
+              group_id: this.id,
+              field: this.sample_type,
+              dignosis: this.dignosis,
+              type: this.type + 1
+            }
+          }
+        );
+        let datas = res.stat;
+         this.sample_type_pieWithTool({
+          myChart: myChart,
+          dataEcharts: datas,
+          title: "标本类型"
+        });
+      }
 
       /**
        * @description EChart -带有工具栏的饼状图，操作echarts对象更换图形
@@ -1803,23 +2503,44 @@ export default {
         "macarons"
       );
 
-      const { data: res } = await this.axios.get(
-        // "group/stat.php?group_id=1&field=sample_location"
-        "group/stat.php",
-        {
-          params: {
-            group_id: this.id,
-            field: this.sample_location,
-            type: this.type + 1
+      if (this.type == 0) {
+        const { data: res } = await this.axios.get(
+          // "group/stat.php?group_id=1&field=sample_location"
+          "group/stat.php",
+          {
+            params: {
+              group_id: this.id,
+              field: this.sample_location,
+              type: this.type + 1
+            }
           }
-        }
-      );
-      let datas = res.stat;
-      this.Sample_location_pieWithTool({
-        myChart: myChart,
-        dataEcharts: datas,
-        title: "取材部位"
-      });
+        );
+        let datas = res.stat;
+        this.Sample_location_pieWithTool({
+          myChart: myChart,
+          dataEcharts: datas,
+          title: "取材部位"
+        });
+      } else {
+        const { data: res } = await this.axios.get(
+          // "group/stat.php?group_id=1&field=sample_location"
+          "group/stat.php",
+          {
+            params: {
+              group_id: this.id,
+              field: this.sample_location,
+              dignosis: this.dignosis,
+              type: this.type + 1
+            }
+          }
+        );
+        let datas = res.stat;
+        this.Sample_location_pieWithTool({
+          myChart: myChart,
+          dataEcharts: datas,
+          title: "取材部位"
+        });
+      }
 
       /**
        * @description EChart -带有工具栏的饼状图，操作echarts对象更换图形
@@ -2230,22 +2951,44 @@ export default {
         document.getElementById("tu"),
         "macarons"
       );
-      const { data: res } = await this.axios.get(
-        // "group/stat.php?group_id=1&field=diff_day"
-        "group/stat.php",
-        {
-          params: {
-            group_id: this.id,
-            field: this.diff_day,
+      if (this.type == 0) {
+        const { data: res } = await this.axios.get(
+          // "group/stat.php?group_id=1&field=diff_day"
+          "group/stat.php",
+          {
+            params: {
+              group_id: this.id,
+              field: this.diff_day,
+              type: this.type + 1
+            }
           }
-        }
-      );
-      let datas = res.stat;
-      this.Diff_day_barWithTool({
-        myChart: myChart,
-        dataEcharts: datas,
-        title: "诊断时长"
-      });
+        );
+        let datas = res.stat;
+        this.Diff_day_barWithTool({
+          myChart: myChart,
+          dataEcharts: datas,
+          title: "诊断时长"
+        });
+      } else {
+        const { data: res } = await this.axios.get(
+          // "group/stat.php?group_id=1&field=diff_day"
+          "group/stat.php",
+          {
+            params: {
+              group_id: this.id,
+              field: this.diff_day,
+              dignosis: this.dignosis,
+              type: this.type + 1
+            }
+          }
+        );
+        let datas = res.stat;
+        this.Diff_day_barWithTool({
+          myChart: myChart,
+          dataEcharts: datas,
+          title: "诊断时长"
+        });
+      }
 
       /**
        * @description EChart -带有工具栏的柱状图，操作echarts对象更换图形
@@ -2566,28 +3309,54 @@ export default {
         "macarons"
       );
       let table = "";
-      const { data: res } = await this.axios.get(
-        // "group/stat.php?group_id=1&field=diff_day"
+      if (this.type == 0) {
+        const { data: res } = await this.axios.get(
+          // "group/stat.php?group_id=1&field=diff_day"
 
-        "group/stat.php",
-        {
-          params: {
-            group_id: this.id,
-            field: this.mark,
-            type: this.type + 1,
-            table: this.ly_helper_diagnosis,
+          "group/stat.php",
+          {
+            params: {
+              group_id: this.id,
+              field: this.mark,
+              type: this.type + 1,
+              table: this.ly_helper_diagnosis,
+            }
           }
-        }
-      );
-      console.log(res);
-      let datas = res.stat;
-      let total = res.total
-      this.J_Check_barWithTool({
-        myChart: myChart,
-        dataEcharts: datas,
-        title: "检测率",
-        total:total
-      });
+        );
+        console.log(res);
+        let datas = res.stat;
+        let total = res.total
+        this.J_Check_barWithTool({
+          myChart: myChart,
+          dataEcharts: datas,
+          title: "检测率",
+          total:total
+        });
+      } else {
+        const { data: res } = await this.axios.get(
+          // "group/stat.php?group_id=1&field=diff_day"
+
+          "group/stat.php",
+          {
+            params: {
+              group_id: this.id,
+              field: this.mark,
+              type: this.type + 1,
+              table: this.ly_helper_diagnosis,
+              dignosis: this.dignosis,
+            }
+          }
+        );
+        console.log(res);
+        let datas = res.stat;
+        let total = res.total
+        this.J_Check_barWithTool({
+          myChart: myChart,
+          dataEcharts: datas,
+          title: "检测率",
+          total:total
+        });
+      }
     },
     J_Check_barWithTool(param) {
       let myChart = param.myChart,
@@ -2807,27 +3576,55 @@ export default {
         document.getElementById("tu"),
         "macarons"
       );
-      const { data: res } = await this.axios.get(
-        // "group/stat.php?group_id=1&field=diff_day"
-        // "group/stat.php?group_id=1&field=mark&type=1&table=ly_helper_diagnosis&field2=result_normal"
-        "group/stat.php?field2=result_normal",{
-          params: {
-            group_id: this.id,
-            field: this.mark,
-            type: this.type + 1,
-            table: this.ly_helper_diagnosis,
+      if (this.type == 0) {
+        const { data: res } = await this.axios.get(
+          // "group/stat.php?group_id=1&field=diff_day"
+          // "group/stat.php?group_id=1&field=mark&type=1&table=ly_helper_diagnosis&field2=result_normal"
+          "group/stat.php?field2=result_normal",{
+            params: {
+              group_id: this.id,
+              field: this.mark,
+              type: this.type + 1,
+              table: this.ly_helper_diagnosis,
+            }
           }
-        }
-      );
-      console.log(res);
-      let datas = res.stat;
-      let total = res.total;
-      this.Y_Check_barWithTool({
-        myChart: myChart,
-        dataEcharts: datas,
-        title: "阳性率",
-        total:total
-      });
+        );
+        console.log(res);
+        let datas = res.stat;
+        let total = res.total;
+        this.Y_Check_barWithTool({
+          myChart: myChart,
+          dataEcharts: datas,
+          title: "阳性率",
+          total:total
+        });
+      } else {
+        // let result_noraml
+        let field2
+        const { data: res } = await this.axios.get(
+          // "group/stat.php?group_id=1&field=diff_day"
+          // "group/stat.php?group_id=1&field=mark&table=ly_helper_diagnosis&field2=result_normal",
+          // { params: { dignosis: this.dignosis, type: this.type + 1 } }
+          "group/stat.php?field2=result_normal",{
+            params: {
+              group_id: this.id,
+              field: this.mark,
+              type: this.type + 1,
+              table: this.ly_helper_diagnosis,
+              dignosis: this.dignosis,
+            }
+          }
+        );
+        console.log(res);
+        let datas = res.stat;
+        let total = res.total;
+        this.Y_Check_barWithTool({
+          myChart: myChart,
+          dataEcharts: datas,
+          title: "阳性率",
+          total:total
+        });
+      }
     },
     Y_Check_barWithTool(param) {
       let myChart = param.myChart,
@@ -3052,6 +3849,7 @@ export default {
         {
           params: {
             group_id: this.id,
+            type: this.type + 1,
             field: this.diagnosis2
           }
         }

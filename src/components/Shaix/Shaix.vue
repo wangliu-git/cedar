@@ -1255,15 +1255,14 @@
                     </div>
                     <div class="sickItem">
                       <span>{{tMInstitution.sample_type.field_title}}:</span>
-                      <el-select name="sample_type" v-model="editForm.sample_type" size="mini">
-                        <el-option
-                          v-for="(item,index) in  tMInstitution.sample_type.field_values"
-                          :key="index"
-                          :value="item"
-                          style="width:200px">
-                          <span>{{item}}</span>
-                        </el-option>
-                      </el-select>
+                      <el-input
+                        type="text"
+                        v-model="editForm.sample_type"
+                        placeholder="请输入标本类型"
+                        size="mini"
+                        style="width:200px"
+                        @keyup.enter.native="shaixuan()"
+                      ></el-input>
                     </div>
 
                     <div class="sickItem">
@@ -2051,7 +2050,7 @@ export default {
               confirmButtonText: "确定",
               type: "success",
               callback: action => {
-                this.getTableList();
+                this.shaixuan()
                 this.luru = false;
               }
             });

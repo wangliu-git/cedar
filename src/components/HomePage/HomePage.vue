@@ -350,7 +350,7 @@ export default {
     async tongji3() {
       let type = "";
       const { data: res } = await this.axios.get("diagnosis_origin/stat.php");
-      // console.log(res)
+      console.log(res)
       this.tongjiList3 = res;
     },
     // 获取报告量详情
