@@ -13,7 +13,7 @@
     "echarts": "^4.7.0",
     "element-ui": "^2.13.0",
     "lib-flexible": "^0.3.2",
-    "qs": "^6.9.3",
+    "qs": "^6.9.7",
     "vue": "^2.6.11",
     "vue-axios": "^2.1.5",
     "vue-resource": "^1.5.1",
